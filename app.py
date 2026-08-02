@@ -1,4 +1,5 @@
 import math
+import os 
 import streamlit as st
 
 # Page Configuration
@@ -12,15 +13,9 @@ st.set_page_config(
 col_logo, col_title = st.columns([1, 5])
 with col_logo:
   # Sidebar or direct logo uploader fallback
-  uploaded_logo = st.sidebar.file_uploader(
-      "Upload Logo Image", type=["png", "jpg", "jpeg"], key="app_logo_upload"
-  )
-  if uploaded_logo is not None:
-    st.image(uploaded_logo, width=120)
+  if os.path.exists("logo.png"):
+    st.image("logo.png, width=120)
   else:
-    try:
-      st.image("logo.png", width=120)
-    except:
       st.markdown("⚙️ **[Logo Here]**")
 
 with col_title:
