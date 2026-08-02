@@ -50,16 +50,16 @@ lang = st.sidebar.selectbox(
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 📌 Menu Navigation")
 
-# --- COMPLETE PROFESSIONAL MENU OPTIONS (WITHOUT UNWANTED EXTRAS) ---
+# --- COMPLETE PROFESSIONAL MENU OPTIONS ---
 menu_options = {
     "தமிழ் (Tamil)": [
         "🏠 முகப்பு (Dashboard)",
         "📸 போட்டோ / டிராயிங் பகுப்பாய்வு & ஜி-கோடு",
-        "🧮 ஒர்க்ஷாப் கால்குலேட்டர் (RPM & Time)",
         (
             "📐 துல்லியமான ராட், எண்டு-பிட் & ஸ்கிராப் கால்குலேட்டர் (Rod & Scrap"
             " Calculator)"
         ),
+        "🧮 ஒர்க்ஷாப் கால்குலேட்டர் (RPM & Time)",
         "💰 வாடிக்கையாளர் கொட்டேஷன் (Quotation with Photo)",
         "🏭 உற்பத்தி கண்காணிப்பு (Production Tracker)",
         "📜 ஜி-கோடு ஜெனரேட்டர் (G-Code)",
@@ -68,8 +68,8 @@ menu_options = {
     "English": [
         "🏠 Dashboard",
         "📸 Photo / Drawing Analysis & G-Code",
-        "🧮 Workshop Calculator (RPM & Time)",
         "📐 Precise Rod, End-Bit & Scrap Calculator",
+        "🧮 Workshop Calculator (RPM & Time)",
         "💰 Customer Quotation (with Photo)",
         "🏭 Production Tracker",
         "📜 G-Code Generator",
@@ -78,8 +78,8 @@ menu_options = {
     "हिंदी (Hindi)": [
         "🏠 डैशबोर्ड (Dashboard)",
         "📸 फोटो / ड्राइंग विश्लेषण और जी-कोड",
-        "🧮 वर्कशॉप कैलकुलेटर",
         "📐 सटीक रॉड, एंड-बिट और स्क्रैप कैलकुलेटर",
+        "🧮 वर्कशॉप कैलकुलेटर",
         "💰 ग्राहक कोटेशन (Photo)",
         "🏭 उत्पादन ट्रैकर",
         "📜 जी-कोड जेनरेटर",
@@ -88,8 +88,8 @@ menu_options = {
     "తెలుగు (Telugu)": [
         "🏠 డాష్‌బోర్డ్ (Dashboard)",
         "📸 ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-కోడ్",
-        "🧮 వర్క్‌షాప్ కాలిక్యులేటర్",
         "📐 ఖచ్చితమైన రాడ్, ఎండ్-బిట్ & స్క్రాప్ కాలిక్యులేటర్",
+        "🧮 వర్క్‌షాప్ కాలిక్యులేటర్",
         "💰 కస్టమర్ కొటేషన్ (Photo)",
         "🏭 ఉత్పత్తి ట్రాకర్",
         "📜 జి-కోడ్ జనరేటర్",
@@ -97,9 +97,9 @@ menu_options = {
     ],
     "മലയാളം (Malayalam)": [
         "🏠 ഡാഷ്‌ബോർഡ് (Dashboard)",
-        "📸 ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-കോഡ്",
-        "🧮 വർക്ക്‌ഷോപ്പ് കാൽക്കുലേറ്റർ",
+        "📸 ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-కోഡ്",
         "📐 കൃത്യമായ റോഡ്, എൻഡ്-ബിറ്റ് & സ്ക്രാപ്പ് കാൽക്കുലേറ്റർ",
+        "🧮 വർക്ക്‌ഷോപ്പ് കാൽക്കുലേറ്റർ",
         "💰 കസ്റ്റമർ കൊട്ടേഷൻ (Photo)",
         "🏭 പ്രൊഡക്ഷൻ ട്രാക്കർ",
         "📜 ജി-കോഡ് ജനറേറ്റർ",
@@ -108,11 +108,11 @@ menu_options = {
     "ಕನ್ನಡ (Kannada)": [
         "🏠 ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)",
         "📸 ಫೋಟೋ / ಡ್ರಾಯಿಂಗ್ ವಿಶ್ಲೇಷಣೆ & జి-కోడ్",
-        "🧮 ವರ್ಕ್‌ಷೋಪ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "📐 ನಿಖರವಾದ ರಾಡ್, ಎಂಡ್-ಬಿಟ್ ಮತ್ತು ಸ್ಕ್ರ್ಯಾಪ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+        "🧮 ವರ್ಕ್‌ಷೋಪ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "💰 ಗ್ರಾಹಕರ ಉಲ್ಲೇಖ (Quotation)",
         "🏭 ಉತ್ಪಾದನಾ ಟ್ರ್ಯಾಕರ್",
-        "📜 ಜಿ-ಕೋಡ್ ಜನರೇಟರ್",
+        "📜 ಜಿ-కోడ్ ಜನರೇಟರ್",
         "📦 ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
     ],
 }
@@ -141,7 +141,7 @@ if any(
   with col3:
     st.metric(label="Languages", value="6 Supported")
   with col4:
-    st.metric(label="Version", value="World-Class Final v14.0")
+    st.metric(label="Version", value="World-Class Final v14.1")
 
 # --- 2. PHOTO / DRAWING ANALYSIS & G-CODE MODULE ---
 elif any(
@@ -200,47 +200,7 @@ M30
         "💡 Upload a component photo or drawing to begin automated programming."
     )
 
-# --- 3. WORKSHOP CALCULATOR (RPM & TIME) ---
-elif any(
-    x in app_mode
-    for x in [
-        "Calculator",
-        "கால்குலேட்டர்",
-        "कैलकुलेटर",
-        "కాలిక్యులేటర్",
-        "കാൽക്കുലേറ്റർ",
-    ]
-):
-  st.header("🧮 Workshop Calculator (RPM & Machining Time)")
-  calc_choice = st.selectbox(
-      "Select Calculation", ["Spindle RPM Calculator", "Machining Time Calculator"]
-  )
-
-  if "RPM" in calc_choice:
-    c1, c2 = st.columns(2)
-    with c1:
-      vc = st.number_input("Cutting Speed (Vc in m/min)", value=200.0)
-    with c2:
-      dia = st.number_input("Rod / Component Diameter (mm)", value=40.0)
-
-    if st.button("Calculate RPM"):
-      if dia > 0:
-        rpm = (1000 * vc) / (math.pi * dia)
-        st.success(f"✅ Required Spindle Speed: **{rpm:.2f} RPM**")
-  else:
-    c1, c2 = st.columns(2)
-    with c1:
-      length = st.number_input("Cutting Length (mm)", value=80.0)
-      feed = st.number_input("Feed Rate (mm/rev)", value=0.2)
-    with c2:
-      rpm_val = st.number_input("Spindle Speed (RPM)", value=1500.0)
-
-    if st.button("Calculate Time"):
-      if feed > 0 and rpm_val > 0:
-        t_mins = length / (feed * rpm_val)
-        st.success(f"✅ Estimated Machining Time: **{t_mins:.2f} Minutes**")
-
-# --- 4. PRECISE ROD, END-BIT, GROOVING & SCRAP CALCULATOR (THE USERS FAVORITE TOOL) ---
+# --- 3. PRECISE ROD, END-BIT, GROOVING & SCRAP CALCULATOR (PLACED FIRST TO FIX OVERLAP) ---
 elif any(
     x in app_mode
     for x in ["Rod", "ராட்", "रॉड", "రॉड", "റോഡ്", "சடிக்", "எண்டு-பிட்"]
@@ -407,6 +367,40 @@ elif any(
         f"- **Single Piece Length Consumption (with allowances):**"
         f" {single_consumption_mm:.1f} mm"
     )
+
+# --- 4. WORKSHOP CALCULATOR (RPM & TIME) ---
+elif any(
+    x in app_mode
+    for x in ["Workshop", "ஒர்க்ஷாப்", "वर्कशॉप", "వర్క్‌షాప్", "വർക്ക്‌ഷോപ്പ്"]
+):
+  st.header("🧮 Workshop Calculator (RPM & Machining Time)")
+  calc_choice = st.selectbox(
+      "Select Calculation", ["Spindle RPM Calculator", "Machining Time Calculator"]
+  )
+
+  if "RPM" in calc_choice:
+    c1, c2 = st.columns(2)
+    with c1:
+      vc = st.number_input("Cutting Speed (Vc in m/min)", value=200.0)
+    with c2:
+      dia = st.number_input("Rod / Component Diameter (mm)", value=40.0)
+
+    if st.button("Calculate RPM"):
+      if dia > 0:
+        rpm = (1000 * vc) / (math.pi * dia)
+        st.success(f"✅ Required Spindle Speed: **{rpm:.2f} RPM**")
+  else:
+    c1, c2 = st.columns(2)
+    with c1:
+      length = st.number_input("Cutting Length (mm)", value=80.0)
+      feed = st.number_input("Feed Rate (mm/rev)", value=0.2)
+    with c2:
+      rpm_val = st.number_input("Spindle Speed (RPM)", value=1500.0)
+
+    if st.button("Calculate Time"):
+      if feed > 0 and rpm_val > 0:
+        t_mins = length / (feed * rpm_val)
+        st.success(f"✅ Estimated Machining Time: **{t_mins:.2f} Minutes**")
 
 # --- 5. CUSTOMER QUOTATION (WITH PHOTO SUPPORT) ---
 elif any(
