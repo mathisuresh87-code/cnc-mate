@@ -1,5 +1,5 @@
 import math
-import os 
+import os
 import streamlit as st
 
 # Page Configuration
@@ -9,14 +9,13 @@ st.set_page_config(
     layout="wide",
 )
 
-# --- HEADER WITH DYNAMIC LOGO UPLOADER ---
+# --- HEADER WITH AUTOMATIC LOGO LOADER ---
 col_logo, col_title = st.columns([1, 5])
 with col_logo:
-  # Sidebar or direct logo uploader fallback
   if os.path.exists("logo.png"):
-    st.image("logo.png, width=120)
+    st.image("logo.png", width=120)
   else:
-      st.markdown("⚙️ **[Logo Here]**")
+    st.markdown("⚙️ **[Logo Here]**")
 
 with col_title:
   st.title("⚙️ Megala CNC Mate")
@@ -124,7 +123,7 @@ translations = {
         "letter_calc": "🔤 లెటర్ కటింగ్ & స్పీడ్ కాలిక్యులేటర్",
         "prod_calc": "⏱️ ప్రొడక్షన్ కాలిక్యులేటర్",
         "cost_calc": "💰 కాస్టింగ్ కాలిక్యులేటర్",
-        "stock_mgmt": "📦 స్టಾಕ್ మేనేజ్‌మెంట్",
+        "stock_mgmt": "📦 స్టాక్ మేనేజ్‌మెంట్",
         "ai_prog": "🤖 G-Code జెనరేటర్ (Turning, Facing, Drilling)",
         "quotation": "📄 కొటేషన్ & PDF",
         "settings": "⚙️ సెటింగ్స్ / మాస్టర్",
