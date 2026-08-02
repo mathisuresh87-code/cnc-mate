@@ -26,14 +26,14 @@ with col_logo:
 with col_title:
   st.title("⚙️ Megala CNC Mate")
   st.markdown(
-      "**SMART CNC. SIMPLE WORK.** — Clean UI, Drawing-Based End-Bit & Scrap"
-      " Calculator, Tube/Rod Profiles, Photo Upload, Quotation, Production &"
-      " Stock Management"
+      "**SMART CNC. SIMPLE WORK.** — Clean Sidebar Radio Menu, Drawing-Based"
+      " End-Bit & Scrap Calculator, Tube/Rod Profiles, Photo Upload, Quotation,"
+      " Production & Stock Management"
   )
 
 st.markdown("---")
 
-# --- CLEAN LANGUAGE SUPPORT SETUP (COMPACT UI) ---
+# --- CLEAN LANGUAGE SUPPORT SETUP ---
 st.sidebar.markdown("### 🌐 Language / மொழி")
 lang = st.sidebar.selectbox(
     "Choose Language",
@@ -49,8 +49,9 @@ lang = st.sidebar.selectbox(
 )
 
 st.sidebar.markdown("---")
-st.sidebar.title("📌 Menu Navigation")
+st.sidebar.markdown("### 📌 Menu Navigation")
 
+# --- MENU OPTIONS FOR ALL 6 LANGUAGES ---
 menu_options = {
     "English": [
         "🏠 Dashboard",
@@ -87,8 +88,8 @@ menu_options = {
     ],
     "తెలుగు (Telugu)": [
         "🏠 డాష్‌బోర్డ్ (Dashboard)",
-        "📸 ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-கோడ్",
-        "🧮 వర్క్‌షోప్ కాలిక్యులేటర్",
+        "📸 ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-కోడ్",
+        "🧮 వర్క్‌షాప్ కాలిక్యులేటర్",
         "📐 ఎండ్-బిట్, స్క్రాప్ & క్వాంటిటీ కాలిక్యులేటర్",
         "💰 కస్టమర్ కొటేషన్ (Photo)",
         "🏭 ఉత్పత్తి ట్రాకర్",
@@ -109,7 +110,7 @@ menu_options = {
     ],
     "ಕನ್ನಡ (Kannada)": [
         "🏠 ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)",
-        "📸 ಫೋಟೋ / ಡ್ರಾಯಿங் ವಿಶ್ಲೇಷಣೆ & ಜಿ-ಕೋடு",
+        "📸 ಫೋಟೋ / ಡ್ರಾಯಿಂಗ್ ವಿಶ್ಲೇಷಣೆ & ಜಿ-ಕೋಡ್",
         "🧮 ವರ್ಕ್‌ಷೋಪ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "📐 ಎಂಡ್-ಬಿಟ್, ಸ್ಕ್ರ್ಯಾಪ್ ಮತ್ತು ಕ್ವಾಂಟಿಟಿ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "💰 ಗ್ರಾಹಕರ ಉಲ್ಲೇಖ (Quotation)",
@@ -120,7 +121,8 @@ menu_options = {
     ],
 }
 
-app_mode = st.sidebar.selectbox(
+# Using st.sidebar.radio so ALL 9 options are permanently visible without hiding
+app_mode = st.sidebar.radio(
     "Select Module", menu_options[lang], label_visibility="collapsed"
 )
 
@@ -150,7 +152,7 @@ if any(
   with col3:
     st.metric(label="Languages", value="6 Supported")
   with col4:
-    st.metric(label="Version", value="Final Clean v11.0")
+    st.metric(label="Version", value="Final Radio v12.0")
 
 # --- 2. PHOTO / DRAWING ANALYSIS & G-CODE MODULE ---
 elif any(
