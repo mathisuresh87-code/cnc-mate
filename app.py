@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --- HEADER SECTION WITH SAFE LOGO LOADER ---
+# --- HEADER SECTION ---
 col_logo, col_title = st.columns([1, 6])
 
 with col_logo:
@@ -26,8 +26,8 @@ with col_logo:
 with col_title:
   st.title("⚙️ Megala CNC Mate")
   st.markdown(
-      "**SMART CNC. SIMPLE WORK.** — Professional Workshop Automation with"
-      " Complete Costing & Calculators"
+      "**SMART CNC. SIMPLE WORK.** — Professional Workshop Automation & Exact"
+      " Module Routing"
   )
 
 st.markdown("---")
@@ -50,69 +50,67 @@ lang = st.sidebar.selectbox(
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 📌 Menu Navigation (முகப்பு மெனு)")
 
-# --- MENU OPTIONS (Calculator placed at the very top as requested) ---
+# --- DISTINCT MENU OPTIONS (No overlapping keywords to prevent routing bugs) ---
 menu_options = {
     "தமிழ் (Tamil)": [
-        "🧮 1. மெஷின் வாரியான கால்குலேட்டர் (CNC / Traub / Drilling)",
-        "💰 2. முழுமையான வாடிக்கையாளர் கொட்டேஷன் (EB, Tool, Food & Snacks Overheads)",
-        "🏠 3. முகப்பு & டேஷ்போர்டு (Dashboard Overview)",
-        "📸 4. போட்டோ / டிராயிங் பகுப்பாய்வு & ஜி-கோடு",
-        "📐 5. துல்லியமான ராட், எண்டு-பிட் & ஸ்கிராப் கால்குலேட்டர்",
-        "📜 6. மேம்பட்ட ஜி-கோடு ஜெனரேட்டர் (Turning, Grooving & Boring)",
-        "🏭 7. உற்பத்தி & ஆர்டர் நாட்கள் கால்குலேட்டர்",
-        "📦 8. ஸ்டாக் மேனேஜ்மென்ட் (Stock & Inventory)",
+        "1. மெஷின் கால்குலேட்டர் (Machine RPM & Time)",
+        "2. கொட்டேஷன் & செலவு மேலாண்மை (Quotation & Overheads)",
+        "3. முகப்பு & டேஷ்போர்டு (Dashboard Overview)",
+        "4. போட்டோ / டிராயிங் பகுப்பாய்வு (Drawing & Photo Analysis)",
+        "5. ராட், எண்டு-பிட் & ஸ்கிராப் (Rod & Scrap Calculator)",
+        "6. ஜி-கோடு ஜெனரேட்டர் (Advanced G-Code)",
+        "7. உற்பத்தி நாட்கள் கால்குலேட்டர் (Production Days)",
+        "8. ஸ்டாக் மேனேஜ்மென்ட் (Stock & Inventory)",
     ],
     "English": [
-        "🧮 1. Machine-Specific Calculator (CNC / Traub / Drilling)",
-        (
-            "💰 2. Comprehensive Quotation (EB, Tool, Food & Snacks Overheads)"
-        ),
-        "🏠 3. Dashboard Overview",
-        "📸 4. Photo / Drawing Analysis & G-Code",
-        "📐 5. Precise Rod, End-Bit & Scrap Calculator",
-        "📜 6. Advanced G-Code Generator",
-        "🏭 7. Production & Large Order Days Calculator",
-        "📦 8. Stock & Inventory Management",
+        "1. Machine Calculator (RPM & Time)",
+        "2. Quotation & Cost Management (Overheads)",
+        "3. Dashboard Overview",
+        "4. Drawing & Photo Analysis",
+        "5. Rod, End-Bit & Scrap Calculator",
+        "6. Advanced G-Code Generator",
+        "7. Production Days Calculator",
+        "8. Stock & Inventory Management",
     ],
     "हिंदी (Hindi)": [
-        "🧮 1. मशीन-विशिष्ट कैलकुलेटर (CNC/Traub/Drilling)",
-        "💰 2. व्यापक कोटेशन (खर्च, टूल, भोजन और स्नैक्स सहित)",
-        "🏠 3. डैशबोर्ड अवलोकन",
-        "📸 4. फोटो / ड्राइंग विश्लेषण और जी-कोड",
-        "📐 5. सटीक रॉड, एंड-बिट और स्क्रैप कैलकुलेटर",
-        "📜 6. उन्नत जी-कोड जेनरेटर",
-        "🏭 7. उत्पादन और ऑर्डर ट्रैकर",
-        "📦 8. स्टॉक प्रबंधन",
+        "1. मशीन कैलकुलेटर (RPM & Time)",
+        "2. कोटेशन और लागत प्रबंधन (Quotation)",
+        "3. डैशबोर्ड अवलोकन (Dashboard)",
+        "4. ड्राइंग और फोटो विश्लेषण (Analysis)",
+        "5. रॉड और स्क्रैप कैलकुलेटर (Scrap)",
+        "6. उन्नत जी-कोड जेनरेटर (G-Code)",
+        "7. उत्पादन दिन कैलकुलेटर (Production)",
+        "8. स्टॉक प्रबंधन (Stock)",
     ],
     "తెలుగు (Telugu)": [
-        "🧮 1. మెషిన్-నిర్దిష్ట కాలిక్యులేటర్ (CNC/Traub/Drilling)",
-        "💰 2. సమగ్ర కొటేషన్ (EB, టూల్, ఫుడ్ & స్నాక్స్ ఖర్చులతో)",
-        "🏠 3. డాష్‌బోర్డ్ అవలోకనం",
-        "📸 4. ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-కోడ్",
-        "📐 5. ఖచ్చితమైన రాడ్, ఎండ్-బిట్ & స్క్రాప్ కాలిక్యులేటర్",
-        "📜 6. అధునాతన జి-కోడ్ జనరేటర్",
-        "🏭 7. ఉత్పత్తి & ఆర్డర్ ట్రాకర్",
-        "📦 8. స్టాక్ నిర్వహణ",
+        "1. మెషిన్ కాలిక్యులేటర్ (RPM & Time)",
+        "2. కొటేషన్ & ఖర్చు నిర్వహణ (Quotation)",
+        "3. డాష్‌బోర్డ్ అవలోకనం (Dashboard)",
+        "4. డ్రాయింగ్ & ఫోటో విశ్లేషణ (Analysis)",
+        "5. రాడ్ & స్క్రాప్ కాలిక్యులేటర్ (Scrap)",
+        "6. అధునాతన జి-కోడ్ జనరేటర్ (G-Code)",
+        "7. ఉత్పత్తి రోజుల కాలిక్యులేటర్ (Production)",
+        "8. స్టాక్ నిర్వహణ (Stock)",
     ],
     "മലയാളം (Malayalam)": [
-        "🧮 1. മെഷീൻ കാൽക്കുലേറ്റർ (CNC / Traub / Drilling)",
-        "💰 2. കോംപ്രിഹെൻസീവ് കൊട്ടേഷൻ (EB, ടൂൾ, ഫുഡ് & സ്നാക്സ് ഉൾപ്പെടെ)",
-        "🏠 3. ഡാഷ്‌ബോർഡ് അവലോകനം",
-        "📸 4. ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-കോഡ്",
-        "📐 5. റോഡ്, എൻഡ്-ബിറ്റ് & സ്ക്രാപ്പ് കാൽക്കുലേറ്റർ",
-        "📜 6. അഡ്വാൻസ്ഡ് ജി-കോഡ് ജനറേറ്റർ",
-        "🏭 7. പ്രൊഡക്ഷൻ ട്രാക്കർ",
-        "📦 8. സ്റ്റോക്ക് മാനേജ്മെന്റ്",
+        "1. മെഷീൻ കാൽക്കുലേറ്റർ (RPM & Time)",
+        "2. കൊട്ടേഷൻ & കോസ്റ്റ് മാനേജ്മെന്റ് (Quotation)",
+        "3. ഡാഷ്‌ബോർഡ് അവലോകനം (Dashboard)",
+        "4. ഡ്രോയിംഗ് & ഫോട്ടോ വിശകലനം (Analysis)",
+        "5. റോഡ് & സ്ക്രാപ്പ് കാൽക്കുലേറ്റർ (Scrap)",
+        "6. അഡ്വാൻസ്ഡ് ജി-കോഡ് ജെനറേറ്റർ (G-Code)",
+        "7. പ്രൊഡക്ഷൻ ഡേയ്സ് കാൽക്കുലേറ്റർ (Production)",
+        "8. സ്റ്റോക്ക് മാനേജ്മെന്റ് (Stock)",
     ],
     "ಕನ್ನಡ (Kannada)": [
-        "🧮 1. ಮೆಷಿನ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್ (CNC / Traub / Drilling)",
-        "💰 2. ಸಮಗ್ರ ಉಲ್ಲೇಖ (EB, ಟೂಲ್, ಫುಡ್ & ಸ್ನಾಕ್ಸ್ ವೆಚ್ಚದೊಂದಿಗೆ)",
-        "🏠 3. ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಅವಲೋಕನ",
-        "📸 4. ಫೋಟೋ / ಡ್ರಾಯಿಂಗ್ ವಿಶ್ಲೇಷಣೆ & జి-కోడ్",
-        "📐 5. ರಾಡ್, ಎಂಡ್-ಬಿತ್ವಿನ ಸ್ಕ್ರ್ಯಾಪ್ ಕ್ಯಾಲ್ಕುలేటర్",
-        "📜 6. ಸುಧಾರಿತ జి-కోడ్ ಜನರೇಟರ್",
-        "🏭 7. ಉತ್ಪಾದನಾ ಟ್ರ್ಯಾಕರ್",
-        "📦 8. ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
+        "1. ಮೆಷಿನ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್ (RPM & Time)",
+        "2. ಉಲ್ಲೇಖ ಮತ್ತು ವೆಚ್ಚ ನಿರ್ವಹಣೆ (Quotation)",
+        "3. ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಅವಲೋಕನ (Dashboard)",
+        "4. ಡ್ರಾಯಿಂಗ್ & ಫೋಟೋ ವಿಶ್ಲೇಷಣೆ (Analysis)",
+        "5. ರಾಡ್ & ಸ್ಕ್ರ್ಯಾಪ್ ಕ್ಯಾಲ್ಕುలేಟರ್ (Scrap)",
+        "6. ಸುಧಾರಿತ జి-కోడ్ ಜನರೇಟರ್ (G-Code)",
+        "7. ಉತ್ಪಾದನಾ ದಿನಗಳ ಕ್ಯಾಲ್ಕುಲೇಟರ್ (Production)",
+        "8. ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ (Stock)",
     ],
 }
 
@@ -120,8 +118,14 @@ app_mode = st.sidebar.radio(
     "Select Module", menu_options[lang], label_visibility="collapsed"
 )
 
-# --- 1. MACHINE-SPECIFIC CALCULATOR (PLACED FIRST AS REQUESTED) ---
-if any(x in app_mode for x in ["Calculator", "கால்குலேட்டர்", "கால்புலேட்டர்"]):
+# --- EXACT STRING MATCHING FOR EACH MODULE (Ensures zero routing overlap) ---
+
+# MODULE 1: MACHINE CALCULATOR
+if (
+    app_mode.startswith("1.")
+    or "Machine Calculator" in app_mode
+    or "மெஷின் கால்குலேட்டர்" in app_mode
+):
   st.header("🧮 Machine-Specific Workshop Calculator (CNC / Traub / Drilling)")
   st.write(
       "Choose your exact machine type. Calculations adjust automatically"
@@ -220,8 +224,12 @@ if any(x in app_mode for x in ["Calculator", "கால்குலேட்ட�
             f" ({drill_time_mins*60:.1f} Seconds)"
         )
 
-# --- 2. COMPREHENSIVE CUSTOMER QUOTATION WITH ALL OVERHEADS & DUAL INPUT ---
-elif any(x in app_mode for x in ["Quotation", "கொட்டேஷன்", "कोटेशन"]):
+# MODULE 2: QUOTATION & OVERHEADS
+elif (
+    app_mode.startswith("2.")
+    or "Quotation" in app_mode
+    or "கொட்டேஷன்" in app_mode
+):
   st.header(
       "💰 Comprehensive Customer Quotation & Cost Estimator (with All Overheads)"
   )
@@ -230,7 +238,6 @@ elif any(x in app_mode for x in ["Quotation", "கொட்டேஷன்", "�
       " Tool/Drill Wear, EB, Coolant, and Worker Food/Snacks expenses."
   )
 
-  # Choose Input Method (Dual Option as requested)
   input_mode = st.radio(
       "Select Quotation Input Method:",
       [
@@ -287,7 +294,6 @@ elif any(x in app_mode for x in ["Quotation", "கொட்டேஷன்", "�
     profit = st.slider("Target Profit Margin (%)", 0, 50, 25)
 
   if st.button("Generate Professional Quotation"):
-    # Calculations
     material_total = part_wt * mat_cost_kg
     machining_cost = (machine_rate / 60.0) * mach_time
     total_unit_cost = (
@@ -308,7 +314,10 @@ elif any(x in app_mode for x in ["Quotation", "கொட்டேஷன்", "�
     col_a, col_b, col_c, col_d = st.columns(4)
     col_a.metric("Material Cost / pc", f"₹{material_total:.2f}")
     col_b.metric("Machining Cost / pc", f"₹{machining_cost:.2f}")
-    col_c.metric("Overheads (Tool+EB+Food)/pc", f"₹{tool_drill_cost + eb_coolant_cost + food_snacks_cost:.2f}")
+    col_c.metric(
+        "Overheads (Tool+EB+Food)/pc",
+        f"₹{tool_drill_cost + eb_coolant_cost + food_snacks_cost:.2f}",
+    )
     col_d.metric("Target Profit", f"{profit}%")
 
     st.markdown("---")
@@ -318,14 +327,12 @@ elif any(x in app_mode for x in ["Quotation", "கொட்டேஷன்", "�
         f"Grand Total for {batch_qty} Nos", f"₹{grand_total_amount:,.2f}"
     )
 
-    st.info(
-        "💡 **Note:** This quotation covers raw materials, machining time,"
-        " tool wear, power (EB), coolant, and worker refreshments to ensure"
-        " 100% profitable workshop operation."
-    )
-
-# --- 3. DASHBOARD OVERVIEW ---
-elif any(x in app_mode for x in ["Dashboard", "முகப்பு", "டேஷ்", "டேஷ்போர்டு"]):
+# MODULE 3: DASHBOARD OVERVIEW
+elif (
+    app_mode.startswith("3.")
+    or "Dashboard" in app_mode
+    or "முகப்பு" in app_mode
+):
   st.header("🏠 Megala CNC Mate - Dashboard & Module Overview")
   st.write(
       "Welcome to your offline workshop command center. Here is the summary of"
@@ -340,24 +347,23 @@ elif any(x in app_mode for x in ["Dashboard", "முகப்பு", "டே�
   with col3:
     st.metric(label="Language Support", value="6 Languages")
   with col4:
-    st.metric(label="App Version", value="Ultimate v16.5")
+    st.metric(label="App Version", value="Ultimate v17.0")
 
   st.markdown("---")
   st.subheader("📌 Quick Guide to Available Features in this App:")
-
   st.markdown("""
-    1. **🧮 Machine-Specific Calculator:** Accurate calculations tailored for CNC Turning, Traub Automatic Lathes (Cam cycle), and Drilling machines.
-    2. **💰 Comprehensive Quotation:** Includes photo upload or manual entry, plus all workshop overheads like EB bills, coolant oil, drill/tool wear, and worker food/snacks.
-    3. **📸 Photo / Drawing Analysis:** Upload drawings to inspect dimensions and auto-generate G-code.
-    4. **📐 Precise Rod & Scrap Calculator:** Calculates pieces per 3m/6m rod, end-bit leftovers, parting blade widths, and precise scrap weights in Kg.
+    1. **🧮 Machine Calculator:** Accurate calculations tailored for CNC Turning, Traub Automatic Lathes, and Drilling machines.
+    2. **💰 Quotation & Overheads:** Includes photo upload or manual entry, plus EB bills, coolant oil, drill/tool wear, and worker food/snacks.
+    3. **📸 Drawing & Photo Analysis:** Upload drawings to inspect dimensions and auto-generate G-code.
+    4. **📐 Rod & Scrap Calculator:** Calculates pieces per 3m/6m rod, end-bit leftovers, parting blade widths, and scrap weights in Kg.
     5. **📜 Advanced G-Code Generator:** Generates turning, grooving, boring, and drilling programs.
-    6. **🏭 Production & Order Tracker:** Calculates estimated working days for large target quantities.
+    6. **🏭 Production Days Calculator:** Calculates estimated working days for large target quantities.
     7. **📦 Stock & Inventory Management:** Monitors raw material stock levels and triggers low-stock warnings.
     """)
 
-# --- 4. PHOTO / DRAWING ANALYSIS & G-CODE MODULE ---
-elif any(
-    x in app_mode for x in ["Photo", "போட்டோ", "फोटो", "ఫోటో", "ഫോട്ടോ"]
+# MODULE 4: DRAWING & PHOTO ANALYSIS
+elif (
+    app_mode.startswith("4.") or "Analysis" in app_mode or "பகுப்பாய்வு" in app_mode
 ):
   st.header("📸 Component Drawing / Photo Analyzer & G-Code Generator")
   uploaded_file = st.file_uploader(
@@ -401,8 +407,8 @@ M30
   else:
     st.info("💡 Upload a component photo or drawing to begin.")
 
-# --- 5. PRECISE ROD, END-BIT, GROOVING & SCRAP CALCULATOR ---
-elif any(x in app_mode for x in ["Rod", "ராட்", "रॉड", "రॉड", "റോഡ്", "சடிக்"]):
+# MODULE 5: ROD, END-BIT & SCRAP CALCULATOR
+elif app_mode.startswith("5.") or "Scrap" in app_mode or "ராட்" in app_mode:
   st.header(
       "📐 Precise Rod, End-Bit, Grooving & Scrap Calculator (Length & Weight)"
   )
@@ -517,8 +523,8 @@ elif any(x in app_mode for x in ["Rod", "ராட்", "रॉड", "రॉड"
     r3.metric("Total Scrap Weight", f"{total_scrap_weight_kg:.3f} Kg")
     r4.metric("Rod Gross Weight", f"{total_gross_weight_kg:.3f} Kg")
 
-# --- 6. ADVANCED G-CODE GENERATOR ---
-elif any(x in app_mode for x in ["G-Code", "ஜி-கோடு", "जी-कोड"]):
+# MODULE 6: ADVANCED G-CODE GENERATOR
+elif app_mode.startswith("6.") or "G-Code" in app_mode or "ஜி-கோடு" in app_mode:
   st.header("📜 Advanced CNC G-Code Generator (Turning, Grooving & Boring)")
   op_choice = st.selectbox(
       "Select Operation",
@@ -611,8 +617,12 @@ M30
         mime="text/plain",
     )
 
-# --- 7. PRODUCTION & LARGE ORDER DAYS CALCULATOR ---
-elif any(x in app_mode for x in ["Production", "உற்பத்தி", "उत्पादन"]):
+# MODULE 7: PRODUCTION DAYS CALCULATOR
+elif (
+    app_mode.startswith("7.")
+    or "Production" in app_mode
+    or "உற்பத்தி" in app_mode
+):
   st.header("🏭 Production & Large Order Days Calculator")
   c1, c2 = st.columns(2)
   with c1:
@@ -646,8 +656,8 @@ elif any(x in app_mode for x in ["Production", "உற்பத்தி", "उ�
     r2.metric("Remaining Hours", f"{actual_rem_hours:.1f} Hours")
     r3.metric("Estimated Days Required", f"{required_days:.1f} Days")
 
-# --- 8. STOCK MANAGEMENT ---
-elif any(x in app_mode for x in ["Stock", "ஸ்டாக்", "स्टॉक"]):
+# MODULE 8: STOCK MANAGEMENT
+elif app_mode.startswith("8.") or "Stock" in app_mode or "ஸ்டாக்" in app_mode:
   st.header("📦 Stock & Inventory Management")
   st.selectbox(
       "Material Grade",
@@ -655,7 +665,7 @@ elif any(x in app_mode for x in ["Stock", "ஸ்டாக்", "स्टॉक
           "EN8",
           "EN24",
           "Aluminum 6061",
-          "Mild Speed (MS)",
+          "Mild Steel (MS)",
           "Brass",
           "Stainless Steel 304",
       ],
