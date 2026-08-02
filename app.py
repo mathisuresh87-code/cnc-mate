@@ -4,7 +4,7 @@ import streamlit as st
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
-    page_title="Megala CNC Mate - Smart CNC & Workshop Manager",
+    page_title="Megala CNC Mate - Professional CNC & Workshop Manager",
     page_icon="⚙️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -25,8 +25,8 @@ with col_logo:
 with col_title:
   st.title("⚙️ Megala CNC Mate")
   st.markdown(
-      "**SMART CNC. SIMPLE WORK.** — Customer Quotation, Production, G-Code,"
-      " Letter Cutting & Stock Management"
+      "**SMART CNC. SIMPLE WORK.** — Complete Quotation, Production, G-Code,"
+      " Letter Cutting & Advanced Stock Management (Rod Grades & Types)"
   )
 
 st.markdown("---")
@@ -41,7 +41,7 @@ app_mode = st.sidebar.selectbox(
         "🏭 Production Tracker",
         "📜 G-Code Generator",
         "🔤 Letter Cutting",
-        "📦 Stock Management",
+        "📦 Stock & Rod Management",
     ],
 )
 
@@ -50,44 +50,54 @@ if app_mode == "🏠 Dashboard":
   st.header("📊 Welcome to Megala CNC Mate Dashboard")
   st.write(
       "Your ultimate smart automation tool for CNC machining, cost estimation,"
-      " and workshop management."
+      " rod inventory, and workshop management."
   )
 
   col1, col2, col3, col4 = st.columns(4)
   with col1:
-    st.metric(label="Active Modules", value="5 Ready")
+    st.metric(label="Active Modules", value="6 Ready")
   with col2:
     st.metric(label="System Status", value="Online 🟢")
   with col3:
     st.metric(label="Environment", value="Streamlit Cloud")
   with col4:
-    st.metric(label="Version", value="Final v1.0")
+    st.metric(label="Version", value="Final Pro v2.0")
 
   st.info(
-      "💡 **Tip:** Use the sidebar menu to switch between Quotation, Production,"
-      " G-Code, Letter Cutting, and Stock Management modules."
+      "💡 **Tip:** Use the sidebar to access Quotation, Production, G-Code,"
+      " Letter Cutting, and Stock/Rod Management modules."
   )
 
 # --- 2. CUSTOMER QUOTATION MODULE ---
 elif app_mode == "💰 Customer Quotation":
   st.header("💰 Customer Quotation Calculator")
   st.write(
-      "Calculate accurate machining costs, raw materials, and profit margins"
-      " for your customers."
+      "Calculate accurate machining costs, material grades, rod types, and profit margins."
   )
 
   col1, col2 = st.columns(2)
   with col1:
     customer_name = st.text_input("Customer Name", "ABC Industries")
     part_name = st.text_input("Component Name", "Steel Bush / Shaft")
-    material_cost = st.number_input(
-        "Raw Material Cost per piece (₹)", min_value=0.0, value=150.0, step=10.0
+    
+    material_grade = st.selectbox(
+        "Select Material Grade",
+        ["EN8", "EN24", "Aluminum 6061", "Mild Steel (MS)", "Brass", "Stainless Steel 304", "Cast Iron"],
     )
-    machining_time = st.number_input(
-        "Machining Time per piece (Minutes)", min_value=0.1, value=5.0, step=0.5
+    rod_type = st.selectbox(
+        "Select Rod Type / Profile",
+        ["Round Bar", "Hexagon Bar", "Square Bar", "Flat Plate / Sheet"],
+    )
+    
+    material_cost_per_kg = st.number_input(
+        "Raw Material Cost per Kg (₹)", min_value=0.0, value=85.0, step=5.0
     )
 
   with col2:
+    estimated_weight = st.number_input("Estimated Part Weight (Kg)", min_value=0.01, value=1.2, step=0.1)
+    machining_time = st.number_input(
+        "Machining Time per piece (Minutes)", min_value=0.1, value=6.0, step=0.5
+    )
     machine_rate_per_hour = st.number_input(
         "Machine Hourly Rate (₹/hr)", min_value=0.0, value=600.0, step=50.0
     )
@@ -96,19 +106,22 @@ elif app_mode == "💰 Customer Quotation":
     )
     profit_margin = st.slider("Profit Margin (%)", 0, 50, 20)
 
-  if st.button("Calculate Quotation"):
+  if st.button("Calculate Final Quotation"):
+    material_total_cost = estimated_weight * material_cost_per_kg
     machining_cost_per_piece = (machine_rate_per_hour / 60) * machining_time
-    total_cost_per_piece = material_cost + machining_cost_per_piece
+    total_cost_per_piece = material_total_cost + machining_cost_per_piece
     unit_price = total_cost_per_piece * (1 + profit_margin / 100)
     total_quotation = unit_price * quantity
 
     st.success("✅ Quotation Calculated Successfully!")
     st.markdown(f"### Quotation Summary for: **{customer_name}** ({part_name})")
+    st.write(f"- **Grade:** {material_grade} | **Profile:** {rod_type}")
+    
     res_col1, res_col2, res_col3 = st.columns(3)
     res_col1.metric(
         label="Cost per Piece", value=f"₹{unit_price:.2f}", delta=f"+{profit_margin}% Profit"
     )
-    res_col2.metric(label="Total Quantity", value=f"{quantity} Nos")
+    res_col2.metric(label="Batch Quantity", value=f"{quantity} Nos")
     res_col3.metric(label="Grand Total Price", value=f"₹{total_quotation:,.2f}")
 
 # --- 3. PRODUCTION TRACKER MODULE ---
@@ -136,8 +149,7 @@ elif app_mode == "🏭 Production Tracker":
 elif app_mode == "📜 G-Code Generator":
   st.header("📜 CNC G-Code Generator")
   st.write(
-      "Generate standard G-code programs for turning, facing, and drilling"
-      " operations."
+      "Generate standard G-code programs for turning, facing, and drilling operations."
   )
 
   operation = st.selectbox(
@@ -185,30 +197,41 @@ elif app_mode == "🔤 Letter Cutting":
         f" mm\n- **Recommended Tool:** 60° V-Bit Cutter"
     )
 
-# --- 6. STOCK MANAGEMENT MODULE ---
-elif app_mode == "📦 Stock Management":
-  st.header("📦 Stock & Inventory Management")
-  st.write("Monitor raw materials, metal bars, and inserts stock levels.")
+# --- 6. STOCK & ROD MANAGEMENT MODULE ---
+elif app_mode == "📦 Stock & Rod Management":
+  st.header("📦 Stock & Rod Inventory Management")
+  st.write("Monitor raw material grades, rod types, diameters, and stock levels.")
 
-  material_type = st.selectbox(
-      "Material Grade", ["EN8", "EN24", "Aluminum 6061", "Brass", "Mild Steel"]
-  )
-  stock_weight = st.number_input("Available Stock Weight (Kg)", value=125.0)
-  min_limit = st.number_input(
-      "Minimum Alert Limit (Kg)", value=30.0
-  )
+  col1, col2 = st.columns(2)
+  with col1:
+    stock_grade = st.selectbox(
+        "Material Grade", ["EN8", "EN24", "Aluminum 6061", "Mild Steel (MS)", "Brass", "Stainless Steel 304", "Cast Iron"], key="stock_grade"
+    )
+    stock_rod_type = st.selectbox(
+        "Rod Type / Profile", ["Round Bar", "Hexagon Bar", "Square Bar", "Flat Plate"], key="stock_rod"
+    )
+    diameter_size = st.number_input("Rod Diameter / Size (mm)", min_value=1.0, value=40.0, step=1.0)
 
-  if stock_weight <= min_limit:
-    st.warning("⚠️ **Warning:** Stock is running low! Reorder required.")
-  else:
-    st.success("✅ Stock level is sufficient.")
+  with col2:
+    length_mm = st.number_input("Rod Length (mm)", min_value=100.0, value=1000.0, step=50.0)
+    available_weight = st.number_input("Available Stock Weight (Kg)", min_value=0.0, value=125.0)
+    min_limit = st.number_input("Minimum Alert Limit (Kg)", min_value=0.0, value=30.0)
 
-  st.write(f"Current Stock of **{material_type}**: **{stock_weight} Kg**")
+  if st.button("Check Stock Status"):
+    if available_weight <= min_limit:
+      st.warning(f"⚠️ **Warning:** Low Stock for {stock_grade} ({stock_rod_type} - {diameter_size}mm)! Reorder required.")
+    else:
+      st.success(f"✅ Stock level for {stock_grade} ({stock_rod_type}) is sufficient.")
+
+    st.write(f"### Inventory Details:")
+    st.write(f"- **Grade:** {stock_grade}")
+    st.write(f"- **Type:** {stock_rod_type}")
+    st.write(f"- **Size:** {diameter_size} mm diameter, {length_mm} mm length")
+    st.write(f"- **Current Stock Weight:** **{available_weight} Kg**")
 
 # --- FOOTER ---
 st.markdown("---")
 st.markdown(
-    "<p style='text-align: center; color: gray;'>© 2026 Megala CNC Mate | Built"
-    " for Smart Workshop Automation</p>",
+    "<p style='text-align: center; color: gray;'>© 2026 Megala CNC Mate | Built for Smart Workshop Automation</p>",
     unsafe_allow_html=True,
 )
