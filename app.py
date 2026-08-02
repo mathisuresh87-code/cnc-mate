@@ -8,11 +8,22 @@ st.set_page_config(
     layout="wide",
 )
 
+# --- HEADER WITH USER LOGO & TITLE ---
+col_logo, col_title = st.columns([1, 5])
+with col_logo:
+    try:
+        st.image("logo.png", width=120)
+    except:
+        st.write("⚙️ [Logo]")
+with col_title:
+    st.title("⚙️ Megala CNC Mate")
+    st.markdown("**SMART CNC. SIMPLE WORK.** — Customer Quotation, Production & Stock Management System")
+
+st.markdown("---")
+
 # Multi-Language Dictionary (English, Tamil, Hindi, Kannada, Telugu)
 translations = {
     "English": {
-        "title": "⚙️ Megala CNC Mate",
-        "subtitle": "**SMART CNC. SIMPLE WORK.** — Customer Quotation, Production & Stock Management System",
         "menu_title": "🧭 Navigation Menu",
         "home": "🏠 Home Dashboard",
         "rod_calc": "📏 Rod & Conversion Calculator",
@@ -22,8 +33,8 @@ translations = {
         "ai_prog": "🤖 AI Drawing to G-Code Generator",
         "quotation": "📄 Quotation & PDF",
         "settings": "⚙️ Settings & Master",
-        "hello": "Hello, Suresh! Good Morning 👋",
-        "home_desc": "Manage all your shop floor calculations in one place.",
+        "hello": "Hello, Nithish! Good Morning 👋",
+        "home_desc": "Manage all your shop floor calculations in one place with your branded system.",
         "raw_dia": "Raw Material Dia / Size (mm)",
         "part_len": "Part Length (mm)",
         "cutting_all": "Cutting Allowance / Groove (mm)",
@@ -36,8 +47,6 @@ translations = {
         "results": "Calculation Results"
     },
     "தமிழ்": {
-        "title": "⚙️ மேகலா CNC மேட்",
-        "subtitle": "**SMART CNC. SIMPLE WORK.** — கஸ்டமர் கொட்டேஷன், உற்பத்தி மற்றும் ஸ்டாக் மேனேஜ்மெண்ட் சிஸ்டம்",
         "menu_title": "🧭 மெனு (Navigation Menu)",
         "home": "🏠 முகப்பு (Home Dashboard)",
         "rod_calc": "📏 ராட் & கன்வெர்ட்டர் கால்குலேட்டர்",
@@ -47,8 +56,8 @@ translations = {
         "ai_prog": "🤖 AI டிராயிங் & CNC ப்ரோக்ராம் ஜெனரேட்டர்",
         "quotation": "📄 கொட்டேஷன் & PDF",
         "settings": "⚙️ செட்டிங்ஸ் / More Menu",
-        "hello": "வணக்கம் சுரேஷ்! இனிய காலை வணக்கம் 👋",
-        "home_desc": "இப்போது உங்கள் ஷாப் ப்ளோர் கணக்கீடுகள் அனைத்தையும் ஒரே இடத்தில் கையாளலாம்.",
+        "hello": "வணக்கம் நிதீஷ்! இனிய காலை வணக்கம் 👋",
+        "home_desc": "உங்களது சொந்த பிராண்ட் லோகோவுடன் ஷாப் ப்ளோர் கணக்கீடுகள் அனைத்தையும் ஒரே இடத்தில் கையாளலாம்.",
         "raw_dia": "ரா மெட்டீரியல் டயா / அளவு (Raw Size - mm)",
         "part_len": "பார்ட் நீளம் (Part Length - mm)",
         "cutting_all": "கட்டிங் அலவன்ஸ் / குருவ் (Cutting Allowance - mm)",
@@ -61,8 +70,6 @@ translations = {
         "results": "கணக்கீட்டு முடிவுகள் (Calculation Result)"
     },
     "हिंदी": {
-        "title": "⚙️ मेगाला सीएनसी मेट",
-        "subtitle": "**SMART CNC. SIMPLE WORK.** — ग्राहक उद्धरण, उत्पादन और स्टॉक प्रबंधन प्रणाली",
         "menu_title": "🧭 नेविगेशन मेनू",
         "home": "🏠 होम डैशबोर्ड",
         "rod_calc": "📏 रॉड और रूपांतरण कैलकुलेटर",
@@ -72,8 +79,8 @@ translations = {
         "ai_prog": "🤖 ड्राइंग से जी-कोड जनरेटर",
         "quotation": "📄 उद्धरण और पीडीएफ",
         "settings": "⚙️ सेटिंग्स और मास्टर",
-        "hello": "नमस्ते सुरेश! सुप्रभात 👋",
-        "home_desc": "अब अपनी सभी शॉप फ्लोर गणनाओं को एक ही स्थान पर प्रबंधित करें।",
+        "hello": "नमस्ते नितेश! सुप्रभात 👋",
+        "home_desc": "अपनी सभी शॉप फ्लोर गणनाओं को प्रबंधित करें।",
         "raw_dia": "रॉ मटेरियल व्यास (Raw Size - mm)",
         "part_len": "पार्ट की लंबाई (Part Length - mm)",
         "cutting_all": "कटिंग अलाउंस / ग्रूव (Cutting Allowance - mm)",
@@ -86,8 +93,6 @@ translations = {
         "results": "गणना परिणाम (Calculation Results)"
     },
     "ಕನ್ನಡ": {
-        "title": "⚙️ ಮೇಗಲಾ ಸಿಎನ್ಸಿ ಮೇಟ್",
-        "subtitle": "**SMART CNC. SIMPLE WORK.** — ಗ್ರಾಹಕರ ಉಲ್ಲೇಖ, ಉತ್ಪಾದನೆ ಮತ್ತು ಸ್ಟಾಕ್ ನಿರ್ವಹಣಾ ವ್ಯವಸ್ಥೆ",
         "menu_title": "🧭 ನ್ಯಾವಿಗೇಷನ್ ಮೆನು",
         "home": "🏠 ಮುಖಪುಟ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
         "rod_calc": "📏 ರಾಡ್ ಮತ್ತು ಪರಿವರ್ತನೆ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
@@ -97,8 +102,8 @@ translations = {
         "ai_prog": "🤖 AI ಡ್ರಾಯಿಂಗ್ ಟು G-Code ಜನರೇಟರ್",
         "quotation": "📄 ಉಲ್ಲೇಖ ಮತ್ತು PDF",
         "settings": "⚙️ ಸೆಟ್ಟಿಂಗ್‌ಗಳು & ಮಾಸ್ಟರ್",
-        "hello": "ನಮಸ್ಕಾರ ಸುರೇಶ್! ಶುಭೋದಯ 👋",
-        "home_desc": "ಈಗ ನಿಮ್ಮ ಎಲ್ಲಾ ಶಾಪ್ ಫ್ಲೋರ್ ಲೆಕ್ಕಾಚಾರಗಳನ್ನು ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ ನಿರ್ವಹಿಸಿ.",
+        "hello": "ನಮಸ್ಕಾರ ನಿತೀಶ್! ಶುಭೋದಯ 👋",
+        "home_desc": "ನಿಮ್ಮ ಎಲ್ಲಾ ಶಾಪ್ ಫ್ಲೋರ್ ಲೆಕ್ಕಾಚಾರಗಳನ್ನು ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ ನಿರ್ವಹಿಸಿ.",
         "raw_dia": "ರಾ ಮೆಟೀರಿಯಲ್ ವ್ಯಾಸ (Raw Size - mm)",
         "part_len": "ಭಾಗದ ಉದ್ದ (Part Length - mm)",
         "cutting_all": "ಕಟಿಂಗ್ ಅಲೌನ್ಸ್ / ಗ್ರೂವ್ (Cutting Allowance - mm)",
@@ -111,8 +116,6 @@ translations = {
         "results": "ಲೆಕ್ಕಾಚಾರದ ಫಲಿತಾಂಶಗಳು (Calculation Results)"
     },
     "తెలుగు": {
-        "title": "⚙️ మేగలా CNC మేట్",
-        "subtitle": "**SMART CNC. SIMPLE WORK.** — కస్టమర్ కొటేషన్, ఉత్పత్తి మరియు స్టాక్ మేనేజ్‌మెంట్ సిస్టమ్",
         "menu_title": "🧭 నావిగేషన్ మెనూ",
         "home": "🏠 హోమ్ డ్యాష్‌బోర్డ్",
         "rod_calc": "📏 రాడ్ & మార్పిడి కాలిక్యులేటర్",
@@ -122,28 +125,24 @@ translations = {
         "ai_prog": "🤖 AI డ్రాయింగ్ నుండి G-Code జెనరేటర్",
         "quotation": "📄 కొటేషన్ & PDF",
         "settings": "⚙️ సెటింగ్స్ / మాస్టర్",
-        "hello": "నమస్తే సురేష్! శుభోదయం 👋",
-        "home_desc": "ఇప్పుడు మీ షాప్ ఫ్లోర్ లెక్కలన్నీ ఒకే చోట నిర్వహించండి.",
+        "hello": "నమస్తే నితీష్! శుభోదయం 👋",
+        "home_desc": "మీ షాప్ ఫ్లోర్ లెక్కలన్నీ ఒకే చోట నిర్వహించండి.",
         "raw_dia": "రా మెటీరియల్ వ్యాసం (Raw Size - mm)",
         "part_len": "భాగం పొడవు (Part Length - mm)",
         "cutting_all": "కటింగ్ అలవెన్స్ / గ్రూవ్ (Cutting Allowance - mm)",
         "std_rod_len": "ప్రామాణిక రాడ్ పొడవు (Standard Rod Length - Meters)",
-        "mode_label": "మెటీరియల్ ఇన్పుట్ మోಡ್ ఎంచుకోండి:",
+        "mode_label": "మెటీరియల్ ఇన్పుட் ಮೋಡ್ ಎంచుకోండి:",
         "mode1": "1. రాడ్ల సంఖ్య / మీటర్ల ద్వారా",
         "mode2": "2. బరువు (KG) ద్వారా",
         "mode3": "3. అవసరమైన భాగాల సంఖ్య (Qty) ద్వారా",
         "calc_btn": "📊 లెక్కించండి (Calculate)",
-        "results": "ఫలిতాలు (Calculation Results)"
+        "results": "ఫలితాలు (Calculation Results)"
     }
 }
 
 # Sidebar Language Selection
 lang_choice = st.sidebar.selectbox("🌐 மொழி / Language / भाषा / ಭಾಷೆ / భాష", ["தமிழ்", "English", "हिंदी", "ಕನ್ನಡ", "తెలుగు"])
 t = translations[lang_choice]
-
-st.title(t["title"])
-st.markdown(t["subtitle"])
-st.markdown("---")
 
 menu = st.sidebar.selectbox(
     t["menu_title"],
@@ -180,7 +179,6 @@ elif menu == t["rod_calc"]:
     st.header(t["rod_calc"])
     st.write("மெட்டீரியல் கிரேடு, வடிவம் (Round, Hex, Tube) மற்றும் மீட்டர்/கிலோ அளவுகளைத் தேர்ந்தெடுத்து துல்லியமாகக் கணக்கிடலாம்.")
 
-    # Material Grade & Shape Selection
     gc1, gc2 = st.columns(2)
     with gc1:
         material_grade = st.selectbox(
@@ -193,7 +191,6 @@ elif menu == t["rod_calc"]:
             ["Round Bar (வட்ட ராட்)", "Hexagon Bar (அக்டகன் / ஹெக்சகன்)", "Tube / Pipe (டியூப் / பைப்)"]
         )
 
-    # Density based on grade
     density_map = {
         "MS (Mild Steel)": 0.00000785,
         "EN8": 0.00000785,
@@ -231,14 +228,12 @@ elif menu == t["rod_calc"]:
 
     effective_len = part_length + cutting_allowance
 
-    # Weight per mm calculation based on shape
     if "Hexagon" in material_shape:
-        # Area of Hexagon = 0.866 * across_flats^2
         weight_per_mm = 0.866 * (raw_dia ** 2) * density
     elif "Tube" in material_shape:
         cross_area = (math.pi / 4) * ((outer_dia ** 2) - (inner_dia ** 2))
         weight_per_mm = cross_area * density
-    else:  # Round Bar
+    else:
         cross_area = math.pi * ((raw_dia / 2) ** 2)
         weight_per_mm = cross_area * density
 
