@@ -24,7 +24,7 @@ translations = {
         "settings": "⚙️ Settings & Master",
         "hello": "Hello, Suresh! Good Morning 👋",
         "home_desc": "Manage all your shop floor calculations in one place.",
-        "raw_dia": "Raw Material Dia (mm)",
+        "raw_dia": "Raw Material Dia / Size (mm)",
         "part_len": "Part Length (mm)",
         "cutting_all": "Cutting Allowance / Groove (mm)",
         "std_rod_len": "Standard Rod Length (Meters)",
@@ -49,7 +49,7 @@ translations = {
         "settings": "⚙️ செட்டிங்ஸ் / More Menu",
         "hello": "வணக்கம் சுரேஷ்! இனிய காலை வணக்கம் 👋",
         "home_desc": "இப்போது உங்கள் ஷாப் ப்ளோர் கணக்கீடுகள் அனைத்தையும் ஒரே இடத்தில் கையாளலாம்.",
-        "raw_dia": "ரா மெட்டீரியல் டயா (Raw Dia - mm)",
+        "raw_dia": "ரா மெட்டீரியல் டயா / அளவு (Raw Size - mm)",
         "part_len": "பார்ட் நீளம் (Part Length - mm)",
         "cutting_all": "கட்டிங் அலவன்ஸ் / குருவ் (Cutting Allowance - mm)",
         "std_rod_len": "ஒரு ஸ்டாண்டர்ட் ராட் நீளம் (Standard Rod Length - Meters)",
@@ -74,7 +74,7 @@ translations = {
         "settings": "⚙️ सेटिंग्स और मास्टर",
         "hello": "नमस्ते सुरेश! सुप्रभात 👋",
         "home_desc": "अब अपनी सभी शॉप फ्लोर गणनाओं को एक ही स्थान पर प्रबंधित करें।",
-        "raw_dia": "रॉ मटेरियल व्यास (Raw Dia - mm)",
+        "raw_dia": "रॉ मटेरियल व्यास (Raw Size - mm)",
         "part_len": "पार्ट की लंबाई (Part Length - mm)",
         "cutting_all": "कटिंग अलाउंस / ग्रूव (Cutting Allowance - mm)",
         "std_rod_len": "मानक रॉड की लंबाई (Standard Rod Length - Meters)",
@@ -99,7 +99,7 @@ translations = {
         "settings": "⚙️ ಸೆಟ್ಟಿಂಗ್‌ಗಳು & ಮಾಸ್ಟರ್",
         "hello": "ನಮಸ್ಕಾರ ಸುರೇಶ್! ಶುಭೋದಯ 👋",
         "home_desc": "ಈಗ ನಿಮ್ಮ ಎಲ್ಲಾ ಶಾಪ್ ಫ್ಲೋರ್ ಲೆಕ್ಕಾಚಾರಗಳನ್ನು ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ ನಿರ್ವಹಿಸಿ.",
-        "raw_dia": "ರಾ ಮೆಟೀರಿಯಲ್ ವ್ಯಾಸ (Raw Dia - mm)",
+        "raw_dia": "ರಾ ಮೆಟೀರಿಯಲ್ ವ್ಯಾಸ (Raw Size - mm)",
         "part_len": "ಭಾಗದ ಉದ್ದ (Part Length - mm)",
         "cutting_all": "ಕಟಿಂಗ್ ಅಲೌನ್ಸ್ / ಗ್ರೂವ್ (Cutting Allowance - mm)",
         "std_rod_len": "ಪ್ರಮಾಣಿತ ರಾಡ್ ಉದ್ದ (Standard Rod Length - Meters)",
@@ -124,16 +124,16 @@ translations = {
         "settings": "⚙️ సెటింగ్స్ / మాస్టర్",
         "hello": "నమస్తే సురేష్! శుభోదయం 👋",
         "home_desc": "ఇప్పుడు మీ షాప్ ఫ్లోర్ లెక్కలన్నీ ఒకే చోట నిర్వహించండి.",
-        "raw_dia": "రా మెటీరియల్ వ్యాసం (Raw Dia - mm)",
+        "raw_dia": "రా మెటీరియల్ వ్యాసం (Raw Size - mm)",
         "part_len": "భాగం పొడవు (Part Length - mm)",
         "cutting_all": "కటింగ్ అలవెన్స్ / గ్రూవ్ (Cutting Allowance - mm)",
         "std_rod_len": "ప్రామాణిక రాడ్ పొడవు (Standard Rod Length - Meters)",
-        "mode_label": "మెటీరియల్ ఇన్పుట్ మోడ్ ఎంచుకోండి:",
+        "mode_label": "మెటీరియల్ ఇన్పుట్ మోಡ್ ఎంచుకోండి:",
         "mode1": "1. రాడ్ల సంఖ్య / మీటర్ల ద్వారా",
         "mode2": "2. బరువు (KG) ద్వారా",
         "mode3": "3. అవసరమైన భాగాల సంఖ్య (Qty) ద్వారా",
         "calc_btn": "📊 లెక్కించండి (Calculate)",
-        "results": "ఫలితాలు (Calculation Results)"
+        "results": "ఫలిতాలు (Calculation Results)"
     }
 }
 
@@ -166,7 +166,7 @@ if menu == t["home"]:
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.info(f"📏 **Rod & Conversion**\n\nMeter, KG & Qty Converter")
+        st.info(f"📏 **Rod & Conversion**\n\nGrades, Shapes, Meter, KG & Qty")
         st.info(f"📦 **Stock Management**\n\nStock levels & details")
     with col2:
         st.success(f"⏱️ **Production Calculator**\n\nCycle time & shift output")
@@ -178,11 +178,41 @@ if menu == t["home"]:
 # ==================== 2. ROD & CONVERSION CALCULATOR ====================
 elif menu == t["rod_calc"]:
     st.header(t["rod_calc"])
-    st.write("ரா மெட்டீரியல் மீட்டர், கிலோ (KG) அல்லது பார்ட் எண்ணிக்கையாக எப்படி வந்தாலும் துல்லியமாகக் கணக்கிடலாம்.")
+    st.write("மெட்டீரியல் கிரேடு, வடிவம் (Round, Hex, Tube) மற்றும் மீட்டர்/கிலோ அளவுகளைத் தேர்ந்தெடுத்து துல்லியமாகக் கணக்கிடலாம்.")
+
+    # Material Grade & Shape Selection
+    gc1, gc2 = st.columns(2)
+    with gc1:
+        material_grade = st.selectbox(
+            "மெட்டீரியல் கிரேடு (Material Grade)",
+            ["MS (Mild Steel)", "EN8", "EN19", "EN24", "Aluminium", "Brass"]
+        )
+    with gc2:
+        material_shape = st.selectbox(
+            "மெட்டீரியல் வடிவம் (Material Shape)",
+            ["Round Bar (வட்ட ராட்)", "Hexagon Bar (அக்டகன் / ஹெக்சகன்)", "Tube / Pipe (டியூப் / பைப்)"]
+        )
+
+    # Density based on grade
+    density_map = {
+        "MS (Mild Steel)": 0.00000785,
+        "EN8": 0.00000785,
+        "EN19": 0.00000785,
+        "EN24": 0.00000785,
+        "Aluminium": 0.00000270,
+        "Brass": 0.00000850
+    }
+    density = density_map.get(material_grade, 0.00000785)
 
     col1, col2 = st.columns(2)
     with col1:
-        raw_dia = st.number_input(t["raw_dia"], min_value=1.0, value=20.0, step=0.5)
+        if "Tube" in material_shape:
+            outer_dia = st.number_input("வெளியிட டயா (Outer Dia - mm)", min_value=1.0, value=30.0, step=0.5)
+            inner_dia = st.number_input("உள் டயா (Inner Dia - mm)", min_value=0.0, value=15.0, step=0.5)
+            raw_dia = outer_dia
+        else:
+            raw_dia = st.number_input(t["raw_dia"], min_value=1.0, value=20.0, step=0.5)
+            
         part_length = st.number_input(t["part_len"], min_value=1.0, value=126.0, step=1.0)
     with col2:
         cutting_allowance = st.number_input(t["cutting_all"], min_value=0.0, value=3.0, step=0.5)
@@ -200,7 +230,18 @@ elif menu == t["rod_calc"]:
     )
 
     effective_len = part_length + cutting_allowance
-    weight_per_mm = math.pi * ((raw_dia / 2) ** 2) * 0.00000785
+
+    # Weight per mm calculation based on shape
+    if "Hexagon" in material_shape:
+        # Area of Hexagon = 0.866 * across_flats^2
+        weight_per_mm = 0.866 * (raw_dia ** 2) * density
+    elif "Tube" in material_shape:
+        cross_area = (math.pi / 4) * ((outer_dia ** 2) - (inner_dia ** 2))
+        weight_per_mm = cross_area * density
+    else:  # Round Bar
+        cross_area = math.pi * ((raw_dia / 2) ** 2)
+        weight_per_mm = cross_area * density
+
     weight_per_meter = weight_per_mm * 1000
     standard_rod_weight = rod_standard_length * weight_per_meter
 
@@ -209,7 +250,6 @@ elif menu == t["rod_calc"]:
         num_rods = st.number_input("ராடுகளின் எண்ணிக்கை (Number of Rods)", min_value=1, value=10, step=1)
         
         if st.button(t["calc_btn"], type="primary"):
-            total_length_mm = num_rods * rod_standard_length * 1000
             parts_per_rod = int((rod_standard_length * 1000) // effective_len) if effective_len > 0 else 0
             total_parts = parts_per_rod * num_rods
             balance_mm_per_rod = (rod_standard_length * 1000) % effective_len
@@ -335,7 +375,7 @@ elif menu == t["stock_mgmt"]:
 # ==================== 6. AI DRAWING TO G-CODE GENERATOR ====================
 elif menu == t["ai_prog"]:
     st.header(t["ai_prog"])
-    st.write("கஸ்டமர் டிராயிங் அல்லது பார்ட் போட்டோவை அப்லோட் செய்து, அதற்கான CNC G-Code ப்ரோக்ராமை உடն உருவாக்கலாம்.")
+    st.write("கஸ்டமர் டிராயிங் அல்லது பார்ட் போட்டோவை அப்லோட் செய்து, அதற்கான CNC G-Code ப்ரோக்ராமை உடனே உருவாக்கலாம்.")
     
     uploaded_drawing = st.file_uploader("பார்ட் டிராயிங் / போட்டோவை அப்லோட் செய்யவும் (Upload Drawing / Image)", type=["png", "jpg", "jpeg"])
     
