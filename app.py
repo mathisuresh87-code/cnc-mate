@@ -26,19 +26,17 @@ with col_logo:
 with col_title:
   st.title("⚙️ Megala CNC Mate")
   st.markdown(
-      "**SMART CNC. SIMPLE WORK.** — 6-Language Support, Drawing-Based End-Bit &"
-      " Scrap Calculator, Tube/Rod Profiles, Photo Upload, Quotation, Production"
-      " & Stock Management"
+      "**SMART CNC. SIMPLE WORK.** — Clean UI, Drawing-Based End-Bit & Scrap"
+      " Calculator, Tube/Rod Profiles, Photo Upload, Quotation, Production &"
+      " Stock Management"
   )
 
 st.markdown("---")
 
-# --- 6 LANGUAGES SUPPORT SETUP ---
-st.sidebar.markdown(
-    "### 🌐 Select Language / மொழி / भाषा / భాష / ഭാഷ / ಭಾಷೆ"
-)
+# --- CLEAN LANGUAGE SUPPORT SETUP (COMPACT UI) ---
+st.sidebar.markdown("### 🌐 Language / மொழி")
 lang = st.sidebar.selectbox(
-    "Language",
+    "Choose Language",
     [
         "English",
         "தமிழ் (Tamil)",
@@ -47,6 +45,7 @@ lang = st.sidebar.selectbox(
         "മലയാളം (Malayalam)",
         "ಕನ್ನಡ (Kannada)",
     ],
+    label_visibility="collapsed",
 )
 
 st.sidebar.markdown("---")
@@ -89,7 +88,7 @@ menu_options = {
     "తెలుగు (Telugu)": [
         "🏠 డాష్‌బోర్డ్ (Dashboard)",
         "📸 ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-கோడ్",
-        "🧮 వర్క్‌షాప్ కాలిక్యులేటర్",
+        "🧮 వర్క్‌షోప్ కాలిక్యులేటర్",
         "📐 ఎండ్-బిట్, స్క్రాప్ & క్వాంటిటీ కాలిక్యులేటర్",
         "💰 కస్టమర్ కొటేషన్ (Photo)",
         "🏭 ఉత్పత్తి ట్రాకర్",
@@ -99,7 +98,7 @@ menu_options = {
     ],
     "മലയാളം (Malayalam)": [
         "🏠 ഡാഷ്‌ബോർഡ് (Dashboard)",
-        "📸 ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-கோഡ്",
+        "📸 ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-കോഡ്",
         "🧮 വർക്ക്‌ഷോപ്പ് കാൽക്കുലേറ്റർ",
         "📐 എൻഡ്-ബിറ്റ്, സ്ക്രാപ്പ് & ക്വാണ്ടിറ്റി കാൽക്കുലേറ്റർ",
         "💰 കസ്റ്റമർ കൊട്ടേഷൻ (Photo)",
@@ -110,7 +109,7 @@ menu_options = {
     ],
     "ಕನ್ನಡ (Kannada)": [
         "🏠 ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)",
-        "📸 ಫೋಟೋ / ಡ್ರಾಯಿಂಗ್ ವಿಶ್ಲೇಷಣೆ & ಜಿ-ಕೋಡ್",
+        "📸 ಫೋಟೋ / ಡ್ರಾಯಿங் ವಿಶ್ಲೇಷಣೆ & ಜಿ-ಕೋடு",
         "🧮 ವರ್ಕ್‌ಷೋಪ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "📐 ಎಂಡ್-ಬಿಟ್, ಸ್ಕ್ರ್ಯಾಪ್ ಮತ್ತು ಕ್ವಾಂಟಿಟಿ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "💰 ಗ್ರಾಹಕರ ಉಲ್ಲೇಖ (Quotation)",
@@ -121,7 +120,9 @@ menu_options = {
     ],
 }
 
-app_mode = st.sidebar.selectbox("Select Module / பகுதி", menu_options[lang])
+app_mode = st.sidebar.selectbox(
+    "Select Module", menu_options[lang], label_visibility="collapsed"
+)
 
 # --- 1. DASHBOARD ---
 if any(
@@ -137,7 +138,7 @@ if any(
 ):
   st.header("📊 Megala CNC Mate Dashboard")
   st.write(
-      "Your ultimate smart automation tool for CNC machining, drawing-based"
+      "Your clean, smart automation tool for CNC machining, drawing-based"
       " scrap analysis, end-bit tracking, and workshop management."
   )
 
@@ -149,7 +150,7 @@ if any(
   with col3:
     st.metric(label="Languages", value="6 Supported")
   with col4:
-    st.metric(label="Version", value="Final Pro v10.0")
+    st.metric(label="Version", value="Final Clean v11.0")
 
 # --- 2. PHOTO / DRAWING ANALYSIS & G-CODE MODULE ---
 elif any(
@@ -352,7 +353,6 @@ elif any(
     )
 
   if st.button("Calculate Exact End-Bit & Scrap"):
-    # Volume calculation per unit length (cm3 per cm)
     if profile_type == "Round Bar":
       r_cm = (dia / 2.0) / 10.0
       vol_per_cm = math.pi * (r_cm**2)
@@ -372,24 +372,15 @@ elif any(
       vol_per_cm = fw_cm * ft_cm
 
     total_rod_len_mm = standard_rod_length_m * 1000.0
-    # Length consumed per single component including facing and parting blade width
     single_consumption_mm = (
         part_drawing_length + facing_allowance + parting_tool_width
     )
-
-    # Number of pieces possible from one rod
     pieces_per_rod = int(total_rod_len_mm // single_consumption_mm)
 
-    # Consumed length for parts + cutting allowances
     used_length_mm = pieces_per_rod * single_consumption_mm
-    end_bit_leftover_mm = (
-        total_rod_len_mm - used_length_mm
-    )  # Tail-end piece scrap
-
-    # Cutting blade scrap total length
+    end_bit_leftover_mm = total_rod_len_mm - used_length_mm
     total_cutting_blade_scrap_mm = pieces_per_rod * parting_tool_width
 
-    # Weights calculation (Kg)
     total_gross_weight_kg = (
         (vol_per_cm * (total_rod_len_mm / 10.0)) * density
     ) / 1000.0
