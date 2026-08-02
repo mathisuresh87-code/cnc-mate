@@ -50,66 +50,69 @@ lang = st.sidebar.selectbox(
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 📌 Menu Navigation (முகப்பு மெனு)")
 
-# --- DISTINCT MENU OPTIONS (No overlapping keywords to prevent routing bugs) ---
+# --- MENU OPTIONS WITH DASHBOARD STRICTLY AT FIRST POSITION ---
 menu_options = {
     "தமிழ் (Tamil)": [
-        "1. மெஷின் கால்குலேட்டர் (Machine RPM & Time)",
-        "2. கொட்டேஷன் & செலவு மேலாண்மை (Quotation & Overheads)",
-        "3. முகப்பு & டேஷ்போர்டு (Dashboard Overview)",
-        "4. போட்டோ / டிராயிங் பகுப்பாய்வு (Drawing & Photo Analysis)",
-        "5. ராட், எண்டு-பிட் & ஸ்கிராப் (Rod & Scrap Calculator)",
-        "6. ஜி-கோடு ஜெனரேட்டர் (Advanced G-Code)",
-        "7. உற்பத்தி நாட்கள் கால்குலேட்டர் (Production Days)",
-        "8. ஸ்டாக் மேனேஜ்மென்ட் (Stock & Inventory)",
+        "1. 🏠 முகப்பு & டேஷ்போர்டு (Dashboard Overview)",
+        "2. 🧮 மெஷின் கால்குலேட்டர் (Machine RPM & Time)",
+        "3. 💰 கொட்டேஷன் & செலவு மேலாண்மை (Quotation & Overheads)",
+        "4. 📸 போட்டோ / டிராயிங் பகுப்பாய்வு (Drawing & Photo Analysis)",
+        (
+            "5. 📐 ராட், கேஜ்/மீட்டர் கன்வெர்ட்டர் & ஸ்கிராப் (Rod & Converter"
+            " Calculator)"
+        ),
+        "6. 📜 ஜி-கோடு ஜெனரேட்டர் (Advanced G-Code)",
+        "7. 🏭 உற்பத்தி நாட்கள் கால்குலேட்டர் (Production Days)",
+        "8. 📦 ஸ்டாக் மேனேஜ்மென்ட் (Stock & Inventory)",
     ],
     "English": [
-        "1. Machine Calculator (RPM & Time)",
-        "2. Quotation & Cost Management (Overheads)",
-        "3. Dashboard Overview",
-        "4. Drawing & Photo Analysis",
-        "5. Rod, End-Bit & Scrap Calculator",
-        "6. Advanced G-Code Generator",
-        "7. Production Days Calculator",
-        "8. Stock & Inventory Management",
+        "1. 🏠 Dashboard Overview",
+        "2. 🧮 Machine Calculator (RPM & Time)",
+        "3. 💰 Quotation & Cost Management (Overheads)",
+        "4. 📸 Drawing & Photo Analysis",
+        "5. 📐 Rod, Meter/Kg Converter & Scrap Calculator",
+        "6. 📜 Advanced G-Code Generator",
+        "7. 🏭 Production Days Calculator",
+        "8. 📦 Stock & Inventory Management",
     ],
     "हिंदी (Hindi)": [
-        "1. मशीन कैलकुलेटर (RPM & Time)",
-        "2. कोटेशन और लागत प्रबंधन (Quotation)",
-        "3. डैशबोर्ड अवलोकन (Dashboard)",
+        "1. 🏠 डैशबोर्ड अवलोकन (Dashboard)",
+        "2. मशीन कैलकुलेटर (RPM & Time)",
+        "3. कोटेशन और लागत प्रबंधन (Quotation)",
         "4. ड्राइंग और फोटो विश्लेषण (Analysis)",
-        "5. रॉड और स्क्रैप कैलकुलेटर (Scrap)",
+        "5. रॉड, मीटर/किलो कनवर्टर और स्क्रैप (Scrap)",
         "6. उन्नत जी-कोड जेनरेटर (G-Code)",
         "7. उत्पादन दिन कैलकुलेटर (Production)",
         "8. स्टॉक प्रबंधन (Stock)",
     ],
     "తెలుగు (Telugu)": [
-        "1. మెషిన్ కాలిక్యులేటర్ (RPM & Time)",
-        "2. కొటేషన్ & ఖర్చు నిర్వహణ (Quotation)",
-        "3. డాష్‌బోర్డ్ అవలోకనం (Dashboard)",
+        "1. 🏠 డాష్‌బోర్డ్ అవలోకనం (Dashboard)",
+        "2. మెషిన్ కాలిక్యులేటర్ (RPM & Time)",
+        "3. కొటేషన్ & ఖర్చు నిర్వహణ (Quotation)",
         "4. డ్రాయింగ్ & ఫోటో విశ్లేషణ (Analysis)",
-        "5. రాడ్ & స్క్రాప్ కాలిక్యులేటర్ (Scrap)",
+        "5. రాడ్, మీటర్/కేజీ కన్వర్టర్ & స్క్రాప్ (Scrap)",
         "6. అధునాతన జి-కోడ్ జనరేటర్ (G-Code)",
         "7. ఉత్పత్తి రోజుల కాలిక్యులేటర్ (Production)",
         "8. స్టాక్ నిర్వహణ (Stock)",
     ],
     "മലയാളം (Malayalam)": [
-        "1. മെഷീൻ കാൽക്കുലേറ്റർ (RPM & Time)",
-        "2. കൊട്ടേഷൻ & കോസ്റ്റ് മാനേജ്മെന്റ് (Quotation)",
-        "3. ഡാഷ്‌ബോർഡ് അവലോകനം (Dashboard)",
+        "1. 🏠 ഡാഷ്‌ബോർഡ് അവലോകനം (Dashboard)",
+        "2. മെഷീൻ കാൽക്കുലേറ്റർ (RPM & Time)",
+        "3. കൊട്ടേഷൻ & കോസ്റ്റ് മാനേജ്മെന്റ് (Quotation)",
         "4. ഡ്രോയിംഗ് & ഫോട്ടോ വിശകലനം (Analysis)",
-        "5. റോഡ് & സ്ക്രാപ്പ് കാൽക്കുലേറ്റർ (Scrap)",
+        "5. റോഡ്, മീറ്റർ/കിലോ കൺവെർട്ടർ & സ്ക്രാപ്പ് (Scrap)",
         "6. അഡ്വാൻസ്ഡ് ജി-കോഡ് ജെനറേറ്റർ (G-Code)",
         "7. പ്രൊഡക്ഷൻ ഡേയ്സ് കാൽക്കുലേറ്റർ (Production)",
         "8. സ്റ്റോക്ക് മാനേജ്മെന്റ് (Stock)",
     ],
     "ಕನ್ನಡ (Kannada)": [
-        "1. ಮೆಷಿನ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್ (RPM & Time)",
-        "2. ಉಲ್ಲೇಖ ಮತ್ತು ವೆಚ್ಚ ನಿರ್ವಹಣೆ (Quotation)",
-        "3. ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಅವಲೋಕನ (Dashboard)",
+        "1. 🏠 ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಅವಲೋಕನ (Dashboard)",
+        "2. ಮೆಷಿನ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್ (RPM & Time)",
+        "3. ಉಲ್ಲೇಖ ಮತ್ತು ವೆಚ್ಚ ನಿರ್ವಹಣೆ (Quotation)",
         "4. ಡ್ರಾಯಿಂಗ್ & ಫೋಟೋ ವಿಶ್ಲೇಷಣೆ (Analysis)",
-        "5. ರಾಡ್ & ಸ್ಕ್ರ್ಯಾಪ್ ಕ್ಯಾಲ್ಕುలేಟರ್ (Scrap)",
+        "5. ರಾಡ್, ಮೀಟರ್/ಕೆಜಿ ಪರಿವರ್ತಕ ಮತ್ತು ಸ್ಕ್ರ್ಯಾಪ್ (Scrap)",
         "6. ಸುಧಾರಿತ జి-కోడ్ ಜನರೇಟರ್ (G-Code)",
-        "7. ಉತ್ಪಾದನಾ ದಿನಗಳ ಕ್ಯಾಲ್ಕುಲೇಟರ್ (Production)",
+        "7. ಉತ್ಪಾದನಾ ದಿನಗಳ ಕ್ಯಾಲ್ಕುలేಟರ್ (Production)",
         "8. ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ (Stock)",
     ],
 }
@@ -118,11 +121,44 @@ app_mode = st.sidebar.radio(
     "Select Module", menu_options[lang], label_visibility="collapsed"
 )
 
-# --- EXACT STRING MATCHING FOR EACH MODULE (Ensures zero routing overlap) ---
-
-# MODULE 1: MACHINE CALCULATOR
+# --- MODULE 1: DASHBOARD OVERVIEW (PLACED FIRST) ---
 if (
     app_mode.startswith("1.")
+    or "Dashboard" in app_mode
+    or "முகப்பு" in app_mode
+):
+  st.header("🏠 Megala CNC Mate - Dashboard & Module Overview")
+  st.write(
+      "Welcome to your offline workshop command center. Here is the summary of"
+      " all available modules designed specifically for Nithish's Workshop."
+  )
+
+  col1, col2, col3, col4 = st.columns(4)
+  with col1:
+    st.metric(label="Total Modules", value="8 Pro Modules")
+  with col2:
+    st.metric(label="Operation Mode", value="100% Offline 🟢")
+  with col3:
+    st.metric(label="Language Support", value="6 Languages")
+  with col4:
+    st.metric(label="App Version", value="Ultimate v18.0")
+
+  st.markdown("---")
+  st.subheader("📌 Quick Guide to Available Features in this App:")
+  st.markdown("""
+    1. **🏠 Dashboard Overview:** Quick summary of workshop modules.
+    2. **🧮 Machine Calculator:** Accurate calculations tailored for CNC Turning, Traub Automatic Lathes, and Drilling machines.
+    3. **💰 Quotation & Overheads:** Includes photo upload or manual entry, plus EB bills, coolant oil, drill/tool wear, and worker food/snacks.
+    4. **📸 Drawing & Photo Analysis:** Upload drawings to inspect dimensions and auto-generate G-code.
+    5. **📐 Rod, Meter/Kg Converter & Scrap Calculator:** Convert between Meters and Kilograms instantly, calculate exact pieces per rod, end-bit leftovers, and scrap weights.
+    6. **📜 Advanced G-Code Generator:** Generates turning, grooving, boring, and drilling programs.
+    7. **🏭 Production Days Calculator:** Calculates estimated working days for large target quantities.
+    8. **📦 Stock & Inventory Management:** Monitors raw material stock levels and triggers low-stock warnings.
+    """)
+
+# --- MODULE 2: MACHINE CALCULATOR ---
+elif (
+    app_mode.startswith("2.")
     or "Machine Calculator" in app_mode
     or "மெஷின் கால்குலேட்டர்" in app_mode
 ):
@@ -224,9 +260,9 @@ if (
             f" ({drill_time_mins*60:.1f} Seconds)"
         )
 
-# MODULE 2: QUOTATION & OVERHEADS
+# --- MODULE 3: QUOTATION & OVERHEADS ---
 elif (
-    app_mode.startswith("2.")
+    app_mode.startswith("3.")
     or "Quotation" in app_mode
     or "கொட்டேஷன்" in app_mode
 ):
@@ -327,41 +363,7 @@ elif (
         f"Grand Total for {batch_qty} Nos", f"₹{grand_total_amount:,.2f}"
     )
 
-# MODULE 3: DASHBOARD OVERVIEW
-elif (
-    app_mode.startswith("3.")
-    or "Dashboard" in app_mode
-    or "முகப்பு" in app_mode
-):
-  st.header("🏠 Megala CNC Mate - Dashboard & Module Overview")
-  st.write(
-      "Welcome to your offline workshop command center. Here is the summary of"
-      " all available modules designed specifically for Nithish's Workshop."
-  )
-
-  col1, col2, col3, col4 = st.columns(4)
-  with col1:
-    st.metric(label="Total Modules", value="8 Pro Modules")
-  with col2:
-    st.metric(label="Operation Mode", value="100% Offline 🟢")
-  with col3:
-    st.metric(label="Language Support", value="6 Languages")
-  with col4:
-    st.metric(label="App Version", value="Ultimate v17.0")
-
-  st.markdown("---")
-  st.subheader("📌 Quick Guide to Available Features in this App:")
-  st.markdown("""
-    1. **🧮 Machine Calculator:** Accurate calculations tailored for CNC Turning, Traub Automatic Lathes, and Drilling machines.
-    2. **💰 Quotation & Overheads:** Includes photo upload or manual entry, plus EB bills, coolant oil, drill/tool wear, and worker food/snacks.
-    3. **📸 Drawing & Photo Analysis:** Upload drawings to inspect dimensions and auto-generate G-code.
-    4. **📐 Rod & Scrap Calculator:** Calculates pieces per 3m/6m rod, end-bit leftovers, parting blade widths, and scrap weights in Kg.
-    5. **📜 Advanced G-Code Generator:** Generates turning, grooving, boring, and drilling programs.
-    6. **🏭 Production Days Calculator:** Calculates estimated working days for large target quantities.
-    7. **📦 Stock & Inventory Management:** Monitors raw material stock levels and triggers low-stock warnings.
-    """)
-
-# MODULE 4: DRAWING & PHOTO ANALYSIS
+# --- MODULE 4: DRAWING & PHOTO ANALYSIS ---
 elif (
     app_mode.startswith("4.") or "Analysis" in app_mode or "பகுப்பாய்வு" in app_mode
 ):
@@ -407,11 +409,22 @@ M30
   else:
     st.info("💡 Upload a component photo or drawing to begin.")
 
-# MODULE 5: ROD, END-BIT & SCRAP CALCULATOR
-elif app_mode.startswith("5.") or "Scrap" in app_mode or "ராட்" in app_mode:
+# --- MODULE 5: ROD, METER/KG CONVERTER & SCRAP CALCULATOR ---
+elif (
+    app_mode.startswith("5.")
+    or "Converter" in app_mode
+    or "ராட்" in app_mode
+    or "Scrap" in app_mode
+):
   st.header(
-      "📐 Precise Rod, End-Bit, Grooving & Scrap Calculator (Length & Weight)"
+      "📐 Rod, Meter/Kg Converter & Scrap Calculator (மீட்டர் அல்லது கேஜ்"
+      " மாற்றி & ஸ்கிராப் கணக்கீடு)"
   )
+  st.write(
+      "ரா மெட்டீரியல் மீட்டரில் வந்தாலும் அல்லது கேஜில் (Kg) வந்தாலும், ஒன்றை"
+      " மற்றொன்றாக மாற்றி எத்தனை பீஸ்கள் வரும் என்று துல்லியமாகக் கணக்கிடலாம்."
+  )
+
   col_a, col_b = st.columns(2)
 
   with col_a:
@@ -445,9 +458,32 @@ elif app_mode.startswith("5.") or "Scrap" in app_mode or "ராட்" in app_m
             "Flat Plate",
         ],
     )
-    standard_rod_length_m = st.number_input(
-        "Standard Raw Rod Length Supplied (Meters)", value=6.0
+
+    # DUAL INPUT MODE (Meters or Kg) as requested by user
+    input_format = st.radio(
+        "Select Raw Material Input Format (உங்களுக்கு மெட்டீரியல் எவ்வாறு வந்தது?):",
+        [
+            "Input Length in Meters (மீட்டர் கணக்கில் கொடுக்க)",
+            "Input Weight in Kilograms / Kg (எடை / கேஜ் கணக்கில் கொடுக்க)",
+        ],
     )
+
+    if "Meters" in input_format:
+      input_meters = st.number_input(
+          "Total Rod Length Received (Meters)",
+          min_value=0.1,
+          value=100.0,
+          step=1.0,
+      )
+      input_kg = 0.0
+    else:
+      input_kg = st.number_input(
+          "Total Rod Weight Received (Kg)",
+          min_value=0.1,
+          value=80.0,
+          step=1.0,
+      )
+      input_meters = 0.0
 
   with col_b:
     if profile_type == "Round Bar":
@@ -473,7 +509,8 @@ elif app_mode.startswith("5.") or "Scrap" in app_mode or "ராட்" in app_m
         "Parting / Grooving Tool Blade Width (mm)", value=3.0
     )
 
-  if st.button("Calculate Exact Pieces, End-Bit & Scrap"):
+  if st.button("Calculate Meter/Kg Conversion & Pieces"):
+    # Volume calculation per cm of length
     if profile_type == "Round Bar":
       r_cm = (dia / 2.0) / 10.0
       vol_per_cm = math.pi * (r_cm**2)
@@ -492,19 +529,30 @@ elif app_mode.startswith("5.") or "Scrap" in app_mode or "ராட்" in app_m
       ft_cm = f_thick / 10.0
       vol_per_cm = fw_cm * ft_cm
 
-    total_rod_len_mm = standard_rod_length_m * 1000.0
+    # Weight per meter (Kg/m) = (vol_per_cm * 100 cm * density) / 1000
+    weight_per_meter_kg = (vol_per_cm * 100.0 * density) / 1000.0
+
+    if "Meters" in input_format:
+      total_rod_len_m = input_meters
+      total_rod_len_mm = total_rod_len_m * 1000.0
+      calculated_total_kg = total_rod_len_m * weight_per_meter_kg
+    else:
+      calculated_total_kg = input_kg
+      if weight_per_meter_kg > 0:
+        total_rod_len_m = input_kg / weight_per_meter_kg
+      else:
+        total_rod_len_m = 0.0
+      total_rod_len_mm = total_rod_len_m * 1000.0
+
     single_consumption_mm = (
         part_drawing_length + facing_allowance + parting_tool_width
     )
-    pieces_per_rod = int(total_rod_len_mm // single_consumption_mm)
+    total_pieces = int(total_rod_len_mm // single_consumption_mm)
 
-    used_length_mm = pieces_per_rod * single_consumption_mm
-    end_bit_leftover_mm = total_rod_len_mm - used_length_mm
-    total_cutting_blade_scrap_mm = pieces_per_rod * parting_tool_width
+    used_length_mm = total_pieces * single_consumption_mm
+    end_bit_leftover_mm = max(0.0, total_rod_len_mm - used_length_mm)
+    total_cutting_blade_scrap_mm = total_pieces * parting_tool_width
 
-    total_gross_weight_kg = (
-        (vol_per_cm * (total_rod_len_mm / 10.0)) * density
-    ) / 1000.0
     net_part_weight_kg = (
         (vol_per_cm * (part_drawing_length / 10.0)) * density
     ) / 1000.0
@@ -516,14 +564,20 @@ elif app_mode.startswith("5.") or "Scrap" in app_mode or "ராட்" in app_m
     ) / 1000.0
     total_scrap_weight_kg = end_bit_weight_kg + cutting_blade_scrap_weight_kg
 
-    st.success("✅ Rod & Scrap Calculation Completed!")
-    r1, r2, r3, r4 = st.columns(4)
-    r1.metric("Pieces per Rod", f"{pieces_per_rod} Nos")
-    r2.metric("End-Bit Waste", f"{end_bit_leftover_mm:.1f} mm")
-    r3.metric("Total Scrap Weight", f"{total_scrap_weight_kg:.3f} Kg")
-    r4.metric("Rod Gross Weight", f"{total_gross_weight_kg:.3f} Kg")
+    st.success("✅ Meter <-> Kg Conversion & Production Calculation Completed!")
 
-# MODULE 6: ADVANCED G-CODE GENERATOR
+    r1, r2, r3, r4 = st.columns(4)
+    r1.metric("Converted Length", f"{total_rod_len_m:.2f} Meters")
+    r2.metric("Converted Weight", f"{calculated_total_kg:.2f} Kg")
+    r3.metric("Total Pieces Yield", f"{total_pieces} Nos")
+    r4.metric("Total Scrap Weight", f"{total_scrap_weight_kg:.3f} Kg")
+
+    st.info(
+        f"💡 **Conversion Details:** 1 Meter of this rod = **{weight_per_meter_kg:.3f} Kg**. "
+        f"End-bit leftover waste length = **{end_bit_leftover_mm:.1f} mm**."
+    )
+
+# --- MODULE 6: ADVANCED G-CODE GENERATOR ---
 elif app_mode.startswith("6.") or "G-Code" in app_mode or "ஜி-கோடு" in app_mode:
   st.header("📜 Advanced CNC G-Code Generator (Turning, Grooving & Boring)")
   op_choice = st.selectbox(
@@ -617,7 +671,7 @@ M30
         mime="text/plain",
     )
 
-# MODULE 7: PRODUCTION DAYS CALCULATOR
+# --- MODULE 7: PRODUCTION DAYS CALCULATOR ---
 elif (
     app_mode.startswith("7.")
     or "Production" in app_mode
@@ -656,7 +710,7 @@ elif (
     r2.metric("Remaining Hours", f"{actual_rem_hours:.1f} Hours")
     r3.metric("Estimated Days Required", f"{required_days:.1f} Days")
 
-# MODULE 8: STOCK MANAGEMENT
+# --- MODULE 8: STOCK MANAGEMENT ---
 elif app_mode.startswith("8.") or "Stock" in app_mode or "ஸ்டாக்" in app_mode:
   st.header("📦 Stock & Inventory Management")
   st.selectbox(
