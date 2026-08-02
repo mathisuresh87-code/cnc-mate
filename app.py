@@ -19,6 +19,7 @@ translations = {
         "prod_calc": "⏱️ Production Calculator",
         "cost_calc": "💰 Costing Calculator",
         "stock_mgmt": "📦 Stock Management",
+        "ai_prog": "🤖 AI Drawing to G-Code Generator",
         "quotation": "📄 Quotation & PDF",
         "settings": "⚙️ Settings & Master",
         "hello": "Hello, Suresh! Good Morning 👋",
@@ -43,6 +44,7 @@ translations = {
         "prod_calc": "⏱️ ப்ரொடக்ஷன் கால்குலேட்டர்",
         "cost_calc": "💰 காஸ்டிங் கால்குலேட்டர்",
         "stock_mgmt": "📦 ஸ்டாக் மேனேஜ்மெண்ட்",
+        "ai_prog": "🤖 AI டிராயிங் & CNC ப்ரோக்ராம் ஜெனரேட்டர்",
         "quotation": "📄 கொட்டேஷன் & PDF",
         "settings": "⚙️ செட்டிங்ஸ் / More Menu",
         "hello": "வணக்கம் சுரேஷ்! இனிய காலை வணக்கம் 👋",
@@ -67,6 +69,7 @@ translations = {
         "prod_calc": "⏱️ उत्पादन कैलकुलेटर",
         "cost_calc": "💰 लागत कैलकुलेटर",
         "stock_mgmt": "📦 स्टॉक प्रबंधन",
+        "ai_prog": "🤖 ड्राइंग से जी-कोड जनरेटर",
         "quotation": "📄 उद्धरण और पीडीएफ",
         "settings": "⚙️ सेटिंग्स और मास्टर",
         "hello": "नमस्ते सुरेश! सुप्रभात 👋",
@@ -91,6 +94,7 @@ translations = {
         "prod_calc": "⏱️ ಉತ್ಪಾದನಾ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "cost_calc": "💰 ವೆಚ್ಚ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "stock_mgmt": "📦 ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
+        "ai_prog": "🤖 AI ಡ್ರಾಯಿಂಗ್ ಟು G-Code ಜನರೇಟರ್",
         "quotation": "📄 ಉಲ್ಲೇಖ ಮತ್ತು PDF",
         "settings": "⚙️ ಸೆಟ್ಟಿಂಗ್‌ಗಳು & ಮಾಸ್ಟರ್",
         "hello": "ನಮಸ್ಕಾರ ಸುರೇಶ್! ಶುಭೋದಯ 👋",
@@ -115,6 +119,7 @@ translations = {
         "prod_calc": "⏱️ ప్రొడక్షన్ కాలిక్యులేటర్",
         "cost_calc": "💰 కాస్టింగ్ కాలిక్యులేటర్",
         "stock_mgmt": "📦 స్టాక్ మేనేజ్‌మెంట్",
+        "ai_prog": "🤖 AI డ్రాయింగ్ నుండి G-Code జెనరేటర్",
         "quotation": "📄 కొటేషన్ & PDF",
         "settings": "⚙️ సెటింగ్స్ / మాస్టర్",
         "hello": "నమస్తే సురేష్! శుభోదయం 👋",
@@ -148,6 +153,7 @@ menu = st.sidebar.selectbox(
         t["prod_calc"],
         t["cost_calc"],
         t["stock_mgmt"],
+        t["ai_prog"],
         t["quotation"],
         t["settings"],
     ]
@@ -164,10 +170,10 @@ if menu == t["home"]:
         st.info(f"📦 **Stock Management**\n\nStock levels & details")
     with col2:
         st.success(f"⏱️ **Production Calculator**\n\nCycle time & shift output")
-        st.success(f"📄 **Quotation & PDF**\n\nDrawing based quotation")
+        st.success(f"🤖 **AI Drawing to G-Code**\n\nUpload drawing & write program")
     with col3:
         st.warning(f"💰 **Costing Calculator**\n\nPart price & profit calculation")
-        st.warning(f"⚙️ **Settings & Master**\n\nCustomer & machine master")
+        st.warning(f"📄 **Quotation & PDF**\n\nDrawing quotation & export")
 
 # ==================== 2. ROD & CONVERSION CALCULATOR ====================
 elif menu == t["rod_calc"]:
@@ -326,24 +332,66 @@ elif menu == t["stock_mgmt"]:
     st.write("🟡 **MS Round Bar - 20mm** : 45.20 Kg (Low Stock)")
     st.write("🔴 **EN24 Round Bar - 16mm** : 0.00 Kg (Out of Stock)")
 
-# ==================== 6. QUOTATION & PDF ====================
+# ==================== 6. AI DRAWING TO G-CODE GENERATOR ====================
+elif menu == t["ai_prog"]:
+    st.header(t["ai_prog"])
+    st.write("கஸ்டமர் டிராயிங் அல்லது பார்ட் போட்டோவை அப்லோட் செய்து, அதற்கான CNC G-Code ப்ரோக்ராமை உடն உருவாக்கலாம்.")
+    
+    uploaded_drawing = st.file_uploader("பார்ட் டிராயிங் / போட்டோவை அப்லோட் செய்யவும் (Upload Drawing / Image)", type=["png", "jpg", "jpeg"])
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        part_name = st.text_input("பார்ட் பெயர் / நம்பர் (Part Name / No)", "Part-01")
+        prog_num = st.text_input("ப்ரோக்ராம் எண் (Program Number)", "O1001")
+        raw_d = st.number_input("ரா மெட்டீரியல் டயா (Raw Dia - mm)", min_value=1.0, value=25.0, step=0.5)
+    with col2:
+        finish_d = st.number_input("பினிஷ்ட் டயா (Finished Dia - mm)", min_value=1.0, value=20.0, step=0.5)
+        p_len = st.number_input("பார்ட் நீளம் (Part Length - mm)", min_value=1.0, value=50.0, step=1.0)
+        feed = st.number_input("ஃபீட் ரேட் (Feed Rate - mm/rev)", min_value=0.01, value=0.15, step=0.01)
+        
+    if st.button("⚙️ CNC G-Code ப்ரோக்ராமை உருவாக்கு", type="primary"):
+        if uploaded_drawing is not None:
+            st.image(uploaded_drawing, caption="Uploaded Drawing Preview", width=350)
+            
+        gcode_content = f"""%
+{prog_num}
+(PART NAME: {part_name})
+(RAW DIA: {raw_d} | FINISHED DIA: {finish_d} | LENGTH: {p_len})
+G21 G40 G99 G18
+G28 U0.0 W0.0
+T0101 (TURNING TOOL)
+G97 S2000 M03
+G00 X{raw_d + 2.0} Z2.0
+G01 Z0.0 F0.2
+X{finish_d} F{feed}
+Z-{p_len}
+G00 X{raw_d + 5.0}
+G28 U0.0 W0.0
+M05
+M30
+%"""
+        st.success("✅ CNC G-Code ப்ரோக்ராம் வெற்றிகரமாக உருவாக்கப்பட்டது!")
+        st.code(gcode_content, language="gcode")
+        st.download_button("⬇️ Download G-Code File (.nc)", data=gcode_content, file_name=f"{part_name}.nc", mime="text/plain")
+
+# ==================== 7. QUOTATION & PDF ====================
 elif menu == t["quotation"]:
     st.header(t["quotation"])
     cust_name = st.text_input("கஸ்டமர் கம்பெனி பெயர்", "ABC Industries")
     part_no = st.text_input("டிராயிங் எண் / பார்ட் பெயர்", "TR-001 - Trunion")
-    uploaded_drawing = st.file_uploader("கஸ்டமர் டிராயிங் அப்லோட் (Image / PDF)", type=["png", "jpg", "jpeg", "pdf"])
+    uploaded_file_q = st.file_uploader("கஸ்டமர் டிராயிங் அப்லோட் (Image / PDF)", type=["png", "jpg", "jpeg", "pdf"], key="q_file")
     quoted_qty = st.number_input("கொட்டேஷன் தேவைப்படும் அளவு (Qty)", value=500)
     unit_price_q = st.number_input("ஒரு பார்ட்டுக்கான இறுதி விலை (₹)", value=9.00)
 
     if st.button("📄 PDF கொட்டேஷனை உருவாக்கு", type="primary"):
         st.success("✅ கொட்டேஷன் வெற்றிகரமாகத் தயாரிக்கப்பட்டது!")
-        if uploaded_drawing is not None:
-            if uploaded_drawing.type in ["image/png", "image/jpeg", "image/jpg"]:
-                st.image(uploaded_drawing, caption="Uploaded Drawing Preview", width=300)
+        if uploaded_file_q is not None:
+            if uploaded_file_q.type in ["image/png", "image/jpeg", "image/jpg"]:
+                st.image(uploaded_file_q, caption="Uploaded Drawing Preview", width=300)
         st.info(f"📥 கஸ்டமர்: {cust_name} | பார்ட்: {part_no} | மொத்தம்: ₹ {quoted_qty * unit_price_q:,.2f}")
         st.download_button("⬇️ Download Quotation PDF", data="Sample PDF Content", file_name="Quotation_MegalaCNC.pdf")
 
-# ==================== 7. SETTINGS / MORE MENU ====================
+# ==================== 8. SETTINGS / MORE MENU ====================
 elif menu == t["settings"]:
     st.header(t["settings"])
     st.markdown("""
