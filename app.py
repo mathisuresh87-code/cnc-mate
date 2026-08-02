@@ -8,13 +8,21 @@ st.set_page_config(
     layout="wide",
 )
 
-# --- HEADER WITH USER LOGO & TITLE ---
+# --- HEADER WITH DYNAMIC LOGO UPLOADER ---
 col_logo, col_title = st.columns([1, 5])
 with col_logo:
-  try:
-    st.image("logo.png", width=120)
-  except:
-    st.write("⚙️ [Logo]")
+  # Sidebar or direct logo uploader fallback
+  uploaded_logo = st.sidebar.file_uploader(
+      "Upload Logo Image", type=["png", "jpg", "jpeg"], key="app_logo_upload"
+  )
+  if uploaded_logo is not None:
+    st.image(uploaded_logo, width=120)
+  else:
+    try:
+      st.image("logo.png", width=120)
+    except:
+      st.markdown("⚙️ **[Logo Here]**")
+
 with col_title:
   st.title("⚙️ Megala CNC Mate")
   st.markdown(
@@ -99,7 +107,7 @@ translations = {
         "home": "🏠 ಮುಖಪುಟ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
         "rod_calc": "📏 ರಾಡ್ ಮತ್ತು ಪರಿವರ್ತನೆ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "letter_calc": "🔤 ಲೆಟರ್ ಕಟಿಂಗ್ & ಸ್ಪೀಡ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
-        "prod_calc": "⏱️ ಉತ್ಪಾದನಾ ಕ್ಯಾಲ್ಕುலேಟರ್",
+        "prod_calc": "⏱️ ಉತ್ಪಾದನಾ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "cost_calc": "💰 ವೆಚ್ಚ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "stock_mgmt": "📦 ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
         "ai_prog": "🤖 G-Code ಜನರೇಟರ್ (Turning, Facing, Drilling)",
