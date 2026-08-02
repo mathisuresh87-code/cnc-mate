@@ -1,7 +1,7 @@
-import os
 import math
-import streamlit as st
+import os
 from PIL import Image
+import streamlit as st
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -26,9 +26,9 @@ with col_logo:
 with col_title:
   st.title("⚙️ Megala CNC Mate")
   st.markdown(
-      "**SMART CNC. SIMPLE WORK.** — 6-Language Support (with Kannada),"
-      " Photo/Drawing Upload, Quotation, Calculator, Production, G-Code & Stock"
-      " Management"
+      "**SMART CNC. SIMPLE WORK.** — 6-Language Support, Drawing-Based End-Bit &"
+      " Scrap Calculator, Tube/Rod Profiles, Photo Upload, Quotation, Production"
+      " & Stock Management"
   )
 
 st.markdown("---")
@@ -57,6 +57,7 @@ menu_options = {
         "🏠 Dashboard",
         "📸 Photo / Drawing Analysis & G-Code",
         "🧮 Workshop Calculator",
+        "📐 Drawing-Based End-Bit, Scrap & Quantity Calculator",
         "💰 Customer Quotation (with Photo)",
         "🏭 Production Tracker",
         "📜 G-Code Generator",
@@ -67,6 +68,7 @@ menu_options = {
         "🏠 முகப்பு (Dashboard)",
         "📸 போட்டோ / டிராயிங் பகுப்பாய்வு & ஜி-கோடு",
         "🧮 ஒர்க்ஷாப் கால்குலேட்டர்",
+        "📐 எண்டு பிட், ஸ்கிராப் & குவாண்டிட்டி கால்குலேட்டர்",
         "💰 வாடிக்கையாளர் கொட்டேஷன் (Photo)",
         "🏭 உற்பத்தி கண்காணிப்பு",
         "📜 ஜி-கோடு ஜெனரேட்டர்",
@@ -77,6 +79,7 @@ menu_options = {
         "🏠 डैशबोर्ड (Dashboard)",
         "📸 फोटो / ड्राइंग विश्लेषण और जी-कोड",
         "🧮 वर्कशॉप कैलकुलेटर",
+        "📐 एंड-बिट, स्क्रैप और मात्रा कैलकुलेटर",
         "💰 ग्राहक कोटेशन (Photo)",
         "🏭 उत्पादन ट्रैकर",
         "📜 जी-कोड जेनरेटर",
@@ -85,8 +88,9 @@ menu_options = {
     ],
     "తెలుగు (Telugu)": [
         "🏠 డాష్‌బోర్డ్ (Dashboard)",
-        "📸 ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-కోడ్",
+        "📸 ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-கோడ్",
         "🧮 వర్క్‌షాప్ కాలిక్యులేటర్",
+        "📐 ఎండ్-బిట్, స్క్రాప్ & క్వాంటిటీ కాలిక్యులేటర్",
         "💰 కస్టమర్ కొటేషన్ (Photo)",
         "🏭 ఉత్పత్తి ట్రాకర్",
         "📜 జి-కోడ్ జనరేటర్",
@@ -95,8 +99,9 @@ menu_options = {
     ],
     "മലയാളം (Malayalam)": [
         "🏠 ഡാഷ്‌ബോർഡ് (Dashboard)",
-        "📸 ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-കോഡ്",
+        "📸 ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-கோഡ്",
         "🧮 വർക്ക്‌ഷോപ്പ് കാൽക്കുലേറ്റർ",
+        "📐 എൻഡ്-ബിറ്റ്, സ്ക്രാപ്പ് & ക്വാണ്ടിറ്റി കാൽക്കുലേറ്റർ",
         "💰 കസ്റ്റമർ കൊട്ടേഷൻ (Photo)",
         "🏭 പ്രൊഡക്ഷൻ ട്രാക്കർ",
         "📜 ജി-കോഡ് ജനറേറ്റർ",
@@ -107,6 +112,7 @@ menu_options = {
         "🏠 ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)",
         "📸 ಫೋಟೋ / ಡ್ರಾಯಿಂಗ್ ವಿಶ್ಲೇಷಣೆ & ಜಿ-ಕೋಡ್",
         "🧮 ವರ್ಕ್‌ಷೋಪ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+        "📐 ಎಂಡ್-ಬಿಟ್, ಸ್ಕ್ರ್ಯಾಪ್ ಮತ್ತು ಕ್ವಾಂಟಿಟಿ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
         "💰 ಗ್ರಾಹಕರ ಉಲ್ಲೇಖ (Quotation)",
         "🏭 ಉತ್ಪಾದನಾ ಟ್ರ್ಯಾಕರ್",
         "📜 ಜಿ-ಕೋಡ್ ಜನರೇಟರ್",
@@ -131,19 +137,19 @@ if any(
 ):
   st.header("📊 Megala CNC Mate Dashboard")
   st.write(
-      "Your ultimate smart automation tool for CNC machining, photo-based"
-      " programming, cost estimation, and workshop management."
+      "Your ultimate smart automation tool for CNC machining, drawing-based"
+      " scrap analysis, end-bit tracking, and workshop management."
   )
 
   col1, col2, col3, col4 = st.columns(4)
   with col1:
-    st.metric(label="Active Modules", value="8 Ready")
+    st.metric(label="Active Modules", value="9 Ready")
   with col2:
     st.metric(label="System Status", value="Online 🟢")
   with col3:
     st.metric(label="Languages", value="6 Supported")
   with col4:
-    st.metric(label="Version", value="Final Pro v7.0")
+    st.metric(label="Version", value="Final Pro v10.0")
 
 # --- 2. PHOTO / DRAWING ANALYSIS & G-CODE MODULE ---
 elif any(
@@ -248,7 +254,180 @@ elif any(
         t_mins = length / (feed * rpm_val)
         st.success(f"✅ Estimated Machining Time: **{t_mins:.2f} Minutes**")
 
-# --- 4. CUSTOMER QUOTATION (WITH PHOTO SUPPORT) ---
+# --- 4. DRAWING-BASED END-BIT, SCRAP & QUANTITY CALCULATOR ---
+elif any(
+    x in app_mode
+    for x in [
+        "End-Bit",
+        "எண்டு பிட்",
+        "एंड-बिट",
+        "ఎండ్-బిట్",
+        "എൻഡ്-ബിറ്റ്",
+        "ಎಂಡ್-ಬಿಟ್",
+    ]
+):
+  st.header(
+      "📐 Drawing-Based End-Bit, Cutting Allowance & Scrap Calculator"
+  )
+  st.write(
+      "Input drawing dimensions, standard rod/tube length, parting tool width"
+      " (cutting allowance), and get exact pieces, tail-end waste, cutting"
+      " scrap, and net/gross weights."
+  )
+
+  dc1, dc2 = st.columns(2)
+  with dc1:
+    mat_grade = st.selectbox(
+        "Material Grade",
+        [
+            "EN8",
+            "EN24",
+            "Aluminum 6061",
+            "Mild Steel (MS)",
+            "Brass",
+            "Stainless Steel 304",
+            "Cast Iron",
+        ],
+    )
+    if "Aluminum" in mat_grade:
+      density = 2.70
+    elif "Brass" in mat_grade:
+      density = 8.50
+    elif "Stainless Steel" in mat_grade:
+      density = 7.93
+    else:
+      density = 7.85
+
+    profile_type = st.selectbox(
+        "Rod / Tube Profile",
+        [
+            "Round Bar",
+            "Hexagon Bar",
+            "Square Bar",
+            "Tube / Hollow Pipe",
+            "Flat Plate",
+        ],
+    )
+    standard_rod_length_m = st.number_input(
+        "Standard Raw Rod Length Supplied (Meters e.g., 3m or 6m)",
+        min_value=0.5,
+        value=3.0,
+        step=0.5,
+    )
+
+  with dc2:
+    if profile_type == "Round Bar":
+      dia = st.number_input(
+          "Drawing Outer Diameter (mm)", min_value=0.1, value=40.0
+      )
+    elif profile_type == "Hexagon Bar":
+      across_flat = st.number_input(
+          "Drawing Across Flats (mm)", min_value=0.1, value=40.0
+      )
+    elif profile_type == "Square Bar":
+      side_w = st.number_input(
+          "Drawing Side Width (mm)", min_value=0.1, value=40.0
+      )
+    elif profile_type == "Tube / Hollow Pipe":
+      outer_d = st.number_input(
+          "Tube Outer Diameter (mm)", min_value=0.1, value=50.0
+      )
+      inner_d = st.number_input(
+          "Tube Inner Diameter / Bore (mm)", min_value=0.0, value=25.0
+      )
+    else:
+      f_width = st.number_input("Plate Width (mm)", min_value=0.1, value=60.0)
+      f_thick = st.number_input(
+          "Plate Thickness (mm)", min_value=0.1, value=12.0
+      )
+
+    part_drawing_length = st.number_input(
+        "Drawing Part Finished Length (mm)", min_value=1.0, value=50.0
+    )
+    facing_allowance = st.number_input(
+        "Facing Allowance per piece (mm)", min_value=0.0, value=2.0
+    )
+    parting_tool_width = st.number_input(
+        "Parting / Cutting Tool Blade Width (mm)", min_value=0.1, value=3.0
+    )
+
+  if st.button("Calculate Exact End-Bit & Scrap"):
+    # Volume calculation per unit length (cm3 per cm)
+    if profile_type == "Round Bar":
+      r_cm = (dia / 2.0) / 10.0
+      vol_per_cm = math.pi * (r_cm**2)
+    elif profile_type == "Hexagon Bar":
+      af_cm = across_flat / 10.0
+      vol_per_cm = (math.sqrt(3) / 2) * (af_cm**2)
+    elif profile_type == "Square Bar":
+      sw_cm = side_w / 10.0
+      vol_per_cm = sw_cm**2
+    elif profile_type == "Tube / Hollow Pipe":
+      o_cm = (outer_d / 2.0) / 10.0
+      i_cm = (inner_d / 2.0) / 10.0
+      vol_per_cm = math.pi * ((o_cm**2) - (i_cm**2))
+    else:
+      fw_cm = f_width / 10.0
+      ft_cm = f_thick / 10.0
+      vol_per_cm = fw_cm * ft_cm
+
+    total_rod_len_mm = standard_rod_length_m * 1000.0
+    # Length consumed per single component including facing and parting blade width
+    single_consumption_mm = (
+        part_drawing_length + facing_allowance + parting_tool_width
+    )
+
+    # Number of pieces possible from one rod
+    pieces_per_rod = int(total_rod_len_mm // single_consumption_mm)
+
+    # Consumed length for parts + cutting allowances
+    used_length_mm = pieces_per_rod * single_consumption_mm
+    end_bit_leftover_mm = (
+        total_rod_len_mm - used_length_mm
+    )  # Tail-end piece scrap
+
+    # Cutting blade scrap total length
+    total_cutting_blade_scrap_mm = pieces_per_rod * parting_tool_width
+
+    # Weights calculation (Kg)
+    total_gross_weight_kg = (
+        (vol_per_cm * (total_rod_len_mm / 10.0)) * density
+    ) / 1000.0
+    net_part_weight_kg = (
+        (vol_per_cm * (part_drawing_length / 10.0)) * density
+    ) / 1000.0
+    total_net_weight_all_parts = net_part_weight_kg * pieces_per_rod
+
+    end_bit_weight_kg = (
+        (vol_per_cm * (end_bit_leftover_mm / 10.0)) * density
+    ) / 1000.0
+    cutting_blade_scrap_weight_kg = (
+        (vol_per_cm * (total_cutting_blade_scrap_mm / 10.0)) * density
+    ) / 1000.0
+    total_scrap_weight_kg = end_bit_weight_kg + cutting_blade_scrap_weight_kg
+
+    st.success("✅ Drawing-Based Scrap & End-Bit Calculation Completed!")
+    st.markdown(
+        f"### Production Analysis for Standard Rod Length:"
+        f" **{standard_rod_length_m} Meters**"
+    )
+
+    r1, r2, r3, r4 = st.columns(4)
+    r1.metric("Pieces per Rod", f"{pieces_per_rod} Nos")
+    r2.metric("Tail-End Piece (End-Bit)", f"{end_bit_leftover_mm:.1f} mm")
+    r3.metric("Total Scrap Weight", f"{total_scrap_weight_kg:.3f} Kg")
+    r4.metric("Total Rod Gross Weight", f"{total_gross_weight_kg:.3f} Kg")
+
+    st.info(
+        f"📋 **Detailed Breakdown:**\n"
+        f"- **Material Grade & Profile:** {mat_grade} ({profile_type})\n"
+        f"- **Net Weight of All Parts:** {total_net_weight_all_parts:.3f} Kg\n"
+        f"- **End-Bit Waste Weight:** {end_bit_weight_kg:.3f} Kg\n"
+        f"- **Cutting Blade/Facing Scrap Weight:**"
+        f" {cutting_blade_scrap_weight_kg:.3f} Kg"
+    )
+
+# --- 5. CUSTOMER QUOTATION (WITH PHOTO SUPPORT) ---
 elif any(
     x in app_mode
     for x in [
@@ -292,7 +471,13 @@ elif any(
     )
     rod_type = st.selectbox(
         "Rod Type / Profile",
-        ["Round Bar", "Hexagon Bar", "Square Bar", "Flat Plate / Sheet"],
+        [
+            "Round Bar",
+            "Hexagon Bar",
+            "Square Bar",
+            "Tube / Pipe",
+            "Flat Plate / Sheet",
+        ],
     )
     material_cost_per_kg = st.number_input(
         "Raw Material Cost per Kg (₹)", min_value=0.0, value=85.0
@@ -326,7 +511,7 @@ elif any(
     r2.metric("Batch Quantity", f"{quantity} Nos")
     r3.metric("Grand Total", f"₹{tot_q:,.2f}")
 
-# --- 5. PRODUCTION TRACKER ---
+# --- 6. PRODUCTION TRACKER ---
 elif any(
     x in app_mode
     for x in [
@@ -355,7 +540,7 @@ elif any(
         f"⏱️ Estimated total time to complete batch: **{tot_hours:.2f} Hours**"
     )
 
-# --- 6. G-CODE GENERATOR ---
+# --- 7. G-CODE GENERATOR ---
 elif any(
     x in app_mode
     for x in ["G-Code", "ஜி-கோடு", "जी-कोड", "జి-కోడ్", "ജി-കോഡ്"]
@@ -390,7 +575,7 @@ M30
         mime="text/plain",
     )
 
-# --- 7. LETTER CUTTING ---
+# --- 8. LETTER CUTTING ---
 elif any(
     x in app_mode for x in ["Letter", "எழுத்து", "अक्षर", "అక్షర", "ലെറ്റർ"]
 ):
@@ -406,7 +591,7 @@ elif any(
         " mm\n- **Tool:** 60° V-Bit Cutter"
     )
 
-# --- 8. STOCK & ROD MANAGEMENT ---
+# --- 9. STOCK & ROD MANAGEMENT ---
 elif any(
     x in app_mode for x in ["Stock", "ஸ்டாக்", "स्टॉक", "സ്റ്റോക്ക്", "ನಿರ್ವಹಣೆ"]
 ):
@@ -431,7 +616,13 @@ elif any(
     )
     s_rod = st.selectbox(
         "Rod Type",
-        ["Round Bar", "Hexagon Bar", "Square Bar", "Flat Plate"],
+        [
+            "Round Bar",
+            "Hexagon Bar",
+            "Square Bar",
+            "Tube / Pipe",
+            "Flat Plate",
+        ],
         key="s_rod",
     )
     dia = st.number_input("Diameter / Size (mm)", min_value=1.0, value=40.0)
