@@ -5,7 +5,7 @@ import streamlit as st
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
-    page_title="Megala CNC Mate - World-Class Professional Workshop Manager",
+    page_title="Megala CNC Mate - Professional Workshop Manager",
     page_icon="⚙️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -26,13 +26,13 @@ with col_logo:
 with col_title:
   st.title("⚙️ Megala CNC Mate")
   st.markdown(
-      "**SMART CNC. SIMPLE WORK.** — World-Class Professional Workshop"
-      " Automation, Precise Rod Cutting, End-Bit, Scrap & Quotation Manager"
+      "**SMART CNC. SIMPLE WORK.** — Professional Workshop Automation with"
+      " Complete Costing & Calculators"
   )
 
 st.markdown("---")
 
-# --- LANGUAGE SUPPORT SETUP (6 LANGUAGES) ---
+# --- LANGUAGE SUPPORT SETUP ---
 st.sidebar.markdown("### 🌐 Language / மொழி")
 lang = st.sidebar.selectbox(
     "Choose Language",
@@ -48,134 +48,337 @@ lang = st.sidebar.selectbox(
 )
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 📌 Menu Navigation")
+st.sidebar.markdown("### 📌 Menu Navigation (முகப்பு மெனு)")
 
-# --- COMPLETE PROFESSIONAL MENU OPTIONS ---
+# --- MENU OPTIONS (Calculator placed at the very top as requested) ---
 menu_options = {
     "தமிழ் (Tamil)": [
-        "🏠 முகப்பு (Dashboard)",
-        "📸 போட்டோ / டிராயிங் பகுப்பாய்வு & ஜி-கோடு",
-        (
-            "📐 துல்லியமான ராட், எண்டு-பிட் & ஸ்கிராப் கால்குலேட்டர் (Rod & Scrap"
-            " Calculator)"
-        ),
-        "🧮 ஒர்க்ஷாப் கால்குலேட்டர் (RPM & Time)",
-        "💰 வாடிக்கையாளர் கொட்டேஷன் (Quotation with Photo)",
-        "🏭 உற்பத்தி கண்காணிப்பு (Production Tracker)",
-        "📜 ஜி-கோடு ஜெனரேட்டர் (G-Code)",
-        "📦 ஸ்டாக் மேனேஜ்மென்ட் (Stock & Inventory)",
+        "🧮 1. மெஷின் வாரியான கால்குலேட்டர் (CNC / Traub / Drilling)",
+        "💰 2. முழுமையான வாடிக்கையாளர் கொட்டேஷன் (EB, Tool, Food & Snacks Overheads)",
+        "🏠 3. முகப்பு & டேஷ்போர்டு (Dashboard Overview)",
+        "📸 4. போட்டோ / டிராயிங் பகுப்பாய்வு & ஜி-கோடு",
+        "📐 5. துல்லியமான ராட், எண்டு-பிட் & ஸ்கிராப் கால்குலேட்டர்",
+        "📜 6. மேம்பட்ட ஜி-கோடு ஜெனரேட்டர் (Turning, Grooving & Boring)",
+        "🏭 7. உற்பத்தி & ஆர்டர் நாட்கள் கால்குலேட்டர்",
+        "📦 8. ஸ்டாக் மேனேஜ்மென்ட் (Stock & Inventory)",
     ],
     "English": [
-        "🏠 Dashboard",
-        "📸 Photo / Drawing Analysis & G-Code",
-        "📐 Precise Rod, End-Bit & Scrap Calculator",
-        "🧮 Workshop Calculator (RPM & Time)",
-        "💰 Customer Quotation (with Photo)",
-        "🏭 Production Tracker",
-        "📜 G-Code Generator",
-        "📦 Stock & Inventory Management",
+        "🧮 1. Machine-Specific Calculator (CNC / Traub / Drilling)",
+        (
+            "💰 2. Comprehensive Quotation (EB, Tool, Food & Snacks Overheads)"
+        ),
+        "🏠 3. Dashboard Overview",
+        "📸 4. Photo / Drawing Analysis & G-Code",
+        "📐 5. Precise Rod, End-Bit & Scrap Calculator",
+        "📜 6. Advanced G-Code Generator",
+        "🏭 7. Production & Large Order Days Calculator",
+        "📦 8. Stock & Inventory Management",
     ],
     "हिंदी (Hindi)": [
-        "🏠 डैशबोर्ड (Dashboard)",
-        "📸 फोटो / ड्राइंग विश्लेषण और जी-कोड",
-        "📐 सटीक रॉड, एंड-बिट और स्क्रैप कैलकुलेटर",
-        "🧮 वर्कशॉप कैलकुलेटर",
-        "💰 ग्राहक कोटेशन (Photo)",
-        "🏭 उत्पादन ट्रैकर",
-        "📜 जी-कोड जेनरेटर",
-        "📦 स्टॉक प्रबंधन",
+        "🧮 1. मशीन-विशिष्ट कैलकुलेटर (CNC/Traub/Drilling)",
+        "💰 2. व्यापक कोटेशन (खर्च, टूल, भोजन और स्नैक्स सहित)",
+        "🏠 3. डैशबोर्ड अवलोकन",
+        "📸 4. फोटो / ड्राइंग विश्लेषण और जी-कोड",
+        "📐 5. सटीक रॉड, एंड-बिट और स्क्रैप कैलकुलेटर",
+        "📜 6. उन्नत जी-कोड जेनरेटर",
+        "🏭 7. उत्पादन और ऑर्डर ट्रैकर",
+        "📦 8. स्टॉक प्रबंधन",
     ],
     "తెలుగు (Telugu)": [
-        "🏠 డాష్‌బోర్డ్ (Dashboard)",
-        "📸 ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-కోడ్",
-        "📐 ఖచ్చితమైన రాడ్, ఎండ్-బిట్ & స్క్రాప్ కాలిక్యులేటర్",
-        "🧮 వర్క్‌షాప్ కాలిక్యులేటర్",
-        "💰 కస్టమర్ కొటేషన్ (Photo)",
-        "🏭 ఉత్పత్తి ట్రాకర్",
-        "📜 జి-కోడ్ జనరేటర్",
-        "📦 స్టాక్ నిర్వహణ",
+        "🧮 1. మెషిన్-నిర్దిష్ట కాలిక్యులేటర్ (CNC/Traub/Drilling)",
+        "💰 2. సమగ్ర కొటేషన్ (EB, టూల్, ఫుడ్ & స్నాక్స్ ఖర్చులతో)",
+        "🏠 3. డాష్‌బోర్డ్ అవలోకనం",
+        "📸 4. ఫోటో / డ్రాయింగ్ విశ్లేషణ & జి-కోడ్",
+        "📐 5. ఖచ్చితమైన రాడ్, ఎండ్-బిట్ & స్క్రాప్ కాలిక్యులేటర్",
+        "📜 6. అధునాతన జి-కోడ్ జనరేటర్",
+        "🏭 7. ఉత్పత్తి & ఆర్డర్ ట్రాకర్",
+        "📦 8. స్టాక్ నిర్వహణ",
     ],
     "മലയാളം (Malayalam)": [
-        "🏠 ഡാഷ്‌ബോർഡ് (Dashboard)",
-        "📸 ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-కోഡ്",
-        "📐 കൃത്യമായ റോഡ്, എൻഡ്-ബിറ്റ് & സ്ക്രാപ്പ് കാൽക്കുലേറ്റർ",
-        "🧮 വർക്ക്‌ഷോപ്പ് കാൽക്കുലേറ്റർ",
-        "💰 കസ്റ്റമർ കൊട്ടേഷൻ (Photo)",
-        "🏭 പ്രൊഡക്ഷൻ ട്രാക്കർ",
-        "📜 ജി-കോഡ് ജനറേറ്റർ",
-        "📦 സ്റ്റോക്ക് മാനേജ്മെന്റ്",
+        "🧮 1. മെഷീൻ കാൽക്കുലേറ്റർ (CNC / Traub / Drilling)",
+        "💰 2. കോംപ്രിഹെൻസീവ് കൊട്ടേഷൻ (EB, ടൂൾ, ഫുഡ് & സ്നാക്സ് ഉൾപ്പെടെ)",
+        "🏠 3. ഡാഷ്‌ബോർഡ് അവലോകനം",
+        "📸 4. ഫോട്ടോ / ഡ്രോയിംഗ് വിശകലനം & ജി-കോഡ്",
+        "📐 5. റോഡ്, എൻഡ്-ബിറ്റ് & സ്ക്രാപ്പ് കാൽക്കുലേറ്റർ",
+        "📜 6. അഡ്വാൻസ്ഡ് ജി-കോഡ് ജനറേറ്റർ",
+        "🏭 7. പ്രൊഡക്ഷൻ ട്രാക്കർ",
+        "📦 8. സ്റ്റോക്ക് മാനേജ്മെന്റ്",
     ],
     "ಕನ್ನಡ (Kannada)": [
-        "🏠 ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)",
-        "📸 ಫೋಟೋ / ಡ್ರಾಯಿಂಗ್ ವಿಶ್ಲೇಷಣೆ & జి-కోడ్",
-        "📐 ನಿಖರವಾದ ರಾಡ್, ಎಂಡ್-ಬಿಟ್ ಮತ್ತು ಸ್ಕ್ರ್ಯಾಪ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
-        "🧮 ವರ್ಕ್‌ಷೋಪ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
-        "💰 ಗ್ರಾಹಕರ ಉಲ್ಲೇಖ (Quotation)",
-        "🏭 ಉತ್ಪಾದನಾ ಟ್ರ್ಯಾಕರ್",
-        "📜 ಜಿ-కోడ్ ಜನರೇಟರ್",
-        "📦 ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
+        "🧮 1. ಮೆಷಿನ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್ (CNC / Traub / Drilling)",
+        "💰 2. ಸಮಗ್ರ ಉಲ್ಲೇಖ (EB, ಟೂಲ್, ಫುಡ್ & ಸ್ನಾಕ್ಸ್ ವೆಚ್ಚದೊಂದಿಗೆ)",
+        "🏠 3. ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಅವಲೋಕನ",
+        "📸 4. ಫೋಟೋ / ಡ್ರಾಯಿಂಗ್ ವಿಶ್ಲೇಷಣೆ & జి-కోడ్",
+        "📐 5. ರಾಡ್, ಎಂಡ್-ಬಿತ್ವಿನ ಸ್ಕ್ರ್ಯಾಪ್ ಕ್ಯಾಲ್ಕುలేటర్",
+        "📜 6. ಸುಧಾರಿತ జి-కోడ్ ಜನರೇಟರ್",
+        "🏭 7. ಉತ್ಪಾದನಾ ಟ್ರ್ಯಾಕರ್",
+        "📦 8. ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
     ],
 }
 
-# Radio button ensures ALL options are permanently visible on the sidebar without hiding
 app_mode = st.sidebar.radio(
     "Select Module", menu_options[lang], label_visibility="collapsed"
 )
 
-# --- 1. DASHBOARD ---
-if any(
-    x in app_mode
-    for x in ["Dashboard", "முகப்பு", "डैशबोर्ड", "డాష్‌బోర్డ్", "ഡാഷ്‌ബോർഡ്"]
-):
-  st.header("📊 Megala CNC Mate Professional Dashboard")
+# --- 1. MACHINE-SPECIFIC CALCULATOR (PLACED FIRST AS REQUESTED) ---
+if any(x in app_mode for x in ["Calculator", "கால்குலேட்டர்", "கால்புலேட்டர்"]):
+  st.header("🧮 Machine-Specific Workshop Calculator (CNC / Traub / Drilling)")
   st.write(
-      "Your world-class workshop command center for precise material"
-      " calculation, scrap tracking, and CNC production."
+      "Choose your exact machine type. Calculations adjust automatically"
+      " according to CNC, Traub, or Drilling mechanics."
+  )
+
+  machine_choice = st.selectbox(
+      "Select Your Machine Type",
+      [
+          "1. CNC Turning Lathe (Feed in mm/rev)",
+          "2. Traub Automatic Lathe (Cam Cycle / Slide Speed)",
+          "3. Vertical Drilling Machine (Feed in mm/min or Manual)",
+      ],
+  )
+
+  if "CNC" in machine_choice:
+    st.info(
+        "💡 **CNC Calculator Mode:** Uses Spindle RPM and Feed per Revolution"
+        " (mm/rev)."
+    )
+    sub_calc = st.selectbox(
+        "CNC Calculation", ["Spindle RPM from Vc", "CNC Machining Time"]
+    )
+    if "RPM" in sub_calc:
+      c1, c2 = st.columns(2)
+      with c1:
+        vc = st.number_input("Cutting Speed (Vc in m/min)", value=200.0)
+      with c2:
+        dia = st.number_input("Component Diameter (mm)", value=40.0)
+      if st.button("Calculate CNC RPM"):
+        if dia > 0:
+          rpm = (1000 * vc) / (math.pi * dia)
+          st.success(
+              f"✅ CNC Spindle Speed: **{rpm:.2f} RPM** (Formula: (1000*Vc)/(pi*D))"
+          )
+    else:
+      c1, c2 = st.columns(2)
+      with c1:
+        length = st.number_input("Total Cutting Length (mm)", value=80.0)
+        feed_rev = st.number_input(
+            "Feed Rate (mm/rev) [e.g., 0.15 to 0.25]", value=0.2
+        )
+      with c2:
+        rpm_val = st.number_input("Spindle Speed (RPM)", value=1500.0)
+      if st.button("Calculate CNC Time"):
+        if feed_rev > 0 and rpm_val > 0:
+          t_mins = length / (feed_rev * rpm_val)
+          st.success(
+              f"✅ CNC Machining Time: **{t_mins:.2f} Minutes** (approx"
+              f" {t_mins*60:.1f} Seconds)"
+          )
+
+  elif "Traub" in machine_choice:
+    st.info(
+        "💡 **Traub Automatic Lathe Mode (A25/A42):** Calculated based on Cam"
+        " feed rate and Production per Hour."
+    )
+    c1, c2 = st.columns(2)
+    with c1:
+      traub_pieces_per_hr = st.number_input(
+          "Estimated Production (Pieces per Hour)", value=120.0
+      )
+      total_order_qty = st.number_input(
+          "Total Order Quantity (Pieces)", value=5000.0
+      )
+    with c2:
+      cam_efficiency = st.slider("Traub Machine Efficiency (%)", 50, 100, 85)
+
+    if st.button("Calculate Traub Production Hours"):
+      actual_pieces_hr = traub_pieces_per_hr * (cam_efficiency / 100.0)
+      total_hours = total_order_qty / actual_pieces_hr
+      st.success(
+          f"✅ Traub Production Time for {total_order_qty} Nos: **{total_hours:.1f}"
+          f" Hours** (~{total_hours/8:.1f} Working Shifts of 8 hrs)"
+      )
+
+  else:
+    st.info(
+        "💡 **Drilling Machine Mode:** Calculated using Feed Rate in mm/min or"
+        " Manual feed estimation."
+    )
+    c1, c2 = st.columns(2)
+    with c1:
+      drill_depth = st.number_input("Hole Depth / Travel Length (mm)", value=30.0)
+      drill_rpm = st.number_input("Drill Spindle RPM", value=800.0)
+    with c2:
+      feed_per_min = st.number_input(
+          "Feed Rate (mm/min) [Drilling Feed]", value=60.0
+      )
+
+    if st.button("Calculate Drilling Time"):
+      if feed_per_min > 0:
+        drill_time_mins = drill_depth / feed_per_min
+        st.success(
+            f"✅ Drilling Time per Hole: **{drill_time_mins:.2f} Minutes**"
+            f" ({drill_time_mins*60:.1f} Seconds)"
+        )
+
+# --- 2. COMPREHENSIVE CUSTOMER QUOTATION WITH ALL OVERHEADS & DUAL INPUT ---
+elif any(x in app_mode for x in ["Quotation", "கொட்டேஷன்", "कोटेशन"]):
+  st.header(
+      "💰 Comprehensive Customer Quotation & Cost Estimator (with All Overheads)"
+  )
+  st.write(
+      "Prepare a 100% practical quotation including Material, Machining Time,"
+      " Tool/Drill Wear, EB, Coolant, and Worker Food/Snacks expenses."
+  )
+
+  # Choose Input Method (Dual Option as requested)
+  input_mode = st.radio(
+      "Select Quotation Input Method:",
+      [
+          "📁 Option 1: Upload Drawing / Part Photo (Visual Reference)",
+          "✍️ Option 2: Manual Data & Dimension Entry",
+      ],
+  )
+
+  if "Option 1" in input_mode:
+    q_photo = st.file_uploader(
+        "Upload Part Drawing / Photo for Quotation Reference",
+        type=["png", "jpg", "jpeg"],
+        key="q_photo_up",
+    )
+    if q_photo:
+      st.image(q_photo, width=250, caption="Quotation Reference Drawing/Photo")
+      st.success("✅ Drawing uploaded successfully. Enter costing details below:")
+
+  st.markdown("---")
+  st.subheader("📊 Detailed Cost Breakdown (உண்மையான ஒர்க்ஷாப் செலவு கணக்கீடு)")
+
+  c1, c2 = st.columns(2)
+  with c1:
+    cust_name = st.text_input("Customer Name / Company", "ABC Industries")
+    part_name = st.text_input("Component Name", "Bush / Shaft / Pin")
+    batch_qty = st.number_input("Batch Order Quantity (Nos)", value=500)
+    mat_cost_kg = st.number_input(
+        "Raw Material Cost per Kg (₹)", value=85.0, step=1.0
+    )
+    part_wt = st.number_input("Finished Part Weight (Kg)", value=0.5, step=0.05)
+
+  with c2:
+    mach_time = st.number_input(
+        "Machining Time per piece (Minutes)", value=4.0, step=0.5
+    )
+    machine_rate = st.number_input(
+        "Machine Hourly Rate (₹/hr) [Depreciation & Rent]",
+        value=600.0,
+        step=50.0,
+    )
+    tool_drill_cost = st.number_input(
+        "Tool, Insert & Drill Bit Cost allowance per piece (₹)",
+        value=3.5,
+        step=0.5,
+    )
+    eb_coolant_cost = st.number_input(
+        "EB Bill & Coolant Oil allowance per piece (₹)", value=2.0, step=0.5
+    )
+    food_snacks_cost = st.number_input(
+        "Workers Food, Tea & Snacks allowance per piece (₹)",
+        value=2.5,
+        step=0.5,
+    )
+    profit = st.slider("Target Profit Margin (%)", 0, 50, 25)
+
+  if st.button("Generate Professional Quotation"):
+    # Calculations
+    material_total = part_wt * mat_cost_kg
+    machining_cost = (machine_rate / 60.0) * mach_time
+    total_unit_cost = (
+        material_total
+        + machining_cost
+        + tool_drill_cost
+        + eb_coolant_cost
+        + food_snacks_cost
+    )
+    unit_selling_price = total_unit_cost * (1 + profit / 100.0)
+    grand_total_amount = unit_selling_price * batch_qty
+
+    st.success("✅ Professional Quotation Generated Successfully!")
+
+    st.markdown(f"### 📋 Quotation Summary for: **{cust_name}**")
+    st.write(f"- **Component:** {part_name} | **Batch Qty:** {batch_qty} Nos")
+
+    col_a, col_b, col_c, col_d = st.columns(4)
+    col_a.metric("Material Cost / pc", f"₹{material_total:.2f}")
+    col_b.metric("Machining Cost / pc", f"₹{machining_cost:.2f}")
+    col_c.metric("Overheads (Tool+EB+Food)/pc", f"₹{tool_drill_cost + eb_coolant_cost + food_snacks_cost:.2f}")
+    col_d.metric("Target Profit", f"{profit}%")
+
+    st.markdown("---")
+    r1, r2 = st.columns(2)
+    r1.metric("Final Unit Selling Price", f"₹{unit_selling_price:.2f} per pc")
+    r2.metric(
+        f"Grand Total for {batch_qty} Nos", f"₹{grand_total_amount:,.2f}"
+    )
+
+    st.info(
+        "💡 **Note:** This quotation covers raw materials, machining time,"
+        " tool wear, power (EB), coolant, and worker refreshments to ensure"
+        " 100% profitable workshop operation."
+    )
+
+# --- 3. DASHBOARD OVERVIEW ---
+elif any(x in app_mode for x in ["Dashboard", "முகப்பு", "டேஷ்", "டேஷ்போர்டு"]):
+  st.header("🏠 Megala CNC Mate - Dashboard & Module Overview")
+  st.write(
+      "Welcome to your offline workshop command center. Here is the summary of"
+      " all available modules designed specifically for Nithish's Workshop."
   )
 
   col1, col2, col3, col4 = st.columns(4)
   with col1:
-    st.metric(label="Active Modules", value="8 Ready")
+    st.metric(label="Total Modules", value="8 Pro Modules")
   with col2:
-    st.metric(label="System Status", value="Online 🟢")
+    st.metric(label="Operation Mode", value="100% Offline 🟢")
   with col3:
-    st.metric(label="Languages", value="6 Supported")
+    st.metric(label="Language Support", value="6 Languages")
   with col4:
-    st.metric(label="Version", value="World-Class Final v14.1")
+    st.metric(label="App Version", value="Ultimate v16.5")
 
-# --- 2. PHOTO / DRAWING ANALYSIS & G-CODE MODULE ---
+  st.markdown("---")
+  st.subheader("📌 Quick Guide to Available Features in this App:")
+
+  st.markdown("""
+    1. **🧮 Machine-Specific Calculator:** Accurate calculations tailored for CNC Turning, Traub Automatic Lathes (Cam cycle), and Drilling machines.
+    2. **💰 Comprehensive Quotation:** Includes photo upload or manual entry, plus all workshop overheads like EB bills, coolant oil, drill/tool wear, and worker food/snacks.
+    3. **📸 Photo / Drawing Analysis:** Upload drawings to inspect dimensions and auto-generate G-code.
+    4. **📐 Precise Rod & Scrap Calculator:** Calculates pieces per 3m/6m rod, end-bit leftovers, parting blade widths, and precise scrap weights in Kg.
+    5. **📜 Advanced G-Code Generator:** Generates turning, grooving, boring, and drilling programs.
+    6. **🏭 Production & Order Tracker:** Calculates estimated working days for large target quantities.
+    7. **📦 Stock & Inventory Management:** Monitors raw material stock levels and triggers low-stock warnings.
+    """)
+
+# --- 4. PHOTO / DRAWING ANALYSIS & G-CODE MODULE ---
 elif any(
-    x in app_mode for x in ["Photo", "போட்டோ", "फोटो", "ఫోటో", "ഫോട്ടോ", "ಫೋಟೋ"]
+    x in app_mode for x in ["Photo", "போட்டோ", "फोटो", "ఫోటో", "ഫോട്ടോ"]
 ):
   st.header("📸 Component Drawing / Photo Analyzer & G-Code Generator")
-  st.write(
-      "Upload your component drawing or part photo to inspect dimensions and"
-      " generate precise G-code."
-  )
-
   uploaded_file = st.file_uploader(
       "Upload Part Drawing / Photo (PNG, JPG)", type=["png", "jpg", "jpeg"]
   )
 
   if uploaded_file is not None:
     image = Image.open(uploaded_file)
-    st.image(
-        image,
-        caption="Uploaded Component Drawing / Photo",
-        use_column_width=True,
-    )
-    st.success("✅ Image Uploaded Successfully!")
+    st.image(image, caption="Uploaded Drawing Reference", use_column_width=True)
+    st.success("✅ Image Uploaded Successfully for Reference!")
 
     op_type = st.selectbox(
         "Machining Operation",
-        ["Turning & Facing", "Stepped Turning", "Grooving & Parting"],
+        ["Turning & Facing", "Stepped Turning", "Grooving", "Boring"],
     )
-    part_dia = st.number_input("Major Diameter (mm)", value=40.0)
+    part_dia = st.number_input("Major Diameter / Hole Diameter (mm)", value=40.0)
     part_length = st.number_input("Total Machining Length (mm)", value=60.0)
 
-    if st.button("Generate G-Code from Drawing"):
+    if st.button("Generate Program from Drawing"):
       gcode_out = f"""
-O1001 (WORLD-CLASS CNC PROGRAM - MEGALA MATE)
+O1001 (MEGALA CNC MATE - DRAWING PROGRAM)
 G21 G90 G40 G80 G18
 M03 S1800
 G00 X{part_dia + 4.0} Z2.0
@@ -196,24 +399,13 @@ M30
           mime="text/plain",
       )
   else:
-    st.info(
-        "💡 Upload a component photo or drawing to begin automated programming."
-    )
+    st.info("💡 Upload a component photo or drawing to begin.")
 
-# --- 3. PRECISE ROD, END-BIT, GROOVING & SCRAP CALCULATOR (PLACED FIRST TO FIX OVERLAP) ---
-elif any(
-    x in app_mode
-    for x in ["Rod", "ராட்", "रॉड", "రॉड", "റോഡ്", "சடிக்", "எண்டு-பிட்"]
-):
+# --- 5. PRECISE ROD, END-BIT, GROOVING & SCRAP CALCULATOR ---
+elif any(x in app_mode for x in ["Rod", "ராட்", "रॉड", "రॉड", "റോഡ്", "சடிக்"]):
   st.header(
       "📐 Precise Rod, End-Bit, Grooving & Scrap Calculator (Length & Weight)"
   )
-  st.write(
-      "Calculate exact pieces per rod (e.g., 3m or 6m rods), tail-end waste"
-      " (end-bit), parting blade cutting allowance, facing allowance, and"
-      " precise scrap weight in grams/kg."
-  )
-
   col_a, col_b = st.columns(2)
 
   with col_a:
@@ -226,10 +418,8 @@ elif any(
             "Mild Steel (MS)",
             "Brass",
             "Stainless Steel 304",
-            "Cast Iron",
         ],
     )
-    # Density setting (g/cm³)
     if "Aluminum" in mat_grade:
       density = 2.70
     elif "Brass" in mat_grade:
@@ -249,55 +439,35 @@ elif any(
             "Flat Plate",
         ],
     )
-
-    # Rod length selection (Supports 3m, 6m or custom lengths)
     standard_rod_length_m = st.number_input(
-        "Standard Raw Rod Length Supplied (Meters e.g., 3m or 6m)",
-        min_value=0.5,
-        value=6.0,
-        step=0.5,
+        "Standard Raw Rod Length Supplied (Meters)", value=6.0
     )
 
   with col_b:
     if profile_type == "Round Bar":
-      dia = st.number_input(
-          "Drawing Outer Diameter (mm)", min_value=0.1, value=40.0
-      )
+      dia = st.number_input("Outer Diameter (mm)", value=40.0)
     elif profile_type == "Hexagon Bar":
-      across_flat = st.number_input(
-          "Drawing Across Flats (mm)", min_value=0.1, value=40.0
-      )
+      across_flat = st.number_input("Across Flats (mm)", value=40.0)
     elif profile_type == "Square Bar":
-      side_w = st.number_input(
-          "Drawing Side Width (mm)", min_value=0.1, value=40.0
-      )
+      side_w = st.number_input("Side Width (mm)", value=40.0)
     elif profile_type == "Tube / Hollow Pipe":
-      outer_d = st.number_input(
-          "Tube Outer Diameter (mm)", min_value=0.1, value=50.0
-      )
-      inner_d = st.number_input(
-          "Tube Inner Bore Diameter (mm)", min_value=0.0, value=25.0
-      )
+      outer_d = st.number_input("Outer Diameter (mm)", value=50.0)
+      inner_d = st.number_input("Inner Bore Diameter (mm)", value=25.0)
     else:
-      f_width = st.number_input("Plate Width (mm)", min_value=0.1, value=60.0)
-      f_thick = st.number_input(
-          "Plate Thickness (mm)", min_value=0.1, value=12.0
-      )
+      f_width = st.number_input("Plate Width (mm)", value=60.0)
+      f_thick = st.number_input("Plate Thickness (mm)", value=12.0)
 
     part_drawing_length = st.number_input(
-        "Finished Part Length from Drawing (mm)", min_value=1.0, value=45.0
+        "Finished Part Length (mm)", value=45.0
     )
     facing_allowance = st.number_input(
-        "Facing Allowance per piece (mm)", min_value=0.0, value=2.0
+        "Facing Allowance per piece (mm)", value=2.0
     )
     parting_tool_width = st.number_input(
-        "Parting / Cutting Tool Blade Width / Allowance (mm)",
-        min_value=0.1,
-        value=3.0,
+        "Parting / Grooving Tool Blade Width (mm)", value=3.0
     )
 
   if st.button("Calculate Exact Pieces, End-Bit & Scrap"):
-    # Volume calculation per cm
     if profile_type == "Round Bar":
       r_cm = (dia / 2.0) / 10.0
       vol_per_cm = math.pi * (r_cm**2)
@@ -332,8 +502,6 @@ elif any(
     net_part_weight_kg = (
         (vol_per_cm * (part_drawing_length / 10.0)) * density
     ) / 1000.0
-    total_net_weight_all_parts = net_part_weight_kg * pieces_per_rod
-
     end_bit_weight_kg = (
         (vol_per_cm * (end_bit_leftover_mm / 10.0)) * density
     ) / 1000.0
@@ -342,167 +510,152 @@ elif any(
     ) / 1000.0
     total_scrap_weight_kg = end_bit_weight_kg + cutting_blade_scrap_weight_kg
 
-    st.success(
-        "✅ Precise Rod, End-Bit, Grooving & Scrap Calculation Completed!"
-    )
-    st.markdown(
-        f"### Production Summary for **{standard_rod_length_m} Meter** Rod"
-        f" ({mat_grade} - {profile_type})"
-    )
-
+    st.success("✅ Rod & Scrap Calculation Completed!")
     r1, r2, r3, r4 = st.columns(4)
     r1.metric("Pieces per Rod", f"{pieces_per_rod} Nos")
-    r2.metric("Tail-End Waste (End-Bit)", f"{end_bit_leftover_mm:.1f} mm")
+    r2.metric("End-Bit Waste", f"{end_bit_leftover_mm:.1f} mm")
     r3.metric("Total Scrap Weight", f"{total_scrap_weight_kg:.3f} Kg")
     r4.metric("Rod Gross Weight", f"{total_gross_weight_kg:.3f} Kg")
 
-    st.info(
-        f"📋 **Detailed Weight & Measurement Breakdown:**\n"
-        f"- **Net Weight of Finished Parts:**"
-        f" {total_net_weight_all_parts:.3f} Kg\n"
-        f"- **Tail-End Piece Waste Weight (End-Bit):**"
-        f" {end_bit_weight_kg:.3f} Kg\n"
-        f"- **Parting Blade & Facing Scrap Weight:**"
-        f" {cutting_blade_scrap_weight_kg:.3f} Kg\n"
-        f"- **Single Piece Length Consumption (with allowances):**"
-        f" {single_consumption_mm:.1f} mm"
-    )
-
-# --- 4. WORKSHOP CALCULATOR (RPM & TIME) ---
-elif any(
-    x in app_mode
-    for x in ["Workshop", "ஒர்க்ஷாப்", "वर्कशॉप", "వర్క్‌షాప్", "വർക്ക്‌ഷോപ്പ്"]
-):
-  st.header("🧮 Workshop Calculator (RPM & Machining Time)")
-  calc_choice = st.selectbox(
-      "Select Calculation", ["Spindle RPM Calculator", "Machining Time Calculator"]
+# --- 6. ADVANCED G-CODE GENERATOR ---
+elif any(x in app_mode for x in ["G-Code", "ஜி-கோடு", "जी-कोड"]):
+  st.header("📜 Advanced CNC G-Code Generator (Turning, Grooving & Boring)")
+  op_choice = st.selectbox(
+      "Select Operation",
+      [
+          "OD Turning & Facing",
+          "OD Grooving & Parting",
+          "ID Boring",
+          "Drilling Cycle",
+      ],
   )
-
-  if "RPM" in calc_choice:
-    c1, c2 = st.columns(2)
-    with c1:
-      vc = st.number_input("Cutting Speed (Vc in m/min)", value=200.0)
-    with c2:
-      dia = st.number_input("Rod / Component Diameter (mm)", value=40.0)
-
-    if st.button("Calculate RPM"):
-      if dia > 0:
-        rpm = (1000 * vc) / (math.pi * dia)
-        st.success(f"✅ Required Spindle Speed: **{rpm:.2f} RPM**")
-  else:
-    c1, c2 = st.columns(2)
-    with c1:
-      length = st.number_input("Cutting Length (mm)", value=80.0)
-      feed = st.number_input("Feed Rate (mm/rev)", value=0.2)
-    with c2:
-      rpm_val = st.number_input("Spindle Speed (RPM)", value=1500.0)
-
-    if st.button("Calculate Time"):
-      if feed > 0 and rpm_val > 0:
-        t_mins = length / (feed * rpm_val)
-        st.success(f"✅ Estimated Machining Time: **{t_mins:.2f} Minutes**")
-
-# --- 5. CUSTOMER QUOTATION (WITH PHOTO SUPPORT) ---
-elif any(
-    x in app_mode
-    for x in ["Quotation", "கொட்டேஷன்", "कोटेशन", "కొటేషన్", "കൊട്ടേഷൻ"]
-):
-  st.header("💰 Customer Quotation & Cost Estimator (with Photo Reference)")
-  st.write(
-      "Calculate costs based on material grades and attach part photos for"
-      " quotation records."
-  )
-
-  q_photo = st.file_uploader(
-      "Upload Part Photo for Quotation Reference",
-      type=["png", "jpg", "jpeg"],
-      key="q_photo",
-  )
-  if q_photo:
-    st.image(q_photo, width=200, caption="Quotation Reference Photo")
 
   c1, c2 = st.columns(2)
   with c1:
-    cust_name = st.text_input("Customer Name", "ABC Industries")
-    part_name = st.text_input("Component Name", "Bush / Shaft")
-    mat_cost_kg = st.number_input("Raw Material Cost per Kg (₹)", value=85.0)
+    prog_no = st.text_input("Program Number", "O0001")
+    s_speed = st.number_input("Spindle Speed (RPM)", value=1500)
+    feed_rate = st.number_input("Feed Rate (mm/rev)", value=0.15)
   with c2:
-    part_wt = st.number_input("Part Weight (Kg)", value=1.0)
-    mach_time = st.number_input("Machining Time per piece (Mins)", value=5.0)
-    machine_rate = st.number_input("Machine Hourly Rate (₹/hr)", value=600.0)
-    batch_qty = st.number_input("Batch Quantity", value=100)
-    profit = st.slider("Profit Margin (%)", 0, 50, 20)
+    if "Turning" in op_choice:
+      dia_val = st.number_input("Target Outer Diameter (mm)", value=40.0)
+      len_val = st.number_input("Machining Length (mm)", value=50.0)
+    elif "Grooving" in op_choice:
+      groove_z = st.number_input(
+          "Groove Distance from Reference Z (mm)", value=-25.0
+      )
+      groove_w = st.number_input("Groove Width (mm)", value=3.0)
+      groove_d = st.number_input("Groove Depth Diameter (mm)", value=32.0)
+    elif "Boring" in op_choice:
+      bore_dia = st.number_input("Final Bore Hole Diameter (mm)", value=25.0)
+      bore_depth = st.number_input("Boring Depth (mm)", value=40.0)
+    else:
+      drill_depth = st.number_input("Drill Hole Depth (mm)", value=30.0)
 
-  if st.button("Calculate Quotation"):
-    mat_tot = part_wt * mat_cost_kg
-    mach_cost = (machine_rate / 60) * mach_time
-    unit_price = (mat_tot + mach_cost) * (1 + profit / 100)
-    grand_total = unit_price * batch_qty
-    st.success("✅ Quotation Calculated Successfully with Photo Reference!")
-    r1, r2, r3 = st.columns(3)
-    r1.metric("Unit Price", f"₹{unit_price:.2f}")
-    r2.metric("Batch Quantity", f"{batch_qty} Nos")
-    r3.metric("Grand Total", f"₹{grand_total:,.2f}")
-
-# --- 6. PRODUCTION TRACKER ---
-elif any(
-    x in app_mode
-    for x in ["Production", "உற்பத்தி", "उत्पादन", "ఉత్పత్తి", "പ്രൊഡക്ഷൻ"]
-):
-  st.header("🏭 Production & Batch Tracker")
-  job_no = st.text_input("Job Order Number", "JOB-2026-001")
-  target = st.number_input("Target Quantity", value=500)
-  completed = st.number_input("Completed Quantity", value=350)
-  cycle_t = st.number_input("Cycle Time per part (Seconds)", value=45.0)
-
-  if st.button("Check Progress"):
-    pct = (completed / target) * 100
-    st.progress(min(pct / 100.0, 1.0))
-    st.write(f"**Completion Status:** {pct:.1f}%")
-    tot_hrs = (target * cycle_t) / 3600
-    st.info(f"⏱️ Estimated total batch time: **{tot_hrs:.2f} Hours**")
-
-# --- 7. G-CODE GENERATOR ---
-elif any(
-    x in app_mode for x in ["G-Code", "ஜி-கோடு", "जी-कोड", "జి-కోడ్", "ജി-കോഡ്"]
-):
-  st.header("📜 CNC G-Code Generator")
-  op = st.selectbox("Operation", ["Facing & Turning", "Grooving", "Drilling"])
-  feed = st.number_input("Feed Rate", value=0.15)
-  s_speed = st.number_input("Spindle Speed", value=1500)
-
-  if st.button("Generate G-Code"):
-    code = f"""
-O0001 (MEGALA CNC MATE PROFESSIONAL)
+  if st.button("Generate Complete G-Code"):
+    if "Turning" in op_choice:
+      gcode_final = f"""
+({prog_no} - MEGALA MATE OD TURNING)
 G21 G90 G40 G80 G18
 M03 S{s_speed}
-G00 X52.0 Z2.0
-G01 Z0.0 F{feed}
+G00 X{dia_val + 4.0} Z2.0
+G01 Z0.0 F{feed_rate}
+G01 X{dia_val} F0.12
+G01 Z-{len_val} F{feed_rate}
+G00 X{dia_val + 5.0}
 G00 Z50.0
 M05
 M30
 """
-    st.code(code, language="text")
+    elif "Grooving" in op_choice:
+      gcode_final = f"""
+({prog_no} - MEGALA MATE GROOVING)
+G21 G90 G40 G80 G18
+M03 S{int(s_speed * 0.7)}
+G00 X{groove_d + 10.0} Z{groove_z}
+G01 X{groove_d} F0.08
+G04 P500 (DWELL FOR CHIP BREAK)
+G00 X{groove_d + 10.0}
+G00 Z50.0
+M05
+M30
+"""
+    elif "Boring" in op_choice:
+      gcode_final = f"""
+({prog_no} - MEGALA MATE ID BORING)
+G21 G90 G40 G80 G18
+M03 S{s_speed}
+G00 X{bore_dia - 2.0} Z2.0
+G01 Z-{bore_depth} F{feed_rate}
+G01 X{bore_dia} F0.1
+G00 Z50.0
+M05
+M30
+"""
+    else:
+      gcode_final = f"""
+({prog_no} - MEGALA MATE DRILLING)
+G21 G90 G40 G80 G18
+M03 S{s_speed}
+G00 X0.0 Z2.0
+G83 Z-{drill_depth} R1.0 Q5.0 F{feed_rate}
+G80
+G00 Z50.0
+M05
+M30
+"""
+    st.code(gcode_final, language="text")
     st.download_button(
         "📥 Download G-Code File (.nc)",
-        data=code,
+        data=gcode_final,
         file_name="program.nc",
         mime="text/plain",
     )
 
+# --- 7. PRODUCTION & LARGE ORDER DAYS CALCULATOR ---
+elif any(x in app_mode for x in ["Production", "உற்பத்தி", "उत्पादन"]):
+  st.header("🏭 Production & Large Order Days Calculator")
+  c1, c2 = st.columns(2)
+  with c1:
+    job_no = st.text_input("Job Order Number", "JOB-2026-5000")
+    total_target = st.number_input(
+        "Total Target Quantity (Pieces)", value=5000.0
+    )
+    cycle_time_sec = st.number_input(
+        "Cycle Time per Piece (Seconds)", value=45.0
+    )
+  with c2:
+    completed_qty = st.number_input(
+        "Already Completed Quantity", value=1200.0
+    )
+    shift_hours = st.selectbox(
+        "Working Hours per Day", [8, 10, 12, 16, 24], index=2
+    )
+    efficiency = st.slider("Machine Efficiency (%)", 50, 100, 85)
+
+  if st.button("Calculate Completion Days"):
+    remaining_qty = max(0.0, total_target - completed_qty)
+    total_rem_seconds = remaining_qty * cycle_time_sec
+    actual_rem_hours = (total_rem_seconds / 3600.0) / (efficiency / 100.0)
+    required_days = actual_rem_hours / shift_hours
+    pct = (completed_qty / total_target) * 100
+    st.progress(min(pct / 100.0, 1.0))
+
+    st.success("✅ Production & Timeline Analysis Completed!")
+    r1, r2, r3 = st.columns(3)
+    r1.metric("Completion Status", f"{pct:.1f}%")
+    r2.metric("Remaining Hours", f"{actual_rem_hours:.1f} Hours")
+    r3.metric("Estimated Days Required", f"{required_days:.1f} Days")
+
 # --- 8. STOCK MANAGEMENT ---
-elif any(
-    x in app_mode for x in ["Stock", "ஸ்டாக்", "स्टॉक", "സ്റ്റോക്ക്", "ನಿರ್ವಹಣೆ"]
-):
+elif any(x in app_mode for x in ["Stock", "ஸ்டாக்", "स्टॉक"]):
   st.header("📦 Stock & Inventory Management")
-  st.write("Monitor raw material stock levels and reorder alerts.")
   st.selectbox(
       "Material Grade",
       [
           "EN8",
           "EN24",
           "Aluminum 6061",
-          "Mild Steel (MS)",
+          "Mild Speed (MS)",
           "Brass",
           "Stainless Steel 304",
       ],
@@ -519,7 +672,7 @@ elif any(
 # --- FOOTER ---
 st.markdown("---")
 st.markdown(
-    "<p style='text-align: center; color: gray;'>© 2026 Megala CNC Mate | World-Class"
-    " Professional Workshop Automation</p>",
+    "<p style='text-align: center; color: gray;'>© 2026 Megala CNC Mate | Professional"
+    " Workshop Automation (100% Offline Ready)</p>",
     unsafe_allow_html=True,
 )
