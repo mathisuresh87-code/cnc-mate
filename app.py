@@ -2,7 +2,7 @@ import streamlit as st
 import math
 
 # Page Configuration - அப்ளிகேஷனின் தலைப்பு மற்றும் வடிவமைப்பு அமைப்பு
-st.set_page_config(page_title="CNC MATE - Smart CNC & Production Assistant", layout="centered")
+st.set_page_config(page_title="Megala CNC Mate - Smart CNC & Production Assistant", layout="centered")
 
 # --- 1. மொழித் தேர்வு பகுதி (Multi-Language Support) ---
 # தமிழ், ஆங்கிலம் மற்றும் ஹிந்தி மொழிகளில் அப்ளிகேஷன் இயங்குவதற்கான மெனு
