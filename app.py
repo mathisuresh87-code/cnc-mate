@@ -11,7 +11,7 @@ lang = st.selectbox("🌐 Select Language / மொழியைத் தேர�
 
 # மொழிக்கேற்ப வார்த்தைகளை மாற்றியமைக்கும் அகராதி (Text Dictionary)
 if lang == "தமிழ் (Tamil)":
-    title = "⚙️ CNC MATE - உற்பத்தி மற்றும் கால்குலேட்டர்"
+    title = "⚙️ MEGALA CNC MATE - உற்பத்தி மற்றும் கால்குலேட்டர்"
     cust_label = "கஸ்டமர் / கம்பெனி பெயர் (Customer Name)"
     part_name_label = "பார்ட் பெயர் / டிராயிங் எண் (Part Name / Drawing No)"
     mat_label = "மெட்டீரியல் வகை (Material Type)"
