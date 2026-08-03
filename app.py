@@ -56,8 +56,8 @@ st.markdown("""
 col_logo, col_title = st.columns([1, 4])
 with col_logo:
     try:
-        if os.path.exists("logo.png"):
-            st.image("logo.png", width=120)
+        if os.path.exists("Logo.png"):
+            st.image("Logo.png", width=120)
         else:
             st.markdown("### ⚙️ MEGALA")
     except Exception:
