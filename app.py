@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 
@@ -51,13 +52,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# App Header with Logo Integration
+# App Header with Safe Logo Integration
 col_logo, col_title = st.columns([1, 4])
 with col_logo:
-    try:
-        st.image("Logo.png", width=120)  # உங்கள் லோகோ படம் இங்கே প্রদর্শிக்கப்படும்
-    except:
-        st.markdown("### ⚙️ [Logo Here]")
+    if os.path.exists("logo.png"):
+        st.image("logo.png", width=120)
+    else:
+        st.markdown("### ⚙️ MEGALA")
 
 with col_title:
     st.markdown('<p class="main-header" style="text-align: left;">MEGALA CNC MATE</p>', unsafe_allow_html=True)
@@ -65,8 +66,12 @@ with col_title:
 
 st.markdown("---")
 
-# Sidebar Navigation with Logo
-st.sidebar.image("logo.png", use_container_width=True)
+# Sidebar Navigation with Safe Logo
+if os.path.exists("logo.png"):
+    st.sidebar.image("logo.png", use_container_width=True)
+else:
+    st.sidebar.markdown("### ⚙️ Megala CNC Mate")
+
 st.sidebar.markdown("### 🚀 Menu / மெனு")
 selected_module = st.sidebar.selectbox(
     "Select Module",
