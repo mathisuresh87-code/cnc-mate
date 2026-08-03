@@ -52,12 +52,21 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# App Header with Safe Logo Integration (Exception Handled)
+# Smart Logo Finder Function
+def get_logo_file():
+    for name in ["logo.png", "Logo.png", "LOGO.PNG", "logo.jpg", "Logo.jpg"]:
+        if os.path.exists(name):
+            return name
+    return None
+
+logo_path = get_logo_file()
+
+# App Header with Safe Logo Integration
 col_logo, col_title = st.columns([1, 4])
 with col_logo:
     try:
-        if os.path.exists("Logo.png"):
-            st.image("Logo.png", width=120)
+        if logo_path:
+            st.image(logo_path, width=120)
         else:
             st.markdown("### ⚙️ MEGALA")
     except Exception:
@@ -69,10 +78,10 @@ with col_title:
 
 st.markdown("---")
 
-# Sidebar Navigation with Safe Logo (Exception Handled)
+# Sidebar Navigation with Safe Logo
 try:
-    if os.path.exists("logo.png"):
-        st.sidebar.image("logo.png", use_container_width=True)
+    if logo_path:
+        st.sidebar.image(logo_path, use_container_width=True)
     else:
         st.sidebar.markdown("### ⚙️ Megala CNC Mate")
 except Exception:
@@ -144,46 +153,58 @@ if "Home" in selected_module:
             </div>
         """, unsafe_allow_html=True)
 
-# 2. ROD CALCULATOR
+# 2. ROD CALCULATOR (Updated with conditional zero logic)
 elif "Rod Calculator" in selected_module:
     st.subheader("📐 Rod & Meter/Kg Calculator")
     mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
     
     col1, col2 = st.columns(2)
     with col1:
-        rod_length = st.number_input("Rod Length (Meter)", value=6.0)
-        part_length = st.number_input("Part Length (mm)", value=126.0)
-        cutting_allowance = st.number_input("Cutting Allowance (mm)", value=3.0)
+        rod_length = st.number_input("Rod Length (Meter)", value=6.0, min_value=0.0)
+        part_length = st.number_input("Part Length (mm)", value=126.0, min_value=0.0)
+        cutting_allowance = st.number_input("Cutting Allowance (mm)", value=3.0, min_value=0.0)
     with col2:
-        required_qty = st.number_input("Required Quantity (Nos)", value=500)
-        cycle_time = st.number_input("Cycle Time (Seconds)", value=20)
+        required_qty = st.number_input("Required Quantity (Nos)", value=500, min_value=0)
+        cycle_time = st.number_input("Cycle Time (Seconds)", value=20, min_value=0)
         shape_type = st.selectbox("Material Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"])
         
     if shape_type == "Tube / Pipe":
         od = st.number_input("Outer Diameter OD (mm)", value=50.0)
         id_val = st.number_input("Inner Diameter ID (mm)", value=30.0)
 
-    if st.button("Calculate Rod Requirements"):
-        st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
-        
+    st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
+
+    # Calculation logic based on Required Quantity
+    if required_qty > 0:
         effective_part_len = part_length + cutting_allowance
         parts_per_rod = int((rod_length * 1000) / effective_part_len) if effective_part_len > 0 else 0
         required_rods = int(required_qty / parts_per_rod) if parts_per_rod > 0 else 0
         total_stock_length = required_rods * rod_length
         prod_per_hour = int(3600 / cycle_time) if cycle_time > 0 else 0
         total_machine_time = (required_qty * cycle_time) / 3600
+        remnant = round((rod_length * 1000) % effective_part_len, 2) if effective_part_len > 0 else 0.0
+    else:
+        parts_per_rod = 0
+        required_rods = 0
+        total_stock_length = 0.0
+        prod_per_hour = 0
+        total_machine_time = 0.0
+        remnant = 0.0
 
-        res1, res2, res3 = st.columns(3)
-        with res1:
-            st.metric("Parts / Rod", f"{parts_per_rod} Nos")
-            st.metric("Required Rods", f"{required_rods} Nos")
-        with res2:
-            st.metric("Balance Scrap / Remnant", f"{round((rod_length*1000) % effective_part_len, 2)} mm")
-            st.metric("Total Stock Length", f"{round(total_stock_length, 2)} Meters")
-        with res3:
-            st.metric("Production / Hour", f"{prod_per_hour} Nos")
-            st.metric("Total Machine Time", f"{round(total_machine_time, 2)} Hr")
-            
+    res1, res2, res3 = st.columns(3)
+    with res1:
+        st.metric("Parts / Rod", f"{parts_per_rod} Nos")
+        st.metric("Required Rods", f"{required_rods} Nos")
+    with res2:
+        st.metric("Balance Scrap / Remnant", f"{remnant} mm")
+        st.metric("Total Stock Length", f"{round(total_stock_length, 2)} Meters")
+    with res3:
+        st.metric("Production / Hour", f"{prod_per_hour} Nos")
+        st.metric("Total Machine Time", f"{round(total_machine_time, 2)} Hr")
+        
+    if required_qty == 0:
+        st.warning("⚠️ Required Quantity 0 ஆக உள்ளதால் அனைத்து ரிசல்ட்களும் 0 எனக் காட்டப்பட்டுள்ளன.")
+    else:
         st.info("All calculations are approximate. Please verify before production.")
 
 # 3. PRODUCTION CALCULATOR
@@ -198,17 +219,16 @@ elif "Production Calculator" in selected_module:
         efficiency = st.slider("Machine Efficiency (%)", 50, 100, 85)
         break_time = st.number_input("Break Time (min)", value=30)
         
-    if st.button("Calculate Production Output"):
-        st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
-        effective_hours = avail_time - (break_time / 60)
-        prod_hour = int(3600 / cyc_time * (efficiency / 100))
-        prod_day = int(prod_hour * effective_hours)
-        
-        r1, r2 = st.columns(2)
-        with r1:
-            st.metric("Production / Hour", f"{prod_hour} Nos")
-        with r2:
-            st.metric("Production / Day", f"{prod_day} Nos")
+    effective_hours = avail_time - (break_time / 60)
+    prod_hour = int(3600 / cyc_time * (efficiency / 100)) if cyc_time > 0 else 0
+    prod_day = int(prod_hour * effective_hours)
+    
+    st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
+    r1, r2 = st.columns(2)
+    with r1:
+        st.metric("Production / Hour", f"{prod_hour} Nos")
+    with r2:
+        st.metric("Production / Day", f"{prod_day} Nos")
 
 # 4. COSTING & QUOTATION CALCULATOR
 elif "Costing & Quotation Calculator" in selected_module:
@@ -224,23 +244,22 @@ elif "Costing & Quotation Calculator" in selected_module:
         overhead_pct = st.number_input("Overhead (%)", value=15.0)
         profit_margin = st.slider("Profit Margin (%)", 0, 50, 20)
 
-    if st.button("Calculate Cost & Selling Price"):
-        st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
-        material_total = mat_cost_kg * mat_wt_part
-        machining_part = (machine_cost_hr / 3600) * 20
-        subtotal = material_total + machining_part + labour_cost_part
-        overhead_val = subtotal * (overhead_pct / 100)
-        cost_per_part = subtotal + overhead_val
-        cost_1000 = cost_per_part * 1000
-        selling_price = cost_per_part * (1 + profit_margin / 100)
+    material_total = mat_cost_kg * mat_wt_part
+    machining_part = (machine_cost_hr / 3600) * 20
+    subtotal = material_total + machining_part + labour_cost_part
+    overhead_val = subtotal * (overhead_pct / 100)
+    cost_per_part = subtotal + overhead_val
+    cost_1000 = cost_per_part * 1000
+    selling_price = cost_per_part * (1 + profit_margin / 100)
 
-        p1, p2, p3 = st.columns(3)
-        with p1:
-            st.metric("Cost / Part", f"₹ {round(cost_per_part, 2)}")
-        with p2:
-            st.metric("Cost / 1000 Parts", f"₹ {round(cost_1000, 2)}")
-        with p3:
-            st.metric("Selling Price / Part", f"₹ {round(selling_price, 2)}")
+    st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
+    p1, p2, p3 = st.columns(3)
+    with p1:
+        st.metric("Cost / Part", f"₹ {round(cost_per_part, 2)}")
+    with p2:
+        st.metric("Cost / 1000 Parts", f"₹ {round(cost_1000, 2)}")
+    with p3:
+        st.metric("Selling Price / Part", f"₹ {round(selling_price, 2)}")
 
 # 5. STOCK MANAGEMENT
 elif "Stock Management" in selected_module:
