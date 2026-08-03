@@ -52,12 +52,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# App Header with Safe Logo Integration
+# App Header with Safe Logo Integration (Exception Handled)
 col_logo, col_title = st.columns([1, 4])
 with col_logo:
-    if os.path.exists("logo.png"):
-        st.image("logo.png", width=120)
-    else:
+    try:
+        if os.path.exists("logo.png"):
+            st.image("logo.png", width=120)
+        else:
+            st.markdown("### ⚙️ MEGALA")
+    except Exception:
         st.markdown("### ⚙️ MEGALA")
 
 with col_title:
@@ -66,10 +69,13 @@ with col_title:
 
 st.markdown("---")
 
-# Sidebar Navigation with Safe Logo
-if os.path.exists("logo.png"):
-    st.sidebar.image("logo.png", use_container_width=True)
-else:
+# Sidebar Navigation with Safe Logo (Exception Handled)
+try:
+    if os.path.exists("logo.png"):
+        st.sidebar.image("logo.png", use_container_width=True)
+    else:
+        st.sidebar.markdown("### ⚙️ Megala CNC Mate")
+except Exception:
     st.sidebar.markdown("### ⚙️ Megala CNC Mate")
 
 st.sidebar.markdown("### 🚀 Menu / மெனு")
