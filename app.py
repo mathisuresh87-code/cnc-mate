@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # --- HEADER SECTION ---
-col_logo, col_title = st.columns([3.5, 3.5])
+col_logo, col_title = st.columns([2.5, 2.5])
 
 with col_logo:
   if os.path.exists("Logo.png"):
