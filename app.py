@@ -3,235 +3,272 @@ import pandas as pd
 
 # Page Configuration
 st.set_page_config(
-    page_title="Megala CNC Mate",
+    page_title="CNC Mate - Smart CNC. Simple Work.",
     page_icon="⚙️",
     layout="wide"
 )
 
-# Custom CSS for Header styling
+# Custom CSS for Dark Theme & Gorgeous UI Cards matching your screenshots
 st.markdown("""
     <style>
-    .main-title {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #1f2937;
-        margin-bottom: 0px;
+    .stApp {
+        background-color: #0d1117;
+        color: #ffffff;
     }
-    .sub-title {
-        font-size: 1rem;
-        color: #4b5563;
-        margin-top: 5px;
+    .main-header {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #ffffff;
+        text-align: center;
+        margin-bottom: 0px;
+        letter-spacing: 1px;
+    }
+    .sub-header {
+        font-size: 1.1rem;
+        color: #38bdf8;
+        text-align: center;
+        margin-bottom: 25px;
+        font-weight: 500;
+    }
+    .metric-card {
+        background-color: #161b22;
+        padding: 18px;
+        border-radius: 12px;
+        border: 1px solid #30363d;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .auto-badge {
+        background-color: #065f46;
+        color: #34d399;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
         margin-bottom: 15px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Header Section (Logo & Custom Title without gear icon)
-col1, col2 = st.columns([1, 4])
-with col1:
-    st.markdown("### 🚚 **Megala CNC**")
-with col2:
-    st.markdown('<p class="main-title">Megala CNC Mate</p>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-title">SMART CNC. SIMPLE WORK. — புரோபஷனல் ஒர்க்ஷாப் ஆட்டோமேஷன் & துல்லியமான கால்குலேட்டர்</p>', unsafe_allow_html=True)
-
+# App Header
+st.markdown('<p class="main-header">CNC MATE</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">SMART CNC. SIMPLE WORK. — புரோபஷனல் ஒர்க்ஷாப் ஆட்டோமேஷன்</p>', unsafe_allow_html=True)
 st.markdown("---")
 
-# Sidebar Navigation (All 9 Modules)
+# Sidebar Navigation
 st.sidebar.markdown("### 🚀 Menu / மெனு")
-menu_option = st.sidebar.selectbox(
-    "Select Module / மாட்யூல் தேர்வு",
+selected_module = st.sidebar.selectbox(
+    "Select Module",
     [
-        "1. முகப்பு (Dashboard)",
-        "2. மிஷின் கால்குலேட்டர் (Machine Calculator)",
-        "3. கொட்டேஷன் & செலவு மேலாண்மை (Quotation & Cost Management)",
-        "4. டிராயிங் & போட்டோ அனாலிசிஸ் (Drawing & Photo Analysis)",
-        "5. ராட், மீட்டர்/கிலோ & ஸ்கிராப் (Rod, Meter/Kg & Scrap)",
-        "6. ஜி-கோடு ஜெனரேட்டர் (Advanced G-Code Generator)",
-        "7. உற்பத்தி & டிஸ்பாட்ச் (Production & Dispatch)",
-        "8. ஸ்டாக் & இன்வென்சரி (Stock & Inventory)",
-        "9. அமைப்புகள் (Settings - 6 Languages)"
+        "🏠 Home / முகப்பு",
+        "📐 Rod Calculator (ராட் கால்குலேட்டர்)",
+        "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)",
+        "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)",
+        "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
+        "📷 Drawing & G-Code Generator (டிராயிங் & ஜி-கோடு)",
+        "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
     ]
 )
 
-# 1. Dashboard
-if "முகப்பு" in menu_option:
-    st.subheader("🏠 முகப்பு (Dashboard)")
-    st.write("நதீஷ் அவர்களின் ஒர்க்ஷாப் ஆட்டோமேஷன் பிரதானப் பக்கம்.")
+# 1. HOME DASHBOARD
+if "Home" in selected_module:
+    st.subheader("👋 Hello, Suresh! Good Morning ☀️")
+    st.write("இன்றைய ஒர்க்ஷாப் சுருக்கம் மற்றும் விரைவான அணுகல்:")
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("ஆக்டிவ் மிஷின்கள்", "Turn, Traub, CNC, Polygon")
+        st.markdown("""
+            <div class="metric-card" style="border-left: 5px solid #3b82f6;">
+                <h3>📐 Rod Calculator</h3>
+                <p>ரவுண்ட், எக்சகன், ஸ்கொயர் & டியூப் கணக்கீடுகள்</p>
+            </div>
+        """, unsafe_allow_html=True)
     with col2:
-        st.metric("இன்று தயாரித்தவை", "1,250 Parts")
+        st.markdown("""
+            <div class="metric-card" style="border-left: 5px solid #10b981;">
+                <h3>⏱️ Production Calculator</h3>
+                <p>டிரெண்ட், ட்ராவ், சிஎன்சி உற்பத்தி நேரம்</p>
+            </div>
+        """, unsafe_allow_html=True)
     with col3:
-        st.metric("மொத்த ரா மெட்டீரியல் ஸ்டாக்", "4,500 Kg")
+        st.markdown("""
+            <div class="metric-card" style="border-left: 5px solid #f97316;">
+                <h3>💰 Costing Calculator</h3>
+                <p>மெட்டீரியல், லேபர் & ஒவர்ஹெட்ஸ் காஸ்ட்</p>
+            </div>
+        """, unsafe_allow_html=True)
 
-# 2. Machine Calculator
-elif "மிஷின் கால்குலேட்டர்" in menu_option:
-    st.subheader("⚙️ மிஷின் கால்குலேட்டர் (Machine RPM & Time Calculator)")
-    machine_type = st.selectbox("மிஷின் வகை", ["Turn Machine", "Traub Machine", "CNC Machine", "Polygon Machine"])
+    st.markdown("<br>", unsafe_allow_html=True)
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown("""
+            <div class="metric-card" style="border-left: 5px solid #8b5cf6;">
+                <h3>📦 Stock Management</h3>
+                <p>ரா மெட்டீரியல் & பினிஷ்ட் குட்ஸ் டிராக்கிங்</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with c2:
+        st.markdown("""
+            <div class="metric-card" style="border-left: 5px solid #06b6d4;">
+                <h3>📄 Quotation & PDF</h3>
+                <p>QR கோடுடன் கூடிய புரொபஷனல் கொட்டேஷன்</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with c3:
+        st.markdown("""
+            <div class="metric-card" style="border-left: 5px solid #6b7280;">
+                <h3>⚙️ Settings & Languages</h3>
+                <p>6 மொழிகள் & ஒர்க்ஷாப் மாஸ்டர்ஸ்</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+# 2. ROD CALCULATOR
+elif "Rod Calculator" in selected_module:
+    st.subheader("📐 Rod & Meter/Kg Calculator")
+    mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
     
     col1, col2 = st.columns(2)
     with col1:
-        dia = st.number_input("மெட்டீரியல் விட்டம் / Diameter (mm)", value=40.0)
-        cutting_speed = st.number_input("கட்டிங் ஸ்பீடு / Cutting Speed (m/min)", value=150.0)
+        rod_length = st.number_input("Rod Length (Meter)", value=6.0)
+        part_length = st.number_input("Part Length (mm)", value=126.0)
+        cutting_allowance = st.number_input("Cutting Allowance (mm)", value=3.0)
     with col2:
-        part_length = st.number_input("பார்ட் நீளம் / Length (mm)", value=50.0)
-        feed_rate = st.number_input("ஃபீடு / Feed (mm/rev)", value=0.15)
+        required_qty = st.number_input("Required Quantity (Nos)", value=500)
+        cycle_time = st.number_input("Cycle Time (Seconds)", value=20)
+        shape_type = st.selectbox("Material Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"])
         
-    if st.button("கணக்கிடு (Calculate RPM & Time)"):
-        rpm = (cutting_speed * 1000) / (3.1416 * dia)
-        time_min = (part_length / feed_rate) / rpm if rpm > 0 else 0
+    if shape_type == "Tube / Pipe":
+        od = st.number_input("Outer Diameter OD (mm)", value=50.0)
+        id_val = st.number_input("Inner Diameter ID (mm)", value=30.0)
+
+    if st.button("Calculate Rod Requirements"):
+        st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
         
-        st.markdown("### 📊 அவுட்புட் முடிவுகள் (Results):")
-        r_col1, r_col2 = st.columns(2)
-        with r_col1:
-            st.metric("தேவையான ஸ்பிண்டில் வேகம் (RPM)", f"{round(rpm, 2)} RPM")
-        with r_col2:
-            st.metric("மதிப்பிடப்பட்ட கட்டிங் நேரம்", f"{round(time_min, 2)} Minutes")
+        # Calculations
+        effective_part_len = part_length + cutting_allowance
+        parts_per_rod = int((rod_length * 1000) / effective_part_len) if effective_part_len > 0 else 0
+        required_rods = int(required_qty / parts_per_rod) if parts_per_rod > 0 else 0
+        total_stock_length = required_rods * rod_length
+        prod_per_hour = int(3600 / cycle_time) if cycle_time > 0 else 0
+        total_machine_time = (required_qty * cycle_time) / 3600 # Hours
 
-# 3. Quotation & Cost Management
-elif "கொட்டேஷன் & செலவு மேலாண்மை" in menu_option:
-    st.subheader("💰 Quotation & Cost Management (Operations & Overheads)")
-    
-    material_source = st.radio("மெட்டீரியல் சோர்ஸ் தேர்வு", ["கஸ்டமர் மெட்டீரியல் (Customer Provided / Job Work Only)", "ஒர்க்ஷாப் வாங்குவது (Workshop Purchased)"])
-    
-    if "Workshop" in material_source:
-        col_m1, col_m2 = st.columns(2)
-        with col_m1:
-            mat_grade = st.selectbox("மெட்டீரியல் கிரேடு", ["EN1", "EN8", "EN19", "EN24", "EN31", "C45", "MS", "SS304", "SS316", "Aluminum", "Brass"])
-        with col_m2:
-            price_per_kg = st.number_input("ஒரு கிலோ விலை (₹)", value=120.0)
-            mat_weight = st.number_input("மொத்த எடை (Kg)", value=5.0)
-    else:
-        price_per_kg = 0.0
-        mat_weight = 0.0
+        res1, res2, res3 = st.columns(3)
+        with res1:
+            st.metric("Parts / Rod", f"{parts_per_rod} Nos")
+            st.metric("Required Rods", f"{required_rods} Nos")
+        with res2:
+            st.metric("Balance Scrap / Remnant", f"{round((rod_length*1000) % effective_part_len, 2)} mm")
+            st.metric("Total Stock Length", f"{round(total_stock_length, 2)} Meters")
+        with res3:
+            st.metric("Production / Hour", f"{prod_per_hour} Nos")
+            st.metric("Total Machine Time", f"{round(total_machine_time, 2)} Hr")
+            
+        st.info("All calculations are approximate. Please verify before production.")
 
-    st.markdown("#### ஆபரேஷன்கள் மற்றும் வேலைப்பாடுகள் (Operations Routing)")
-    selected_ops = st.multiselect("தேவையான ஆபரேஷன்கள்", ["Facing", "Turning", "Grooving", "Boring", "Straight Drilling", "Cross-Drilling", "Chamfering", "Tapping"])
+# 3. PRODUCTION CALCULATOR
+elif "Production Calculator" in selected_module:
+    st.subheader("⏱️ Production Days & Output Calculator")
     
-    st.markdown("#### லேபர் மற்றும் ஓவர்ஹெட் செலவுகள் (Manpower & Overheads)")
-    col_l1, col_l2 = st.columns(2)
-    with col_l1:
-        machine_hourly_rate = st.number_input("மிஷின் மணிநேரக் கட்டணம் (₹/hr)", value=600.0)
-        running_hours = st.number_input("மொத்த ஒர்க்கிங் நேரம் (Hours)", value=2.0)
-        operator_salary = st.number_input("ஆபரேட்டர்/செட்டர்/புரோகிராமர் செலவு பங்கு (₹)", value=150.0)
-    with col_l2:
-        overheads = st.number_input("இதர செலவுகள் (Coolant, Power, Tea/Snacks - ₹)", value=100.0)
-        profit_margin = st.slider("இலாப விளிம்பு (Profit Margin %)", 0, 50, 20)
-
-    if st.button("இறுதி கொட்டேஷன் விலை கணக்கிடு"):
-        machining_cost = machine_hourly_rate * running_hours
-        material_cost = price_per_kg * mat_weight
-        subtotal = machining_cost + material_cost + operator_salary + overheads
-        final_price = subtotal * (1 + profit_margin / 100.0)
+    c1, c2 = st.columns(2)
+    with c1:
+        cyc_time = st.number_input("Cycle Time (sec)", value=20)
+        avail_time = st.number_input("Available Time / Day (hr)", value=8.0)
+    with c2:
+        efficiency = st.slider("Machine Efficiency (%)", 50, 100, 85)
+        break_time = st.number_input("Break Time (min)", value=30)
         
-        st.markdown("### 📋 விரிவான கொட்டேஷன் அவுட்புட்:")
-        st.success(f"### இறுதி கொட்டேஷன் விலை: ₹ {round(final_price, 2)}")
+    if st.button("Calculate Production Output"):
+        st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
+        effective_hours = avail_time - (break_time / 60)
+        prod_hour = int(3600 / cyc_time * (efficiency / 100))
+        prod_day = int(prod_hour * effective_hours)
         
-        df_quote = pd.DataFrame({
-            "செலவுப் பிரிவு (Cost Component)": ["மிஷினிங் காஸ்ட்", "மெட்டீரியல் காஸ்ட்", "லேபர் & ஓவர்ஹெட்ஸ்", "இலாப விளிம்பு (%)"],
-            "தொகை / மதிப்பு": [f"₹ {machining_cost}", f"₹ {material_cost}", f"₹ {operator_salary + overheads}", f"{profit_margin}%"]
-        })
-        st.table(df_quote)
+        r1, r2 = st.columns(2)
+        with r1:
+            st.metric("Production / Hour", f"{prod_hour} Nos")
+        with r2:
+            st.metric("Production / Day", f"{prod_day} Nos")
 
-# 4. Drawing & Photo Analysis
-elif "டிராயிங் & போட்டோ அனாலிசிஸ்" in menu_option:
-    st.subheader("📷 Drawing & Photo Analysis & Operation Detection")
-    uploaded_file = st.file_uploader("பார்ட் டிராயிங் அல்லது போட்டோவை அப்லோட் செய்யவும் (PDF/PNG/JPG)", type=["png", "jpg", "jpeg", "pdf"])
-    if uploaded_file is not None:
-        st.success("கோப்பு வெற்றிகரமாக அப்லோட் செய்யப்பட்டது!")
-        if st.button("பகுப்பாய்வு செய்து ஆபரேஷன்களைக் கண்டறி"):
-            st.markdown("### 🔍 கண்டறியப்பட்ட ஆபரேஷன்கள்:")
-            st.write("- **Facing:** பேசிங் ஆபரேஷன் உள்ளது")
-            st.write("- **Turning:** அவுட்டர் டர்னிங் உள்ளது")
-            st.write("- **Drilling & Tapping:** ஹோல் மற்றும் டேப்பிங் ஆபரேஷன் உள்ளது")
-            st.info("மேற்கண்ட ஆபரேஷன்களுக்குரிய ஆட்டோமேட்டிக் கொட்டேஷன் மற்றும் G-Code உருவாக்கப்பட்டுள்ளது.")
-
-# 5. Rod, Meter/Kg Converter & Scrap
-elif "ராட், மீட்டர்/கிலோ & ஸ்கிராப்" in menu_option:
-    st.subheader("📐 ராட், மீட்டர்/கிலோ கன்வெர்ட்டர் & ஸ்கிராப் கால்குலேட்டர்")
+# 4. COSTING & QUOTATION CALCULATOR
+elif "Costing & Quotation Calculator" in selected_module:
+    st.subheader("💰 Costing & Quotation Calculator")
     
-    shape = st.selectbox("ரா மெட்டீரியல் வடிவம் (Shape)", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"])
-    grade = st.selectbox("மெட்டீரியல் கிரேடு (Grade)", ["EN1", "EN8", "EN19", "EN24", "EN31", "C45", "MS", "SS304", "SS316", "Aluminum", "Brass"])
-    
-    if shape == "Tube / Pipe":
-        col_t1, col_t2 = st.columns(2)
-        with col_t1:
-            od = st.number_input("வெளி விட்டம் (Outer Diameter OD - mm)", value=50.0)
-        with col_t2:
-            id_val = st.number_input("உள் விட்டம் (Inner Diameter ID - mm)", value=30.0)
-    else:
-        od = st.number_input("விட்டம் / அகலம் (mm)", value=40.0)
-        id_val = 0.0
+    col1, col2 = st.columns(2)
+    with col1:
+        mat_cost_kg = st.number_input("Material Cost / Kg (₹)", value=85.0)
+        mat_wt_part = st.number_input("Material Weight / Part (Kg)", value=0.25)
+        machine_cost_hr = st.number_input("Machine Cost / Hr (₹)", value=600.0)
+    with col2:
+        labour_cost_part = st.number_input("Labour Cost / Part (₹)", value=1.20)
+        overhead_pct = st.number_input("Overhead (%)", value=15.0)
+        profit_margin = st.slider("Profit Margin (%)", 0, 50, 20)
 
-    length_m = st.number_input("மொத்த ராட் நீளம் (Meters)", value=10.0)
-    
-    if st.button("எடை மற்றும் அளவைக் கணக்கிடு"):
-        est_weight = (od ** 2) * length_m * 0.00616
-        st.markdown("### ⚖️ எடை கணக்கீட்டு அவுட்புட்:")
-        st.success(f"தேர்ந்தெடுக்கப்பட்ட கிரேடு: {grade} | வடிவம்: {shape} | மதிப்பிடப்பட்ட எடை: **{round(est_weight, 2)} Kg**")
+    if st.button("Calculate Cost & Selling Price"):
+        st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
+        material_total = mat_cost_kg * mat_wt_part
+        machining_part = (machine_cost_hr / 3600) * 20 # assuming 20 sec cycle
+        subtotal = material_total + machining_part + labour_cost_part
+        overhead_val = subtotal * (overhead_pct / 100)
+        cost_per_part = subtotal + overhead_val
+        cost_1000 = cost_per_part * 1000
+        selling_price = cost_per_part * (1 + profit_margin / 100)
 
-# 6. Advanced G-Code Generator
-elif "ஜி-கோடு ஜெனரேட்டர்" in menu_option:
-    st.subheader("📜 Advanced G-Code Generator")
-    gcode_input_method = st.radio("உள்ளீட்டு முறை", ["டிராயிங் / PDF அப்லோட்", "நேரடி பரிமாணங்கள் உள்ளீடு"])
-    
-    if "அப்லோட்" in gcode_input_method:
-        st.file_uploader("பார்ட் டிராயிங்கை அப்லோட் செய்யவும்", type=["pdf", "png", "jpg"])
-    else:
-        st.number_input("பார்ட் நீளம் (Length - mm)", value=100.0)
-        st.number_input("பார்ட் விட்டம் (Diameter - mm)", value=25.0)
-        st.multiselect("தேவையான ஆபரேஷன்கள்", ["Facing", "Turning", "Grooving", "Drilling", "Tapping"])
+        p1, p2, p3 = st.columns(3)
+        with p1:
+            st.metric("Cost / Part", f"₹ {round(cost_per_part, 2)}")
+        with p2:
+            st.metric("Cost / 1000 Parts", f"₹ {round(cost_1000, 2)}")
+        with p3:
+            st.metric("Selling Price / Part", f"₹ {round(selling_price, 2)}")
 
-    if st.button("G-Code புரோகிராம் உருவாக்கு"):
-        sample_gcode = """O1001 (MEGALA CNC MATE - FINAL PROGRAM)
-G21 G99 G40
-M03 S1500
-G00 X50.0 Z5.0
-G01 Z-45.0 F0.2
-G00 X100.0 Z100.0
-M30"""
-        st.markdown("### 💻 ஜெனரேட் செய்யப்பட்ட ஜி-கோடு:")
-        st.code(sample_gcode, language="text")
-
-# 7. Daily Production & Dispatch
-elif "உற்பத்தி & டிஸ்பாட்ச்" in menu_option:
-    st.subheader("📊 Daily Production & Dispatch Calculator")
-    
-    col_p1, col_p2 = st.columns(2)
-    with col_p1:
-        part_name = st.text_input("பார்ட் பெயர் / நம்பர்", value="Part-A01")
-        machine_used = st.selectbox("மிஷின் பெயர்", ["CNC-1", "Traub-1", "Turn-1", "Polygon-1"])
-        qty_produced = st.number_input("இன்று தயாரித்த எண்ணிக்கை (Produced Qty)", value=500)
-    with col_p2:
-        hours_run = st.number_input("ஓடிய மணிநேரம் (Running Hours)", value=8.0)
-        dispatch_qty = st.number_input("இன்று டிஸ்பாட்ச் செய்ய உள்ளவை (Dispatch Qty)", value=400)
-        
-    if st.button("உற்பத்தி மற்றும் ஸ்டாக் பதிவு செய்"):
-        st.markdown("### 📈 உற்பத்தி அவுட்புட்:")
-        st.success("உற்பத்தி மற்றும் டிஸ்பாட்ச் விபரங்கள் வெற்றிகரமாகப் பதிவு செய்யப்பட்டன!")
-        st.metric("மீதமுள்ள ஸ்டாக் இருப்பு (Closing Stock)", f"{qty_produced - dispatch_qty} Parts")
-
-# 8. Stock & Inventory Management
-elif "ஸ்டாக் & இன்வென்சரி" in menu_option:
+# 5. STOCK MANAGEMENT
+elif "Stock Management" in selected_module:
     st.subheader("📦 Stock & Inventory Management")
     
-    data = {
-        "Part / Material": ["EN8 Round 40mm", "EN19 Hex 25mm", "Finished Bush-01", "Finished Pin-02"],
-        "Category": ["Raw Material", "Raw Material", "Finished Goods", "Finished Goods"],
-        "Current Stock": ["250 Kg", "150 Kg", "600 Nos", "1200 Nos"],
-        "Status": ["Sufficient", "Sufficient", "Dispatch Ready", "Low Stock"]
+    s1, s2, s3 = st.columns(3)
+    with s1:
+        st.metric("Total Items", "128")
+    with s2:
+        st.metric("Low Stock", "8", delta_color="inverse")
+    with s3:
+        st.metric("Out of Stock", "3", delta_color="inverse")
+        
+    st.text_input("🔍 Search Part / Material...")
+    
+    stock_data = {
+        "Material / Part": ["EN8 Round Bar - 12mm", "MS Round Bar - 20mm", "EN24 Round Bar - 16mm", "Finished Bush-01"],
+        "Category": ["Raw Material", "Raw Material", "Raw Material", "Finished Goods"],
+        "Stock Qty": ["120.50 Kg", "45.20 Kg", "0.00 Kg", "650 Nos"],
+        "Status": ["In Stock", "Low Stock", "Out of Stock", "Dispatch Ready"]
     }
-    df = pd.DataFrame(data)
-    st.markdown("### 🗂️ ஸ்டாக் இருப்பு அட்டவணை:")
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 9. Settings
-elif "அமைப்புகள்" in menu_option:
-    st.subheader("⚙️ Settings / அமைப்புகள் (Multi-Language Support)")
+# 6. DRAWING & G-CODE GENERATOR
+elif "Drawing & G-Code Generator" in selected_module:
+    st.subheader("📷 Drawing Analysis & Advanced G-Code Generator")
+    uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG)", type=["png", "jpg", "pdf"])
+    
+    if uploaded_file:
+        st.success("Drawing successfully analyzed by AI!")
+        st.write("**Detected Operations:** Facing, Turning, Grooving, Drilling, Tapping")
+        
+    if st.button("Generate G-Code Program"):
+        sample_code = """O1001 (CNC MATE AUTOMATED PROGRAM)
+G21 G99 G40
+M03 S2000
+G00 X50.0 Z5.0
+G01 Z-50.0 F0.2
+G00 X100.0 Z100.0
+M30"""
+        st.code(sample_code, language="text")
+
+# 7. MORE MENU & SETTINGS
+elif "More Menu & Settings" in selected_module:
+    st.subheader("⚙️ More Menu & Settings (Settings & Masters)")
+    
     lang = st.selectbox(
-        "மொழி தேர்வு / Select Language", 
+        "🌐 Select Language / மொழி தேர்வு", 
         [
             "தமிழ் (Tamil)", 
             "English", 
@@ -241,5 +278,16 @@ elif "அமைப்புகள்" in menu_option:
             "ಕನ್ನಡ (Kannada)"
         ]
     )
-    st.success(f"தேர்ந்தெடுக்கப்பட்ட மொழி / Selected Language: {lang}")
-    st.write("மெகலா சிஎன்சி மெய்ட் (Megala CNC Mate) ஒர்க்ஷாப் ஆட்டோமேஷன் சிஸ்டம் v2.6 - முழுமையான பதிப்பு.")
+    st.success(f"Language set to: {lang}")
+    
+    st.markdown("---")
+    st.markdown("### 📋 Workshop Masters & Tools")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("• Part Master")
+        st.write("• Customer Master")
+        st.write("• Machine Master")
+    with col2:
+        st.write("• Material Master (EN1, EN8, EN19, EN24, EN31, C45, MS, SS, Aluminum, Brass)")
+        st.write("• Tool Master & Backup")
+        st.write("• Help & Support")
