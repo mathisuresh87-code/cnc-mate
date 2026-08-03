@@ -3,12 +3,12 @@ import pandas as pd
 
 # Page Configuration
 st.set_page_config(
-    page_title="CNC Mate - Smart CNC. Simple Work.",
+    page_title="Megala CNC Mate - Smart CNC. Simple Work.",
     page_icon="⚙️",
     layout="wide"
 )
 
-# Custom CSS for Dark Theme & Gorgeous UI Cards matching your screenshots
+# Custom CSS for Dark Theme & Gorgeous UI Cards
 st.markdown("""
     <style>
     .stApp {
@@ -51,12 +51,22 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# App Header
-st.markdown('<p class="main-header">CNC MATE</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">SMART CNC. SIMPLE WORK. — புரோபஷனல் ஒர்க்ஷாப் ஆட்டோமேஷன்</p>', unsafe_allow_html=True)
+# App Header with Logo Integration
+col_logo, col_title = st.columns([1, 4])
+with col_logo:
+    try:
+        st.image("logo.png", width=120)  # உங்கள் லோகோ படம் இங்கே প্রদর্শிக்கப்படும்
+    except:
+        st.markdown("### ⚙️ [Logo Here]")
+
+with col_title:
+    st.markdown('<p class="main-header" style="text-align: left;">MEGALA CNC MATE</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-header" style="text-align: left;">SMART CNC. SIMPLE WORK. — புரோபஷனல் ஒர்க்ஷாப் ஆட்டோமேஷன்</p>', unsafe_allow_html=True)
+
 st.markdown("---")
 
-# Sidebar Navigation
+# Sidebar Navigation with Logo
+st.sidebar.image("logo.png", use_container_width=True)
 st.sidebar.markdown("### 🚀 Menu / மெனு")
 selected_module = st.sidebar.selectbox(
     "Select Module",
@@ -73,7 +83,7 @@ selected_module = st.sidebar.selectbox(
 
 # 1. HOME DASHBOARD
 if "Home" in selected_module:
-    st.subheader("👋 Hello, Suresh! Good Morning ☀️")
+    st.subheader("👋 Hello, Nithish! Good Morning ☀️")
     st.write("இன்றைய ஒர்க்ஷாப் சுருக்கம் மற்றும் விரைவான அணுகல்:")
     
     col1, col2, col3 = st.columns(3)
@@ -145,13 +155,12 @@ elif "Rod Calculator" in selected_module:
     if st.button("Calculate Rod Requirements"):
         st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
         
-        # Calculations
         effective_part_len = part_length + cutting_allowance
         parts_per_rod = int((rod_length * 1000) / effective_part_len) if effective_part_len > 0 else 0
         required_rods = int(required_qty / parts_per_rod) if parts_per_rod > 0 else 0
         total_stock_length = required_rods * rod_length
         prod_per_hour = int(3600 / cycle_time) if cycle_time > 0 else 0
-        total_machine_time = (required_qty * cycle_time) / 3600 # Hours
+        total_machine_time = (required_qty * cycle_time) / 3600
 
         res1, res2, res3 = st.columns(3)
         with res1:
@@ -207,7 +216,7 @@ elif "Costing & Quotation Calculator" in selected_module:
     if st.button("Calculate Cost & Selling Price"):
         st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
         material_total = mat_cost_kg * mat_wt_part
-        machining_part = (machine_cost_hr / 3600) * 20 # assuming 20 sec cycle
+        machining_part = (machine_cost_hr / 3600) * 20
         subtotal = material_total + machining_part + labour_cost_part
         overhead_val = subtotal * (overhead_pct / 100)
         cost_per_part = subtotal + overhead_val
@@ -254,7 +263,7 @@ elif "Drawing & G-Code Generator" in selected_module:
         st.write("**Detected Operations:** Facing, Turning, Grooving, Drilling, Tapping")
         
     if st.button("Generate G-Code Program"):
-        sample_code = """O1001 (CNC MATE AUTOMATED PROGRAM)
+        sample_code = """O1001 (MEGALA CNC MATE AUTOMATED PROGRAM)
 G21 G99 G40
 M03 S2000
 G00 X50.0 Z5.0
