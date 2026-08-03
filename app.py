@@ -17,7 +17,7 @@ col_logo, col_title = st.columns([2.5, 2.5])
 with col_logo:
   if os.path.exists("Logo.png"):
     try:
-      st.image("Logo.png", width=250)
+      st.image("Logo.png", width=220)
     except Exception:
       st.markdown("⚙️ **[Logo Error]**")
   else:
