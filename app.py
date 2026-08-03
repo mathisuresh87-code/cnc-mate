@@ -24,7 +24,7 @@ with col_logo:
     st.markdown("⚙️ **[Logo Here]**")
 
 with col_title:
-  st.title("⚙️ Megala CNC Mate")
+  st.title("Megala CNC Mate")
   st.markdown(
       "**SMART CNC. SIMPLE WORK.** — Professional Workshop Automation & Exact"
       " Module Routing"
