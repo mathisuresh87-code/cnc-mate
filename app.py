@@ -55,7 +55,7 @@ st.markdown("""
 col_logo, col_title = st.columns([1, 4])
 with col_logo:
     try:
-        st.image("logo.png", width=120)  # உங்கள் லோகோ படம் இங்கே প্রদর্শிக்கப்படும்
+        st.image("Logo.png", width=120)  # உங்கள் லோகோ படம் இங்கே প্রদর্শிக்கப்படும்
     except:
         st.markdown("### ⚙️ [Logo Here]")
 
