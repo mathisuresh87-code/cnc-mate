@@ -96,6 +96,10 @@ selected_module = st.sidebar.selectbox(
     ]
 )
 
+# Helper to clean text for FPDF (replaces unicode symbols like ₹ with Rs.)
+def clean_text(text):
+    return str(text).replace('₹', 'Rs.').encode('latin-1', 'replace').decode('latin-1')
+
 # PDF Generation Helper Functions
 def generate_production_pdf(data):
     pdf = FPDF()
@@ -105,7 +109,7 @@ def generate_production_pdf(data):
     pdf.set_font("Arial", "", 12)
     pdf.ln(10)
     for k, v in data.items():
-        pdf.cell(200, 8, txt=f"{k}: {v}", ln=True)
+        pdf.cell(200, 8, txt=clean_text(f"{k}: {v}"), ln=True)
     return pdf.output(dest='S').encode('latin1')
 
 def generate_quotation_pdf(data):
@@ -116,7 +120,7 @@ def generate_quotation_pdf(data):
     pdf.set_font("Arial", "", 12)
     pdf.ln(10)
     for k, v in data.items():
-        pdf.cell(200, 8, txt=f"{k}: {v}", ln=True)
+        pdf.cell(200, 8, txt=clean_text(f"{k}: {v}"), ln=True)
     return pdf.output(dest='S').encode('latin1')
 
 def generate_program_pdf(code_text):
@@ -127,7 +131,7 @@ def generate_program_pdf(code_text):
     pdf.set_font("Courier", "", 10)
     pdf.ln(10)
     for line in code_text.split('\n'):
-        pdf.cell(200, 6, txt=line, ln=True)
+        pdf.cell(200, 6, txt=clean_text(line), ln=True)
     return pdf.output(dest='S').encode('latin1')
 
 # 1. HOME DASHBOARD
@@ -182,7 +186,7 @@ if "Home" in selected_module:
             </div>
         """, unsafe_allow_html=True)
 
-# 2. ROD CALCULATOR (Updated with conditional zero logic)
+# 2. ROD CALCULATOR
 elif "Rod Calculator" in selected_module:
     st.subheader("📐 Rod & Meter/Kg Calculator")
     mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
@@ -235,7 +239,7 @@ elif "Rod Calculator" in selected_module:
     else:
         st.info("All calculations are approximate. Please verify before production.")
 
-# 3. PRODUCTION CALCULATOR (With PDF Report Download)
+# 3. PRODUCTION CALCULATOR
 elif "Production Calculator" in selected_module:
     st.subheader("⏱️ Production Days & Output Calculator & PDF Report")
     
@@ -282,11 +286,11 @@ elif "Costing & Quotation Calculator" in selected_module:
     
     col1, col2 = st.columns(2)
     with col1:
-        mat_cost_kg = st.number_input("Material Cost / Kg (₹)", value=85.0)
+        mat_cost_kg = st.number_input("Material Cost / Kg (Rs.)", value=85.0)
         mat_wt_part = st.number_input("Material Weight / Part (Kg)", value=0.25)
-        machine_cost_hr = st.number_input("Machine Cost / Hr (₹)", value=600.0)
+        machine_cost_hr = st.number_input("Machine Cost / Hr (Rs.)", value=600.0)
     with col2:
-        labour_cost_part = st.number_input("Labour Cost / Part (₹)", value=1.20)
+        labour_cost_part = st.number_input("Labour Cost / Part (Rs.)", value=1.20)
         overhead_pct = st.number_input("Overhead (%)", value=15.0)
         profit_margin = st.slider("Profit Margin (%)", 0, 50, 20)
 
@@ -301,22 +305,22 @@ elif "Costing & Quotation Calculator" in selected_module:
     st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
     p1, p2, p3 = st.columns(3)
     with p1:
-        st.metric("Cost / Part", f"₹ {round(cost_per_part, 2)}")
+        st.metric("Cost / Part", f"Rs. {round(cost_per_part, 2)}")
     with p2:
-        st.metric("Cost / 1000 Parts", f"₹ {round(cost_1000, 2)}")
+        st.metric("Cost / 1000 Parts", f"Rs. {round(cost_1000, 2)}")
     with p3:
-        st.metric("Selling Price / Part", f"₹ {round(selling_price, 2)}")
+        st.metric("Selling Price / Part", f"Rs. {round(selling_price, 2)}")
 
     st.markdown("---")
     st.subheader("📄 Download Quotation as PDF")
     quot_data_dict = {
-        "Material Cost / Kg": f"₹ {mat_cost_kg}",
+        "Material Cost / Kg": f"Rs. {mat_cost_kg}",
         "Material Weight / Part": f"{mat_wt_part} Kg",
-        "Machine Cost / Hr": f"₹ {machine_cost_hr}",
-        "Labour Cost / Part": f"₹ {labour_cost_part}",
-        "Cost Per Part": f"₹ {round(cost_per_part, 2)}",
-        "Selling Price Per Part": f"₹ {round(selling_price, 2)}",
-        "Cost for 1000 Parts": f"₹ {round(cost_1000, 2)}"
+        "Machine Cost / Hr": f"Rs. {machine_cost_hr}",
+        "Labour Cost / Part": f"Rs. {labour_cost_part}",
+        "Cost Per Part": f"Rs. {round(cost_per_part, 2)}",
+        "Selling Price Per Part": f"Rs. {round(selling_price, 2)}",
+        "Cost for 1000 Parts": f"Rs. {round(cost_1000, 2)}"
     }
     q_pdf_bytes = generate_quotation_pdf(quot_data_dict)
     st.download_button(
@@ -348,7 +352,7 @@ elif "Stock Management" in selected_module:
     }
     st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 6. DRAWING & AUTO-QUOTATION (With Process Detection & Program PDF Export)
+# 6. DRAWING & AUTO-QUOTATION
 elif "Drawing & Auto-Quotation" in selected_module:
     st.subheader("📷 Drawing Analysis, Process Detection & Auto Quotation")
     uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG)", type=["png", "jpg", "pdf"])
@@ -379,7 +383,7 @@ elif "Drawing & Auto-Quotation" in selected_module:
         
         q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1)
         est_cycle_time = st.slider("Estimated Cycle Time (Seconds)", 10, 120, 25)
-        mat_rate = st.number_input("Material Rate / Kg (₹)", value=90.0)
+        mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0)
         part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30)
         
         mat_total_cost = mat_rate * part_wt
@@ -393,22 +397,22 @@ elif "Drawing & Auto-Quotation" in selected_module:
         aq1, aq2, aq3 = st.columns(3)
         with aq1:
             st.metric("Estimated Cycle Time", f"{est_cycle_time} Sec")
-            st.metric("Cost Per Part", f"₹ {round(final_quoted_price, 2)}")
+            st.metric("Cost Per Part", f"Rs. {round(final_quoted_price, 2)}")
         with aq2:
-            st.metric("Material Cost / Part", f"₹ {round(mat_total_cost, 2)}")
-            st.metric("Machining Cost / Part", f"₹ {round(machining_cost_per_part, 2)}")
+            st.metric("Material Cost / Part", f"Rs. {round(mat_total_cost, 2)}")
+            st.metric("Machining Cost / Part", f"Rs. {round(machining_cost_per_part, 2)}")
         with aq3:
-            st.metric("Total Order Value", f"₹ {round(total_quotation_amount, 2)}")
+            st.metric("Total Order Value", f"Rs. {round(total_quotation_amount, 2)}")
             
         st.markdown("---")
         st.subheader("📄 Download Quotation PDF")
         drawing_quot_dict = {
             "Target Quantity": f"{q_qty} Nos",
             "Estimated Cycle Time": f"{est_cycle_time} Sec",
-            "Material Cost / Part": f"₹ {round(mat_total_cost, 2)}",
-            "Machining Cost / Part": f"₹ {round(machining_cost_per_part, 2)}",
-            "Price Per Part": f"₹ {round(final_quoted_price, 2)}",
-            "Total Order Value": f"₹ {round(total_quotation_amount, 2)}"
+            "Material Cost / Part": f"Rs. {round(mat_total_cost, 2)}",
+            "Machining Cost / Part": f"Rs. {round(machining_cost_per_part, 2)}",
+            "Price Per Part": f"Rs. {round(final_quoted_price, 2)}",
+            "Total Order Value": f"Rs. {round(total_quotation_amount, 2)}"
         }
         d_quot_pdf = generate_quotation_pdf(drawing_quot_dict)
         st.download_button(
