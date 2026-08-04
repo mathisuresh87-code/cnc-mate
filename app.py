@@ -62,7 +62,7 @@ def get_logo_file():
 logo_path = get_logo_file()
 
 # App Header with Safe Logo Integration
-col_logo, col_title = st.columns([1, 4])
+col_logo, col_title = st.columns([2.5, 2.5])
 with col_logo:
     try:
         if logo_path:
