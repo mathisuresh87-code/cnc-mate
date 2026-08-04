@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import pandas as pd
+from fpdf import FPDF
 
 # Page Configuration
 st.set_page_config(
@@ -94,6 +95,40 @@ selected_module = st.sidebar.selectbox(
         "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
     ]
 )
+
+# PDF Generation Helper Functions
+def generate_production_pdf(data):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, txt="MEGALA CNC MATE - PRODUCTION REPORT", ln=True, align="C")
+    pdf.set_font("Arial", "", 12)
+    pdf.ln(10)
+    for k, v in data.items():
+        pdf.cell(200, 8, txt=f"{k}: {v}", ln=True)
+    return pdf.output(dest='S').encode('latin1')
+
+def generate_quotation_pdf(data):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, txt="MEGALA CNC MATE - PROFESSIONAL QUOTATION", ln=True, align="C")
+    pdf.set_font("Arial", "", 12)
+    pdf.ln(10)
+    for k, v in data.items():
+        pdf.cell(200, 8, txt=f"{k}: {v}", ln=True)
+    return pdf.output(dest='S').encode('latin1')
+
+def generate_program_pdf(code_text):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Courier", "B", 14)
+    pdf.cell(200, 10, txt="MEGALA CNC MATE - G-CODE PROGRAM", ln=True, align="C")
+    pdf.set_font("Courier", "", 10)
+    pdf.ln(10)
+    for line in code_text.split('\n'):
+        pdf.cell(200, 6, txt=line, ln=True)
+    return pdf.output(dest='S').encode('latin1')
 
 # 1. HOME DASHBOARD
 if "Home" in selected_module:
@@ -200,9 +235,9 @@ elif "Rod Calculator" in selected_module:
     else:
         st.info("All calculations are approximate. Please verify before production.")
 
-# 3. PRODUCTION CALCULATOR
+# 3. PRODUCTION CALCULATOR (With PDF Report Download)
 elif "Production Calculator" in selected_module:
-    st.subheader("⏱️ Production Days & Output Calculator")
+    st.subheader("⏱️ Production Days & Output Calculator & PDF Report")
     
     c1, c2 = st.columns(2)
     with c1:
@@ -222,6 +257,24 @@ elif "Production Calculator" in selected_module:
         st.metric("Production / Hour", f"{prod_hour} Nos")
     with r2:
         st.metric("Production / Day", f"{prod_day} Nos")
+        
+    st.markdown("---")
+    st.subheader("📄 Download Production Report as PDF")
+    prod_data_dict = {
+        "Cycle Time (sec)": cyc_time,
+        "Available Time / Day (hr)": avail_time,
+        "Machine Efficiency (%)": efficiency,
+        "Break Time (min)": break_time,
+        "Production / Hour": f"{prod_hour} Nos",
+        "Production / Day": f"{prod_day} Nos"
+    }
+    pdf_bytes = generate_production_pdf(prod_data_dict)
+    st.download_button(
+        label="📥 Download Production Report PDF",
+        data=pdf_bytes,
+        file_name="Production_Report.pdf",
+        mime="application/pdf"
+    )
 
 # 4. COSTING & QUOTATION CALCULATOR
 elif "Costing & Quotation Calculator" in selected_module:
@@ -254,6 +307,25 @@ elif "Costing & Quotation Calculator" in selected_module:
     with p3:
         st.metric("Selling Price / Part", f"₹ {round(selling_price, 2)}")
 
+    st.markdown("---")
+    st.subheader("📄 Download Quotation as PDF")
+    quot_data_dict = {
+        "Material Cost / Kg": f"₹ {mat_cost_kg}",
+        "Material Weight / Part": f"{mat_wt_part} Kg",
+        "Machine Cost / Hr": f"₹ {machine_cost_hr}",
+        "Labour Cost / Part": f"₹ {labour_cost_part}",
+        "Cost Per Part": f"₹ {round(cost_per_part, 2)}",
+        "Selling Price Per Part": f"₹ {round(selling_price, 2)}",
+        "Cost for 1000 Parts": f"₹ {round(cost_1000, 2)}"
+    }
+    q_pdf_bytes = generate_quotation_pdf(quot_data_dict)
+    st.download_button(
+        label="📥 Download Quotation PDF",
+        data=q_pdf_bytes,
+        file_name="Quotation.pdf",
+        mime="application/pdf"
+    )
+
 # 5. STOCK MANAGEMENT
 elif "Stock Management" in selected_module:
     st.subheader("📦 Stock & Inventory Management")
@@ -276,7 +348,7 @@ elif "Stock Management" in selected_module:
     }
     st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 6. DRAWING & AUTO-QUOTATION (Enhanced with Process Detection & Auto Quotation)
+# 6. DRAWING & AUTO-QUOTATION (With Process Detection & Program PDF Export)
 elif "Drawing & Auto-Quotation" in selected_module:
     st.subheader("📷 Drawing Analysis, Process Detection & Auto Quotation")
     uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG)", type=["png", "jpg", "pdf"])
@@ -284,7 +356,6 @@ elif "Drawing & Auto-Quotation" in selected_module:
     if uploaded_file:
         st.success("Drawing successfully analyzed by AI Vision!")
         
-        # Display Preview if image
         if uploaded_file.type in ["image/png", "image/jpeg"]:
             st.image(uploaded_file, caption="Uploaded Drawing Preview", width=350)
             
@@ -306,17 +377,15 @@ elif "Drawing & Auto-Quotation" in selected_module:
         st.markdown("---")
         st.markdown("### 💰 Automatic Quotation Generated from Drawing")
         
-        # Auto Estimation Inputs
         q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1)
         est_cycle_time = st.slider("Estimated Cycle Time (Seconds)", 10, 120, 25)
         mat_rate = st.number_input("Material Rate / Kg (₹)", value=90.0)
         part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30)
         
-        # Calculations
         mat_total_cost = mat_rate * part_wt
         machining_cost_per_part = (600.0 / 3600) * est_cycle_time
-        base_cost = mat_total_cost + machining_cost_per_part + 2.50 # including labour
-        final_quoted_price = base_cost * 1.25 # 25% Profit margin
+        base_cost = mat_total_cost + machining_cost_per_part + 2.50
+        final_quoted_price = base_cost * 1.25
         total_quotation_amount = final_quoted_price * q_qty
         
         st.markdown('<div class="auto-badge">⚡ INSTANT QUOTATION READY</div>', unsafe_allow_html=True)
@@ -331,6 +400,24 @@ elif "Drawing & Auto-Quotation" in selected_module:
         with aq3:
             st.metric("Total Order Value", f"₹ {round(total_quotation_amount, 2)}")
             
+        st.markdown("---")
+        st.subheader("📄 Download Quotation PDF")
+        drawing_quot_dict = {
+            "Target Quantity": f"{q_qty} Nos",
+            "Estimated Cycle Time": f"{est_cycle_time} Sec",
+            "Material Cost / Part": f"₹ {round(mat_total_cost, 2)}",
+            "Machining Cost / Part": f"₹ {round(machining_cost_per_part, 2)}",
+            "Price Per Part": f"₹ {round(final_quoted_price, 2)}",
+            "Total Order Value": f"₹ {round(total_quotation_amount, 2)}"
+        }
+        d_quot_pdf = generate_quotation_pdf(drawing_quot_dict)
+        st.download_button(
+            label="📥 Download Drawing Quotation PDF",
+            data=d_quot_pdf,
+            file_name="Drawing_Quotation.pdf",
+            mime="application/pdf"
+        )
+            
         if st.button("Generate Professional G-Code Program"):
             sample_code = """O2026 (MEGALA CNC MATE AUTO-GENERATED PROGRAM)
 G21 G99 G40
@@ -341,6 +428,16 @@ G01 Z-45.0 F0.25
 G00 X100.0 Z100.0
 M30"""
             st.code(sample_code, language="text")
+            
+            st.markdown("---")
+            st.subheader("📄 Download G-Code Program as PDF")
+            prog_pdf_bytes = generate_program_pdf(sample_code)
+            st.download_button(
+                label="📥 Download G-Code Program PDF",
+                data=prog_pdf_bytes,
+                file_name="CNC_Program.pdf",
+                mime="application/pdf"
+            )
 
 # 7. MORE MENU & SETTINGS
 elif "More Menu & Settings" in selected_module:
