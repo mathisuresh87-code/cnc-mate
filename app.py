@@ -65,8 +65,8 @@ logo_path = get_logo_file()
 col_logo, col_title = st.columns([1, 4])
 with col_logo:
     try:
-        if logo_path:
-            st.image(logo_path, width=120)
+        if Logo_path:
+            st.image(Logo_path, width=120)
         else:
             st.markdown("### ⚙️ MEGALA")
     except Exception:
