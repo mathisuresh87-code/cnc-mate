@@ -92,7 +92,7 @@ selected_module = st.sidebar.selectbox(
         "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)",
         "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)",
         "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
-        "📷 Drawing & Multi-Op G-Code (டிராயிங் & மல்டி-ஆப் ஜெனரேட்டர்)",
+        "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)",
         "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
     ]
 )
@@ -117,7 +117,7 @@ def generate_quotation_pdf(data):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", "B", 14)
-    pdf.cell(200, 10, txt="MEGALA CNC MATE - DETAILED QUOTATION", ln=True, align="C")
+    pdf.cell(200, 10, txt="MEGALA CNC MATE - DETAILED QUOTATION REPORT", ln=True, align="C")
     pdf.set_font("Arial", "", 10)
     pdf.ln(10)
     for k, v in data.items():
@@ -189,8 +189,8 @@ if "Home" in selected_module:
     with c2:
         st.markdown("""
             <div class="metric-card" style="border-left: 5px solid #06b6d4;">
-                <h3>📷 Drawing & Multi-Op</h3>
-                <p>டிராயிங் அப்லோட் & மல்டி-ஆபரேஷன் ஜி-கோட்</p>
+                <h3>📷 Drawing & Auto-Op</h3>
+                <p>டிராயிங் அப்லோட் & ஆட்டோமேட்டிக் மல்டி-ஆப் ரிப்போர்ட்</p>
             </div>
         """, unsafe_allow_html=True)
     with c3:
@@ -288,7 +288,6 @@ elif "Rod Calculator" in selected_module:
             if adv_shape == "Tube / Pipe":
                 adv_inner_dia = st.number_input("Tube Inner Diameter / Bore (mm)", value=20.0, min_value=0.0, key="adv_inner_dia")
                 
-            # Auto-Density Presets
             mat_preset_options = {
                 "Steel / MS / EN Series (0.00785)": 0.00785,
                 "Aluminum (0.00270)": 0.00270,
@@ -490,9 +489,9 @@ elif "Stock Management" in selected_module:
     }
     st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
+# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR / AUTO REPORT
 elif "Drawing & Multi-Op G-Code" in selected_module:
-    st.subheader("📷 Drawing Upload & Automatic Scrap/End-Bit Analysis")
+    st.subheader("📷 Drawing Upload & Automatic Scrap / Multi-Op Report Generator")
     uploaded_file = st.file_uploader("Upload Part Drawing / Photo (PDF / PNG / JPG)", type=["png", "jpg", "pdf"], key="multi_op_drawing_upload")
     
     draw_dynamic_offset = 0.0
@@ -502,14 +501,14 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
         if uploaded_file.type in ["image/png", "image/jpeg"]:
             st.image(uploaded_file, caption=f"Uploaded Drawing Preview: {uploaded_file.name}", width=350)
     else:
-        st.info("ℹ️ நீங்கள் டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன், ரவுண்ட்/டியூப்/எக்சகன் எதுவாக இருந்தாலும் எண்டு பிட் மற்றும் ஸ்கிராப் எடை ஆட்டோமேட்டிக்காக அப்டேட் ஆகும்.")
+        st.info("ℹ️ நீங்கள் டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன், ரவுண்ட்/டியூப்/எக்சகன் எதுவாக இருந்தாலும் பிளாட் சைஸ், பார்ட் சைஸ், எண்டு பிட் மற்றும் ஸ்கிராப் எடை ஆட்டோமேட்டிக்காக அப்டேட் ஆகும்.")
 
     st.markdown("---")
-    st.subheader("📏 Drawing Material & Shape Dimension Inputs for Exact Scrap Calculation")
+    st.subheader("📏 Drawing Material & Shape Dimension Inputs for Exact Analysis")
     
     dc1, dc2 = st.columns(2)
     with dc1:
-        draw_shape = st.selectbox("Profile / Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="d_draw_shape")
+        draw_shape = st.selectbox("Profile / Shape (ஷேப்)", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="d_draw_shape")
         draw_rod_len = st.number_input("Rod Length (mm) [Set 0 if Total Weight given]", value=6000.0, key="d_draw_rod_len")
         default_draw_part = 126.0 + draw_dynamic_offset
         draw_part_len = st.number_input("Part Length from Drawing (mm)", value=default_draw_part, key="d_draw_part_len")
@@ -585,7 +584,7 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
         st.metric("Cutting Allowance", f"{draw_cut_allow} mm")
 
     st.markdown("---")
-    st.subheader("🛠️ Multi-Operation Setup & G-Code Generator")
+    st.subheader("🛠️ Multi-Operation Setup & G-Code Generator (Facing, Straight, Taper, Grooving, Threading, Tapping, Cross-Drilling)")
     
     num_ops = st.selectbox(
         "இந்த பார்ட்டிற்கு எத்தனை ஆபரேஷன்கள் தேவை? (Select number of operations)", 
@@ -606,10 +605,13 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
                     f"Operation Type (Op {i+1})",
                     [
                         "Facing & Rough Turning", 
+                        "Straight Turning (ஸ்ட்ரைட் டர்னிங்)",
+                        "Taper Turning (டேபர் டர்னிங்)",
                         "Finish Turning", 
-                        "Grooving", 
-                        "Threading", 
-                        "Drilling / Boring", 
+                        "Grooving (குரு)", 
+                        "Threading (த்ரெட்டிங்)", 
+                        "Tapping (டேப்பிங்)",
+                        "Drilling / Boring (டிரில்லிங் / போரிங்)", 
                         "Cross-Drilling / Milling (கிராஸ் ட்ரில்லிங்)",
                         "Part-off / Cut-off (பார்ட் ஆஃப்)"
                     ],
@@ -637,11 +639,21 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
 G97 S{rpm} M03
 G0 X{draw_rod_dia + 5.0} Z2.0
 """
-            if "Facing" in op_type or "Turning" in op_type:
+            if "Facing" in op_type or "Rough" in op_type:
                 op_gcode += f"""G1 X0.0 F{feed}
 G0 Z2.0
 G1 Z-{draw_part_len} F{feed}
 G0 X{target_dia + 2.0}
+"""
+            elif "Straight Turning" in op_type:
+                op_gcode += f"""G0 X{target_dia + 2.0} Z2.0
+G1 Z-{draw_part_len} F{feed}
+G0 X{target_dia + 5.0}
+"""
+            elif "Taper Turning" in op_type:
+                op_gcode += f"""G0 X{target_dia + 5.0} Z2.0
+G1 X{target_dia} Z-{draw_part_len} F{feed}
+G0 X{target_dia + 10.0}
 """
             elif "Grooving" in op_type:
                 op_gcode += f"""G0 X{target_dia + 5.0} Z-{draw_part_len/2}
@@ -652,6 +664,11 @@ G0 X{target_dia + 5.0}
                 op_gcode += f"""G0 X{target_dia + 2.0} Z5.0
 G76 P030060 Q50 R0.05
 G76 X{target_dia - 1.5} Z-{draw_part_len/2} P1250 Q200 F1.5
+"""
+            elif "Tapping" in op_type:
+                op_gcode += f"""G0 X0.0 Z5.0
+G84 Z-{draw_part_len - 10} R2.0 F1.25
+G80
 """
             elif "Drilling" in op_type:
                 op_gcode += f"""G0 X0.0 Z2.0
@@ -681,7 +698,7 @@ M05
     st.subheader("📜 Complete Combined Multi-Op G-Code Program")
 
     final_program = f"""%
-O2026 (MEGALA CNC MATE - MULTI-OP PROGRAM FOR NITHISH)
+O2026 (MEGALA CNC MATE - AUTOMATED REPORT & PROGRAM FOR NITHISH)
 G21 G90 G40 G95
 """
     for code in all_gcodes:
@@ -703,7 +720,7 @@ M30
     )
 
     st.markdown("---")
-    st.subheader("💰 Process-wise Detailed Automatic Quotation & Drawing Summary")
+    st.subheader("💰 Process-wise Detailed Automatic Quotation & Drawing Summary Report")
     
     q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1, key="d_q_qty")
     total_rods_needed = int(math.ceil(q_qty / parts_per_bar)) if parts_per_bar > 0 else 0
