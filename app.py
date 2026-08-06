@@ -186,7 +186,7 @@ if "Home" in selected_module:
             </div>
         """, unsafe_allow_html=True)
 
-# 2. ROD CALCULATOR (Flexible Required Quantity & Independent Part/Scrap calculations)
+# 2. ROD CALCULATOR
 elif "Rod Calculator" in selected_module:
     st.subheader("📐 Rod & Meter/Kg Calculator")
     mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
@@ -207,7 +207,6 @@ elif "Rod Calculator" in selected_module:
 
     st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
 
-    # Independent calculations for parts per rod and remnant
     effective_part_len = part_length + cutting_allowance
     parts_per_rod = int((rod_length * 1000) / effective_part_len) if effective_part_len > 0 else 0
     remnant = round((rod_length * 1000) % effective_part_len, 2) if effective_part_len > 0 else 0.0
@@ -235,7 +234,7 @@ elif "Rod Calculator" in selected_module:
         st.metric("Total Machine Time", f"{round(total_machine_time, 2)} Hr")
         
     if required_qty == 0:
-        st.info("ℹ️ Required Quantity 0 ஆக உள்ளதால், ஒரு ராடில் எத்தனை பார்ட் வரும் மற்றும் ஸ்கிராப் விபரங்கள் மேலே காட்டப்பட்டுள்ளன. ஆர்டர் குவாண்டிட்டி கொடுத்தால் தேவைப்படும் ராட் எண்ணிக்கைகள் கணக்கிடப்படும்.")
+        st.info("ℹ️ Required Quantity 0 ஆக உள்ளதால், ஒரு ராடில் எத்தனை பார்ட் வரும் மற்றும் ஸ்கிராப் விபரங்கள் மேலே காட்டப்பட்டுள்ளன.")
     else:
         st.info("All calculations are approximate. Please verify before production.")
 
@@ -352,7 +351,7 @@ elif "Stock Management" in selected_module:
     }
     st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
+# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR (With Integrated Rod & Scrap Breakdown)
 elif "Drawing & Multi-Op G-Code" in selected_module:
     st.subheader("📷 Drawing Upload & Detailed Multi-Operation Process Generator")
     uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG - Optional)", type=["png", "jpg", "pdf"])
@@ -486,12 +485,25 @@ M30
     )
 
     st.markdown("---")
-    st.subheader("💰 Process-wise Detailed Automatic Quotation")
+    st.subheader("💰 Process-wise Detailed Automatic Quotation & Rod/Scrap Calculation")
     
-    q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1, key="d_q_qty")
-    mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="d_mat_rate")
-    part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30, key="d_part_wt")
-    
+    # Inputs for Quantity, Material Rate, Part Weight and Drawing Size / Rod Sizing Calculations
+    col_q1, col_q2 = st.columns(2)
+    with col_q1:
+        q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1, key="d_q_qty")
+        mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="d_mat_rate")
+        part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30, key="d_part_wt")
+    with col_q2:
+        draw_rod_len = st.number_input("Standard Rod Length (mm)", value=6000.0, key="d_draw_rod_len")
+        draw_part_len = st.number_input("Part Length from Drawing (mm)", value=126.0, key="d_draw_part_len")
+        draw_cut_allow = st.number_input("Cutting / Parting Allowance (mm)", value=3.0, key="d_draw_cut_allow")
+
+    # Accurate Rod & Scrap Calculations from Drawing Sizing
+    eff_part_len = draw_part_len + draw_cut_allow
+    parts_per_bar = int(draw_rod_len / eff_part_len) if eff_part_len > 0 else 0
+    scrap_remnant_mm = round(draw_rod_len % eff_part_len, 2) if eff_part_len > 0 else 0.0
+    total_rods_needed = int(q_qty / parts_per_bar) if parts_per_bar > 0 else 0
+
     mat_total_cost = mat_rate * part_wt
     total_machining_cost = sum([item["Cost (Rs.)"] for item in op_summary_data])
     total_cycle_time = sum([item["Time (Sec)"] for item in op_summary_data])
@@ -500,32 +512,46 @@ M30
     final_quoted_price = base_cost * 1.25
     total_quotation_amount = final_quoted_price * q_qty
     
-    st.markdown('<div class="auto-badge">⚡ DETAILED BREAKDOWN READY</div>', unsafe_allow_html=True)
+    st.markdown('<div class="auto-badge">⚡ ACCURATE BREAKDOWN & SCRAP ANALYSIS READY</div>', unsafe_allow_html=True)
     
-    # Display each process separately in UI table/metrics
+    # Display Rod & Scrap Metrics for Drawing
+    st.write("### 📐 Drawing Rod & Scrap Breakdown:")
+    m1, m2, m3, m4 = st.columns(4)
+    with m1:
+        st.metric("Parts / Rod", f"{parts_per_bar} Nos")
+    with m2:
+        st.metric("Balance Scrap / Remnant", f"{scrap_remnant_mm} mm")
+    with m3:
+        st.metric("Total Rods Needed", f"{total_rods_needed} Nos")
+    with m4:
+        st.metric("Total Cycle Time", f"{total_cycle_time} Sec")
+
+    # Display each process separately in UI table
     st.write("### 🔍 Process-wise Cost & Time Breakdown:")
     df_ops = pd.DataFrame(op_summary_data)
     st.dataframe(df_ops, use_container_width=True)
 
     aq1, aq2, aq3 = st.columns(3)
     with aq1:
-        st.metric("Total Cycle Time", f"{total_cycle_time} Sec")
         st.metric("Cost Per Part", f"Rs. {round(final_quoted_price, 2)}")
     with aq2:
-        st.metric("Material Cost / Part", f"Rs. {round(mat_total_cost, 2)}")
-        st.metric("Machining Cost / Part", f"Rs. {round(total_machining_cost, 2)}")
+        st.metric("Material & Machining Cost / Part", f"Rs. {round(mat_total_cost + total_machining_cost, 2)}")
     with aq3:
         st.metric("Total Order Value", f"Rs. {round(total_quotation_amount, 2)}")
         
     st.markdown("---")
     st.subheader("📄 Download Detailed Process-wise Quotation PDF")
     
-    # Build quotation dictionary including all individual process details for PDF
+    # Build quotation dictionary including drawing scrap & parts breakdown for PDF
     drawing_quot_dict = {
         "Target Quantity": f"{q_qty} Nos",
         "Total Operations": f"{num_ops} Operations",
         "Total Estimated Cycle Time": f"{total_cycle_time} Sec",
-        "----------------------------------------": "PROCESS BREAKDOWN",
+        "----------------------------------------": "DRAWING ROD & SCRAP ANALYSIS",
+        "Parts Per Rod": f"{parts_per_bar} Nos",
+        "Balance Scrap / Remnant": f"{scrap_remnant_mm} mm",
+        "Total Rods Required": f"{total_rods_needed} Nos",
+        "-----------------------------------------": "PROCESS BREAKDOWN",
     }
     for item in op_summary_data:
         drawing_quot_dict[f"{item['Op No']} ({item['Type']})"] = f"Tool: {item['Tool']} | Time: {item['Time (Sec)']}s | Cost: Rs. {item['Cost (Rs.)']}"
