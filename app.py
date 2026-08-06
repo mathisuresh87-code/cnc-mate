@@ -13,7 +13,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Ultra-Vibrant & Colorful Next-Gen SaaS Custom CSS
+# Ultra-Vibrant & Colorful Next-Gen SaaS Custom CSS with Seamless Column Cards
 st.markdown("""
     <style>
     /* Global Background with Deep Tech Vibrant Gradient */
@@ -81,19 +81,18 @@ st.markdown("""
         letter-spacing: 1px;
     }
 
-    /* Dashboard Grand Colorful Card Containers */
-    .dash-card {
+    /* Transform Streamlit Columns into Gorgeous Glowing Dashboard Cards */
+    div[data-testid="column"] {
         background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
         border: 1px solid rgba(236, 72, 153, 0.3);
-        padding: 24px;
+        padding: 22px;
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         backdrop-filter: blur(16px);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 20px;
-        text-align: center;
     }
-    .dash-card:hover {
+    div[data-testid="column"]:hover {
         border-color: #f43f5e;
         transform: translateY(-6px);
         box-shadow: 0 20px 45px rgba(244, 63, 94, 0.4);
@@ -275,53 +274,41 @@ if "Home" in selected_module:
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### 📐 Rod Calculator")
         if st.button("🚀 Open Rod Calculator", use_container_width=True, key="btn_h1"):
             st.session_state["selected_module"] = "📐 Rod Calculator (ராட் கால்குலேட்டர்)"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
-        st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### ⏱️ Production Calc")
         if st.button("🚀 Open Production Calc", use_container_width=True, key="btn_h2"):
             st.session_state["selected_module"] = "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with col3:
-        st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### 💰 Costing & Quote")
         if st.button("🚀 Open Costing Calc", use_container_width=True, key="btn_h3"):
             st.session_state["selected_module"] = "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
     c4, c5, c6 = st.columns(3)
     with c4:
-        st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### 📦 Stock Manager")
         if st.button("🚀 Open Stock Manager", use_container_width=True, key="btn_h4"):
             st.session_state["selected_module"] = "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with c5:
-        st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### 📷 Drawing & Multi-Op")
         if st.button("🚀 Open Drawing Studio", use_container_width=True, key="btn_h5"):
             st.session_state["selected_module"] = "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with c6:
-        st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### ⚙️ Settings & Masters")
         if st.button("🚀 Open Settings Hub", use_container_width=True, key="btn_h6"):
             st.session_state["selected_module"] = "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
 # 2. ROD CALCULATOR
 elif "Rod Calculator" in selected_module:
