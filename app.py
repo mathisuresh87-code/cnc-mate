@@ -110,7 +110,7 @@ st.markdown("""
         box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
     }
 
-    /* Balanced Touch/Click Glow Effect (Not Overwhelming) */
+    /* Balanced Touch/Click Glow Effect */
     div.stButton > button:active, div.stButton > button:focus {
         background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
         color: #ffffff !important;
@@ -134,10 +134,23 @@ st.markdown("""
         box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
     }
 
-    /* Sidebar Styling */
+    /* Sidebar Styling & Compact Logo Uploader Alignment */
     section[data-testid="stSidebar"] {
         background: #070a12;
         border-right: 1px solid rgba(148, 163, 184, 0.1);
+        padding-top: 0.5rem;
+    }
+    section[data-testid="stSidebar"] .stFileUploader {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 12px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    section[data-testid="stSidebar"] .stFileUploader label {
+        color: #38bdf8 !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -162,28 +175,29 @@ if "selected_module" not in st.session_state:
 
 # Sidebar Navigation Header & Permanent Logo Uploader
 st.sidebar.markdown("""
-    <div style="text-align: center; padding: 10px 0;">
-        <h3 style="color: #38bdf8; margin: 5px 0 0 0; font-size: 1.2rem; font-weight: 800; letter-spacing: 1.2px;">MEGALA CNC MATE</h3>
+    <div style="text-align: center; padding: 5px 0 10px 0;">
+        <h3 style="color: #38bdf8; margin: 0; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px;">MEGALA CNC MATE</h3>
     </div>
 """, unsafe_allow_html=True)
 
-st.sidebar.markdown("### 🖼️ Permanent Company Logo")
-uploaded_logo = st.sidebar.file_uploader("Upload Logo (Once - Stays Permanent)", type=["png", "jpg", "jpeg"], key="sidebar_logo_upload")
+st.sidebar.markdown("<p style='font-size: 0.82rem; font-weight: 700; color: #94a3b8; margin-bottom: 5px; text-transform: uppercase;'>🖼️ Company Logo</p>", unsafe_allow_html=True)
+uploaded_logo = st.sidebar.file_uploader("Upload Permanent Logo", type=["png", "jpg", "jpeg"], key="sidebar_logo_upload", label_visibility="collapsed")
 
 if uploaded_logo is not None:
     try:
         img = Image.open(uploaded_logo)
         img.save(LOGO_PATH)
-        st.sidebar.success("✅ லோகோ நிரந்தரமாக சேமிக்கப்பட்டது!")
+        st.sidebar.success("✅ லோகோ சேமிக்கப்பட்டது!")
     except Exception as e:
         st.sidebar.error(f"Error: {e}")
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 🚀 Navigation Hub / வழிசெலுத்தல்")
+st.sidebar.markdown("<p style='font-size: 0.82rem; font-weight: 700; color: #94a3b8; margin-bottom: 5px; text-transform: uppercase;'>🚀 Navigation Hub</p>", unsafe_allow_html=True)
 selected_module = st.sidebar.selectbox(
     "Select Module",
     module_list,
-    index=module_list.index(st.session_state["selected_module"]) if st.session_state["selected_module"] in module_list else 0
+    index=module_list.index(st.session_state["selected_module"]) if st.session_state["selected_module"] in module_list else 0,
+    label_visibility="collapsed"
 )
 st.session_state["selected_module"] = selected_module
 
@@ -276,9 +290,8 @@ if "d_draw_rod_dia" not in st.session_state:
 if "d_draw_part_len" not in st.session_state:
     st.session_state["d_draw_part_len"] = 38.70
 
-# 1. HOME DASHBOARD (Clean, Minimalist SaaS Dashboard Experience)
+# 1. HOME DASHBOARD
 if "Home" in selected_module:
-    # Live Metric Summary Bar
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.metric("Active Machines", "4 Units", "Running 🚀")
