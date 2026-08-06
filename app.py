@@ -352,201 +352,200 @@ elif "Stock Management" in selected_module:
     }
     st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
+# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR (Mobile friendly - No blocking file uploader)
 elif "Drawing & Multi-Op G-Code" in selected_module:
     st.subheader("📷 Drawing Upload & Detailed Multi-Operation Process Generator")
-    uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG)", type=["png", "jpg", "pdf"])
+    uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG - Optional)", type=["png", "jpg", "pdf"])
     
     if uploaded_file:
-        st.success("Drawing uploaded successfully and analyzed!")
-        
+        st.success("Drawing uploaded successfully!")
         if uploaded_file.type in ["image/png", "image/jpeg"]:
             st.image(uploaded_file, caption="Uploaded Drawing Preview", width=350)
+    else:
+        st.info("ℹ️ ஃபைல் அப்லோட் செய்யாவிட்டாலும், கீழே உள்ள மல்டி-ஆபரேஷன் செட்டப் மற்றும் G-Code ஜெனரேட்டர் நேரடியாக வேலை செய்யும்.")
+
+    st.markdown("---")
+    st.subheader("🛠️ Multi-Operation Setup (Up to 5 Operations - Facing, Turning, Grooving, Threading, Drilling, Cross-Drilling, Part-off)")
+    
+    num_ops = st.selectbox(
+        "இந்த பார்ட்டிற்கு எத்தனை ஆபரேஷன்கள் தேவை? (Select number of operations)", 
+        [1, 2, 3, 4, 5], 
+        key="drawing_num_ops"
+    )
+
+    all_gcodes = []
+    op_summary_data = []
+
+    # Loop dynamically for each operation selected (1 up to 5)
+    for i in range(num_ops):
+        with st.expander(f"📌 Operation {i+1} Details", expanded=(i == 0)):
+            col1, col2 = st.columns(2)
             
-        st.markdown("---")
-        st.subheader("🛠️ Multi-Operation Setup (Up to 5 Operations - Facing, Turning, Grooving, Threading, Drilling, Cross-Drilling, Part-off)")
-        
-        num_ops = st.selectbox(
-            "இந்த பார்ட்டிற்கு எத்தனை ஆப்பரேஷன்கள் தேவை? (Select number of operations)", 
-            [1, 2, 3, 4, 5], 
-            key="drawing_num_ops"
-        )
-
-        all_gcodes = []
-        op_summary_data = []
-
-        # Loop dynamically for each operation selected (1 up to 5)
-        for i in range(num_ops):
-            with st.expander(f"📌 Operation {i+1} Details", expanded=(i == 0)):
-                col1, col2 = st.columns(2)
+            with col1:
+                tool_no = st.text_input(f"Tool Number (Op {i+1})", f"T{i+1:02d}{i+1:02d}", key=f"d_tool_{i}")
+                op_type = st.selectbox(
+                    f"Operation Type (Op {i+1})",
+                    [
+                        "Facing & Rough Turning", 
+                        "Finish Turning", 
+                        "Grooving", 
+                        "Threading", 
+                        "Drilling / Boring", 
+                        "Cross-Drilling / Milling (கிராஸ் ட்ரில்லிங்)",
+                        "Part-off / Cut-off (பார்ட் ஆஃப்)"
+                    ],
+                    key=f"d_op_type_{i}"
+                )
+                rpm = st.number_input(f"Spindle Speed (RPM - Op {i+1})", value=1200, key=f"d_rpm_{i}")
                 
-                with col1:
-                    tool_no = st.text_input(f"Tool Number (Op {i+1})", f"T{i+1:02d}{i+1:02d}", key=f"d_tool_{i}")
-                    op_type = st.selectbox(
-                        f"Operation Type (Op {i+1})",
-                        [
-                            "Facing & Rough Turning", 
-                            "Finish Turning", 
-                            "Grooving", 
-                            "Threading", 
-                            "Drilling / Boring", 
-                            "Cross-Drilling / Milling (கிராஸ் ட்ரில்லிங்)",
-                            "Part-off / Cut-off (பார்ட் ஆஃப்)"
-                        ],
-                        key=f"d_op_type_{i}"
-                    )
-                    rpm = st.number_input(f"Spindle Speed (RPM - Op {i+1})", value=1200, key=f"d_rpm_{i}")
-                    
-                with col2:
-                    feed = st.number_input(f"Feed Rate (mm/rev - Op {i+1})", value=0.15, key=f"d_feed_{i}")
-                    depth_of_cut = st.number_input(f"Depth of Cut / Pass (mm - Op {i+1})", value=1.0, key=f"d_doc_{i}")
-                    target_dia = st.number_input(f"Target Diameter (mm - Op {i+1})", value=40.0, key=f"d_dia_{i}")
-                    op_time = st.number_input(f"Estimated Time for Op {i+1} (Seconds)", value=15.0, key=f"d_time_{i}")
+            with col2:
+                feed = st.number_input(f"Feed Rate (mm/rev - Op {i+1})", value=0.15, key=f"d_feed_{i}")
+                depth_of_cut = st.number_input(f"Depth of Cut / Pass (mm - Op {i+1})", value=1.0, key=f"d_doc_{i}")
+                target_dia = st.number_input(f"Target Diameter (mm - Op {i+1})", value=40.0, key=f"d_dia_{i}")
+                op_time = st.number_input(f"Estimated Time for Op {i+1} (Seconds)", value=15.0, key=f"d_time_{i}")
 
-                # Individual process cost calculation assuming machine rate 600 Rs/hr
-                op_cost = (600.0 / 3600) * op_time
-                op_summary_data.append({
-                    "Op No": f"Operation {i+1}",
-                    "Type": op_type,
-                    "Tool": tool_no,
-                    "Time (Sec)": op_time,
-                    "Cost (Rs.)": round(op_cost, 2)
-                })
+            # Individual process cost calculation assuming machine rate 600 Rs/hr
+            op_cost = (600.0 / 3600) * op_time
+            op_summary_data.append({
+                "Op No": f"Operation {i+1}",
+                "Type": op_type,
+                "Tool": tool_no,
+                "Time (Sec)": op_time,
+                "Cost (Rs.)": round(op_cost, 2)
+            })
 
-                # Generate individual G-Code logic based on the selected operation type
-                op_gcode = f"""( --- OPERATION {i+1}: {op_type.upper()} --- )
+            # Generate individual G-Code logic based on the selected operation type
+            op_gcode = f"""( --- OPERATION {i+1}: {op_type.upper()} --- )
 {tool_no}
 G97 S{rpm} M03
 G0 X52.0 Z2.0
 """
-                if "Facing" in op_type or "Turning" in op_type:
-                    op_gcode += f"""G1 X0.0 F{feed}
+            if "Facing" in op_type or "Turning" in op_type:
+                op_gcode += f"""G1 X0.0 F{feed}
 G0 Z2.0
 G1 Z-50.0 F{feed}
 G0 X{target_dia + 2.0}
 """
-                elif "Grooving" in op_type:
-                    op_gcode += f"""G0 X{target_dia + 5.0} Z-25.0
+            elif "Grooving" in op_type:
+                op_gcode += f"""G0 X{target_dia + 5.0} Z-25.0
 G1 X{target_dia} F{feed}
 G0 X{target_dia + 5.0}
 """
-                elif "Threading" in op_type:
-                    op_gcode += f"""G0 X{target_dia + 2.0} Z5.0
+            elif "Threading" in op_type:
+                op_gcode += f"""G0 X{target_dia + 2.0} Z5.0
 G76 P030060 Q50 R0.05
 G76 X{target_dia - 1.5} Z-30.0 P1250 Q200 F1.5
 """
-                elif "Drilling" in op_type:
-                    op_gcode += f"""G0 X0.0 Z2.0
+            elif "Drilling" in op_type:
+                op_gcode += f"""G0 X0.0 Z2.0
 G1 Z-40.0 F{feed}
 G0 Z5.0
 """
-                elif "Cross-Drilling" in op_type:
-                    op_gcode += f"""M19 (Spindle Orient for Cross Hole)
+            elif "Cross-Drilling" in op_type:
+                op_gcode += f"""M19 (Spindle Orient for Cross Hole)
 G0 C0.0
 G0 X{target_dia + 10.0} Z-20.0
 G83 Z-15.0 R2.0 Q2.0 F{feed}
 G80
 M05
 """
-                elif "Part-off" in op_type:
-                    op_gcode += f"""G0 X{target_dia + 5.0} Z-55.0
+            elif "Part-off" in op_type:
+                op_gcode += f"""G0 X{target_dia + 5.0} Z-55.0
 M03 S800
 G1 X-0.5 F{feed / 2}
 G0 X50.0
 M05
 """
 
-                all_gcodes.append(op_gcode)
-                st.text_area(f"Generated G-Code for Operation {i+1}", op_gcode.strip(), height=130, key=f"d_code_area_{i}")
+            all_gcodes.append(op_gcode)
+            st.text_area(f"Generated G-Code for Operation {i+1}", op_gcode.strip(), height=130, key=f"d_code_area_{i}")
 
-        st.markdown("---")
-        st.subheader("📜 Complete Combined Multi-Op G-Code Program")
+    st.markdown("---")
+    st.subheader("📜 Complete Combined Multi-Op G-Code Program")
 
-        final_program = f"""%
+    final_program = f"""%
 O2026 (MEGALA CNC MATE - MULTI-OP PROGRAM FOR NITHISH)
 G21 G90 G40 G95
 """
-        for code in all_gcodes:
-            final_program += code + "\n"
+    for code in all_gcodes:
+        final_program += code + "\n"
 
-        final_program += """M05
+    final_program += """M05
 M30
 %"""
 
-        st.code(final_program, language="text")
+    st.code(final_program, language="text")
 
-        prog_pdf_bytes = generate_program_pdf(final_program)
-        st.download_button(
-            label="📥 Download Complete G-Code Program as PDF",
-            data=prog_pdf_bytes,
-            file_name="CNC_Multi_Operation_Program.pdf",
-            mime="application/pdf",
-            key="download_multi_op_pdf"
-        )
+    prog_pdf_bytes = generate_program_pdf(final_program)
+    st.download_button(
+        label="📥 Download Complete G-Code Program as PDF",
+        data=prog_pdf_bytes,
+        file_name="CNC_Multi_Operation_Program.pdf",
+        mime="application/pdf",
+        key="download_multi_op_pdf"
+    )
 
-        st.markdown("---")
-        st.subheader("💰 Process-wise Detailed Automatic Quotation")
-        
-        q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1, key="d_q_qty")
-        mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="d_mat_rate")
-        part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30, key="d_part_wt")
-        
-        mat_total_cost = mat_rate * part_wt
-        total_machining_cost = sum([item["Cost (Rs.)"] for item in op_summary_data])
-        total_cycle_time = sum([item["Time (Sec)"] for item in op_summary_data])
-        
-        base_cost = mat_total_cost + total_machining_cost + 2.50
-        final_quoted_price = base_cost * 1.25
-        total_quotation_amount = final_quoted_price * q_qty
-        
-        st.markdown('<div class="auto-badge">⚡ DETAILED BREAKDOWN READY</div>', unsafe_allow_html=True)
-        
-        # Display each process separately in UI table/metrics
-        st.write("### 🔍 Process-wise Cost & Time Breakdown:")
-        df_ops = pd.DataFrame(op_summary_data)
-        st.dataframe(df_ops, use_container_width=True)
+    st.markdown("---")
+    st.subheader("💰 Process-wise Detailed Automatic Quotation")
+    
+    q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1, key="d_q_qty")
+    mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="d_mat_rate")
+    part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30, key="d_part_wt")
+    
+    mat_total_cost = mat_rate * part_wt
+    total_machining_cost = sum([item["Cost (Rs.)"] for item in op_summary_data])
+    total_cycle_time = sum([item["Time (Sec)"] for item in op_summary_data])
+    
+    base_cost = mat_total_cost + total_machining_cost + 2.50
+    final_quoted_price = base_cost * 1.25
+    total_quotation_amount = final_quoted_price * q_qty
+    
+    st.markdown('<div class="auto-badge">⚡ DETAILED BREAKDOWN READY</div>', unsafe_allow_html=True)
+    
+    # Display each process separately in UI table/metrics
+    st.write("### 🔍 Process-wise Cost & Time Breakdown:")
+    df_ops = pd.DataFrame(op_summary_data)
+    st.dataframe(df_ops, use_container_width=True)
 
-        aq1, aq2, aq3 = st.columns(3)
-        with aq1:
-            st.metric("Total Cycle Time", f"{total_cycle_time} Sec")
-            st.metric("Cost Per Part", f"Rs. {round(final_quoted_price, 2)}")
-        with aq2:
-            st.metric("Material Cost / Part", f"Rs. {round(mat_total_cost, 2)}")
-            st.metric("Machining Cost / Part", f"Rs. {round(total_machining_cost, 2)}")
-        with aq3:
-            st.metric("Total Order Value", f"Rs. {round(total_quotation_amount, 2)}")
-            
-        st.markdown("---")
-        st.subheader("📄 Download Detailed Process-wise Quotation PDF")
+    aq1, aq2, aq3 = st.columns(3)
+    with aq1:
+        st.metric("Total Cycle Time", f"{total_cycle_time} Sec")
+        st.metric("Cost Per Part", f"Rs. {round(final_quoted_price, 2)}")
+    with aq2:
+        st.metric("Material Cost / Part", f"Rs. {round(mat_total_cost, 2)}")
+        st.metric("Machining Cost / Part", f"Rs. {round(total_machining_cost, 2)}")
+    with aq3:
+        st.metric("Total Order Value", f"Rs. {round(total_quotation_amount, 2)}")
         
-        # Build quotation dictionary including all individual process details for PDF
-        drawing_quot_dict = {
-            "Target Quantity": f"{q_qty} Nos",
-            "Total Operations": f"{num_ops} Operations",
-            "Total Estimated Cycle Time": f"{total_cycle_time} Sec",
-            "----------------------------------------": "PROCESS BREAKDOWN",
-        }
-        for item in op_summary_data:
-            drawing_quot_dict[f"{item['Op No']} ({item['Type']})"] = f"Tool: {item['Tool']} | Time: {item['Time (Sec)']}s | Cost: Rs. {item['Cost (Rs.)']}"
-            
-        drawing_quot_dict.update({
-            "---------------------------------------- ": "COST SUMMARY",
-            "Material Cost / Part": f"Rs. {round(mat_total_cost, 2)}",
-            "Total Machining Cost / Part": f"Rs. {round(total_machining_cost, 2)}",
-            "Price Per Part (with Margin)": f"Rs. {round(final_quoted_price, 2)}",
-            "Total Order Value": f"Rs. {round(total_quotation_amount, 2)}"
-        })
+    st.markdown("---")
+    st.subheader("📄 Download Detailed Process-wise Quotation PDF")
+    
+    # Build quotation dictionary including all individual process details for PDF
+    drawing_quot_dict = {
+        "Target Quantity": f"{q_qty} Nos",
+        "Total Operations": f"{num_ops} Operations",
+        "Total Estimated Cycle Time": f"{total_cycle_time} Sec",
+        "----------------------------------------": "PROCESS BREAKDOWN",
+    }
+    for item in op_summary_data:
+        drawing_quot_dict[f"{item['Op No']} ({item['Type']})"] = f"Tool: {item['Tool']} | Time: {item['Time (Sec)']}s | Cost: Rs. {item['Cost (Rs.)']}"
+        
+    drawing_quot_dict.update({
+        "---------------------------------------- ": "COST SUMMARY",
+        "Material Cost / Part": f"Rs. {round(mat_total_cost, 2)}",
+        "Total Machining Cost / Part": f"Rs. {round(total_machining_cost, 2)}",
+        "Price Per Part (with Margin)": f"Rs. {round(final_quoted_price, 2)}",
+        "Total Order Value": f"Rs. {round(total_quotation_amount, 2)}"
+    })
 
-        d_quot_pdf = generate_quotation_pdf(drawing_quot_dict)
-        st.download_button(
-            label="📥 Download Detailed Drawing Quotation PDF",
-            data=d_quot_pdf,
-            file_name="Detailed_Drawing_Quotation.pdf",
-            mime="application/pdf",
-            key="download_drawing_quot_pdf"
-        )
-    else:
-        st.info("👆 மேலே உள்ள பட்டன் மூலம் பார்ட் டிராயிங் (PDF / PNG / JPG) அப்லோட் செய்யவும். அப்லோட் செய்தவுடன் ஒவ்வொரு ஆபரேஷனுக்கான தனித்தனி விபரங்கள் மற்றும் கொட்டேஷன் தோன்றும்.")
+    d_quot_pdf = generate_quotation_pdf(drawing_quot_dict)
+    st.download_button(
+        label="📥 Download Detailed Drawing Quotation PDF",
+        data=d_quot_pdf,
+        file_name="Detailed_Drawing_Quotation.pdf",
+        mime="application/pdf",
+        key="download_drawing_quot_pdf"
+    )
 
 # 7. MORE MENU & SETTINGS
 elif "More Menu & Settings" in selected_module:
