@@ -91,6 +91,7 @@ st.markdown("""
         backdrop-filter: blur(16px);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 20px;
+        text-align: center;
     }
     .dash-card:hover {
         border-color: #f43f5e;
@@ -256,15 +257,8 @@ if "d_draw_rod_dia" not in st.session_state:
 if "d_draw_part_len" not in st.session_state:
     st.session_state["d_draw_part_len"] = 38.70
 
-# 1. HOME DASHBOARD (Grand SaaS Dashboard Experience)
+# 1. HOME DASHBOARD (Clean, Minimalist SaaS Dashboard Experience)
 if "Home" in selected_module:
-    st.markdown("""
-        <div style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%); border: 1px solid rgba(236, 72, 153, 0.4); padding: 25px; border-radius: 20px; margin-bottom: 25px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);">
-            <h2 style="background: linear-gradient(90deg, #38bdf8, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 10px 0; font-weight: 900;">⚡ வெல்கம் மேகலா சிஎன்சி மேட்! (Welcome Megala CNC Mate)</h2>
-            <p style="color: #e2e8f0; font-size: 1.1rem; margin: 0;">இன்றைய ஒர்க்ஷாப் உற்பத்தி நிலை மற்றும் ஸ்மார்ட் டூல்ஸ் சுருக்கம். பிரமாண்டமான கீழ்க்காணும் கண்ட்ரோல் கார்டுகளைத் தொட்டு நேரடியாக மாட்யூல்களுக்குச் செல்லலாம்:</p>
-        </div>
-    """, unsafe_allow_html=True)
-
     # Live Metric Summary Bar
     m1, m2, m3, m4 = st.columns(4)
     with m1:
@@ -283,7 +277,6 @@ if "Home" in selected_module:
     with col1:
         st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### 📐 Rod Calculator")
-        st.write("ரவுண்ட், எக்சகன், ஸ்கொயர் & டியூப் மெட்டீரியல் எடைக் கணக்கீடு மற்றும் துல்லியமான கிராம் அனாலிசிஸ்.")
         if st.button("🚀 Open Rod Calculator", use_container_width=True, key="btn_h1"):
             st.session_state["selected_module"] = "📐 Rod Calculator (ராட் கால்குலேட்டர்)"
             st.rerun()
@@ -292,7 +285,6 @@ if "Home" in selected_module:
     with col2:
         st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### ⏱️ Production Calc")
-        st.write("டிரெண்ட், ட்ராவ் மற்றும் சிஎன்சி உற்பத்தி நேரம், மணிநேர மற்றும் தினசரி இலக்குகளைத் துல்லியமாக அறிதல்.")
         if st.button("🚀 Open Production Calc", use_container_width=True, key="btn_h2"):
             st.session_state["selected_module"] = "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)"
             st.rerun()
@@ -301,7 +293,6 @@ if "Home" in selected_module:
     with col3:
         st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### 💰 Costing & Quote")
-        st.write("மெட்டீரியல் செலவு, லேபர் காஸ்ட், ஓவர்ஹெட்ஸ் மற்றும் லாபத்துடன் கூடிய பிரீமியம் கொட்டேஷன் உருவாக்கம்.")
         if st.button("🚀 Open Costing Calc", use_container_width=True, key="btn_h3"):
             st.session_state["selected_module"] = "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)"
             st.rerun()
@@ -311,7 +302,6 @@ if "Home" in selected_module:
     with c4:
         st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### 📦 Stock Manager")
-        st.write("ரா மெட்டீரியல் மற்றும் பினிஷ்ட் குட்ஸ் ஸ்டாக் நிலைகளைக் கண்காணித்தல் மற்றும் லோ-ஸ்டாக் அலெர்ட்.")
         if st.button("🚀 Open Stock Manager", use_container_width=True, key="btn_h4"):
             st.session_state["selected_module"] = "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)"
             st.rerun()
@@ -320,7 +310,6 @@ if "Home" in selected_module:
     with c5:
         st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### 📷 Drawing & Multi-Op")
-        st.write("டிராயிங் அப்லோட், ஆட்டோமேட்டிக் மல்டி-ஆபரேஷன் ஜி-கோடு ஜெனரேட்டர் மற்றும் விரிவான பிடிஎப் ரிப்போர்ட்.")
         if st.button("🚀 Open Drawing Studio", use_container_width=True, key="btn_h5"):
             st.session_state["selected_module"] = "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)"
             st.rerun()
@@ -329,7 +318,6 @@ if "Home" in selected_module:
     with c6:
         st.markdown('<div class="dash-card">', unsafe_allow_html=True)
         st.markdown("### ⚙️ Settings & Masters")
-        st.write("6 மொழிகள் தேர்வு, ஒர்க்ஷாப் மாஸ்டர்ஸ், மெட்டீரியல் டேட்டாபேஸ் மற்றும் சிஸ்டம் அமைப்புகள்.")
         if st.button("🚀 Open Settings Hub", use_container_width=True, key="btn_h6"):
             st.session_state["selected_module"] = "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
             st.rerun()
