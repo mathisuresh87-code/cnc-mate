@@ -186,7 +186,7 @@ if "Home" in selected_module:
             </div>
         """, unsafe_allow_html=True)
 
-# 2. ROD CALCULATOR
+# 2. ROD CALCULATOR (Flexible Required Quantity & Independent Part/Scrap calculations)
 elif "Rod Calculator" in selected_module:
     st.subheader("📐 Rod & Meter/Kg Calculator")
     mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
@@ -197,7 +197,7 @@ elif "Rod Calculator" in selected_module:
         part_length = st.number_input("Part Length (mm)", value=126.0, min_value=0.0)
         cutting_allowance = st.number_input("Cutting Allowance (mm)", value=3.0, min_value=0.0)
     with col2:
-        required_qty = st.number_input("Required Quantity (Nos)", value=500, min_value=0)
+        required_qty = st.number_input("Required Quantity (Optional / Nos)", value=500, min_value=0)
         cycle_time = st.number_input("Cycle Time (Seconds)", value=20, min_value=0)
         shape_type = st.selectbox("Material Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"])
         
@@ -207,21 +207,21 @@ elif "Rod Calculator" in selected_module:
 
     st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
 
+    # Independent calculations for parts per rod and remnant
+    effective_part_len = part_length + cutting_allowance
+    parts_per_rod = int((rod_length * 1000) / effective_part_len) if effective_part_len > 0 else 0
+    remnant = round((rod_length * 1000) % effective_part_len, 2) if effective_part_len > 0 else 0.0
+
     if required_qty > 0:
-        effective_part_len = part_length + cutting_allowance
-        parts_per_rod = int((rod_length * 1000) / effective_part_len) if effective_part_len > 0 else 0
         required_rods = int(required_qty / parts_per_rod) if parts_per_rod > 0 else 0
         total_stock_length = required_rods * rod_length
         prod_per_hour = int(3600 / cycle_time) if cycle_time > 0 else 0
         total_machine_time = (required_qty * cycle_time) / 3600
-        remnant = round((rod_length * 1000) % effective_part_len, 2) if effective_part_len > 0 else 0.0
     else:
-        parts_per_rod = 0
         required_rods = 0
         total_stock_length = 0.0
-        prod_per_hour = 0
+        prod_per_hour = int(3600 / cycle_time) if cycle_time > 0 else 0
         total_machine_time = 0.0
-        remnant = 0.0
 
     res1, res2, res3 = st.columns(3)
     with res1:
@@ -235,7 +235,7 @@ elif "Rod Calculator" in selected_module:
         st.metric("Total Machine Time", f"{round(total_machine_time, 2)} Hr")
         
     if required_qty == 0:
-        st.warning("⚠️ Required Quantity 0 ஆக உள்ளதால் அனைத்து ரிசல்ட்களும் 0 எனக் காட்டப்பட்டுள்ளன.")
+        st.info("ℹ️ Required Quantity 0 ஆக உள்ளதால், ஒரு ராடில் எத்தனை பார்ட் வரும் மற்றும் ஸ்கிராப் விபரங்கள் மேலே காட்டப்பட்டுள்ளன. ஆர்டர் குவாண்டிட்டி கொடுத்தால் தேவைப்படும் ராட் எண்ணிக்கைகள் கணக்கிடப்படும்.")
     else:
         st.info("All calculations are approximate. Please verify before production.")
 
@@ -352,7 +352,7 @@ elif "Stock Management" in selected_module:
     }
     st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR (Mobile friendly - No blocking file uploader)
+# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
 elif "Drawing & Multi-Op G-Code" in selected_module:
     st.subheader("📷 Drawing Upload & Detailed Multi-Operation Process Generator")
     uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG - Optional)", type=["png", "jpg", "pdf"])
