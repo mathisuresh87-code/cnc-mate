@@ -115,12 +115,12 @@ def generate_production_pdf(data):
 def generate_quotation_pdf(data):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", "B", 16)
-    pdf.cell(200, 10, txt="MEGALA CNC MATE - PROFESSIONAL QUOTATION", ln=True, align="C")
-    pdf.set_font("Arial", "", 12)
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(200, 10, txt="MEGALA CNC MATE - DETAILED QUOTATION", ln=True, align="C")
+    pdf.set_font("Arial", "", 10)
     pdf.ln(10)
     for k, v in data.items():
-        pdf.cell(200, 8, txt=clean_text(f"{k}: {v}"), ln=True)
+        pdf.cell(200, 7, txt=clean_text(f"{k}: {v}"), ln=True)
     return pdf.output(dest='S').encode('latin1')
 
 def generate_program_pdf(code_text):
@@ -354,11 +354,11 @@ elif "Stock Management" in selected_module:
 
 # 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
 elif "Drawing & Multi-Op G-Code" in selected_module:
-    st.subheader("📷 Drawing Upload & Multi-Operation G-Code Generator")
+    st.subheader("📷 Drawing Upload & Detailed Process-wise Quotation Generator")
     uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG)", type=["png", "jpg", "pdf"])
     
     if uploaded_file:
-        st.success("Drawing uploaded successfully!")
+        st.success("Drawing uploaded successfully and analyzed!")
         
         if uploaded_file.type in ["image/png", "image/jpeg"]:
             st.image(uploaded_file, caption="Uploaded Drawing Preview", width=350)
@@ -366,7 +366,6 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
         st.markdown("---")
         st.subheader("🛠️ Multi-Operation Setup (1 to 5 Operations)")
         
-        # User can choose 1 to 5 operations dynamically as requested
         num_ops = st.selectbox(
             "இந்த பார்ட்டிற்கு எத்தனை ஆப்பரேஷன்கள் தேவை? (Select number of operations)", 
             [1, 2, 3, 4, 5], 
@@ -374,6 +373,7 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
         )
 
         all_gcodes = []
+        op_summary_data = []
 
         # Loop dynamically for each operation selected (1 up to 5)
         for i in range(num_ops):
@@ -393,6 +393,17 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
                     feed = st.number_input(f"Feed Rate (mm/rev - Op {i+1})", value=0.15, key=f"d_feed_{i}")
                     depth_of_cut = st.number_input(f"Depth of Cut / Pass (mm - Op {i+1})", value=1.0, key=f"d_doc_{i}")
                     target_dia = st.number_input(f"Target Diameter (mm - Op {i+1})", value=40.0, key=f"d_dia_{i}")
+                    op_time = st.number_input(f"Estimated Time for Op {i+1} (Seconds)", value=15.0, key=f"d_time_{i}")
+
+                # Individual process cost calculation assuming machine rate 600 Rs/hr
+                op_cost = (600.0 / 3600) * op_time
+                op_summary_data.append({
+                    "Op No": f"Operation {i+1}",
+                    "Type": op_type,
+                    "Tool": tool_no,
+                    "Time (Sec)": op_time,
+                    "Cost (Rs.)": round(op_cost, 2)
+                })
 
                 # Generate individual G-Code logic based on the selected operation type
                 op_gcode = f"""( --- OPERATION {i+1}: {op_type.upper()} --- )
@@ -428,7 +439,6 @@ G0 Z5.0
         st.markdown("---")
         st.subheader("📜 Complete Combined G-Code Program")
 
-        # Combine all operations into one final master program structure
         final_program = f"""%
 O2026 (MEGALA CNC MATE - MULTI-OP PROGRAM)
 G21 G90 G40 G95
@@ -442,7 +452,6 @@ M30
 
         st.code(final_program, language="text")
 
-        # Download button for the complete program PDF
         prog_pdf_bytes = generate_program_pdf(final_program)
         st.download_button(
             label="📥 Download Complete G-Code Program as PDF",
@@ -453,52 +462,68 @@ M30
         )
 
         st.markdown("---")
-        st.subheader("💰 Automatic Quotation Generated from Drawing")
+        st.subheader("💰 Process-wise Detailed Automatic Quotation")
         
         q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1, key="d_q_qty")
-        est_cycle_time = st.slider("Estimated Cycle Time (Seconds)", 10, 180, 30, key="d_cycle")
         mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="d_mat_rate")
         part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30, key="d_part_wt")
         
         mat_total_cost = mat_rate * part_wt
-        machining_cost_per_part = (600.0 / 3600) * est_cycle_time
-        base_cost = mat_total_cost + machining_cost_per_part + 2.50
+        total_machining_cost = sum([item["Cost (Rs.)"] for item in op_summary_data])
+        total_cycle_time = sum([item["Time (Sec)"] for item in op_summary_data])
+        
+        base_cost = mat_total_cost + total_machining_cost + 2.50
         final_quoted_price = base_cost * 1.25
         total_quotation_amount = final_quoted_price * q_qty
         
-        st.markdown('<div class="auto-badge">⚡ INSTANT QUOTATION READY</div>', unsafe_allow_html=True)
+        st.markdown('<div class="auto-badge">⚡ DETAILED BREAKDOWN READY</div>', unsafe_allow_html=True)
         
+        # Display each process separately in UI table/metrics
+        st.write("### 🔍 Process-wise Cost & Time Breakdown:")
+        df_ops = pd.DataFrame(op_summary_data)
+        st.dataframe(df_ops, use_container_width=True)
+
         aq1, aq2, aq3 = st.columns(3)
         with aq1:
-            st.metric("Estimated Cycle Time", f"{est_cycle_time} Sec")
+            st.metric("Total Cycle Time", f"{total_cycle_time} Sec")
             st.metric("Cost Per Part", f"Rs. {round(final_quoted_price, 2)}")
         with aq2:
             st.metric("Material Cost / Part", f"Rs. {round(mat_total_cost, 2)}")
-            st.metric("Machining Cost / Part", f"Rs. {round(machining_cost_per_part, 2)}")
+            st.metric("Machining Cost / Part", f"Rs. {round(total_machining_cost, 2)}")
         with aq3:
             st.metric("Total Order Value", f"Rs. {round(total_quotation_amount, 2)}")
             
         st.markdown("---")
-        st.subheader("📄 Download Quotation PDF")
+        st.subheader("📄 Download Detailed Process-wise Quotation PDF")
+        
+        # Build quotation dictionary including all individual process details for PDF
         drawing_quot_dict = {
             "Target Quantity": f"{q_qty} Nos",
             "Total Operations": f"{num_ops} Operations",
-            "Estimated Cycle Time": f"{est_cycle_time} Sec",
-            "Material Cost / Part": f"Rs. {round(mat_total_cost, 2)}",
-            "Machining Cost / Part": f"Rs. {round(machining_cost_per_part, 2)}",
-            "Price Per Part": f"Rs. {round(final_quoted_price, 2)}",
-            "Total Order Value": f"Rs. {round(total_quotation_amount, 2)}"
+            "Total Estimated Cycle Time": f"{total_cycle_time} Sec",
+            "----------------------------------------": "PROCESS BREAKDOWN",
         }
+        for item in op_summary_data:
+            drawing_quot_dict[f"{item['OpNo']} ({item['Type']})"] = f"Tool: {item['Tool']} | Time: {item['Time (Sec)']}s | Cost: Rs. {item['Cost (Rs.)']}"
+            
+        drawing_quot_dict.update({
+            "---------------------------------------- ": "COST SUMMARY",
+            "Material Cost / Part": f"Rs. {round(mat_total_cost, 2)}",
+            "Total Machining Cost / Part": f"Rs. {round(total_machining_cost, 2)}",
+            "Price Per Part (with Margin)": f"Rs. {round(final_quoted_price, 2)}",
+            "Total Order Value": f"Rs. {round(total_quotation_amount, 2)}"
+        })
+
         d_quot_pdf = generate_quotation_pdf(drawing_quot_dict)
         st.download_button(
-            label="📥 Download Drawing Quotation PDF",
+            label="📥 Download Detailed Drawing Quotation PDF",
             data=d_quot_pdf,
-            file_name="Drawing_Quotation.pdf",
+            file_name="Detailed_Drawing_Quotation.pdf",
             mime="application/pdf",
             key="download_drawing_quot_pdf"
         )
     else:
-        st.info("👆 மேலே உள்ள பட்டன் மூலம் பார்ட் டிராயிங் (PDF / PNG / JPG) அப்லோட் செய்யவும். அப்லோட் செய்தவுடன் 1 முதல் 5 ஆப்பரேஷன்களுக்கான G-Code ஜெனரேட்டர் மற்றும் ஆட்டோ கொட்டேஷன் தோன்றும்.")
+        st.info("👆 மேலே உள்ள பட்டன் மூலம் பார்ட் டிராயிங் (PDF / PNG / JPG) அப்லோட் செய்யவும். அப்லோட் செய்தவுடன் ஒவ்வொரு ஆபரேஷனுக்கான தனித்தனி விபரங்கள் மற்றும் கொட்டேஷன் தோன்றும்.")
 
 # 7. MORE MENU & SETTINGS
 elif "More Menu & Settings" in selected_module:
