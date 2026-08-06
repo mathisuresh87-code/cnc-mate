@@ -496,7 +496,7 @@ M30
         st.markdown("---")
         st.subheader("📄 Download Detailed Process-wise Quotation PDF")
         
-        # Build quotation dictionary including all individual process details for PDF
+        # Build quotation dictionary including all individual process details for PDF (Fixed 'Op No' key)
         drawing_quot_dict = {
             "Target Quantity": f"{q_qty} Nos",
             "Total Operations": f"{num_ops} Operations",
@@ -504,7 +504,7 @@ M30
             "----------------------------------------": "PROCESS BREAKDOWN",
         }
         for item in op_summary_data:
-            drawing_quot_dict[f"{item['OpNo']} ({item['Type']})"] = f"Tool: {item['Tool']} | Time: {item['Time (Sec)']}s | Cost: Rs. {item['Cost (Rs.)']}"
+            drawing_quot_dict[f"{item['Op No']} ({item['Type']})"] = f"Tool: {item['Tool']} | Time: {item['Time (Sec)']}s | Cost: Rs. {item['Cost (Rs.)']}"
             
         drawing_quot_dict.update({
             "---------------------------------------- ": "COST SUMMARY",
