@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Ultra-Modern High-End SaaS Custom CSS for Grand UI & Glowing Dashboards
+# Ultra-Modern High-End SaaS Custom CSS with 3D Text & Glowing Logo Design
 st.markdown("""
     <style>
     /* Global Background with Deep Tech Gradient */
@@ -21,25 +21,55 @@ st.markdown("""
         font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     
-    /* Grand Header Styling */
+    /* Grand 3D Text Styling for Header */
     .main-header {
-        font-size: 2.8rem;
+        font-size: 3rem;
         font-weight: 900;
-        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #e879f9 100%);
+        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 40%, #c084fc 70%, #f472b6 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0px;
-        letter-spacing: 1.5px;
-        text-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+        text-shadow: 
+            0 1px 0 #0284c7, 
+            0 2px 0 #0369a1, 
+            0 3px 0 #075985, 
+            0 4px 0 #0c4a6e,
+            0 6px 1px rgba(0,0,0,0.1),
+            0 0 35px rgba(56, 189, 248, 0.6),
+            0 0 70px rgba(129, 140, 248, 0.4);
     }
+    
     .sub-header {
         font-size: 1.15rem;
         color: #94a3b8;
         margin-bottom: 25px;
-        font-weight: 500;
-        letter-spacing: 0.5px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
     
+    /* Attractive Glowing Logo Container Box */
+    .logo-box {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.98) 100%);
+        border: 1px solid rgba(56, 189, 248, 0.5);
+        padding: 12px;
+        border-radius: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 30px rgba(56, 189, 248, 0.35), inset 0 0 15px rgba(56, 189, 248, 0.15);
+        backdrop-filter: blur(12px);
+        transition: all 0.3s ease;
+    }
+    .logo-box:hover {
+        border-color: #38bdf8;
+        box-shadow: 0 0 45px rgba(56, 189, 248, 0.6), inset 0 0 20px rgba(56, 189, 248, 0.3);
+        transform: scale(1.03);
+    }
+
     /* Glowing Badges */
     .auto-badge {
         background: linear-gradient(135deg, #065f46 0%, #047857 100%);
@@ -92,13 +122,6 @@ st.markdown("""
         background: linear-gradient(180deg, #0b0f19 0%, #090d16 100%);
         border-right: 1px solid #1e293b;
     }
-
-    /* Success / Info Boxes */
-    .stAlert {
-        border-radius: 12px;
-        border: 1px solid #334155;
-        background-color: rgba(30, 41, 59, 0.5);
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -111,13 +134,15 @@ def get_logo():
 
 logo_path = get_logo()
 
-# App Header with Robust Logo Integration
+# App Header with Attractive Glowing Logo & 3D Title
 col_logo, col_title = st.columns([1, 6])
 with col_logo:
+    st.markdown('<div class="logo-box">', unsafe_allow_html=True)
     try:
-        st.image(logo_path, width=110)
+        st.image(logo_path, width=95)
     except Exception:
         st.markdown("### ⚙️ MEGALA")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 with col_title:
     st.markdown('<p class="main-header">MEGALA CNC MATE</p>', unsafe_allow_html=True)
@@ -142,7 +167,7 @@ if "selected_module" not in st.session_state:
 
 # Sidebar Navigation
 try:
-    st.sidebar.image(logo_path, width=80)
+    st.sidebar.image(logo_path, width=70)
 except Exception:
     st.sidebar.markdown("### ⚙️ Megala CNC Mate")
 
@@ -216,7 +241,7 @@ if "d_draw_part_len" not in st.session_state:
 if "Home" in selected_module:
     st.markdown("""
         <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(129, 140, 248, 0.15) 100%); border: 1px solid rgba(56, 189, 248, 0.3); padding: 25px; border-radius: 18px; margin-bottom: 25px; backdrop-filter: blur(10px);">
-            <h2 style="color: #38bdf8; margin: 0 0 10px 0; font-weight: 800;">👋 வெல்கம் நிதீஷ்! (Welcome Nithish)</h2>
+            <h2 style="color: #38bdf8; margin: 0 0 10px 0; font-weight: 800;">⚡ வெல்கம் மேகலா சிஎன்சி மேட்! (Welcome Megala CNC Mate)</h2>
             <p style="color: #cbd5e1; font-size: 1.1rem; margin: 0;">இன்றைய ஒர்க்ஷாப் உற்பத்தி நிலை மற்றும் ஸ்மார்ட் டூல்ஸ் சுருக்கம். பிரமாண்டமான கீழ்க்காணும் கண்ட்ரோல் கார்டுகளைத் தொட்டு நேரடியாக மாட்யூல்களுக்குச் செல்லலாம்:</p>
         </div>
     """, unsafe_allow_html=True)
@@ -233,7 +258,7 @@ if "Home" in selected_module:
         st.metric("System Status", "100%", "Online ⚡")
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### ⚡ Core Automation Modules / முக்கிய மாட்யூல்கள்")
+    st.markdown("### 🚀 Core Automation Modules / முக்கிய மாட்யூல்கள்")
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -798,7 +823,7 @@ M05
     st.subheader("📜 Complete Combined Multi-Op G-Code Program")
 
     final_program = f"""%
-O2026 (MEGALA CNC MATE - AUTOMATED REPORT & PROGRAM FOR NITHISH)
+O2026 (MEGALA CNC MATE - AUTOMATED REPORT & PROGRAM)
 G21 G90 G40 G95
 """
     for code in all_gcodes:
