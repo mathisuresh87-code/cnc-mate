@@ -2,6 +2,7 @@ import os
 import math
 import streamlit as st
 import pandas as pd
+from PIL import Image
 from fpdf import FPDF
 
 # Page Configuration
@@ -11,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Ultra-Modern High-End SaaS Custom CSS with Crystal Clear 3D Logo & Harmonized Colors
+# Ultra-Modern High-End SaaS Custom CSS with Harmonized Colors
 st.markdown("""
     <style>
     /* Global Background with Deep Tech Gradient */
@@ -25,31 +26,10 @@ st.markdown("""
     .header-container {
         display: flex;
         align-items: center;
-        gap: 24px;
+        gap: 20px;
         padding: 10px 0 20px 0;
         border-bottom: 1px solid rgba(56, 189, 248, 0.2);
         margin-bottom: 25px;
-    }
-
-    /* Crystal Clear 3D Glowing Vector Logo Emblem */
-    .crystal-logo-box {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        border: 2px solid #38bdf8;
-        width: 85px;
-        height: 85px;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 0 35px rgba(56, 189, 248, 0.4), inset 0 0 15px rgba(56, 189, 248, 0.2);
-        flex-shrink: 0;
-        position: relative;
-        animation: pulse-glow 3s infinite alternate;
-    }
-    
-    @keyframes pulse-glow {
-        0% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.3); border-color: rgba(56, 189, 248, 0.6); }
-        100% { box-shadow: 0 0 45px rgba(56, 189, 248, 0.7); border-color: #38bdf8; }
     }
 
     /* Grand 3D Text Styling for Main Title */
@@ -153,14 +133,17 @@ module_list = [
 if "selected_module" not in st.session_state:
     st.session_state["selected_module"] = module_list[0]
 
-# Sidebar Navigation Header
+# Sidebar Navigation Header & Logo Uploader
 st.sidebar.markdown("""
     <div style="text-align: center; padding: 10px 0;">
-        <span style="font-size: 2rem;">⚙️</span>
         <h3 style="color: #38bdf8; margin: 5px 0 0 0; font-size: 1.2rem; letter-spacing: 1px;">MEGALA CNC MATE</h3>
     </div>
 """, unsafe_allow_html=True)
 
+st.sidebar.markdown("### 🖼️ Company Logo Settings")
+company_logo_file = st.sidebar.file_uploader("Upload Your Company Logo", type=["png", "jpg", "jpeg"], key="sidebar_logo_upload")
+
+st.sidebar.markdown("---")
 st.sidebar.markdown("### 🚀 Navigation Hub / வழிசெலுத்தல்")
 selected_module = st.sidebar.selectbox(
     "Select Module",
@@ -169,18 +152,24 @@ selected_module = st.sidebar.selectbox(
 )
 st.session_state["selected_module"] = selected_module
 
-# --- CRYSTAL CLEAR 3D HEADER & LOGO SECTION ---
-st.markdown("""
-    <div class="header-container">
-        <div class="crystal-logo-box">
-            <span style="font-size: 2.8rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">⚙️</span>
-        </div>
-        <div>
-            <h1 class="main-title">MEGALA CNC MATE</h1>
-            <p class="sub-title">ENTERPRISE CNC AUTOMATION & WORKSHOP INTELLIGENCE SYSTEM</p>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+# --- CRYSTAL CLEAR HEADER & COMPANY LOGO SECTION ---
+col_logo, col_title = st.columns([0.15, 0.85], vertical_alignment="center")
+with col_logo:
+    if company_logo_file is not None:
+        st.image(company_logo_file, width=85)
+    else:
+        # Default placeholder if user hasn't uploaded their logo yet
+        st.markdown("""
+            <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 2px solid #38bdf8; width: 80px; height: 80px; border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);">
+                <span style="font-size: 1.5rem; font-weight: 900; color: #38bdf8;">MC</span>
+            </div>
+        """, unsafe_allow_html=True)
+
+with col_title:
+    st.markdown('<h1 class="main-title">MEGALA CNC MATE</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-title">ENTERPRISE CNC AUTOMATION & WORKSHOP INTELLIGENCE SYSTEM</p>', unsafe_allow_html=True)
+
+st.markdown("<hr style='margin-top: 0px; border-color: rgba(56, 189, 248, 0.2);'>", unsafe_allow_html=True)
 
 # Helper to clean text for FPDF (replaces unicode symbols like ₹ with Rs.)
 def clean_text(text):
