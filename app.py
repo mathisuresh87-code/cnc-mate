@@ -1,3 +1,6 @@
+சுரேஷ், நீங்கள் அனுப்பியுள்ள ஸ்கிரீன்ஷாட்டில் உள்ள பிழைக்குக் காரணம் (Error), op_summary_data-வில் கீ (Key) பெயராக "Op No" (இடையோடு) கொடுக்கப்பட்டுள்ளது, ஆனால் PDF டிக்ஷனரி உருவாக்கும் போது தவறுதலாக item['OpNo'] (இடைவெளியின்றி) என எழுதப்பட்டுள்ளது.
+இந்த சிறு பிழையைச் சரிசெய்து, மற்ற எந்த வசதியையும் மாற்றாமல் முழுமையான கோடை கீழே கொடுத்துள்ளேன். இதை அப்படியே காப்பி செய்து பயன்படுத்திக் கொள்ளுங்கள்:
+📝 முழுமையான மற்றும் பிழை திருத்தப்பட்ட Python Code (app.py):
 import os
 import streamlit as st
 import pandas as pd
@@ -553,3 +556,4 @@ elif "More Menu & Settings" in selected_module:
         st.write("• Material Master (EN1, EN8, EN19, EN24, EN31, C45, MS, SS, Aluminum, Brass)")
         st.write("• Tool Master & Backup")
         st.write("• Help & Support")
+
