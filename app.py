@@ -187,7 +187,7 @@ if "Home" in selected_module:
             </div>
         """, unsafe_allow_html=True)
 
-# 2. ROD CALCULATOR (Simple vs Advanced Mode with Optional Required Quantity Checkboxes)
+# 2. ROD CALCULATOR (Simple vs Advanced Mode with 0-based Quantity Input)
 elif "Rod Calculator" in selected_module:
     st.subheader("📐 Rod Calculator - Simple & Advanced Modes")
     mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
@@ -203,11 +203,9 @@ elif "Rod Calculator" in selected_module:
             shape_type = st.selectbox("Material Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="simp_shape")
             cycle_time = st.number_input("Cycle Time (Seconds)", value=20, min_value=0, key="simp_cyc_time")
             
-            # Optional Required Quantity Checkbox in Simple Mode
-            enable_simp_req = st.checkbox("Enable Required Quantity (Optional)", value=False, key="simp_chk_req")
-            required_qty = 0
-            if enable_simp_req:
-                required_qty = st.number_input("Required Quantity (Nos)", value=500, min_value=0, key="simp_req_qty")
+            # Required Quantity Input: Enter 0 for Optional / Off, or enter a number (e.g., 500) to calculate
+            required_qty = st.number_input("Required Quantity (Enter 0 for Optional / Off)", value=500, min_value=0, key="simp_req_qty")
+            enable_simp_req = required_qty > 0
             
         effective_part_len = part_length + cutting_allowance
         parts_per_rod = int((rod_length * 1000) / effective_part_len) if effective_part_len > 0 else 0
@@ -262,11 +260,9 @@ elif "Rod Calculator" in selected_module:
             adv_part_len = st.number_input("Part Length from Drawing (mm)", value=126.0, min_value=0.0, key="adv_part_len")
             adv_cut_allow = st.number_input("Cutting / Parting Allowance (mm)", value=3.0, min_value=0.0, key="adv_cut_allow")
             
-            # Optional Required Quantity Checkbox in Advanced Mode
-            enable_adv_req = st.checkbox("Enable Required Quantity (Optional)", value=False, key="adv_chk_req")
-            adv_req_qty = 0
-            if enable_adv_req:
-                adv_req_qty = st.number_input("Required Order Quantity (Nos)", value=500, min_value=0, key="adv_req_qty")
+            # Required Quantity Input: Enter 0 for Optional / Off, or enter a number to calculate
+            adv_req_qty = st.number_input("Required Order Quantity (Enter 0 for Optional / Off)", value=500, min_value=0, key="adv_req_qty")
+            enable_adv_req = adv_req_qty > 0
         with ac2:
             adv_dia = st.number_input("Raw Material Diameter (mm)", value=45.0, min_value=0.0, key="adv_dia")
             adv_density = st.number_input("Material Density (g/mm³) [Steel ≈ 0.00785]", value=0.00785, format="%.5f", key="adv_density")
@@ -434,7 +430,7 @@ elif "Stock Management" in selected_module:
     }
     st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR (With Automatic Scrap Grams & End Bit Calculations)
+# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
 elif "Drawing & Multi-Op G-Code" in selected_module:
     st.subheader("📷 Drawing Upload & Automatic Scrap/End-Bit Analysis")
     uploaded_file = st.file_uploader("Upload Part Drawing / Photo (PDF / PNG / JPG)", type=["png", "jpg", "pdf"])
