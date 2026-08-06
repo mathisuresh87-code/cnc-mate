@@ -12,12 +12,12 @@ st.set_page_config(
     layout="wide"
 )
 
-# Ultra-Modern High-End SaaS Custom CSS with Harmonized Colors
+# Ultra-Vibrant & Colorful Next-Gen SaaS Custom CSS
 st.markdown("""
     <style>
-    /* Global Background with Deep Tech Gradient */
+    /* Global Background with Deep Tech Vibrant Gradient */
     .stApp {
-        background: radial-gradient(circle at 50% 0%, #0f172a 0%, #070a14 100%);
+        background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0f172a 50%, #030712 100%);
         color: #f8fafc;
         font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
@@ -28,15 +28,15 @@ st.markdown("""
         align-items: center;
         gap: 20px;
         padding: 10px 0 20px 0;
-        border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+        border-bottom: 2px solid rgba(236, 72, 153, 0.3);
         margin-bottom: 25px;
     }
 
-    /* Grand 3D Text Styling for Main Title */
+    /* Grand 3D Neon Text Styling for Main Title */
     .main-title {
-        font-size: 2.8rem;
+        font-size: 2.9rem;
         font-weight: 900;
-        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 40%, #c084fc 70%, #f472b6 100%);
+        background: linear-gradient(135deg, #38bdf8 0%, #f43f5e 35%, #a855f7 70%, #06b6d4 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0 0 4px 0;
@@ -44,79 +44,85 @@ st.markdown("""
         letter-spacing: 2px;
         text-transform: uppercase;
         line-height: 1.1;
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.7));
+        filter: drop-shadow(0 4px 12px rgba(244, 63, 94, 0.4));
         text-shadow: 
-            0 1px 0 #0284c7, 
-            0 2px 0 #0369a1, 
-            0 3px 0 #075985, 
-            0 4px 0 #0c4a6e,
-            0 8px 20px rgba(56, 189, 248, 0.5);
+            0 1px 0 #be185d, 
+            0 2px 0 #9d174d, 
+            0 3px 0 #831843, 
+            0 4px 15px rgba(236, 72, 153, 0.6);
     }
     
     /* Sleek Professional Sub-Header */
     .sub-title {
         font-size: 0.95rem;
-        color: #94a3b8;
+        background: linear-gradient(90deg, #38bdf8, #e879f9, #4ade80);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         margin: 0;
-        font-weight: 600;
-        letter-spacing: 1.5px;
+        font-weight: 700;
+        letter-spacing: 1.8px;
         text-transform: uppercase;
     }
 
     /* Colorful Vibrant Badges */
     .auto-badge {
-        background: linear-gradient(135deg, #065f46 0%, #047857 100%);
-        color: #34d399;
-        padding: 6px 18px;
+        background: linear-gradient(135deg, #4f46e5 0%, #ec4899 50%, #f59e0b 100%);
+        color: #ffffff;
+        padding: 8px 20px;
         border-radius: 30px;
         font-size: 0.9rem;
-        font-weight: 700;
+        font-weight: 800;
         display: inline-block;
         margin-bottom: 18px;
-        box-shadow: 0 0 20px rgba(5, 150, 105, 0.4);
-        border: 1px solid #10b981;
+        box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
-    /* Dashboard Grand Card Containers */
+    /* Dashboard Grand Colorful Card Containers */
     .dash-card {
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.85) 100%);
-        border: 1px solid rgba(56, 189, 248, 0.25);
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+        border: 1px solid rgba(236, 72, 153, 0.3);
         padding: 24px;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(16px);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 20px;
     }
     .dash-card:hover {
-        border-color: #38bdf8;
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(56, 189, 248, 0.3);
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+        border-color: #f43f5e;
+        transform: translateY(-6px);
+        box-shadow: 0 20px 45px rgba(244, 63, 94, 0.4);
+        background: linear-gradient(145deg, rgba(49, 46, 129, 0.4) 0%, rgba(15, 23, 42, 0.98) 100%);
     }
 
     /* Metric Cards Styling */
     div[data-testid="metric-container"] {
-        background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-        border: 1px solid #334155;
+        background: linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%);
+        border: 1px solid #4f46e5;
         padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
         transition: all 0.3s ease;
     }
     div[data-testid="metric-container"]:hover {
-        border-color: #38bdf8;
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(56, 189, 248, 0.3);
+        border-color: #ec4899;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 35px rgba(236, 72, 153, 0.4);
     }
 
     /* Sidebar Styling */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0b0f19 0%, #070a14 100%);
-        border-right: 1px solid #1e293b;
+        background: linear-gradient(180deg, #090d16 0%, #030712 100%);
+        border-right: 2px solid rgba(79, 70, 229, 0.3);
     }
     </style>
 """, unsafe_allow_html=True)
+
+# Permanent Logo Storage File Path
+LOGO_PATH = "company_logo_permanent.png"
 
 # Module List for Navigation
 module_list = [
@@ -133,15 +139,23 @@ module_list = [
 if "selected_module" not in st.session_state:
     st.session_state["selected_module"] = module_list[0]
 
-# Sidebar Navigation Header & Logo Uploader
+# Sidebar Navigation Header & Permanent Logo Uploader
 st.sidebar.markdown("""
     <div style="text-align: center; padding: 10px 0;">
-        <h3 style="color: #38bdf8; margin: 5px 0 0 0; font-size: 1.2rem; letter-spacing: 1px;">MEGALA CNC MATE</h3>
+        <h3 style="background: linear-gradient(90deg, #38bdf8, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 5px 0 0 0; font-size: 1.3rem; font-weight: 900; letter-spacing: 1.5px;">MEGALA CNC MATE</h3>
     </div>
 """, unsafe_allow_html=True)
 
-st.sidebar.markdown("### 🖼️ Company Logo Settings")
-company_logo_file = st.sidebar.file_uploader("Upload Your Company Logo", type=["png", "jpg", "jpeg"], key="sidebar_logo_upload")
+st.sidebar.markdown("### 🖼️ Permanent Company Logo")
+uploaded_logo = st.sidebar.file_uploader("Upload Logo (Once - Stays Permanent)", type=["png", "jpg", "jpeg"], key="sidebar_logo_upload")
+
+if uploaded_logo is not None:
+    try:
+        img = Image.open(uploaded_logo)
+        img.save(LOGO_PATH)
+        st.sidebar.success("✅ லோகோ நிரந்தரமாக சேமிக்கப்பட்டது!")
+    except Exception as e:
+        st.sidebar.error(f"Error: {e}")
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 🚀 Navigation Hub / வழிசெலுத்தல்")
@@ -152,24 +166,24 @@ selected_module = st.sidebar.selectbox(
 )
 st.session_state["selected_module"] = selected_module
 
-# --- CRYSTAL CLEAR HEADER & COMPANY LOGO SECTION ---
+# --- PERMANENT CRYSTAL CLEAR HEADER & COMPANY LOGO SECTION ---
 col_logo, col_title = st.columns([0.15, 0.85], vertical_alignment="center")
 with col_logo:
-    if company_logo_file is not None:
-        st.image(company_logo_file, width=85)
+    if os.path.exists(LOGO_PATH):
+        st.image(LOGO_PATH, width=85)
     else:
-        # Default placeholder if user hasn't uploaded their logo yet
+        # Default vibrant glowing placeholder if no logo has been uploaded yet
         st.markdown("""
-            <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 2px solid #38bdf8; width: 80px; height: 80px; border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);">
-                <span style="font-size: 1.5rem; font-weight: 900; color: #38bdf8;">MC</span>
+            <div style="background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%); border: 2px solid #38bdf8; width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(236, 72, 153, 0.6);">
+                <span style="font-size: 1.6rem; font-weight: 900; color: #ffffff;">MC</span>
             </div>
         """, unsafe_allow_html=True)
 
 with col_title:
     st.markdown('<h1 class="main-title">MEGALA CNC MATE</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-title">ENTERPRISE CNC AUTOMATION & WORKSHOP INTELLIGENCE SYSTEM</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-title">⚡ ENTERPRISE CNC AUTOMATION & WORKSHOP INTELLIGENCE SYSTEM ⚡</p>', unsafe_allow_html=True)
 
-st.markdown("<hr style='margin-top: 0px; border-color: rgba(56, 189, 248, 0.2);'>", unsafe_allow_html=True)
+st.markdown("<hr style='margin-top: 0px; border-color: rgba(236, 72, 153, 0.3);'>", unsafe_allow_html=True)
 
 # Helper to clean text for FPDF (replaces unicode symbols like ₹ with Rs.)
 def clean_text(text):
@@ -232,20 +246,20 @@ if "d_draw_part_len" not in st.session_state:
 # 1. HOME DASHBOARD (Grand SaaS Dashboard Experience)
 if "Home" in selected_module:
     st.markdown("""
-        <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(129, 140, 248, 0.15) 100%); border: 1px solid rgba(56, 189, 248, 0.35); padding: 25px; border-radius: 18px; margin-bottom: 25px; backdrop-filter: blur(10px);">
-            <h2 style="color: #38bdf8; margin: 0 0 10px 0; font-weight: 800;">⚡ வெல்கம் மேகலா சிஎன்சி மேட்! (Welcome Megala CNC Mate)</h2>
-            <p style="color: #cbd5e1; font-size: 1.1rem; margin: 0;">இன்றைய ஒர்க்ஷாப் உற்பத்தி நிலை மற்றும் ஸ்மார்ட் டூல்ஸ் சுருக்கம். பிரமாண்டமான கீழ்க்காணும் கண்ட்ரோல் கார்டுகளைத் தொட்டு நேரடியாக மாட்யூல்களுக்குச் செல்லலாம்:</p>
+        <div style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%); border: 1px solid rgba(236, 72, 153, 0.4); padding: 25px; border-radius: 20px; margin-bottom: 25px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);">
+            <h2 style="background: linear-gradient(90deg, #38bdf8, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 10px 0; font-weight: 900;">⚡ வெல்கம் மேகலா சிஎன்சி மேட்! (Welcome Megala CNC Mate)</h2>
+            <p style="color: #e2e8f0; font-size: 1.1rem; margin: 0;">இன்றைய ஒர்க்ஷாப் உற்பத்தி நிலை மற்றும் ஸ்மார்ட் டூல்ஸ் சுருக்கம். பிரமாண்டமான கீழ்க்காணும் கண்ட்ரோல் கார்டுகளைத் தொட்டு நேரடியாக மாட்யூல்களுக்குச் செல்லலாம்:</p>
         </div>
     """, unsafe_allow_html=True)
 
     # Live Metric Summary Bar
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.metric("Active Machines", "4 Units", "Running")
+        st.metric("Active Machines", "4 Units", "Running 🚀")
     with m2:
-        st.metric("Today's Output", "1,850 Nos", "+12%")
+        st.metric("Today's Output", "1,850 Nos", "+12% 📈")
     with m3:
-        st.metric("Material Stock", "1,240 Kg", "Optimal")
+        st.metric("Material Stock", "1,240 Kg", "Optimal ✨")
     with m4:
         st.metric("System Status", "100%", "Online ⚡")
 
