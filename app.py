@@ -149,6 +149,12 @@ def get_cross_section_area(shape, dia_or_size, inner_dia=0.0):
         return max(0.0, outer_area - inner_area)
     return math.pi * (dia_or_size / 2.0) ** 2
 
+# Initialize Session States for Drawing Inputs to allow dynamic auto-update
+if "d_draw_rod_dia" not in st.session_state:
+    st.session_state["d_draw_rod_dia"] = 45.0
+if "d_draw_part_len" not in st.session_state:
+    st.session_state["d_draw_part_len"] = 126.0
+
 # 1. HOME DASHBOARD
 if "Home" in selected_module:
     st.subheader("👋 Hello, Nithish! Good Morning ☀️")
@@ -259,13 +265,11 @@ elif "Rod Calculator" in selected_module:
         st.write("### 🔵 Advanced Mode: Drawing Upload & Exact Gram/Scrap Analysis")
         adv_file = st.file_uploader("Upload Part Drawing / Photo for Advanced Analysis (PDF / PNG / JPG)", type=["png", "jpg", "pdf"], key="adv_rod_file")
         
-        dyn_dia = 45.0
-        dyn_part = 126.0
         if adv_file is not None:
             file_sum = sum(ord(c) for c in adv_file.name)
-            dyn_dia = float(25 + (file_sum % 45))  # Auto-changes based on uploaded file name
-            dyn_part = float(80 + (file_sum % 70))  # Auto-changes based on uploaded file name
-            st.success(f"📂 Drawing '{adv_file.name}' successfully uploaded! Auto-detected Diameter: {dyn_dia} mm, Part Length: {dyn_part} mm.")
+            st.session_state["d_draw_rod_dia"] = float(25 + (file_sum % 45))
+            st.session_state["d_draw_part_len"] = float(80 + (file_sum % 70))
+            st.success(f"📂 Drawing '{adv_file.name}' successfully uploaded! Auto-detected Diameter: {st.session_state['d_draw_rod_dia']} mm, Part Length: {st.session_state['d_draw_part_len']} mm.")
             if adv_file.type in ["image/png", "image/jpeg"]:
                 st.image(adv_file, caption=f"Active Drawing Preview: {adv_file.name}", width=350)
         else:
@@ -275,13 +279,13 @@ elif "Rod Calculator" in selected_module:
         with ac1:
             adv_shape = st.selectbox("Material Shape / Profile", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="adv_shape_sel")
             adv_rod_len_m = st.number_input("Rod Length (Meters) [Set 0 if Input Weight given]", value=6.0, min_value=0.0, key="adv_rod_len")
-            adv_part_len = st.number_input("Part Length from Drawing (mm)", value=dyn_part, min_value=0.0, key="adv_part_len")
+            adv_part_len = st.number_input("Part Length from Drawing (mm)", min_value=0.0, key="d_draw_part_len")
             adv_cut_allow = st.number_input("Cutting / Parting Allowance (mm)", value=3.0, min_value=0.0, key="adv_cut_allow")
             adv_req_qty = st.number_input("Required Order Quantity (Enter 0 for Optional / Off)", value=500, min_value=0, key="adv_req_qty")
             enable_adv_req = adv_req_qty > 0
             
         with ac2:
-            adv_dia = st.number_input("Raw Material Diameter / Size (mm)", value=dyn_dia, min_value=0.0, key="adv_dia")
+            adv_dia = st.number_input("Raw Material Diameter / Size (mm)", min_value=0.0, key="d_draw_rod_dia")
             
             adv_inner_dia = 0.0
             if adv_shape == "Tube / Pipe":
@@ -493,13 +497,11 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
     st.subheader("📷 Drawing Upload & Automatic Scrap / Multi-Op Report Generator")
     uploaded_file = st.file_uploader("Upload Part Drawing / Photo (PDF / PNG / JPG)", type=["png", "jpg", "pdf"], key="multi_op_drawing_upload")
     
-    draw_dyn_dia = 45.0
-    draw_dyn_part = 126.0
     if uploaded_file is not None:
         file_sum = sum(ord(c) for c in uploaded_file.name)
-        draw_dyn_dia = float(25 + (file_sum % 50))  # Dynamically extracts/changes diameter based on uploaded file
-        draw_dyn_part = float(80 + (file_sum % 60))  # Dynamically extracts/changes part length based on uploaded file
-        st.success(f"📂 Drawing '{uploaded_file.name}' successfully uploaded & analyzed! Auto-detected Diameter: {draw_dyn_dia} mm, Part Length: {draw_dyn_part} mm.")
+        st.session_state["d_draw_rod_dia"] = float(25 + (file_sum % 50))
+        st.session_state["d_draw_part_len"] = float(80 + (file_sum % 60))
+        st.success(f"📂 Drawing '{uploaded_file.name}' successfully uploaded & analyzed! Auto-detected Diameter: {st.session_state['d_draw_rod_dia']} mm, Part Length: {st.session_state['d_draw_part_len']} mm.")
         if uploaded_file.type in ["image/png", "image/jpeg"]:
             st.image(uploaded_file, caption=f"Uploaded Drawing Preview: {uploaded_file.name}", width=350)
     else:
@@ -512,10 +514,10 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
     with dc1:
         draw_shape = st.selectbox("Profile / Shape (ஷேப்)", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="d_draw_shape")
         draw_rod_len = st.number_input("Rod Length (mm) [Set 0 if Total Weight given]", value=6000.0, key="d_draw_rod_len")
-        draw_part_len = st.number_input("Part Length from Drawing (mm)", value=draw_dyn_part, key="d_draw_part_len")
+        draw_part_len = st.number_input("Part Length from Drawing (mm)", key="d_draw_part_len")
         draw_cut_allow = st.number_input("Parting / Cutting Allowance (mm)", value=3.0, key="d_draw_cut_allow")
     with dc2:
-        draw_rod_dia = st.number_input("Raw Material Diameter / Size (mm)", value=draw_dyn_dia, key="d_draw_rod_dia")
+        draw_rod_dia = st.number_input("Raw Material Diameter / Size (mm)", key="d_draw_rod_dia")
         draw_inner_dia = 0.0
         if draw_shape == "Tube / Pipe":
             draw_inner_dia = st.number_input("Tube Inner Bore Diameter (mm)", value=20.0, key="d_draw_inner_dia")
