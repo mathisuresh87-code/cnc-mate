@@ -13,7 +13,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Ultra-Vibrant & Colorful Next-Gen SaaS Custom CSS with Seamless Column Cards
+# Ultra-Vibrant & Colorful Next-Gen SaaS Custom CSS with Glowing Button Click Effects
 st.markdown("""
     <style>
     /* Global Background with Deep Tech Vibrant Gradient */
@@ -97,6 +97,34 @@ st.markdown("""
         transform: translateY(-6px);
         box-shadow: 0 20px 45px rgba(244, 63, 94, 0.4);
         background: linear-gradient(145deg, rgba(49, 46, 129, 0.4) 0%, rgba(15, 23, 42, 0.98) 100%);
+    }
+
+    /* --- VIBRANT GLOWING BUTTON LIGHT EFFECT ON HOVER & TOUCH/CLICK --- */
+    div.stButton > button {
+        background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%);
+        color: #ffffff !important;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        transition: all 0.25s ease-in-out;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    }
+    
+    div.stButton > button:hover {
+        background: linear-gradient(135deg, #38bdf8 0%, #f43f5e 100%);
+        border-color: #38bdf8;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 0 25px #38bdf8, 0 0 35px #ec4899;
+    }
+
+    /* Light-Up Effect when Touch / Click / Active */
+    div.stButton > button:active, div.stButton > button:focus {
+        background: linear-gradient(135deg, #f43f5e 0%, #38bdf8 100%) !important;
+        color: #ffffff !important;
+        border-color: #ffffff !important;
+        transform: scale(0.98);
+        box-shadow: 0 0 40px #f43f5e, 0 0 60px #38bdf8, inset 0 0 20px rgba(255, 255, 255, 0.9) !important;
     }
 
     /* Metric Cards Styling */
