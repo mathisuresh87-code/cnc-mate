@@ -91,7 +91,7 @@ selected_module = st.sidebar.selectbox(
         "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)",
         "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)",
         "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
-        "📷 Drawing & Auto-Quotation (டிராயிங் & ஆட்டோ கொட்டேஷன்)",
+        "📷 Drawing & Multi-Op G-Code (டிராயிங் & மல்டி-ஆப் ஜெனரேட்டர்)",
         "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
     ]
 )
@@ -136,7 +136,7 @@ def generate_program_pdf(code_text):
 
 # 1. HOME DASHBOARD
 if "Home" in selected_module:
-    st.subheader("👋 Hello, Nithish! Good Morning ☀️")
+    st.subheader("👋 Hello, Suresh! Good Morning ☀️")
     st.write("இன்றைய ஒர்க்ஷாப் சுருக்கம் மற்றும் விரைவான அணுகல்:")
     
     col1, col2, col3 = st.columns(3)
@@ -174,8 +174,8 @@ if "Home" in selected_module:
     with c2:
         st.markdown("""
             <div class="metric-card" style="border-left: 5px solid #06b6d4;">
-                <h3>📄 Quotation & PDF</h3>
-                <p>QR கோடுடன் கூடிய புரொபஷனல் கொட்டேஷன்</p>
+                <h3>📷 Drawing & Multi-Op</h3>
+                <p>டிராயிங் அப்லோட் & மல்டி-ஆபரேஷன் ஜி-கோட்</p>
             </div>
         """, unsafe_allow_html=True)
     with c3:
@@ -352,39 +352,113 @@ elif "Stock Management" in selected_module:
     }
     st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
 
-# 6. DRAWING & AUTO-QUOTATION
-elif "Drawing & Auto-Quotation" in selected_module:
-    st.subheader("📷 Drawing Analysis, Process Detection & Auto Quotation")
+# 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
+elif "Drawing & Multi-Op G-Code" in selected_module:
+    st.subheader("📷 Drawing Upload & Multi-Operation G-Code Generator")
     uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG)", type=["png", "jpg", "pdf"])
     
     if uploaded_file:
-        st.success("Drawing successfully analyzed by AI Vision!")
+        st.success("Drawing uploaded successfully!")
         
         if uploaded_file.type in ["image/png", "image/jpeg"]:
             st.image(uploaded_file, caption="Uploaded Drawing Preview", width=350)
             
-        st.markdown("### 🔍 Detected Machining Processes & Operations:")
-        col_op1, col_op2 = st.columns(2)
-        with col_op1:
-            st.markdown("""
-                - **Facing Operation:** Detected (Front & Back)
-                - **OD Turning & Profiling:** Detected
-                - **Grooving & Parting:** Detected
-            """)
-        with col_op2:
-            st.markdown("""
-                - **Drilling (Center Hole):** Detected
-                - **Internal Tapping/Threading:** Detected
-                - **Chamfering & Deburring:** Detected
-            """)
-            
         st.markdown("---")
-        st.markdown("### 💰 Automatic Quotation Generated from Drawing")
+        st.subheader("🛠️ Multi-Operation Setup (1 to 5 Operations)")
         
-        q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1)
-        est_cycle_time = st.slider("Estimated Cycle Time (Seconds)", 10, 120, 25)
-        mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0)
-        part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30)
+        # User can choose 1 to 5 operations dynamically as requested
+        num_ops = st.selectbox(
+            "இந்த பார்ட்டிற்கு எத்தனை ஆப்பரேஷன்கள் தேவை? (Select number of operations)", 
+            [1, 2, 3, 4, 5], 
+            key="drawing_num_ops"
+        )
+
+        all_gcodes = []
+
+        # Loop dynamically for each operation selected (1 up to 5)
+        for i in range(num_ops):
+            with st.expander(f"📌 Operation {i+1} Details", expanded=(i == 0)):
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    tool_no = st.text_input(f"Tool Number (Op {i+1})", f"T{i+1:02d}{i+1:02d}", key=f"d_tool_{i}")
+                    op_type = st.selectbox(
+                        f"Operation Type (Op {i+1})",
+                        ["Facing & Rough Turning", "Finish Turning", "Grooving", "Threading", "Drilling / Boring"],
+                        key=f"d_op_type_{i}"
+                    )
+                    rpm = st.number_input(f"Spindle Speed (RPM - Op {i+1})", value=1200, key=f"d_rpm_{i}")
+                    
+                with col2:
+                    feed = st.number_input(f"Feed Rate (mm/rev - Op {i+1})", value=0.15, key=f"d_feed_{i}")
+                    depth_of_cut = st.number_input(f"Depth of Cut / Pass (mm - Op {i+1})", value=1.0, key=f"d_doc_{i}")
+                    target_dia = st.number_input(f"Target Diameter (mm - Op {i+1})", value=40.0, key=f"d_dia_{i}")
+
+                # Generate individual G-Code logic based on the selected operation type
+                op_gcode = f"""( --- OPERATION {i+1}: {op_type.upper()} --- )
+{tool_no}
+G97 S{rpm} M03
+G0 X52.0 Z2.0
+"""
+                if "Facing" in op_type or "Turning" in op_type:
+                    op_gcode += f"""G1 X0.0 F{feed}
+G0 Z2.0
+G1 Z-50.0 F{feed}
+G0 X{target_dia + 2.0}
+"""
+                elif "Grooving" in op_type:
+                    op_gcode += f"""G0 X{target_dia + 5.0} Z-25.0
+G1 X{target_dia} F{feed}
+G0 X{target_dia + 5.0}
+"""
+                elif "Threading" in op_type:
+                    op_gcode += f"""G0 X{target_dia + 2.0} Z5.0
+G76 P030060 Q50 R0.05
+G76 X{target_dia - 1.5} Z-30.0 P1250 Q200 F1.5
+"""
+                elif "Drilling" in op_type:
+                    op_gcode += f"""G0 X0.0 Z2.0
+G1 Z-40.0 F{feed}
+G0 Z5.0
+"""
+
+                all_gcodes.append(op_gcode)
+                st.text_area(f"Generated G-Code for Operation {i+1}", op_gcode.strip(), height=130, key=f"d_code_area_{i}")
+
+        st.markdown("---")
+        st.subheader("📜 Complete Combined G-Code Program")
+
+        # Combine all operations into one final master program structure
+        final_program = f"""%
+O2026 (MEGALA CNC MATE - MULTI-OP PROGRAM)
+G21 G90 G40 G95
+"""
+        for code in all_gcodes:
+            final_program += code + "\n"
+
+        final_program += """M05
+M30
+%"""
+
+        st.code(final_program, language="text")
+
+        # Download button for the complete program PDF
+        prog_pdf_bytes = generate_program_pdf(final_program)
+        st.download_button(
+            label="📥 Download Complete G-Code Program as PDF",
+            data=prog_pdf_bytes,
+            file_name="CNC_Multi_Operation_Program.pdf",
+            mime="application/pdf",
+            key="download_multi_op_pdf"
+        )
+
+        st.markdown("---")
+        st.subheader("💰 Automatic Quotation Generated from Drawing")
+        
+        q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1, key="d_q_qty")
+        est_cycle_time = st.slider("Estimated Cycle Time (Seconds)", 10, 180, 30, key="d_cycle")
+        mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="d_mat_rate")
+        part_wt = st.number_input("Estimated Part Weight (Kg)", value=0.30, key="d_part_wt")
         
         mat_total_cost = mat_rate * part_wt
         machining_cost_per_part = (600.0 / 3600) * est_cycle_time
@@ -408,6 +482,7 @@ elif "Drawing & Auto-Quotation" in selected_module:
         st.subheader("📄 Download Quotation PDF")
         drawing_quot_dict = {
             "Target Quantity": f"{q_qty} Nos",
+            "Total Operations": f"{num_ops} Operations",
             "Estimated Cycle Time": f"{est_cycle_time} Sec",
             "Material Cost / Part": f"Rs. {round(mat_total_cost, 2)}",
             "Machining Cost / Part": f"Rs. {round(machining_cost_per_part, 2)}",
@@ -419,29 +494,11 @@ elif "Drawing & Auto-Quotation" in selected_module:
             label="📥 Download Drawing Quotation PDF",
             data=d_quot_pdf,
             file_name="Drawing_Quotation.pdf",
-            mime="application/pdf"
+            mime="application/pdf",
+            key="download_drawing_quot_pdf"
         )
-            
-        if st.button("Generate Professional G-Code Program"):
-            sample_code = """O2026 (MEGALA CNC MATE AUTO-GENERATED PROGRAM)
-G21 G99 G40
-M03 S2500
-G00 X60.0 Z5.0
-(Facing & OD Turning Cycle)
-G01 Z-45.0 F0.25
-G00 X100.0 Z100.0
-M30"""
-            st.code(sample_code, language="text")
-            
-            st.markdown("---")
-            st.subheader("📄 Download G-Code Program as PDF")
-            prog_pdf_bytes = generate_program_pdf(sample_code)
-            st.download_button(
-                label="📥 Download G-Code Program PDF",
-                data=prog_pdf_bytes,
-                file_name="CNC_Program.pdf",
-                mime="application/pdf"
-            )
+    else:
+        st.info("👆 மேலே உள்ள பட்டன் மூலம் பார்ட் டிராயிங் (PDF / PNG / JPG) அப்லோட் செய்யவும். அப்லோட் செய்தவுடன் 1 முதல் 5 ஆப்பரேஷன்களுக்கான G-Code ஜெனரேட்டர் மற்றும் ஆட்டோ கொட்டேஷன் தோன்றும்.")
 
 # 7. MORE MENU & SETTINGS
 elif "More Menu & Settings" in selected_module:
