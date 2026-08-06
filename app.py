@@ -136,7 +136,7 @@ def generate_program_pdf(code_text):
 
 # 1. HOME DASHBOARD
 if "Home" in selected_module:
-    st.subheader("👋 Hello, Suresh! Good Morning ☀️")
+    st.subheader("👋 Hello, Nithish! Good Morning ☀️")
     st.write("இன்றைய ஒர்க்ஷாப் சுருக்கம் மற்றும் விரைவான அணுகல்:")
     
     col1, col2, col3 = st.columns(3)
@@ -354,7 +354,7 @@ elif "Stock Management" in selected_module:
 
 # 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
 elif "Drawing & Multi-Op G-Code" in selected_module:
-    st.subheader("📷 Drawing Upload & Detailed Process-wise Quotation Generator")
+    st.subheader("📷 Drawing Upload & Detailed Multi-Operation Process Generator")
     uploaded_file = st.file_uploader("Upload Part Drawing (PDF / PNG / JPG)", type=["png", "jpg", "pdf"])
     
     if uploaded_file:
@@ -364,7 +364,7 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
             st.image(uploaded_file, caption="Uploaded Drawing Preview", width=350)
             
         st.markdown("---")
-        st.subheader("🛠️ Multi-Operation Setup (1 to 5 Operations)")
+        st.subheader("🛠️ Multi-Operation Setup (Up to 5 Operations - Facing, Turning, Grooving, Threading, Drilling, Cross-Drilling, Part-off)")
         
         num_ops = st.selectbox(
             "இந்த பார்ட்டிற்கு எத்தனை ஆப்பரேஷன்கள் தேவை? (Select number of operations)", 
@@ -384,7 +384,15 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
                     tool_no = st.text_input(f"Tool Number (Op {i+1})", f"T{i+1:02d}{i+1:02d}", key=f"d_tool_{i}")
                     op_type = st.selectbox(
                         f"Operation Type (Op {i+1})",
-                        ["Facing & Rough Turning", "Finish Turning", "Grooving", "Threading", "Drilling / Boring"],
+                        [
+                            "Facing & Rough Turning", 
+                            "Finish Turning", 
+                            "Grooving", 
+                            "Threading", 
+                            "Drilling / Boring", 
+                            "Cross-Drilling / Milling (கிராஸ் ட்ரில்லிங்)",
+                            "Part-off / Cut-off (பார்ட் ஆஃப்)"
+                        ],
                         key=f"d_op_type_{i}"
                     )
                     rpm = st.number_input(f"Spindle Speed (RPM - Op {i+1})", value=1200, key=f"d_rpm_{i}")
@@ -432,15 +440,30 @@ G76 X{target_dia - 1.5} Z-30.0 P1250 Q200 F1.5
 G1 Z-40.0 F{feed}
 G0 Z5.0
 """
+                elif "Cross-Drilling" in op_type:
+                    op_gcode += f"""M19 (Spindle Orient for Cross Hole)
+G0 C0.0
+G0 X{target_dia + 10.0} Z-20.0
+G83 Z-15.0 R2.0 Q2.0 F{feed}
+G80
+M05
+"""
+                elif "Part-off" in op_type:
+                    op_gcode += f"""G0 X{target_dia + 5.0} Z-55.0
+M03 S800
+G1 X-0.5 F{feed / 2}
+G0 X50.0
+M05
+"""
 
                 all_gcodes.append(op_gcode)
                 st.text_area(f"Generated G-Code for Operation {i+1}", op_gcode.strip(), height=130, key=f"d_code_area_{i}")
 
         st.markdown("---")
-        st.subheader("📜 Complete Combined G-Code Program")
+        st.subheader("📜 Complete Combined Multi-Op G-Code Program")
 
         final_program = f"""%
-O2026 (MEGALA CNC MATE - MULTI-OP PROGRAM)
+O2026 (MEGALA CNC MATE - MULTI-OP PROGRAM FOR NITHISH)
 G21 G90 G40 G95
 """
         for code in all_gcodes:
