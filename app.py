@@ -187,7 +187,7 @@ if "Home" in selected_module:
             </div>
         """, unsafe_allow_html=True)
 
-# 2. ROD CALCULATOR (Distinct Simple vs Advanced Mode with Drawing Upload & Gram Analysis)
+# 2. ROD CALCULATOR (Simple vs Advanced Mode with Optional Required Quantity Checkboxes)
 elif "Rod Calculator" in selected_module:
     st.subheader("📐 Rod Calculator - Simple & Advanced Modes")
     mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
@@ -200,15 +200,20 @@ elif "Rod Calculator" in selected_module:
             part_length = st.number_input("Part Length (mm)", value=126.0, min_value=0.0, key="simp_part_len")
             cutting_allowance = st.number_input("Cutting Allowance (mm)", value=3.0, min_value=0.0, key="simp_cut_allow")
         with col2:
-            required_qty = st.number_input("Required Quantity (Nos)", value=500, min_value=0, key="simp_req_qty")
-            cycle_time = st.number_input("Cycle Time (Seconds)", value=20, min_value=0, key="simp_cyc_time")
             shape_type = st.selectbox("Material Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="simp_shape")
+            cycle_time = st.number_input("Cycle Time (Seconds)", value=20, min_value=0, key="simp_cyc_time")
+            
+            # Optional Required Quantity Checkbox in Simple Mode
+            enable_simp_req = st.checkbox("Enable Required Quantity (Optional)", value=False, key="simp_chk_req")
+            required_qty = 0
+            if enable_simp_req:
+                required_qty = st.number_input("Required Quantity (Nos)", value=500, min_value=0, key="simp_req_qty")
             
         effective_part_len = part_length + cutting_allowance
         parts_per_rod = int((rod_length * 1000) / effective_part_len) if effective_part_len > 0 else 0
         remnant = round((rod_length * 1000) % effective_part_len, 2) if effective_part_len > 0 else 0.0
 
-        if required_qty > 0:
+        if enable_simp_req and required_qty > 0:
             required_rods = int(required_qty / parts_per_rod) if parts_per_rod > 0 else 0
             total_stock_length = required_rods * rod_length
             prod_per_hour = int(3600 / cycle_time) if cycle_time > 0 else 0
@@ -223,13 +228,22 @@ elif "Rod Calculator" in selected_module:
         res1, res2, res3 = st.columns(3)
         with res1:
             st.metric("Parts / Rod", f"{parts_per_rod} Nos")
-            st.metric("Required Rods", f"{required_rods} Nos")
+            if enable_simp_req:
+                st.metric("Required Rods", f"{required_rods} Nos")
+            else:
+                st.metric("Required Rods", "Optional (Off)")
         with res2:
             st.metric("Balance Scrap / Remnant", f"{remnant} mm")
-            st.metric("Total Stock Length", f"{round(total_stock_length, 2)} Meters")
+            if enable_simp_req:
+                st.metric("Total Stock Length", f"{round(total_stock_length, 2)} Meters")
+            else:
+                st.metric("Total Stock Length", "Optional (Off)")
         with res3:
             st.metric("Production / Hour", f"{prod_per_hour} Nos")
-            st.metric("Total Machine Time", f"{round(total_machine_time, 2)} Hr")
+            if enable_simp_req:
+                st.metric("Total Machine Time", f"{round(total_machine_time, 2)} Hr")
+            else:
+                st.metric("Total Machine Time", "Optional (Off)")
 
     else:
         st.write("### 🔵 Advanced Mode: Drawing Upload & Exact Gram/Scrap Analysis")
@@ -247,7 +261,12 @@ elif "Rod Calculator" in selected_module:
             adv_rod_len_m = st.number_input("Rod Length (Meters)", value=6.0, min_value=0.0, key="adv_rod_len")
             adv_part_len = st.number_input("Part Length from Drawing (mm)", value=126.0, min_value=0.0, key="adv_part_len")
             adv_cut_allow = st.number_input("Cutting / Parting Allowance (mm)", value=3.0, min_value=0.0, key="adv_cut_allow")
-            adv_req_qty = st.number_input("Required Order Quantity (Nos)", value=500, min_value=0, key="adv_req_qty")
+            
+            # Optional Required Quantity Checkbox in Advanced Mode
+            enable_adv_req = st.checkbox("Enable Required Quantity (Optional)", value=False, key="adv_chk_req")
+            adv_req_qty = 0
+            if enable_adv_req:
+                adv_req_qty = st.number_input("Required Order Quantity (Nos)", value=500, min_value=0, key="adv_req_qty")
         with ac2:
             adv_dia = st.number_input("Raw Material Diameter (mm)", value=45.0, min_value=0.0, key="adv_dia")
             adv_density = st.number_input("Material Density (g/mm³) [Steel ≈ 0.00785]", value=0.00785, format="%.5f", key="adv_density")
@@ -257,7 +276,11 @@ elif "Rod Calculator" in selected_module:
         adv_eff_len = adv_part_len + adv_cut_allow
         adv_parts_per_rod = int((adv_rod_len_m * 1000) / adv_eff_len) if adv_eff_len > 0 else 0
         adv_remnant_mm = round((adv_rod_len_m * 1000) % adv_eff_len, 2) if adv_eff_len > 0 else 0.0
-        adv_required_rods = int(adv_req_qty / adv_parts_per_rod) if adv_parts_per_rod > 0 else 0
+        
+        if enable_adv_req:
+            adv_required_rods = int(adv_req_qty / adv_parts_per_rod) if adv_parts_per_rod > 0 else 0
+        else:
+            adv_required_rods = 0
 
         # Exact gram weight calculations
         part_vol = math.pi * (adv_dia / 2)**2 * adv_part_len
@@ -268,8 +291,12 @@ elif "Rod Calculator" in selected_module:
         
         total_scrap_g = round((math.pi * (adv_dia / 2)**2 * (adv_remnant_mm + (adv_parts_per_rod * adv_cut_allow))) * adv_density, 2)
         
-        total_mat_wt_kg = round((adv_required_rods * adv_rod_len_m * (math.pi * (adv_dia / 2)**2 * adv_density * 1000)) / 1000000, 2) * (1 + adv_wastage_pct/100)
-        total_mat_cost = round(total_mat_wt_kg * adv_mat_rate, 2)
+        if enable_adv_req and adv_required_rods > 0:
+            total_mat_wt_kg = round((adv_required_rods * adv_rod_len_m * (math.pi * (adv_dia / 2)**2 * adv_density * 1000)) / 1000000, 2) * (1 + adv_wastage_pct/100)
+            total_mat_cost = round(total_mat_wt_kg * adv_mat_rate, 2)
+        else:
+            total_mat_wt_kg = 0.0
+            total_mat_cost = 0.0
 
         st.markdown('<div class="auto-badge">⚡ ADVANCED DRAWING & GRAM-LEVEL ANALYSIS READY</div>', unsafe_allow_html=True)
         
@@ -281,11 +308,18 @@ elif "Rod Calculator" in selected_module:
             st.metric("Remnant / End Bit", f"{adv_remnant_mm} mm")
             st.metric("End Bit Weight", f"{remnant_wt_g} g")
         with ar3:
-            st.metric("Required Rods", f"{adv_required_rods} Nos")
+            if enable_adv_req:
+                st.metric("Required Rods", f"{adv_required_rods} Nos")
+            else:
+                st.metric("Required Rods", "Optional (Off)")
             st.metric("Total Scrap / Rod", f"{total_scrap_g} g")
         with ar4:
-            st.metric("Total Mat. Weight", f"{round(total_mat_wt_kg, 2)} Kg")
-            st.metric("Total Mat. Cost", f"Rs. {total_mat_cost}")
+            if enable_adv_req:
+                st.metric("Total Mat. Weight", f"{round(total_mat_wt_kg, 2)} Kg")
+                st.metric("Total Mat. Cost", f"Rs. {total_mat_cost}")
+            else:
+                st.metric("Total Mat. Weight", "Optional (Off)")
+                st.metric("Total Mat. Cost", "Optional (Off)")
 
 # 3. PRODUCTION CALCULATOR
 elif "Production Calculator" in selected_module:
@@ -663,5 +697,4 @@ elif "More Menu & Settings" in selected_module:
         st.write("• Machine Master")
     with col2:
         st.write("• Material Master (EN1, EN8, EN19, EN24, EN31, C45, MS, SS, Aluminum, Brass)")
-        st.write("• Tool Master & Backup")
-        st.write("• Help & Support")
+        st.write("• Tool Master & Backup", "• Help & Support")
