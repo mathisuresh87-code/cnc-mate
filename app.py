@@ -13,13 +13,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# Ultra-Vibrant & Colorful Next-Gen SaaS Custom CSS with Glowing Button Click Effects
+# Sophisticated, Balanced & Proportional Professional SaaS Custom CSS
 st.markdown("""
     <style>
-    /* Global Background with Deep Tech Vibrant Gradient */
+    /* Global Background with Deep Tech Balanced Gradient */
     .stApp {
-        background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0f172a 50%, #030712 100%);
-        color: #f8fafc;
+        background: linear-gradient(135deg, #0b0f19 0%, #0f172a 50%, #030712 100%);
+        color: #f1f5f9;
         font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     
@@ -29,123 +29,115 @@ st.markdown("""
         align-items: center;
         gap: 20px;
         padding: 10px 0 20px 0;
-        border-bottom: 2px solid rgba(236, 72, 153, 0.3);
+        border-bottom: 1px solid rgba(56, 189, 248, 0.2);
         margin-bottom: 25px;
     }
 
-    /* Grand 3D Neon Text Styling for Main Title */
+    /* Professional & Balanced Title Styling */
     .main-title {
-        font-size: 2.9rem;
-        font-weight: 900;
-        background: linear-gradient(135deg, #38bdf8 0%, #f43f5e 35%, #a855f7 70%, #06b6d4 100%);
+        font-size: 2.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0 0 4px 0;
         padding: 0;
-        letter-spacing: 2px;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
         line-height: 1.1;
-        filter: drop-shadow(0 4px 12px rgba(244, 63, 94, 0.4));
-        text-shadow: 
-            0 1px 0 #be185d, 
-            0 2px 0 #9d174d, 
-            0 3px 0 #831843, 
-            0 4px 15px rgba(236, 72, 153, 0.6);
+        filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.25));
     }
     
     /* Sleek Professional Sub-Header */
     .sub-title {
-        font-size: 0.95rem;
-        background: linear-gradient(90deg, #38bdf8, #e879f9, #4ade80);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-size: 0.92rem;
+        color: #94a3b8;
         margin: 0;
-        font-weight: 700;
-        letter-spacing: 1.8px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
     }
 
-    /* Colorful Vibrant Badges */
+    /* Balanced Professional Badges */
     .auto-badge {
-        background: linear-gradient(135deg, #4f46e5 0%, #ec4899 50%, #f59e0b 100%);
-        color: #ffffff;
-        padding: 8px 20px;
-        border-radius: 30px;
-        font-size: 0.9rem;
-        font-weight: 800;
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.25) 0%, rgba(56, 189, 248, 0.25) 100%);
+        color: #38bdf8;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 700;
         display: inline-block;
-        margin-bottom: 18px;
-        box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        margin-bottom: 16px;
+        border: 1px solid rgba(56, 189, 248, 0.3);
         text-transform: uppercase;
         letter-spacing: 1px;
     }
 
-    /* Transform Streamlit Columns into Gorgeous Glowing Dashboard Cards */
+    /* Transform Streamlit Columns into Clean Dashboard Cards */
     div[data-testid="column"] {
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
-        border: 1px solid rgba(236, 72, 153, 0.3);
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.12);
         padding: 22px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(16px);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(12px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 20px;
     }
     div[data-testid="column"]:hover {
-        border-color: #f43f5e;
-        transform: translateY(-6px);
-        box-shadow: 0 20px 45px rgba(244, 63, 94, 0.4);
-        background: linear-gradient(145deg, rgba(49, 46, 129, 0.4) 0%, rgba(15, 23, 42, 0.98) 100%);
+        border-color: rgba(56, 189, 248, 0.4);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(56, 189, 248, 0.15);
+        background: rgba(30, 41, 59, 0.85);
     }
 
-    /* --- VIBRANT GLOWING BUTTON LIGHT EFFECT ON HOVER & TOUCH/CLICK --- */
+    /* --- SOPHISTICATED BALANCED BUTTON EFFECTS --- */
     div.stButton > button {
-        background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%);
+        background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
         color: #ffffff !important;
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        font-weight: 800;
-        letter-spacing: 0.8px;
-        transition: all 0.25s ease-in-out;
-        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
     }
     
     div.stButton > button:hover {
-        background: linear-gradient(135deg, #38bdf8 0%, #f43f5e 100%);
-        border-color: #38bdf8;
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 0 25px #38bdf8, 0 0 35px #ec4899;
+        background: linear-gradient(135deg, #6366f1 0%, #2563eb 100%);
+        border-color: rgba(56, 189, 248, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
     }
 
-    /* Light-Up Effect when Touch / Click / Active */
+    /* Balanced Touch/Click Glow Effect (Not Overwhelming) */
     div.stButton > button:active, div.stButton > button:focus {
-        background: linear-gradient(135deg, #f43f5e 0%, #38bdf8 100%) !important;
+        background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
         color: #ffffff !important;
-        border-color: #ffffff !important;
+        border-color: #38bdf8 !important;
         transform: scale(0.98);
-        box-shadow: 0 0 40px #f43f5e, 0 0 60px #38bdf8, inset 0 0 20px rgba(255, 255, 255, 0.9) !important;
+        box-shadow: 0 0 15px rgba(56, 189, 248, 0.5) !important;
     }
 
     /* Metric Cards Styling */
     div[data-testid="metric-container"] {
-        background: linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%);
-        border: 1px solid #4f46e5;
-        padding: 20px;
-        border-radius: 18px;
-        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+        background: rgba(15, 23, 42, 0.75);
+        border: 1px solid rgba(148, 163, 184, 0.15);
+        padding: 18px;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
     }
     div[data-testid="metric-container"]:hover {
-        border-color: #ec4899;
-        transform: translateY(-4px);
-        box-shadow: 0 12px 35px rgba(236, 72, 153, 0.4);
+        border-color: rgba(56, 189, 248, 0.35);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
     }
 
     /* Sidebar Styling */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #090d16 0%, #030712 100%);
-        border-right: 2px solid rgba(79, 70, 229, 0.3);
+        background: #070a12;
+        border-right: 1px solid rgba(148, 163, 184, 0.1);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -171,7 +163,7 @@ if "selected_module" not in st.session_state:
 # Sidebar Navigation Header & Permanent Logo Uploader
 st.sidebar.markdown("""
     <div style="text-align: center; padding: 10px 0;">
-        <h3 style="background: linear-gradient(90deg, #38bdf8, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 5px 0 0 0; font-size: 1.3rem; font-weight: 900; letter-spacing: 1.5px;">MEGALA CNC MATE</h3>
+        <h3 style="color: #38bdf8; margin: 5px 0 0 0; font-size: 1.2rem; font-weight: 800; letter-spacing: 1.2px;">MEGALA CNC MATE</h3>
     </div>
 """, unsafe_allow_html=True)
 
@@ -195,7 +187,7 @@ selected_module = st.sidebar.selectbox(
 )
 st.session_state["selected_module"] = selected_module
 
-# Helper function to convert image to base64 for circular glowing container display
+# Helper function to convert image to base64 for circular container display
 def get_base64_image(path):
     if os.path.exists(path):
         with open(path, "rb") as f:
@@ -203,28 +195,28 @@ def get_base64_image(path):
         return base64.b64encode(data).decode("utf-8")
     return None
 
-# --- PERMANENT CRYSTAL CLEAR HEADER & CIRCULAR GLOWING LOGO SECTION ---
+# --- PERMANENT CRYSTAL CLEAR HEADER & CIRCULAR LOGO SECTION ---
 col_logo, col_title = st.columns([0.15, 0.85], vertical_alignment="center")
 with col_logo:
     encoded_img = get_base64_image(LOGO_PATH)
     if encoded_img:
         st.markdown(f"""
-            <div style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%); border: 2px solid #38bdf8; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(236, 72, 153, 0.6); overflow: hidden; backdrop-filter: blur(10px);">
+            <div style="background: rgba(56, 189, 248, 0.1); border: 2px solid #38bdf8; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25); overflow: hidden; backdrop-filter: blur(8px);">
                 <img src="data:image/png;base64,{encoded_img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
             </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown("""
-            <div style="background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%); border: 2px solid #38bdf8; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(236, 72, 153, 0.6);">
-                <span style="font-size: 1.6rem; font-weight: 900; color: #ffffff;">MC</span>
+            <div style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); border: 2px solid #38bdf8; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);">
+                <span style="font-size: 1.5rem; font-weight: 800; color: #ffffff;">MC</span>
             </div>
         """, unsafe_allow_html=True)
 
 with col_title:
     st.markdown('<h1 class="main-title">MEGALA CNC MATE</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-title">⚡ ENTERPRISE CNC AUTOMATION & WORKSHOP INTELLIGENCE SYSTEM ⚡</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-title">ENTERPRISE CNC AUTOMATION & WORKSHOP INTELLIGENCE SYSTEM</p>', unsafe_allow_html=True)
 
-st.markdown("<hr style='margin-top: 0px; border-color: rgba(236, 72, 153, 0.3);'>", unsafe_allow_html=True)
+st.markdown("<hr style='margin-top: 0px; border-color: rgba(148, 163, 184, 0.15);'>", unsafe_allow_html=True)
 
 # Helper to clean text for FPDF (replaces unicode symbols like ₹ with Rs.)
 def clean_text(text):
