@@ -33,14 +33,6 @@ st.markdown("""
         margin-bottom: 25px;
         font-weight: 500;
     }
-    .metric-card {
-        background-color: #161b22;
-        padding: 18px;
-        border-radius: 12px;
-        border: 1px solid #30363d;
-        text-align: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
     .auto-badge {
         background-color: #065f46;
         color: #34d399;
@@ -77,6 +69,21 @@ with col_title:
 
 st.markdown("---")
 
+# Module List for Navigation
+module_list = [
+    "🏠 Home / முகப்பு",
+    "📐 Rod Calculator (ராட் கால்குலேட்டர்)",
+    "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)",
+    "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)",
+    "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
+    "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)",
+    "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
+]
+
+# Initialize Session State for Navigation
+if "selected_module" not in st.session_state:
+    st.session_state["selected_module"] = module_list[0]
+
 # Sidebar Navigation with Robust Logo
 try:
     st.sidebar.image(logo_path, width=80)
@@ -86,16 +93,10 @@ except Exception:
 st.sidebar.markdown("### 🚀 Menu / மெனு")
 selected_module = st.sidebar.selectbox(
     "Select Module",
-    [
-        "🏠 Home / முகப்பு",
-        "📐 Rod Calculator (ராட் கால்குலேட்டர்)",
-        "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)",
-        "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)",
-        "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
-        "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)",
-        "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
-    ]
+    module_list,
+    index=module_list.index(st.session_state["selected_module"]) if st.session_state["selected_module"] in module_list else 0
 )
+st.session_state["selected_module"] = selected_module
 
 # Helper to clean text for FPDF (replaces unicode symbols like ₹ with Rs.)
 def clean_text(text):
@@ -155,57 +156,39 @@ if "d_draw_rod_dia" not in st.session_state:
 if "d_draw_part_len" not in st.session_state:
     st.session_state["d_draw_part_len"] = 38.70
 
-# 1. HOME DASHBOARD
+# 1. HOME DASHBOARD (Interactive Touch Cards)
 if "Home" in selected_module:
     st.subheader("👋 Hello, Nithish! Good Morning ☀️")
-    st.write("இன்றைய ஒர்க்ஷாப் சுருக்கம் மற்றும் விரைவான அணுகல்:")
+    st.write("இன்றைய ஒர்க்ஷாப் சுருக்கம் மற்றும் விரைவான அணுகல் (கீழே உள்ள கார்டுகளைத் தொட்டு நேராக உள்ளே செல்லலாம்):")
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown("""
-            <div class="metric-card" style="border-left: 5px solid #3b82f6;">
-                <h3>📐 Rod Calculator</h3>
-                <p>ரவுண்ட், எக்சகன், ஸ்கொயர் & டியூப் கணக்கீடுகள்</p>
-            </div>
-        """, unsafe_allow_html=True)
+        if st.button("📐 Rod Calculator\n\nரவுண்ட், எக்சகன், ஸ்கொயர் & டியூப் கணக்கீடுகள்", use_container_width=True):
+            st.session_state["selected_module"] = "📐 Rod Calculator (ராட் கால்குலேட்டர்)"
+            st.rerun()
     with col2:
-        st.markdown("""
-            <div class="metric-card" style="border-left: 5px solid #10b981;">
-                <h3>⏱️ Production Calculator</h3>
-                <p>டிரெண்ட், ட்ராவ், சிஎன்சி உற்பத்தி நேரம்</p>
-            </div>
-        """, unsafe_allow_html=True)
+        if st.button("⏱️ Production Calculator\n\nடிரெண்ட், ட்ராவ், சிஎன்சி உற்பத்தி நேரம்", use_container_width=True):
+            st.session_state["selected_module"] = "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)"
+            st.rerun()
     with col3:
-        st.markdown("""
-            <div class="metric-card" style="border-left: 5px solid #f97316;">
-                <h3>💰 Costing Calculator</h3>
-                <p>மெட்டீரியல், லேபர் & ஒவர்ஹெட்ஸ் காஸ்ட்</p>
-            </div>
-        """, unsafe_allow_html=True)
+        if st.button("💰 Costing Calculator\n\nமெட்டீரியல், லேபர் & ஒவர்ஹெட்ஸ் காஸ்ட்", use_container_width=True):
+            st.session_state["selected_module"] = "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)"
+            st.rerun()
 
     st.markdown("<br>", unsafe_allow_html=True)
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.markdown("""
-            <div class="metric-card" style="border-left: 5px solid #8b5cf6;">
-                <h3>📦 Stock Management</h3>
-                <p>ரா மெட்டீரியல் & பினிஷ்ட் குட்ஸ் டிராக்கிங்</p>
-            </div>
-        """, unsafe_allow_html=True)
-    with c2:
-        st.markdown("""
-            <div class="metric-card" style="border-left: 5px solid #06b6d4;">
-                <h3>📷 Drawing & Auto-Op</h3>
-                <p>டிராயிங் அப்லோட் & ஆட்டோமேட்டிக் மல்டி-ஆப் ரிப்போர்ட்</p>
-            </div>
-        """, unsafe_allow_html=True)
-    with c3:
-        st.markdown("""
-            <div class="metric-card" style="border-left: 5px solid #6b7280;">
-                <h3>⚙️ Settings & Languages</h3>
-                <p>6 மொழிகள் & ஒர்க்ஷாப் மாஸ்டர்ஸ்</p>
-            </div>
-        """, unsafe_allow_html=True)
+    c4, c5, c6 = st.columns(3)
+    with c4:
+        if st.button("📦 Stock Management\n\nரா மெட்டீரியல் & பினிஷ்ட் குட்ஸ் டிராக்கிங்", use_container_width=True):
+            st.session_state["selected_module"] = "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)"
+            st.rerun()
+    with c5:
+        if st.button("📷 Drawing & Auto-Op\n\nடிராயிங் அப்லோட் & ஆட்டோமேட்டிக் மல்டி-ஆப்", use_container_width=True):
+            st.session_state["selected_module"] = "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)"
+            st.rerun()
+    with c6:
+        if st.button("⚙️ Settings & Languages\n\n6 மொழிகள் & ஒர்க்ஷாப் மாஸ்டர்ஸ்", use_container_width=True):
+            st.session_state["selected_module"] = "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
+            st.rerun()
 
 # 2. ROD CALCULATOR (Simple vs Advanced Mode)
 elif "Rod Calculator" in selected_module:
