@@ -1,5 +1,6 @@
 import os
 import math
+import base64
 import streamlit as st
 import pandas as pd
 from PIL import Image
@@ -166,15 +167,27 @@ selected_module = st.sidebar.selectbox(
 )
 st.session_state["selected_module"] = selected_module
 
-# --- PERMANENT CRYSTAL CLEAR HEADER & COMPANY LOGO SECTION ---
+# Helper function to convert image to base64 for circular glowing container display
+def get_base64_image(path):
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode("utf-8")
+    return None
+
+# --- PERMANENT CRYSTAL CLEAR HEADER & CIRCULAR GLOWING LOGO SECTION ---
 col_logo, col_title = st.columns([0.15, 0.85], vertical_alignment="center")
 with col_logo:
-    if os.path.exists(LOGO_PATH):
-        st.image(LOGO_PATH, width=85)
+    encoded_img = get_base64_image(LOGO_PATH)
+    if encoded_img:
+        st.markdown(f"""
+            <div style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%); border: 2px solid #38bdf8; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(236, 72, 153, 0.6); overflow: hidden; backdrop-filter: blur(10px);">
+                <img src="data:image/png;base64,{encoded_img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+            </div>
+        """, unsafe_allow_html=True)
     else:
-        # Default vibrant glowing placeholder if no logo has been uploaded yet
         st.markdown("""
-            <div style="background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%); border: 2px solid #38bdf8; width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(236, 72, 153, 0.6);">
+            <div style="background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%); border: 2px solid #38bdf8; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(236, 72, 153, 0.6);">
                 <span style="font-size: 1.6rem; font-weight: 900; color: #ffffff;">MC</span>
             </div>
         """, unsafe_allow_html=True)
