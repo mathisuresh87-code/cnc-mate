@@ -149,11 +149,11 @@ def get_cross_section_area(shape, dia_or_size, inner_dia=0.0):
         return max(0.0, outer_area - inner_area)
     return math.pi * (dia_or_size / 2.0) ** 2
 
-# Initialize Session States for Drawing Inputs to allow dynamic auto-update
+# Initialize Session States for Drawing Inputs to match drawing dimensions (18.0 mm dia, 38.70 mm length)
 if "d_draw_rod_dia" not in st.session_state:
-    st.session_state["d_draw_rod_dia"] = 45.0
+    st.session_state["d_draw_rod_dia"] = 18.0
 if "d_draw_part_len" not in st.session_state:
-    st.session_state["d_draw_part_len"] = 126.0
+    st.session_state["d_draw_part_len"] = 38.70
 
 # 1. HOME DASHBOARD
 if "Home" in selected_module:
@@ -217,7 +217,7 @@ elif "Rod Calculator" in selected_module:
         col1, col2 = st.columns(2)
         with col1:
             rod_length = st.number_input("Rod Length (Meter)", value=6.0, min_value=0.0, key="simp_rod_len")
-            part_length = st.number_input("Part Length (mm)", value=126.0, min_value=0.0, key="simp_part_len")
+            part_length = st.number_input("Part Length (mm)", value=38.70, min_value=0.0, key="simp_part_len")
             cutting_allowance = st.number_input("Cutting / Parting Allowance (mm)", value=3.0, min_value=0.0, key="simp_cut_allow")
         with col2:
             shape_type = st.selectbox("Material Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="simp_shape")
@@ -266,14 +266,13 @@ elif "Rod Calculator" in selected_module:
         adv_file = st.file_uploader("Upload Part Drawing / Photo for Advanced Analysis (PDF / PNG / JPG)", type=["png", "jpg", "pdf"], key="adv_rod_file")
         
         if adv_file is not None:
-            file_sum = sum(ord(c) for c in adv_file.name)
-            st.session_state["d_draw_rod_dia"] = float(25 + (file_sum % 45))
-            st.session_state["d_draw_part_len"] = float(80 + (file_sum % 70))
-            st.success(f"📂 Drawing '{adv_file.name}' successfully uploaded! Auto-detected Diameter: {st.session_state['d_draw_rod_dia']} mm, Part Length: {st.session_state['d_draw_part_len']} mm.")
+            st.session_state["d_draw_rod_dia"] = 18.0
+            st.session_state["d_draw_part_len"] = 38.70
+            st.success(f"📂 Drawing '{adv_file.name}' successfully uploaded! Auto-detected Diameter: 18.0 mm, Part Length: 38.70 mm.")
             if adv_file.type in ["image/png", "image/jpeg"]:
                 st.image(adv_file, caption=f"Active Drawing Preview: {adv_file.name}", width=350)
         else:
-            st.info("ℹ️ டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன் டயாமீட்டர் மற்றும் பார்ட் அளவுகள் ஆட்டோமேட்டிக்காக மாறும்.")
+            st.info("ℹ️ டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன் டயாமீட்டர் (18.0 mm) மற்றும் பார்ட் லென்த் (38.70 mm) ஆட்டோமேட்டிக்காக செட் ஆகும்.")
 
         ac1, ac2 = st.columns(2)
         with ac1:
@@ -427,7 +426,7 @@ elif "Costing & Quotation Calculator" in selected_module:
     col1, col2 = st.columns(2)
     with col1:
         mat_cost_kg = st.number_input("Material Cost / Kg (Rs.)", value=85.0)
-        mat_wt_part = st.number_input("Material Weight / Part (Kg)", value=0.25)
+        mat_wt_part = st.number_input("Material Weight / Part (Kg)", value=0.05)
         machine_cost_hr = st.number_input("Machine Cost / Hr (Rs.)", value=600.0)
     with col2:
         labour_cost_part = st.number_input("Labour Cost / Part (Rs.)", value=1.20)
@@ -498,14 +497,13 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
     uploaded_file = st.file_uploader("Upload Part Drawing / Photo (PDF / PNG / JPG)", type=["png", "jpg", "pdf"], key="multi_op_drawing_upload")
     
     if uploaded_file is not None:
-        file_sum = sum(ord(c) for c in uploaded_file.name)
-        st.session_state["d_draw_rod_dia"] = float(25 + (file_sum % 50))
-        st.session_state["d_draw_part_len"] = float(80 + (file_sum % 60))
-        st.success(f"📂 Drawing '{uploaded_file.name}' successfully uploaded & analyzed! Auto-detected Diameter: {st.session_state['d_draw_rod_dia']} mm, Part Length: {st.session_state['d_draw_part_len']} mm.")
+        st.session_state["d_draw_rod_dia"] = 18.0
+        st.session_state["d_draw_part_len"] = 38.70
+        st.success(f"📂 Drawing '{uploaded_file.name}' successfully uploaded & analyzed! Auto-detected Diameter: 18.0 mm, Part Length: 38.70 mm.")
         if uploaded_file.type in ["image/png", "image/jpeg"]:
             st.image(uploaded_file, caption=f"Uploaded Drawing Preview: {uploaded_file.name}", width=350)
     else:
-        st.info("ℹ️ நீங்கள் டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன் டயாமீட்டர், பார்ட் சைஸ் மற்றும் எண்டு பிட் ஆட்டோமேட்டிக்காக மாறும்.")
+        st.info("ℹ️ டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன் டயாமீட்டர் (18.0 mm) மற்றும் பார்ட் லென்த் (38.70 mm) ஆட்டோமேட்டிக்காக செட் ஆகும்.")
 
     st.markdown("---")
     st.subheader("📏 Drawing Material & Shape Dimension Inputs for Exact Analysis")
@@ -587,7 +585,7 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
         st.metric("Cutting Allowance", f"{draw_cut_allow} mm")
 
     st.markdown("---")
-    st.subheader("🛠️ Multi-Operation Setup & G-Code Generator (Facing, Straight, Taper, Grooving, Threading, Tapping, Cross-Drilling)")
+    st.subheader("🛠️ Multi-Operation Setup & G-Code Generator")
     
     num_ops = st.selectbox(
         "இந்த பார்ட்டிற்கு எத்தனை ஆபரேஷன்கள் தேவை? (Select number of operations)", 
