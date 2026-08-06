@@ -11,37 +11,75 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for Dark Theme & Gorgeous UI Cards
+# Custom CSS for Grand UI, Neon Gradients & Gorgeous App Cards
 st.markdown("""
     <style>
+    /* Global App Background & Font */
     .stApp {
-        background-color: #0d1117;
-        color: #ffffff;
+        background: linear-gradient(135deg, #090d16 0%, #111827 100%);
+        color: #f8fafc;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
+    
+    /* Main Header Styling with Gradient */
     .main-header {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #ffffff;
-        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 900;
+        background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: left;
         margin-bottom: 0px;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
     }
     .sub-header {
-        font-size: 1.1rem;
-        color: #38bdf8;
-        text-align: center;
+        font-size: 1.15rem;
+        color: #94a3b8;
+        text-align: left;
         margin-bottom: 25px;
-        font-weight: 500;
-    }
-    .auto-badge {
-        background-color: #065f46;
-        color: #34d399;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
         font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Glowing Badge */
+    .auto-badge {
+        background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+        color: #34d399;
+        padding: 6px 16px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        font-weight: 700;
         display: inline-block;
-        margin-bottom: 15px;
+        margin-bottom: 18px;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        border: 1px solid #10b981;
+    }
+
+    /* Metric Cards Styling */
+    div[data-testid="metric-container"] {
+        background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid #334155;
+        padding: 18px;
+        border-radius: 14px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+    }
+    div[data-testid="metric-container"]:hover {
+        border-color: #38bdf8;
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(56, 189, 248, 0.2);
+    }
+
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background-color: #0b0f19;
+        border-right: 1px solid #1e293b;
+    }
+
+    /* Success / Info Boxes */
+    .stAlert {
+        border-radius: 12px;
+        border: 1px solid #334155;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -56,16 +94,16 @@ def get_logo():
 logo_path = get_logo()
 
 # App Header with Robust Logo Integration
-col_logo, col_title = st.columns([1, 4])
+col_logo, col_title = st.columns([1, 5])
 with col_logo:
     try:
-        st.image(logo_path, width=100)
+        st.image(logo_path, width=110)
     except Exception:
         st.markdown("### ⚙️ MEGALA")
 
 with col_title:
-    st.markdown('<p class="main-header" style="text-align: left;">MEGALA CNC MATE</p>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header" style="text-align: left;">SMART CNC. SIMPLE WORK. — புரோபஷனல் ஒர்க்ஷாப் ஆட்டோமேஷன்</p>', unsafe_allow_html=True)
+    st.markdown('<p class="main-header">MEGALA CNC MATE</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-header">SMART CNC. SIMPLE WORK. — புரோபஷனல் ஒர்க்ஷாப் ஆட்டோமேஷன் சிஸ்டம்</p>', unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -158,8 +196,8 @@ if "d_draw_part_len" not in st.session_state:
 
 # 1. HOME DASHBOARD (Interactive Touch Cards)
 if "Home" in selected_module:
-    st.subheader("👋 Hello, Nithish! Good Morning ☀️")
-    st.write("இன்றைய ஒர்க்ஷாப் சுருக்கம் மற்றும் விரைவான அணுகல் (கீழே உள்ள கார்டுகளைத் தொட்டு நேராக உள்ளே செல்லலாம்):")
+    st.subheader("👋 Hello, Nithish! Welcome to Megala CNC Mate ✨")
+    st.write("இன்றைய ஒர்க்ஷாப் சுருக்கம் மற்றும் விரைவான அணுகல் (கீழே உள்ள பிரமாண்டமான கார்டுகளைத் தொட்டு நேராக உள்ளே செல்லலாம்):")
     
     col1, col2, col3 = st.columns(3)
     with col1:
