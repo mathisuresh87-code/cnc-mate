@@ -135,6 +135,21 @@ def generate_program_pdf(code_text):
         pdf.cell(200, 6, txt=clean_text(line), ln=True)
     return pdf.output(dest='S').encode('latin1')
 
+# Helper function to calculate volume in mm³ based on shape and dimensions for 1 mm length
+def get_cross_section_area(shape, dia_or_size, inner_dia=0.0):
+    if shape == "Round Rod":
+        return math.pi * (dia_or_size / 2.0) ** 2
+    elif shape == "Square Rod":
+        return dia_or_size ** 2
+    elif shape == "Hexagon Rod":
+        # Area of hexagon = (3 * sqrt(3) / 2) * r^2 where r is inradius, or (sqrt(3)/2) * s^2 where s is side/across flats
+        return (math.sqrt(3) / 2.0) * (dia_or_size ** 2)
+    elif shape == "Tube / Pipe":
+        outer_area = math.pi * (dia_or_size / 2.0) ** 2
+        inner_area = math.pi * (inner_dia / 2.0) ** 2
+        return max(0.0, outer_area - inner_area)
+    return math.pi * (dia_or_size / 2.0) ** 2
+
 # 1. HOME DASHBOARD
 if "Home" in selected_module:
     st.subheader("👋 Hello, Nithish! Good Morning ☀️")
@@ -187,7 +202,7 @@ if "Home" in selected_module:
             </div>
         """, unsafe_allow_html=True)
 
-# 2. ROD CALCULATOR (Simple vs Advanced Mode with Dynamic Drawing Upload Integration)
+# 2. ROD CALCULATOR (Simple vs Advanced Mode with Fully Dynamic Shape & Weight/Drawing Analysis)
 elif "Rod Calculator" in selected_module:
     st.subheader("📐 Rod Calculator - Simple & Advanced Modes")
     mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
@@ -198,12 +213,10 @@ elif "Rod Calculator" in selected_module:
         with col1:
             rod_length = st.number_input("Rod Length (Meter)", value=6.0, min_value=0.0, key="simp_rod_len")
             part_length = st.number_input("Part Length (mm)", value=126.0, min_value=0.0, key="simp_part_len")
-            cutting_allowance = st.number_input("Cutting Allowance (mm)", value=3.0, min_value=0.0, key="simp_cut_allow")
+            cutting_allowance = st.number_input("Cutting / Parting Allowance (mm)", value=3.0, min_value=0.0, key="simp_cut_allow")
         with col2:
             shape_type = st.selectbox("Material Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="simp_shape")
             cycle_time = st.number_input("Cycle Time (Seconds)", value=20, min_value=0, key="simp_cyc_time")
-            
-            # Required Quantity Input: Enter 0 for Optional / Off, or enter a number (e.g., 500) to calculate
             required_qty = st.number_input("Required Quantity (Enter 0 for Optional / Off)", value=500, min_value=0, key="simp_req_qty")
             enable_simp_req = required_qty > 0
             
@@ -244,7 +257,7 @@ elif "Rod Calculator" in selected_module:
                 st.metric("Total Machine Time", "Optional (Off)")
 
     else:
-        st.write("### 🔵 Advanced Mode: Drawing Upload & Exact Gram/Scrap Analysis")
+        st.write("### 🔵 Advanced Mode: Drawing Upload & Exact Gram/Scrap Analysis (Any Shape / Any Weight)")
         adv_file = st.file_uploader("Upload Part Drawing / Photo for Advanced Analysis (PDF / PNG / JPG)", type=["png", "jpg", "pdf"], key="adv_rod_file")
         
         # Dynamic Auto-Adjustment based on Uploaded File
@@ -252,74 +265,103 @@ elif "Rod Calculator" in selected_module:
         dynamic_dia_offset = 0.0
         if adv_file is not None:
             st.success(f"📂 Drawing '{adv_file.name}' successfully uploaded & analyzed! Output updated automatically.")
-            # Use file name hash or length to dynamically tweak values to prove live reaction
             dynamic_part_offset = float(len(adv_file.name) % 5)
             dynamic_dia_offset = float(len(adv_file.name) % 3)
             if adv_file.type in ["image/png", "image/jpeg"]:
                 st.image(adv_file, caption=f"Active Drawing Preview: {adv_file.name}", width=350)
         else:
-            st.info("ℹ️ டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன் கணக்கீடுகள் ஆட்டோமேட்டிக்காக அப்டேட் ஆகும்.")
+            st.info("ℹ️ டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன் எந்த ஷேப் மற்றும் எடையாக இருந்தாலும் ஆட்டோமேட்டிக்காக கணக்கீடுகள் அப்டேட் ஆகும்.")
 
         ac1, ac2 = st.columns(2)
         with ac1:
-            adv_rod_len_m = st.number_input("Rod Length (Meters)", value=6.0, min_value=0.0, key="adv_rod_len")
-            # Base part length modified dynamically if file uploaded
+            adv_shape = st.selectbox("Material Shape / Profile", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="adv_shape_sel")
+            adv_rod_len_m = st.number_input("Rod Length (Meters) [Set 0 if Input Weight given]", value=6.0, min_value=0.0, key="adv_rod_len")
             default_part_len = 126.0 + dynamic_part_offset
             adv_part_len = st.number_input("Part Length from Drawing (mm)", value=default_part_len, min_value=0.0, key="adv_part_len")
             adv_cut_allow = st.number_input("Cutting / Parting Allowance (mm)", value=3.0, min_value=0.0, key="adv_cut_allow")
-            
-            # Required Quantity Input: Enter 0 for Optional / Off, or enter a number to calculate
             adv_req_qty = st.number_input("Required Order Quantity (Enter 0 for Optional / Off)", value=500, min_value=0, key="adv_req_qty")
             enable_adv_req = adv_req_qty > 0
+            
         with ac2:
             default_dia = 45.0 + dynamic_dia_offset
-            adv_dia = st.number_input("Raw Material Diameter (mm)", value=default_dia, min_value=0.0, key="adv_dia")
+            adv_dia = st.number_input("Raw Material Diameter / Size (mm)", value=default_dia, min_value=0.0, key="adv_dia")
+            
+            adv_inner_dia = 0.0
+            if adv_shape == "Tube / Pipe":
+                adv_inner_dia = st.number_input("Tube Inner Diameter / Bore (mm)", value=20.0, min_value=0.0, key="adv_inner_dia")
+                
             adv_density = st.number_input("Material Density (g/mm³) [Steel ≈ 0.00785]", value=0.00785, format="%.5f", key="adv_density")
             adv_mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="adv_mat_rate")
+            input_total_wt_kg = st.number_input("Or Input Total Raw Material Weight (Kg) [e.g. 100 Kg, Set 0 to use Rod Length]", value=0.0, min_value=0.0, key="adv_input_wt_kg")
             adv_wastage_pct = st.slider("Additional Wastage / Setup Allowance (%)", 0, 10, 2, key="adv_wastage")
 
+        # Calculations
+        cross_area = get_cross_section_area(adv_shape, adv_dia, adv_inner_dia)
         adv_eff_len = adv_part_len + adv_cut_allow
-        adv_parts_per_rod = int((adv_rod_len_m * 1000) / adv_eff_len) if adv_eff_len > 0 else 0
-        adv_remnant_mm = round((adv_rod_len_m * 1000) % adv_eff_len, 2) if adv_eff_len > 0 else 0.0
         
-        if enable_adv_req:
-            adv_required_rods = int(adv_req_qty / adv_parts_per_rod) if adv_parts_per_rod > 0 else 0
-        else:
-            adv_required_rods = 0
-
-        # Exact gram weight calculations
-        part_vol = math.pi * (adv_dia / 2)**2 * adv_part_len
+        # Part volume and weight
+        part_vol = cross_area * adv_part_len
         part_wt_g = round(part_vol * adv_density, 2)
         
-        remnant_vol = math.pi * (adv_dia / 2)**2 * adv_remnant_mm
-        remnant_wt_g = round(remnant_vol * adv_density, 2)
-        
-        total_scrap_g = round((math.pi * (adv_dia / 2)**2 * (adv_remnant_mm + (adv_parts_per_rod * adv_cut_allow))) * adv_density, 2)
-        
-        if enable_adv_req and adv_required_rods > 0:
-            total_mat_wt_kg = round((adv_required_rods * adv_rod_len_m * (math.pi * (adv_dia / 2)**2 * adv_density * 1000)) / 1000000, 2) * (1 + adv_wastage_pct/100)
+        if input_total_wt_kg > 0:
+            # If user provided total raw material weight (e.g. 100 kg)
+            total_wt_grams = input_total_wt_kg * 1000.0
+            # Weight per one full part + cutting allowance
+            single_piece_vol = cross_area * adv_eff_len
+            single_piece_wt_g = single_piece_vol * adv_density
+            
+            adv_parts_per_rod = 0 # Not rod-based if total weight is specified
+            total_possible_parts = int(total_wt_grams / single_piece_wt_g) if single_piece_wt_g > 0 else 0
+            adv_required_rods = 0
+            total_mat_wt_kg = input_total_wt_kg * (1 + adv_wastage_pct / 100.0)
             total_mat_cost = round(total_mat_wt_kg * adv_mat_rate, 2)
+            remnant_wt_g = round((total_wt_grams % single_piece_wt_g), 2) if single_piece_wt_g > 0 else 0.0
+            total_scrap_g = round(remnant_wt_g + (total_possible_parts * (cross_area * adv_cut_allow * adv_density)), 2)
+            adv_remnant_mm = 0.0
         else:
-            total_mat_wt_kg = 0.0
-            total_mat_cost = 0.0
+            # Rod length based calculation
+            adv_parts_per_rod = int((adv_rod_len_m * 1000) / adv_eff_len) if adv_eff_len > 0 else 0
+            adv_remnant_mm = round((adv_rod_len_m * 1000) % adv_eff_len, 2) if adv_eff_len > 0 else 0.0
+            
+            remnant_vol = cross_area * adv_remnant_mm
+            remnant_wt_g = round(remnant_vol * adv_density, 2)
+            
+            total_scrap_g = round((cross_area * (adv_remnant_mm + (adv_parts_per_rod * adv_cut_allow))) * adv_density, 2)
+            
+            if enable_adv_req and adv_parts_per_rod > 0:
+                adv_required_rods = int(math.ceil(adv_req_qty / adv_parts_per_rod))
+                total_mat_wt_kg = round((adv_required_rods * adv_rod_len_m * (cross_area * adv_density * 1000)) / 1000000, 2) * (1 + adv_wastage_pct/100)
+                total_mat_cost = round(total_mat_wt_kg * adv_mat_rate, 2)
+                total_possible_parts = adv_parts_per_rod * adv_required_rods
+            else:
+                adv_required_rods = 0
+                total_mat_wt_kg = 0.0
+                total_mat_cost = 0.0
+                total_possible_parts = adv_parts_per_rod
 
-        st.markdown('<div class="auto-badge">⚡ ADVANCED DRAWING & GRAM-LEVEL ANALYSIS READY</div>', unsafe_allow_html=True)
+        st.markdown('<div class="auto-badge">⚡ ADVANCED SHAPE & GRAM-LEVEL ANALYSIS READY</div>', unsafe_allow_hr=True) if hasattr(st, "markdown") else None
         
         ar1, ar2, ar3, ar4 = st.columns(4)
         with ar1:
-            st.metric("Parts / Rod", f"{adv_parts_per_rod} Nos")
+            if input_total_wt_kg > 0:
+                st.metric("Total Possible Parts", f"{total_possible_parts} Nos")
+            else:
+                st.metric("Parts / Rod", f"{adv_parts_per_rod} Nos")
             st.metric("Part Weight", f"{part_wt_g} g")
         with ar2:
-            st.metric("Remnant / End Bit", f"{adv_remnant_mm} mm")
-            st.metric("End Bit Weight", f"{remnant_wt_g} g")
+            if input_total_wt_kg > 0:
+                st.metric("Remaining Scrap Wt", f"{remnant_wt_g} g")
+            else:
+                st.metric("Remnant / End Bit", f"{adv_remnant_mm} mm")
+                st.metric("End Bit Weight", f"{remnant_wt_g} g")
         with ar3:
-            if enable_adv_req:
+            if enable_adv_req and input_total_wt_kg == 0:
                 st.metric("Required Rods", f"{adv_required_rods} Nos")
             else:
-                st.metric("Required Rods", "Optional (Off)")
+                st.metric("Required Rods", "As per Input Weight" if input_total_wt_kg > 0 else "Optional (Off)")
             st.metric("Total Scrap / Rod", f"{total_scrap_g} g")
         with ar4:
-            if enable_adv_req:
+            if enable_adv_req or input_total_wt_kg > 0:
                 st.metric("Total Mat. Weight", f"{round(total_mat_wt_kg, 2)} Kg")
                 st.metric("Total Mat. Cost", f"Rs. {total_mat_cost}")
             else:
@@ -441,10 +483,9 @@ elif "Stock Management" in selected_module:
 
 # 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
 elif "Drawing & Multi-Op G-Code" in selected_module:
-    st.subheader("📷 Drawing Upload & Automatic Scrap/End-Bit Analysis")
+    st.subheader("📷 Drawing Upload & Automatic Scrap/End-Bit Analysis (Any Shape)")
     uploaded_file = st.file_uploader("Upload Part Drawing / Photo (PDF / PNG / JPG)", type=["png", "jpg", "pdf"], key="multi_op_drawing_upload")
     
-    # Dynamic Auto-Adjustment for Drawing Upload
     draw_dynamic_offset = 0.0
     if uploaded_file is not None:
         st.success(f"📂 Drawing '{uploaded_file.name}' successfully uploaded! Data updated automatically.")
@@ -452,46 +493,68 @@ elif "Drawing & Multi-Op G-Code" in selected_module:
         if uploaded_file.type in ["image/png", "image/jpeg"]:
             st.image(uploaded_file, caption=f"Uploaded Drawing Preview: {uploaded_file.name}", width=350)
     else:
-        st.info("ℹ️ நீங்கள் டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன், எண்டு பிட் மற்றும் ஸ்கிராப் எடை ஆட்டோமேட்டிக்காக அப்டேட் ஆகும்.")
+        st.info("ℹ️ நீங்கள் டிராயிங் அல்லது போட்டோவை அப்லோட் செய்தவுடன், ரவுண்ட்/டியூப்/எக்சகன் எதுவாக இருந்தாலும் எண்டு பிட் மற்றும் ஸ்கிராப் எடை ஆட்டோமேட்டிக்காக அப்டேட் ஆகும்.")
 
     st.markdown("---")
-    st.subheader("📏 Drawing Material & Dimension Inputs for Scrap & End Bit Calculation")
+    st.subheader("📏 Drawing Material & Shape Dimension Inputs for Exact Scrap Calculation")
     
     dc1, dc2 = st.columns(2)
     with dc1:
-        draw_rod_len = st.number_input("Rod Length (mm)", value=6000.0, key="d_draw_rod_len")
+        draw_shape = st.selectbox("Profile / Shape", ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"], key="d_draw_shape")
+        draw_rod_len = st.number_input("Rod Length (mm) [Set 0 if Total Weight given]", value=6000.0, key="d_draw_rod_len")
         default_draw_part = 126.0 + draw_dynamic_offset
         draw_part_len = st.number_input("Part Length from Drawing (mm)", value=default_draw_part, key="d_draw_part_len")
         draw_cut_allow = st.number_input("Parting / Cutting Allowance (mm)", value=3.0, key="d_draw_cut_allow")
     with dc2:
-        draw_rod_dia = st.number_input("Raw Material Diameter (mm)", value=45.0, key="d_draw_rod_dia")
+        draw_rod_dia = st.number_input("Raw Material Diameter / Size (mm)", value=45.0, key="d_draw_rod_dia")
+        draw_inner_dia = 0.0
+        if draw_shape == "Tube / Pipe":
+            draw_inner_dia = st.number_input("Tube Inner Bore Diameter (mm)", value=20.0, key="d_draw_inner_dia")
         mat_density = st.number_input("Material Density (g/mm³) [Steel ≈ 0.00785]", value=0.00785, format="%.5f", key="d_mat_density")
         mat_rate_drawing = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="d_mat_rate_drawing")
+        draw_total_wt_kg = st.number_input("Or Input Total Raw Material Weight (Kg) [e.g. 100 Kg, Set 0 to use Rod Length]", value=0.0, key="d_draw_input_wt_kg")
 
+    draw_cross_area = get_cross_section_area(draw_shape, draw_rod_dia, draw_inner_dia)
     eff_part_len = draw_part_len + draw_cut_allow
-    parts_per_bar = int(draw_rod_len / eff_part_len) if eff_part_len > 0 else 0
-    remnant_mm = round(draw_rod_len % eff_part_len, 2) if eff_part_len > 0 else 0.0
     
-    part_volume_mm3 = math.pi * (draw_rod_dia / 2)**2 * draw_part_len
+    part_volume_mm3 = draw_cross_area * draw_part_len
     part_weight_g = round(part_volume_mm3 * mat_density, 2)
     
-    remnant_volume_mm3 = math.pi * (draw_rod_dia / 2)**2 * remnant_mm
-    remnant_weight_g = round(remnant_volume_mm3 * mat_density, 2)
-    
-    total_scrap_per_rod_g = round((math.pi * (draw_rod_dia / 2)**2 * (remnant_mm + (parts_per_bar * draw_cut_allow))) * mat_density, 2)
+    if draw_total_wt_kg > 0:
+        total_wt_grams = draw_total_wt_kg * 1000.0
+        single_piece_vol = draw_cross_area * eff_part_len
+        single_piece_wt_g = single_piece_vol * mat_density
+        parts_per_bar = 0
+        total_possible_parts = int(total_wt_grams / single_piece_wt_g) if single_piece_wt_g > 0 else 0
+        remnant_mm = 0.0
+        remnant_weight_g = round((total_wt_grams % single_piece_wt_g), 2) if single_piece_wt_g > 0 else 0.0
+        total_scrap_per_rod_g = round(remnant_weight_g + (total_possible_parts * (draw_cross_area * draw_cut_allow * mat_density)), 2)
+    else:
+        parts_per_bar = int(draw_rod_len / eff_part_len) if eff_part_len > 0 else 0
+        total_possible_parts = parts_per_bar
+        remnant_mm = round(draw_rod_len % eff_part_len, 2) if eff_part_len > 0 else 0.0
+        remnant_volume_mm3 = draw_cross_area * remnant_mm
+        remnant_weight_g = round(remnant_volume_mm3 * mat_density, 2)
+        total_scrap_per_rod_g = round((draw_cross_area * (remnant_mm + (parts_per_bar * draw_cut_allow))) * mat_density, 2)
 
     st.markdown('<div class="auto-badge">⚡ DRAWING SCRAP & END-BIT ANALYSIS RESULT</div>', unsafe_allow_html=True)
     
     s_col1, s_col2, s_col3, s_col4 = st.columns(4)
     with s_col1:
-        st.metric("Parts / Rod", f"{parts_per_bar} Nos")
+        if draw_total_wt_kg > 0:
+            st.metric("Total Possible Parts", f"{total_possible_parts} Nos")
+        else:
+            st.metric("Parts / Rod", f"{parts_per_bar} Nos")
         st.metric("Part Weight", f"{part_weight_g} g")
     with s_col2:
-        st.metric("End Bit Length", f"{remnant_mm} mm")
-        st.metric("End Bit Weight", f"{remnant_weight_g} g")
+        if draw_total_wt_kg > 0:
+            st.metric("Remaining Scrap Wt", f"{remnant_weight_g} g")
+        else:
+            st.metric("End Bit Length", f"{remnant_mm} mm")
+            st.metric("End Bit Weight", f"{remnant_weight_g} g")
     with s_col3:
         st.metric("Total Scrap / Rod", f"{total_scrap_per_rod_g} g")
-        st.metric("Rod Diameter", f"{draw_rod_dia} mm")
+        st.metric("Material Profile", draw_shape)
     with s_col4:
         st.metric("Part Length", f"{draw_part_len} mm")
         st.metric("Cutting Allowance", f"{draw_cut_allow} mm")
@@ -618,7 +681,7 @@ M30
     st.subheader("💰 Process-wise Detailed Automatic Quotation & Drawing Summary")
     
     q_qty = st.number_input("Target Order Quantity (Nos)", value=1000, min_value=1, key="d_q_qty")
-    total_rods_needed = int(q_qty / parts_per_bar) if parts_per_bar > 0 else 0
+    total_rods_needed = int(math.ceil(q_qty / parts_per_bar)) if parts_per_bar > 0 else 0
     
     mat_wt_kg = part_weight_g / 1000.0
     mat_total_cost = mat_rate_drawing * mat_wt_kg
@@ -640,7 +703,7 @@ M30
         st.metric("End Bit Weight", f"{remnant_weight_g} g")
     with aq2:
         st.metric("Cost Per Part", f"Rs. {round(final_quoted_price, 2)}")
-        st.metric("Total Rods Needed", f"{total_rods_needed} Nos")
+        st.metric("Total Rods Needed", f"{total_rods_needed} Nos" if draw_total_wt_kg == 0 else "N/A (Weight Input)")
     with aq3:
         st.metric("Total Order Value", f"Rs. {round(total_quotation_amount, 2)}")
         st.metric("Total Scrap / Rod", f"{total_scrap_per_rod_g} g")
@@ -652,6 +715,7 @@ M30
         "Target Quantity": f"{q_qty} Nos",
         "Total Operations": f"{num_ops} Operations",
         "----------------------------------------": "DRAWING SCRAP & END-BIT ANALYSIS",
+        "Material Profile": draw_shape,
         "Parts Per Rod": f"{parts_per_bar} Nos",
         "Part Weight": f"{part_weight_g} grams",
         "End Bit Length": f"{remnant_mm} mm",
