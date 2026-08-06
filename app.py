@@ -150,7 +150,7 @@ def get_cross_section_area(shape, dia_or_size, inner_dia=0.0):
         return max(0.0, outer_area - inner_area)
     return math.pi * (dia_or_size / 2.0) ** 2
 
-# Initialize Session States for Drawing Inputs to match drawing dimensions (18.0 mm dia, 38.70 mm length)
+# Initialize Session States for Drawing Inputs
 if "d_draw_rod_dia" not in st.session_state:
     st.session_state["d_draw_rod_dia"] = 18.0
 if "d_draw_part_len" not in st.session_state:
@@ -190,8 +190,11 @@ if "Home" in selected_module:
             st.session_state["selected_module"] = "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
             st.rerun()
 
-# 2. ROD CALCULATOR (Simple vs Advanced Mode)
+# 2. ROD CALCULATOR
 elif "Rod Calculator" in selected_module:
+    if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
+        st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+        st.rerun()
     st.subheader("📐 Rod Calculator - Simple & Advanced Modes")
     mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
     
@@ -363,6 +366,9 @@ elif "Rod Calculator" in selected_module:
 
 # 3. PRODUCTION CALCULATOR
 elif "Production Calculator" in selected_module:
+    if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
+        st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+        st.rerun()
     st.subheader("⏱️ Production Days & Output Calculator & PDF Report")
     
     c1, c2 = st.columns(2)
@@ -404,6 +410,9 @@ elif "Production Calculator" in selected_module:
 
 # 4. COSTING & QUOTATION CALCULATOR
 elif "Costing & Quotation Calculator" in selected_module:
+    if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
+        st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+        st.rerun()
     st.subheader("💰 Costing & Quotation Calculator")
     
     col1, col2 = st.columns(2)
@@ -454,6 +463,9 @@ elif "Costing & Quotation Calculator" in selected_module:
 
 # 5. STOCK MANAGEMENT
 elif "Stock Management" in selected_module:
+    if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
+        st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+        st.rerun()
     st.subheader("📦 Stock & Inventory Management")
     
     s1, s2, s3 = st.columns(3)
@@ -476,6 +488,9 @@ elif "Stock Management" in selected_module:
 
 # 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR / AUTO REPORT
 elif "Drawing & Multi-Op G-Code" in selected_module:
+    if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
+        st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+        st.rerun()
     st.subheader("📷 Drawing Upload & Automatic Scrap / Multi-Op Report Generator")
     uploaded_file = st.file_uploader("Upload Part Drawing / Photo (PDF / PNG / JPG)", type=["png", "jpg", "pdf"], key="multi_op_drawing_upload")
     
@@ -772,6 +787,9 @@ M30
 
 # 7. MORE MENU & SETTINGS
 elif "More Menu & Settings" in selected_module:
+    if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
+        st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+        st.rerun()
     st.subheader("⚙️ More Menu & Settings (Settings & Masters)")
     
     lang = st.selectbox(
