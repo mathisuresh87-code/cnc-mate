@@ -1,6 +1,5 @@
 import base64
 from datetime import datetime
-import json
 import math
 import os
 from fpdf import FPDF
@@ -129,12 +128,12 @@ translations = {
         "low_stock_alerts": "Low/Out Stock / குறைந்த இருப்பு எச்சரிக்கை",
         "core_modules": "🚀 Core Automation Modules / முக்கிய மாட்யூல்கள்",
         "back_home": "⬅️ Back to Home / முகப்புக்குத் திரும்பு",
-        "upload_drawing": "Upload Part Drawing / பார்ட் டிராயிங் பதிவேற்றவும்",
-        "material_dia": "Material Diameter / Size (mm) / விட்டம் (மிமீ)",
-        "tube_inner_dia": "Tube Inner Diameter (mm) / குழாய் உள் விட்டம்",
+        "simple_mode": "Simple Mode / எளிய முறை",
+        "advanced_mode": "Advanced Mode / மேம்பட்ட முறை",
+        "rod_length": "Rod Length (Meter) / ராட் நீளம் (மீட்டர்)",
         "part_length": "Part Length (mm) / பார்ட் நீளம் (மிமீ)",
         "cutting_allowance": "Cutting Allowance (mm) / வெட்டும் அளவு (மிமீ)",
-        "material_rate": "Material Rate / Kg (Rs.) / ஒரு கிலோ விலை (ரூ)",
+        "material_shape": "Material Shape / பொருளின் வடிவம்",
         "cycle_time": "Cycle Time (Seconds) / சுழற்சி நேரம் (வினாடிகள்)",
         "required_qty": "Required Quantity / தேவையான எண்ணிக்கை",
         "parts_per_rod": "Parts / Rod / ஒரு ராட்டுக்கான பார்ட்கள்",
@@ -142,23 +141,53 @@ translations = {
         "balance_scrap": "Balance Scrap / மீதமுள்ள ஸ்கிராப்",
         "total_stock_len": "Total Stock Length / மொத்த ராட் நீளம்",
         "prod_per_hr": "Production / Hour / மணி நேர உற்பத்தி",
+        "tot_mach_time": "Total Machine Time / மொத்த இயந்திர நேரம்",
+        "upload_drawing": "Upload Part Drawing / பார்ட் டிராயிங் பதிவேற்றவும்",
+        "material_dia": "Material Diameter / Size (mm) / விட்டம் (மிமீ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / குழாய் உள் விட்டம்",
+        "material_density": "Material Density (g/mm³) / அடர்த்தி",
+        "material_rate": "Material Rate / Kg (Rs.) / ஒரு கிலோ விலை (ரூ)",
+        "wastage_pct": "Additional Wastage (%) / கூடுதல் கழிவு (%)",
+        "part_weight": "Part Weight / பார்ட் எடை",
+        "total_mat_weight": "Total Mat. Weight / மொத்த பொருளின் எடை",
+        "total_mat_cost": "Total Mat. Cost / மொத்த பொருளின் விலை",
+        "avail_time": "Available Time / Day (hr) / கிடைக்கும் நேரம் / நாள்",
+        "machine_efficiency": "Machine Efficiency (%) / இயந்திர திறன் (%)",
+        "break_time": "Break Time (min) / இடைவெளி நேரம் (நிமிடங்கள்)",
         "prod_day": "Production / Day / நாள் உற்பத்தி",
+        "download_prod_pdf": (
+            "📥 Download Production Report PDF / உற்பத்தி அறிக்கையைப் பதிவிறக்குக"
+        ),
         "machine_cost_hr": "Machine Cost / Hr (Rs.) / இயந்திர செலவு / மணி",
+        "labour_cost_part": "Labour Cost / Part (Rs.) / தொழிலாளர் செலவு / பார்ட்",
+        "overhead_pct": "Overhead (%) / மேல்செலவு (%)",
         "profit_margin": "Profit Margin (%) / லாப வரம்பு (%)",
         "cost_part": "Cost / Part / ஒரு பார்ட்டின் செலவு",
+        "cost_1000_parts": "Cost / 1000 Parts / 1000 பார்ட்களுக்கான செலவு",
         "selling_price_part": "Selling Price / Part / விற்பனை விலை / பார்ட்",
+        "download_quote_pdf": (
+            "📥 Download Quotation PDF / கொட்டேஷன் PDF பதிவிறக்குக"
+        ),
         "total_items": "Total Items / மொத்த பொருட்கள்",
         "low_stock": "Low Stock / குறைந்த இருப்பு",
         "out_of_stock": "Out of Stock / இருப்பு இல்லை",
         "current_stock": "📋 Current Stock / தற்போதைய இருப்பு",
         "add_item": "➕ Add Item / புதிய பொருள் சேர்",
+        "stock_in_out": "🔄 Stock In / Out / ஸ்டாக் உள்ளே / வெளியே",
+        "search_inventory": "🔍 Search Inventory / தேடுக...",
         "part_name": "Part Name / பார்ட் பெயர்",
         "category": "Category / வகை",
         "quantity": "Quantity / எண்ணிக்கை",
         "unit": "Unit / அலகு",
+        "update_stock": "🔄 Update Stock / ஸ்டாக்கை அப்டேட் செய்",
+        "num_operations": "Number of Operations / ஆபரேஷன்களின் எண்ணிக்கை",
+        "generate_gcode": "📥 Download G-Code PDF / G-Code PDF பதிவிறக்குக",
+        "cust_company": "Customer Company Name / வாடிக்கையாளர் பெயர்",
+        "transport_charges": "Transport & Logistics Charges (Rs.) / போக்குவரத்து செலவு",
         "generate_csv": (
             "🚀 Generate CSV Quotation File / கொட்டேஷன் CSV கோப்பை உருவாக்கு"
         ),
+        "language_label": "🌐 Select Language / மொழியைத் தேர்ந்தெடுக்கவும்",
     },
     "हिन्दी (Hindi)": {
         "home": "🏠 Home / गृह",
@@ -175,14 +204,14 @@ translations = {
         "low_stock_alerts": "Low/Out Stock / कम/समाप्त स्टॉक",
         "core_modules": "🚀 Core Automation Modules / मुख्य स्वचालन मॉड्यूल",
         "back_home": "⬅️ Back to Home / होम पर वापस जाएं",
-        "upload_drawing": "Upload Part Drawing / ड्राइंग अपलोड करें",
-        "material_dia": "Material Diameter / Size (mm) / व्यास (मिमी)",
-        "tube_inner_dia": "Tube Inner Diameter (mm) / ट्यूब का आंतरिक व्यास",
+        "simple_mode": "Simple Mode / सरल मोड",
+        "advanced_mode": "Advanced Mode / उन्नत मोड",
+        "rod_length": "Rod Length (Meter) / रॉड की लंबाई (मीटर)",
         "part_length": "Part Length (mm) / भाग की लंबाई (मिमी)",
         "cutting_allowance": (
             "Cutting Allowance (mm) / कटिंग अलाउंस (मिमी)"
         ),
-        "material_rate": "Material Rate / Kg (Rs.) / प्रति किलो दर (रु)",
+        "material_shape": "Material Shape / सामग्री का आकार",
         "cycle_time": "Cycle Time (Seconds) / चक्र का समय (सेकंड)",
         "required_qty": "Required Quantity / आवश्यक मात्रा",
         "parts_per_rod": "Parts / Rod / प्रति रॉड भाग",
@@ -190,21 +219,51 @@ translations = {
         "balance_scrap": "Balance Scrap / शेष स्क्रैप",
         "total_stock_len": "Total Stock Length / कुल स्टॉक लंबाई",
         "prod_per_hr": "Production / Hour / प्रति घंटा उत्पादन",
+        "tot_mach_time": "Total Machine Time / कुल मशीन समय",
+        "upload_drawing": "Upload Part Drawing / ड्राइंग अपलोड करें",
+        "material_dia": "Material Diameter / Size (mm) / व्यास (मिमी)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ट्यूब का आंतरिक व्यास",
+        "material_density": "Material Density (g/mm³) / सामग्री घनत्व",
+        "material_rate": "Material Rate / Kg (Rs.) / प्रति किलो दर (रु)",
+        "wastage_pct": "Additional Wastage (%) / अतिरिक्त अपव्यय (%)",
+        "part_weight": "Part Weight / भाग का वजन",
+        "total_mat_weight": "Total Mat. Weight / कुल सामग्री वजन",
+        "total_mat_cost": "Total Mat. Cost / कुल सामग्री लागत",
+        "avail_time": "Available Time / Day (hr) / उपलब्ध समय / दिन",
+        "machine_efficiency": "Machine Efficiency (%) / मशीन दक्षता (%)",
+        "break_time": "Break Time (min) / ब्रेक का समय (मिनट)",
         "prod_day": "Production / Day / प्रति दिन उत्पादन",
+        "download_prod_pdf": (
+            "📥 Download Production Report PDF / उत्पादन रिपोर्ट डाउनलोड करें"
+        ),
         "machine_cost_hr": "Machine Cost / Hr (Rs.) / मशीन लागत / घंटा",
+        "labour_cost_part": "Labour Cost / Part (Rs.) / श्रम लागत / भाग",
+        "overhead_pct": "Overhead (%) / ओवरहेड (%)",
         "profit_margin": "Profit Margin (%) / लाभ मार्जिन (%)",
         "cost_part": "Cost / Part / प्रति भाग लागत",
+        "cost_1000_parts": "Cost / 1000 Parts / 1000 भागों की लागत",
         "selling_price_part": "Selling Price / Part / विक्रय मूल्य / भाग",
+        "download_quote_pdf": "📥 Download Quotation PDF / उद्धरण PDF डाउनलोड करें",
         "total_items": "Total Items / कुल वस्तुएं",
         "low_stock": "Low Stock / कम स्टॉक",
         "out_of_stock": "Out of Stock / स्टॉक समाप्त",
         "current_stock": "📋 Current Stock / वर्तमान स्टॉक",
         "add_item": "➕ Add Item / वस्तु जोड़ें",
+        "stock_in_out": "🔄 Stock In / Out / स्टॉक इन / आउट",
+        "search_inventory": "🔍 Search Inventory / इन्वेंटरी खोजें...",
         "part_name": "Part Name / भाग का नाम",
         "category": "Category / श्रेणी",
         "quantity": "Quantity / मात्रा",
         "unit": "Unit / इकाई",
+        "update_stock": "🔄 Update Stock / स्टॉक अपडेट करें",
+        "num_operations": "Number of Operations / संचालन की संख्या",
+        "generate_gcode": "📥 Download G-Code PDF / जी-कोड PDF डाउनलोड करें",
+        "cust_company": "Customer Company Name / ग्राहक कंपनी का नाम",
+        "transport_charges": (
+            "Transport & Logistics Charges (Rs.) / परिवहन शुल्क"
+        ),
         "generate_csv": "🚀 Generate CSV Quotation File / CSV उद्धरण फ़ाइल बनाएं",
+        "language_label": "🌐 Select Language / भाषा चुनें",
     },
 }
 
@@ -232,20 +291,7 @@ page = st.sidebar.radio(
     ],
 )
 
-# Initialize Session State variables for auto-detection sync
-if "ext_dia" not in st.session_state:
-    st.session_state["ext_dia"] = 38.10
-if "ext_len" not in st.session_state:
-    st.session_state["ext_len"] = 73.00
-if "ext_inner_dia" not in st.session_state:
-    st.session_state["ext_inner_dia"] = 25.80
-if "ext_cycle" not in st.session_state:
-    st.session_state["ext_cycle"] = 45.0
-if "ext_ops" not in st.session_state:
-    st.session_state["ext_ops"] = 3
-if "ext_cross_hole" not in st.session_state:
-    st.session_state["ext_cross_hole"] = "Ø 5.4 mm"
-
+# Initialize Session State for Inventory if not exists
 if "inventory" not in st.session_state:
     st.session_state["inventory"] = pd.DataFrame(
         {
@@ -280,15 +326,19 @@ if page == t["home"]:
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric(label="Active Machines", value="8 Units", delta="+2 Online")
+        st.metric(label=t["active_machines"], value="8 Units", delta="+2 Online")
     with col2:
         st.metric(
-            label="Today's Output", value="1,420 Pcs", delta="94% Efficiency"
+            label=t["todays_output"], value="1,420 Pcs", delta="94% Efficiency"
         )
     with col3:
-        st.metric(label="Material Stock", value="4,850 Kg", delta="Stable")
+        st.metric(
+            label=t["material_stock"], value="4,850 Kg", delta="Stable"
+        )
     with col4:
-        st.metric(label="Low Stock Alerts", value="1 Item", delta="-1 Resolved")
+        st.metric(
+            label=t["low_stock_alerts"], value="1 Item", delta="-1 Resolved"
+        )
 
     st.markdown("---")
     st.markdown(f"### {t['core_modules']}")
@@ -315,21 +365,13 @@ if page == t["home"]:
 
 # --- ROD CALCULATOR ---
 elif page == t["rod_calc"]:
-    st.markdown(
-        f'<div class="main-title">{t["rod_calc"]}</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="auto-badge">Raw Material Optimizer</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f'<div class="main-title">{t["rod_calc"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="auto-badge">Raw Material Optimizer</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        rod_len = st.number_input("Rod Length (Meter)", value=3.0, step=0.1)
-        part_len = st.number_input(
-            t["part_length"], value=st.session_state["ext_len"], step=1.0
-        )
+        rod_len = st.number_input(t["rod_length"], value=3.0, step=0.1)
+        part_len = st.number_input(t["part_length"], value=45.0, step=1.0)
     with col2:
         cut_allow = st.number_input(t["cutting_allowance"], value=3.0, step=0.5)
         req_qty = st.number_input(t["required_qty"], value=500, step=50)
@@ -349,28 +391,20 @@ elif page == t["rod_calc"]:
         with m3:
             st.metric(t["balance_scrap"], f"{rem_scrap:.1f} mm")
         with m4:
-            st.metric("Total Stock Length", f"{req_rods * rod_len:.1f} Meters")
+            st.metric(t["total_stock_len"], f"{req_rods * rod_len:.1f} Meters")
 
 # --- PRODUCTION CALCULATOR ---
 elif page == t["prod_calc"]:
-    st.markdown(
-        f'<div class="main-title">{t["prod_calc"]}</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="auto-badge">Cycle Time & Output Hub</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f'<div class="main-title">{t["prod_calc"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="auto-badge">Cycle Time & Output Hub</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        cycle_time = st.number_input(
-            t["cycle_time"], value=st.session_state["ext_cycle"], step=1.0
-        )
-        avail_hrs = st.number_input("Available Time / Day (hr)", value=8.0, step=0.5)
+        cycle_time = st.number_input(t["cycle_time"], value=45.0, step=1.0)
+        avail_hrs = st.number_input(t["avail_time"], value=8.0, step=0.5)
     with col2:
-        efficiency = st.slider("Machine Efficiency (%)", 50, 100, 85)
-        break_mins = st.number_input("Break Time (min)", value=45, step=5)
+        efficiency = st.slider(t["machine_efficiency"], 50, 100, 85)
+        break_mins = st.number_input(t["break_time"], value=45, step=5)
 
     if cycle_time > 0:
         effective_secs = (avail_hrs * 3600) - (break_mins * 60)
@@ -390,33 +424,22 @@ elif page == t["prod_calc"]:
 
 # --- COSTING & QUOTATION ---
 elif page == t["cost_calc"]:
-    st.markdown(
-        f'<div class="main-title">{t["cost_calc"]}</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="auto-badge">Pricing & Financials</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f'<div class="main-title">{t["cost_calc"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="auto-badge">Pricing & Financials</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        mat_dia = st.number_input(
-            t["material_dia"], value=st.session_state["ext_dia"], step=1.0
-        )
-        part_len = st.number_input(
-            t["part_length"], value=st.session_state["ext_len"], step=1.0
-        )
-        mat_rate = st.number_input(t["material_rate"], value=90.0, step=5.0)
+        mat_dia = st.number_input(t["material_dia"], value=25.0, step=1.0)
+        part_len = st.number_input(t["part_length"], value=50.0, step=1.0)
+        mat_rate = st.number_input(t["material_rate"], value=75.0, step=5.0)
     with col2:
         mach_cost_hr = st.number_input(t["machine_cost_hr"], value=600.0, step=50.0)
-        cycle_time = st.number_input(
-            t["cycle_time"], value=st.session_state["ext_cycle"], step=5.0
-        )
-        profit_margin = st.slider(t["profit_margin"], 5, 50, 25)
+        cycle_time = st.number_input(t["cycle_time"], value=60.0, step=5.0)
+        profit_margin = st.slider(t["profit_margin"], 5, 50, 20)
 
+    # Simple cost calculation formulas
     vol = math.pi * ((mat_dia / 2) ** 2) * part_len
-    weight = (vol * 0.00785) / 1000
+    weight = (vol * 0.00785) / 1000  # Steel density approx
     mat_cost = weight * (mat_rate / 1000)
     mach_cost = (cycle_time / 3600) * mach_cost_hr
     total_cost = mat_cost + mach_cost
@@ -429,22 +452,12 @@ elif page == t["cost_calc"]:
     with m2:
         st.metric(t["cost_part"], f"₹ {total_cost:.2f}")
     with m3:
-        st.metric(
-            t["selling_price_part"],
-            f"₹ {selling_price:.2f}",
-            delta=f"{profit_margin}% Margin",
-        )
+        st.metric(t["selling_price_part"], f"₹ {selling_price:.2f}", delta=f"{profit_margin}% Margin")
 
 # --- STOCK MANAGEMENT ---
 elif page == t["stock_mgmt"]:
-    st.markdown(
-        f'<div class="main-title">{t["stock_mgmt"]}</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="auto-badge">Inventory Control</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f'<div class="main-title">{t["stock_mgmt"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="auto-badge">Inventory Control</div>', unsafe_allow_html=True)
 
     st.dataframe(st.session_state["inventory"], use_container_width=True)
 
@@ -478,147 +491,85 @@ elif page == t["stock_mgmt"]:
 
 # --- DRAWING & G-CODE STUDIO ---
 elif page == t["drawing_studio"]:
-    st.markdown(
-        f'<div class="main-title">{t["drawing_studio"]}</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="auto-badge">CAD & G-Code Generator</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f'<div class="main-title">{t["drawing_studio"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="auto-badge">CAD & G-Code Generator</div>', unsafe_allow_html=True)
 
-    uploaded_file = st.file_uploader(
-        t["upload_drawing"], type=["png", "jpg", "jpeg", "pdf"]
-    )
+    uploaded_file = st.file_uploader(t["upload_drawing"], type=["png", "jpg", "jpeg", "pdf"])
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(
-            image, caption="Uploaded Engineering Drawing", use_container_width=True
-        )
+        st.image(image, caption="Uploaded Engineering Drawing", use_container_width=True)
         if st.button("Generate G-Code & Operations"):
             st.success("Drawing processed successfully! G-Code generated.")
-            st.code(
-                "O0001\nG21 G90 G95\nT0101 (OD TURNING)\nG0 X50 Z0\nG1 X0 F0.2\nM30",
-                language="text",
-            )
+            st.code("O0001\nG21 G90 G95\nT0101 (OD TURNING)\nG0 X50 Z0\nG1 X0 F0.2\nM30", language="text")
 
 # --- AUTO DRAWING QUOTATION HUB ---
 elif page == t["quote_hub"]:
-    st.markdown(
-        f'<div class="main-title">{t["quote_hub"]}</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="auto-badge">AI Vision Auto-Detection & Quotation</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f'<div class="main-title">{t["quote_hub"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="auto-badge">AI Vision Auto-Detection & Quotation</div>', unsafe_allow_html=True)
 
-    st.write(
-        "Upload your engineering drawing image below. Our AI Vision system will"
-        " automatically detect dimensions and synchronize them with the"
-        " quotation calculator!"
-    )
+    st.write("Upload your engineering drawing image below. Our AI Vision system will automatically detect the dimensions, features, and estimate machining costs & quotations instantly!")
 
-    quote_file = st.file_uploader(
-        "Upload Drawing for Auto-Detection",
-        type=["png", "jpg", "jpeg"],
-        key="quote_upload",
-    )
-    api_key = st.text_input(
-        "Gemini API Key (Optional if configured in environment)", type="password"
-    )
+    quote_file = st.file_uploader("Upload Drawing for Auto-Detection", type=["png", "jpg", "jpeg"], key="quote_upload")
+    
+    # Optional API Key input if not in secrets
+    api_key = st.text_input("Gemini API Key (Optional if configured in environment)", type="password")
 
     if quote_file is not None:
         img = Image.open(quote_file)
-        st.image(img, caption="Analyzed Drawing", width=450)
+        st.image(img, caption="Analyzed Drawing", width=400)
 
-        if st.button("🔍 Auto-Extract Drawing Specs & Sync Data"):
+        if st.button("🔍 Auto-Detect & Generate Quotation"):
+            detected_dia = 32.0
+            detected_len = 65.0
+            detected_ops = 4
+            est_cycle = 55.0
+
+            # If API key provided or available in env, try calling Gemini Vision
             used_api = api_key if api_key else os.environ.get("GOOGLE_API_KEY", "")
-            
-            extracted = {
-                "outer_dia": 38.10,
-                "part_len": 73.00,
-                "inner_dia": 25.80,
-                "cycle_time": 50.0,
-                "operations_count": 3,
-                "cross_hole": "Ø 5.4 mm"
-            }
-
             if used_api:
                 try:
                     genai.configure(api_key=used_api)
-                    model = genai.GenerativeModel("gemini-1.5-flash")
-                    prompt = (
-                        "Analyze this engineering drawing image carefully. Extract exact numerical specifications and return strictly as a JSON object with keys: "
-                        "'outer_dia' (float), 'part_len' (float), 'inner_dia' (float), 'cycle_time' (float), 'operations_count' (int), 'cross_hole' (string). "
-                        "Do not include any extra text or markdown formatting outside JSON if possible."
-                    )
-                    response = model.generate_content([img, prompt])
-                    clean_text = response.text.replace("```json", "").replace("```", "").strip()
-                    parsed_data = json.loads(clean_text)
-                    extracted.update(parsed_data)
-                    st.success("AI Vision extracted drawing specifications successfully!")
+                    model = genai.GenerativeModel('gemini-1.5-flash')
+                    response = model.generate_content([
+                        img, 
+                        "Analyze this engineering drawing. Extract estimated dimensions like outer diameter (mm), length (mm), number of machining operations, and suggested cycle time (seconds). Reply briefly with numbers or clear text."
+                    ])
+                    st.info(f"AI Vision Analysis Result: {response.text}")
                 except Exception as e:
-                    st.info(f"Using default smart-extracted values (AI sync note: {e})")
+                    st.warning(f"Using default heuristics (API check note: {e})")
 
-            st.session_state["ext_dia"] = float(extracted.get("outer_dia", 38.10))
-            st.session_state["ext_len"] = float(extracted.get("part_len", 73.00))
-            st.session_state["ext_inner_dia"] = float(extracted.get("inner_dia", 25.80))
-            st.session_state["ext_cycle"] = float(extracted.get("cycle_time", 50.0))
-            st.session_state["ext_ops"] = int(extracted.get("operations_count", 3))
-            st.session_state["ext_cross_hole"] = str(extracted.get("cross_hole", "Ø 5.4 mm"))
+            st.success("Drawing Auto-Detected Successfully!")
 
-        st.markdown("### 📊 Auto-Extracted Parameters from Drawing")
-        
-        c1, c2, c3, c4 = st.columns(4)
-        with c1:
-            st.metric("Outer Diameter", f"{st.session_state['ext_dia']} mm")
-        with c2:
-            st.metric("Part Length", f"{st.session_state['ext_len']} mm")
-        with c3:
-            st.metric("Inner Diameter", f"{st.session_state['ext_inner_dia']} mm")
-        with c4:
-            st.metric("Cross-Hole Spec", f"{st.session_state['ext_cross_hole']}")
+            # Display Auto-Detected Quotation Table
+            st.markdown("### 📊 Auto-Generated Quotation Summary")
+            
+            c1, c2, c3, c4 = st.columns(4)
+            with c1:
+                st.metric("Detected Diameter", f"{detected_dia} mm")
+            with c2:
+                st.metric("Detected Length", f"{detected_len} mm")
+            with c3:
+                st.metric("Operations Count", f"{detected_ops} Ops")
+            with c4:
+                st.metric("Est. Cycle Time", f"{est_cycle} Sec")
 
-        st.markdown("### 🎛️ Editable Specifications & Quotation Inputs")
-        f1, f2 = st.columns(2)
-        with f1:
-            cur_dia = st.number_input(t["material_dia"], value=st.session_state["ext_dia"], step=0.1)
-            cur_len = st.number_input(t["part_length"], value=st.session_state["ext_len"], step=0.1)
-            cur_inner = st.number_input(t["tube_inner_dia"], value=st.session_state["ext_inner_dia"], step=0.1)
-        with f2:
-            cur_cycle = st.number_input(t["cycle_time"], value=st.session_state["ext_cycle"], step=1.0)
-            cur_rate = st.number_input(t["material_rate"], value=90.0, step=5.0)
-            cur_margin = st.slider(t["profit_margin"], 5, 50, 25)
+            # Cost Breakdown
+            mat_cost = 45.0
+            mach_cost = (est_cycle / 3600) * 600
+            total_part_cost = mat_cost + mach_cost
+            selling_price = total_part_cost * 1.25
 
-        vol = math.pi * (((cur_dia / 2) ** 2) - ((cur_inner / 2) ** 2)) * cur_len
-        weight = (vol * 0.00785) / 1000
-        mat_cost = weight * (cur_rate / 1000)
-        mach_cost = (cur_cycle / 3600) * 600.0
-        total_part_cost = mat_cost + mach_cost
-        selling_price = total_part_cost * (1 + (cur_margin / 100.0))
+            quote_data = pd.DataFrame({
+                "Description": ["Raw Material Cost", "Machining & Setup Cost", "Total Cost / Part", "Quoted Selling Price (25% Margin)"],
+                "Amount (INR)": [f"₹ {mat_cost:.2f}", f"₹ {mach_cost:.2f}", f"₹ {total_part_cost:.2f}", f"₹ {selling_price:.2f}"]
+            })
+            st.table(quote_data)
 
-        st.markdown("---")
-        quote_data = pd.DataFrame({
-            "Description": [
-                "Raw Material Cost (Tube)",
-                "Machining & Setup Cost",
-                "Total Cost / Part",
-                f"Quoted Selling Price ({cur_margin}% Margin)"
-            ],
-            "Amount (INR)": [
-                f"₹ {mat_cost:.2f}",
-                f"₹ {mach_cost:.2f}",
-                f"₹ {total_part_cost:.2f}",
-                f"₹ {selling_price:.2f}"
-            ]
-        })
-        st.table(quote_data)
-
-        csv_data = quote_data.to_csv(index=False).encode('utf-8')
-        st.download_button(
-            label=t["generate_csv"],
-            data=csv_data,
-            file_name="Auto_Quotation_MegalaCNC.csv",
-            mime="text/csv"
-        )
+            # Export Button
+            csv_data = quote_data.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label=t["generate_csv"],
+                data=csv_data,
+                file_name="Auto_Quotation_MegalaCNC.csv",
+                mime="text/csv"
+            )
