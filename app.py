@@ -191,7 +191,15 @@ if "stock_inventory_df" not in st.session_state:
 if "stock_logs_df" not in st.session_state:
     st.session_state["stock_logs_df"] = pd.DataFrame(columns=["Timestamp", "Item ID", "Action", "Qty Changed", "User/Notes"])
 
-# Sidebar Navigation Header & Permanent Logo Uploader
+# Helper function to convert image to base64 for circular container display
+def get_base64_image(path):
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode("utf-8")
+    return None
+
+# Sidebar Navigation Header & Permanent Logo Uploader with Circular Preview
 st.sidebar.markdown("""
     <div style="text-align: center; padding: 5px 0 10px 0;">
         <h3 style="color: #ec4899; margin: 0; font-size: 1.15rem; font-weight: 900; letter-spacing: 1.5px; text-shadow: 0 0 15px rgba(236,72,153,0.6);">MEGALA CNC MATE</h3>
@@ -199,6 +207,19 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 st.sidebar.markdown("<p style='font-size: 0.85rem; font-weight: 800; color: #ec4899; margin-bottom: 5px; text-transform: uppercase;'>🖼️ Company Logo</p>", unsafe_allow_html=True)
+
+# Display Circular Logo Preview in Sidebar if uploaded/saved
+encoded_sidebar_img = get_base64_image(LOGO_PATH)
+if encoded_sidebar_img:
+    st.sidebar.markdown(f"""
+        <div style="text-align: center; margin-bottom: 12px;">
+            <div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(56, 189, 248, 0.3)); border: 2.5px solid #ec4899; width: 75px; height: 75px; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(236, 72, 153, 0.6); overflow: hidden; backdrop-filter: blur(8px);">
+                <img src="data:image/png;base64,{encoded_sidebar_img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+            </div>
+            <p style="font-size: 0.75rem; color: #38bdf8; margin-top: 4px; font-weight: 700;">Active Logo Preview</p>
+        </div>
+    """, unsafe_allow_html=True)
+
 uploaded_logo = st.sidebar.file_uploader("Upload Permanent Logo", type=["png", "jpg", "jpeg"], key="sidebar_logo_upload", label_visibility="collapsed")
 
 if uploaded_logo is not None:
@@ -206,6 +227,7 @@ if uploaded_logo is not None:
         img = Image.open(uploaded_logo)
         img.save(LOGO_PATH)
         st.sidebar.success("✅ லோகோ சேமிக்கப்பட்டது!")
+        st.rerun()
     except Exception as e:
         st.sidebar.error(f"Error: {e}")
 
@@ -218,14 +240,6 @@ selected_module = st.sidebar.selectbox(
     label_visibility="collapsed"
 )
 st.session_state["selected_module"] = selected_module
-
-# Helper function to convert image to base64 for circular container display
-def get_base64_image(path):
-    if os.path.exists(path):
-        with open(path, "rb") as f:
-            data = f.read()
-        return base64.b64encode(data).decode("utf-8")
-    return None
 
 # --- PERMANENT CRYSTAL CLEAR HEADER & CIRCULAR LOGO SECTION ---
 col_logo, col_title = st.columns([0.15, 0.85], vertical_alignment="center")
@@ -660,7 +674,6 @@ elif "Stock Management" in selected_module:
         
     st.markdown("---")
     
-    # Tabs for Inventory Management: View/Search, Add New Item, Stock In/Out Transaction
     tab1, tab2, tab3 = st.tabs(["📋 Current Stock Table", "➕ Add New Item", "🔄 Stock In / Out Transaction"])
     
     with tab1:
@@ -723,7 +736,6 @@ elif "Stock Management" in selected_module:
                         new_qty_val = max(0.0, curr_qty - trans_qty)
                         action_str = "STOCK OUT"
                         
-                    # Recalculate status
                     if new_qty_val == 0:
                         new_stat = "Out of Stock"
                     elif new_qty_val < 10:
@@ -734,7 +746,6 @@ elif "Stock Management" in selected_module:
                     st.session_state["stock_inventory_df"].at[idx, "Quantity"] = new_qty_val
                     st.session_state["stock_inventory_df"].at[idx, "Status"] = new_stat
                     
-                    # Log transaction
                     new_log = pd.DataFrame({
                         "Timestamp": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
                         "Item ID": [item_id_extracted],
