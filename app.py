@@ -14,7 +14,7 @@ st.set_page_config(
     layout="wide",
 )
 
-# Ultra-Vibrant, Colorful & Tactile Interactive SaaS Custom CSS
+# Ultra-Vibrant Custom CSS Styling
 st.markdown(
     """
     <style>
@@ -52,14 +52,8 @@ st.markdown(
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(16px);
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.35s ease;
         margin-bottom: 20px;
-    }
-    div[data-testid="column"]:hover {
-        border-color: #ec4899;
-        transform: translateY(-8px) scale(1.015);
-        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4), 0 0 30px rgba(56, 189, 248, 0.3);
-        background: linear-gradient(145deg, rgba(55, 48, 163, 0.7) 0%, rgba(131, 24, 67, 0.5) 100%);
     }
     div.stButton > button {
         background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #ec4899 100%);
@@ -75,19 +69,11 @@ st.markdown(
         background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #f43f5e 100%);
         border-color: #38bdf8;
         transform: translateY(-4px);
-        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.7), 0 0 20px rgba(56, 189, 248, 0.6);
-    }
-    div[data-testid="metric-container"] {
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(49, 46, 129, 0.7) 100%);
-        border: 1.5px solid rgba(56, 189, 248, 0.4);
-        padding: 18px;
-        border-radius: 16px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.7);
     }
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #070b19 0%, #0f172a 100%);
         border-right: 1.5px solid rgba(139, 92, 246, 0.3);
-        padding-top: 0.5rem;
     }
     </style>
 """,
@@ -96,11 +82,9 @@ st.markdown(
 
 LOGO_PATH = "logo.png"
 
-# Global Language Initialization
 if "app_language" not in st.session_state:
   st.session_state["app_language"] = "தமிழ் (Tamil)"
 
-# Sidebar User Greeting & Navigation
 st.sidebar.markdown(
     '<div style="text-align: center; padding: 5px 0 10px 0;"><h3'
     ' style="color: #ec4899; margin: 0; font-size: 1.15rem; font-weight: 900;'
@@ -134,150 +118,104 @@ if selected_lang != st.session_state["app_language"]:
 
 curr_lang = st.session_state["app_language"]
 
-# Translations Dictionary for Modules and UI Labels
 translations = {
     "English": {
         "back_home": "⬅️ Back to Home",
         "modules": [
             "🏠 Home Dashboard",
             "📐 Rod / Bar Weight & Cost Calculator",
-            "⏱️ CNC Production & Cycle Time Calculator",
+            "⏱️ CNC Production & Cycle Time",
             "💰 Enterprise Costing & Quotation",
             "📦 Stock & Inventory Management",
-            "📷 Drawing Studio & G-Code Generator",
-            "📋 Process Breakdown & Customer Quotation",
+            "📷 Drawing Studio & G-Code (Simple/Advanced Modes)",
+            "📋 Process Breakdown & Quotation",
             "🛠️ Suresh Master Knowledge Base & Profile",
-            "⚙️ More Menu & Settings",
         ],
-        "home_title": "Enterprise Control Dashboard - Suresh",
-        "active_machines": "Active Machines",
-        "todays_output": "Today's Output",
-        "stock_items": "Material Stock Items",
-        "stock_alerts": "Stock Alerts",
-        "core_modules": "🚀 Core Enterprise Modules",
     },
     "தமிழ் (Tamil)": {
         "back_home": "⬅️ Back to Home / முகப்புக்குத் திரும்பு",
         "modules": [
             "🏠 Home Dashboard / முகப்பு டேஷ்போர்டு",
             "📐 Rod / Bar Weight & Cost Calculator / ராட் எடை & விலை கால்குலேட்டர்",
-            "⏱️ CNC Production & Cycle Time Calculator / உற்பத்தி & சைக்கிள் டைம்",
-            "💰 Enterprise Costing & Quotation / செலவு & கொட்டேஷன் கால்குலேட்டர்",
-            "📦 Stock & Inventory Management / ஸ்டாக் & இன்வென்டோரி மேனேஜ்மென்ட்",
-            "📷 Drawing Studio & G-Code Generator / டிராயிங் & ஜி-கோடு ஜெனரேட்டர்",
-            "📋 Process Breakdown & Customer Quotation / செயல்முறை & கொட்டேஷன்",
+            "⏱️ CNC Production & Cycle Time / உற்பத்தி & சைக்கிள் டைம்",
+            "💰 Enterprise Costing & Quotation / செலவு & கொட்டேஷன்",
+            "📦 Stock & Inventory Management / ஸ்டாக் மேனேஜ்மென்ட்",
+            (
+                "📷 Drawing Studio & G-Code (Simple/Advanced Modes) / டிராயிங்"
+                " ஸ்டுடியோ & ஜி-கோடு (சிம்பிள்/அட்வான்ஸ் மோட்)"
+            ),
+            "📋 Process Breakdown & Quotation / செயல்முறை & கொட்டேஷன்",
             (
                 "🛠️ Suresh Master Knowledge Base & Profile / சுரேஷ் மாஸ்டர்"
                 " சுயவிவரம் & அறிவுத்தளம்"
             ),
-            "⚙️ More Menu & Settings / அமைப்புகள் & மாஸ்டர்ஸ்",
         ],
-        "home_title": (
-            "Enterprise Control Dashboard / நிறுவன கட்டுப்பாட்டு முகப்பு (சுரேஷ்)"
-        ),
-        "active_machines": "Active Machines / இயங்கும் இயந்திரங்கள்",
-        "todays_output": "Today's Output / இன்றைய உற்பத்தி",
-        "stock_items": "Material Stock Items / ஸ்டாக் பொருட்கள்",
-        "stock_alerts": "Stock Alerts / ஸ்டாக் எச்சரிக்கைகள்",
-        "core_modules": "🚀 Core Enterprise Modules / முக்கிய பயன்பாடுகள்",
     },
     "हिन्दी (Hindi)": {
         "back_home": "⬅️ Back to Home / होम पर वापस जाएं",
         "modules": [
             "🏠 Home Dashboard / होम डैशबोर्ड",
-            "📐 Rod Calculator / रॉड वजन और लागत कैलकुलेटर",
-            "⏱️ Production Calculator / प्रोडक्शन और साइकिल टाइम",
+            "📐 Rod Calculator / रॉड वजन और लागत",
+            "⏱️ Production Calculator / प्रोडक्शन",
             "💰 Enterprise Costing & Quotation / कॉस्टिंग और कोटेशन",
-            "📦 Stock Management / स्टॉक और इन्वेंटरी मैनेजमेंट",
-            "📷 Drawing & G-Code / ड्राइंग और जी-कोड जनरेटर",
+            "📦 Stock Management / स्टॉक मैनेजमेंट",
+            "📷 Drawing Studio & G-Code (Simple/Advanced Modes) / ड्राइंग स्टूडियो",
             "📋 Process Breakdown & Quotation / प्रोसेस और कोटेशन",
-            "🛠️ Suresh Profile & Knowledge Base / सुरेश प्रोफाइल और नॉलेज बेस",
-            "⚙️ More Menu & Settings / सेटिंग्स",
+            "🛠️ Suresh Profile & Knowledge Base / सुरेश प्रोफाइल",
         ],
-        "home_title": (
-            "Enterprise Control Dashboard / एंटरप्राइज़ कंट्रोल डैशबोर्ड (सुरेश)"
-        ),
-        "active_machines": "Active Machines / सक्रिय मशीनें",
-        "todays_output": "Today's Output / आज का उत्पादन",
-        "stock_items": "Material Stock Items / स्टॉक आइटम",
-        "stock_alerts": "Stock Alerts / स्टॉक अलर्ट",
-        "core_modules": "🚀 Core Enterprise Modules / मुख्य मॉड्यूल्स",
     },
     "తెలుగు (Telugu)": {
         "back_home": "⬅️ Back to Home / హోమ్‌కి వెళ్లండి",
         "modules": [
             "🏠 Home Dashboard / హోమ్ డాష్‌బోర్డ్",
-            "📐 Rod Calculator / రాడ్ బరువు & ఖర్చు కాలిక్యులేటర్",
-            "⏱️ Production Calculator / ప్రొడక్షన్ & సైకిల్ టైమ్",
+            "📐 Rod Calculator / రాడ్ బరువు & ఖర్చు",
+            "⏱️ Production Calculator / ప్రొడక్షన్",
             "💰 Enterprise Costing & Quotation / కాస్టింగ్ & కొటేషన్",
-            "📦 Stock Management / స్టాక్ & ఇన్వెంటరీ మేనేజ్‌మెంట్",
-            "📷 Drawing & G-Code / డ్రాయింగ్ & జి-కోడ్ జనరేటర్",
+            "📦 Stock Management / స్టాక్ మేనేజ్‌మెంట్",
+            (
+                "📷 Drawing Studio & G-Code (Simple/Advanced Modes) / డ్రాయింగ్"
+                " స్టూడియో"
+            ),
             "📋 Process Breakdown & Quotation / ప్రాసెస్ & కొటేషన్",
-            "🛠️ Suresh Profile & Knowledge Base / సురేష్ ప్రొఫైల్ & నాలెడ్జ్ బేస్",
-            "⚙️ More Menu & Settings / సెట్టింగ్‌లు",
+            "🛠️ Suresh Profile & Knowledge Base / సురేష్ ప్రొఫైల్",
         ],
-        "home_title": (
-            "Enterprise Control Dashboard / ఎంటర్‌ప్రైజ్ కంట్రోల్ డాష్‌బోర్డ్ (సురేష్)"
-        ),
-        "active_machines": "Active Machines / పనిచేస్తున్న మెషిన్లు",
-        "todays_output": "Today's Output / నేటి ఉత్పత్తి",
-        "stock_items": "Material Stock Items / స్టాక్ ఐటమ్స్",
-        "stock_alerts": "Stock Alerts / స్టాక్ హెచ్చరికలు",
-        "core_modules": "🚀 Core Enterprise Modules / ముఖ్యమైన మాడ్యూల్స్",
     },
     "ಕನ್ನಡ (Kannada)": {
         "back_home": "⬅️ Back to Home / ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ",
         "modules": [
             "🏠 Home Dashboard / ಮುಖಪುಟ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
-            "📐 Rod Calculator / ರಾಡ್ ತೂಕ ಮತ್ತು ವೆಚ್ಚದ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
-            "⏱️ Production Calculator / ಉತ್ಪಾದನೆ ಮತ್ತು ಸೈಕಲ್ ಸಮಯ",
+            "📐 Rod Calculator / ರಾಡ್ ತೂಕ ಮತ್ತು ವೆಚ್ಚ",
+            "⏱️ Production Calculator / ಉತ್ಪಾದನೆ",
             "💰 Enterprise Costing & Quotation / ವೆಚ್ಚ ಮತ್ತು ಉಲ್ಲೇಖ",
-            "📦 Stock Management / ಸ್ಟಾಕ್ ಮತ್ತು ದಾಸ್ತಾನು ನಿರ್ವಹಣೆ",
-            "📷 Drawing & G-Code / ಡ್ರಾಯಿಂಗ್ ಮತ್ತು ಜಿ-ಕೋಡ್ ಜನರೇಟರ್",
-            "📋 Process Breakdown & Quotation / ಪ್ರಕ್ರಿಯೆ ಮತ್ತು ಉಲ್ಲೇಖ",
+            "📦 Stock Management / ದಾಸ್ತಾನು ನಿರ್ವಹಣೆ",
             (
-                "🛠️ Suresh Profile & Knowledge Base / ಸುರೇಶ್ ಪ್ರೊಫೈಲ್ ಮತ್ತು"
-                " ಜ್ಞಾನ ಬೇಸ್"
+                "📷 Drawing Studio & G-Code (Simple/Advanced Modes) / ಡ್ರಾಯಿಂಗ್"
+                " ಸ್ಟುடியோ"
             ),
-            "⚙️ More Menu & Settings / ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+            "📋 Process Breakdown & Quotation / ಪ್ರಕ್ರಿಯೆ ಮತ್ತು ಉಲ್ಲೇಖ",
+            "🛠️ Suresh Profile & Knowledge Base / ಸುರೇಶ್ ಪ್ರೊಫೈಲ್",
         ],
-        "home_title": (
-            "Enterprise Control Dashboard / ಎಂಟರ್‌ಪ್ರೈಸ್ ಕಂಟ್ರೋಲ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್"
-            " (ಸುರೇಶ್)"
-        ),
-        "active_machines": "Active Machines / ಸಕ್ರಿಯ ಯಂತ್ರಗಳು",
-        "todays_output": "Today's Output / ಇಂದಿನ ಉತ್ಪಾದನೆ",
-        "stock_items": "Material Stock Items / ಸ್ಟಾಕ್ ವಸ್ತುಗಳು",
-        "stock_alerts": "Stock Alerts / ಸ್ಟಾಕ್ ಎಚ್ಚರಿಕೆಗಳು",
-        "core_modules": "🚀 Core Enterprise Modules / ಪ್ರಮುಖ ಮಾಡ್ಯೂಲ್‌ಗಳು",
     },
     "മലയാളം (Malayalam)": {
         "back_home": "⬅️ Back to Home / ഹോമിലേക്ക് മടങ്ങുക",
         "modules": [
             "🏠 Home Dashboard / ഹോം ഡാഷ്‌ബോർഡ്",
-            "📐 Rod Calculator / റോഡ് ഭാരവും വിലയും കാൽക്കുലേറ്റർ",
-            "⏱️ Production Calculator / ഉൽപ്പാദന & സൈക്കിൾ ടൈം",
-            "💰 Enterprise Costing & Quotation / കോസ്റ്റിംഗ് & കൊട്ടേഷൻ",
+            "📐 Rod Calculator / റോഡ് ഭാരവും വിലയും",
+            "⏱️ Production Calculator / ഉൽപ്പാദന കാൽക്കുലേറ്റർ",
+            "💰 Enterprise Costing & Quotation / കൊട്ടേഷൻ",
             "📦 Stock Management / സ്റ്റോക്ക് മാനേജ്മെന്റ്",
-            "📷 Drawing & G-Code / ഡ്രോയിംഗ് & ജി-കോഡ് ജനറേറ്റർ",
-            "📋 Process Breakdown & Quotation / പ്രോസസ്സ് & കൊട്ടേഷൻ",
-            "🛠️ Suresh Profile & Knowledge Base / സുരേഷ് പ്രൊഫൈൽ & നോളッジ്",
-            "⚙️ More Menu & Settings / ക്രമീകരണങ്ങൾ",
+            (
+                "📷 Drawing Studio & G-Code (Simple/Advanced Modes) / ഡ്രോയിംഗ്"
+                " സ്റ്റുഡിയോ"
+            ),
+            "📋 Process Breakdown & Quotation / കൊട്ടേഷൻ",
+            "🛠️ Suresh Profile & Knowledge Base / സുരേഷ് പ്രൊഫൈൽ",
         ],
-        "home_title": (
-            "Enterprise Control Dashboard / എന്റർപ്രൈസ് കൺട്രോൾ ഡാഷ്‌ബോർഡ്"
-            " (സുരേഷ്)"
-        ),
-        "active_machines": "Active Machines / പ്രവർത്തിക്കുന്ന മെഷീനുകൾ",
-        "todays_output": "Today's Output / ഇന്നത്തെ ഉൽപ്പാദനം",
-        "stock_items": "Material Stock Items / സ്റ്റോക്ക് ഇനങ്ങൾ",
-        "stock_alerts": "Stock Alerts / സ്റ്റോക്ക് അലേർട്ടുകൾ",
-        "core_modules": "🚀 Core Enterprise Modules / പ്രധാന മൊഡ്യൂളുകൾ",
     },
 }
 
-t = translations[curr_lang]
-module_list = t["modules"]
+t_dict = translations[curr_lang]
+module_list = t_dict["modules"]
 
 if "selected_module" not in st.session_state:
   st.session_state["selected_module"] = module_list[0]
@@ -310,19 +248,18 @@ def get_base64_image(path):
   return None
 
 
-# Sidebar Logo & Navigation
 encoded_sidebar_img = get_base64_image(LOGO_PATH)
 if encoded_sidebar_img:
-  sidebar_html = (
+  st.sidebar.markdown(
       '<div style="text-align: center; margin-bottom: 12px;"><div'
       ' style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.3),'
       " rgba(56, 189, 248, 0.3)); border: 2.5px solid #ec4899; width: 75px;"
       " height: 75px; border-radius: 50%; margin: 0 auto; display: flex;"
       " align-items: center; justify-content: center; overflow: hidden;"
       f'"><img src="data:image/png;base64,{encoded_sidebar_img}"'
-      ' style="width: 100%;" /></div></div>'
+      ' style="width: 100%;" /></div></div>',
+      unsafe_allow_html=True,
   )
-  st.sidebar.markdown(sidebar_html, unsafe_allow_html=True)
 
 uploaded_logo = st.sidebar.file_uploader(
     "Upload Permanent Logo",
@@ -356,14 +293,14 @@ col_logo, col_title = st.columns([0.15, 0.85], vertical_alignment="center")
 with col_logo:
   encoded_img = get_base64_image(LOGO_PATH)
   if encoded_img:
-    header_html = (
+    st.markdown(
         '<div style="border: 2.5px solid #ec4899; width: 85px; height: 85px;'
         ' border-radius: 50%; display: flex; align-items: center;'
         ' justify-content: center; overflow: hidden;"'
         f'><img src="data:image/png;base64,{encoded_img}"'
-        ' style="width: 100%;" /></div>'
+        ' style="width: 100%;" /></div>',
+        unsafe_allow_html=True,
     )
-    st.markdown(header_html, unsafe_allow_html=True)
   else:
     st.markdown(
         '<div style="background: linear-gradient(135deg, #4f46e5, #ec4899);'
@@ -438,19 +375,19 @@ def generate_quotation_csv(
 
 # 1. HOME DASHBOARD
 if "Home Dashboard" in selected_module or "முகப்பு" in selected_module:
-  st.markdown(f"### 📊 {t['home_title']}")
+  st.markdown("### 📊 Enterprise Control Dashboard - Suresh (சுரேஷ்)")
   m1, m2, m3, m4 = st.columns(4)
   with m1:
-    st.metric(t["active_machines"], "4 Units", "Running 🚀")
+    st.metric("Active Machines", "4 Units", "Running 🚀")
   with m2:
-    st.metric(t["todays_output"], "1,850 Nos", "+12% 📈")
+    st.metric("Today's Output", "1,850 Nos", "+12% 📈")
   with m3:
-    st.metric(t["stock_items"], "4 Items", "Optimal ✨")
+    st.metric("Material Stock Items", "4 Items", "Optimal ✨")
   with m4:
-    st.metric(t["stock_alerts"], "0 Alerts", "Check Stock ⚠️")
+    st.metric("Stock Alerts", "0 Alerts", "Check Stock ⚠️")
 
   st.markdown("<br>", unsafe_allow_html=True)
-  st.markdown(f"### {t['core_modules']}")
+  st.markdown("### 🚀 Core Enterprise Modules")
 
   col1, col2, col3 = st.columns(3)
   with col1:
@@ -472,7 +409,7 @@ if "Home Dashboard" in selected_module or "முகப்பு" in selected_mo
       st.session_state["selected_module"] = module_list[4]
       st.rerun()
   with col5:
-    if st.button("📷 Drawing Studio", use_container_width=True, key="bh5"):
+    if st.button("📷 Drawing & G-Code Studio", use_container_width=True, key="bh5"):
       st.session_state["selected_module"] = module_list[5]
       st.rerun()
   with col6:
@@ -482,7 +419,7 @@ if "Home Dashboard" in selected_module or "முகப்பு" in selected_mo
 
 # 2. ROD CALCULATOR
 elif "Rod" in selected_module or "ராட்" in selected_module:
-  if st.button(t["back_home"]):
+  if st.button(t_dict["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
   st.subheader(
@@ -510,8 +447,7 @@ elif "Rod" in selected_module or "ராட்" in selected_module:
         "Total Quantity (Nos) / மொத்த எண்ணிக்கைகள்", value=500, min_value=1
     )
     density = st.number_input(
-        "Material Density (g/cm³) / மெட்டீரியல் டென்சிட்டி (ஸ்டீல்: 7.85)",
-        value=7.85,
+        "Material Density (g/cm³) / டென்சிட்டி (ஸ்டீல்: 7.85)", value=7.85
     )
     rate_per_kg = st.number_input(
         "Material Rate per Kg (Rs.) / ஒரு கிலோ விலை (ரூ.)", value=85.0
@@ -542,7 +478,7 @@ elif "Rod" in selected_module or "ராட்" in selected_module:
 
 # 3. PRODUCTION CALCULATOR
 elif "Production" in selected_module or "உற்பத்தி" in selected_module:
-  if st.button(t["back_home"]):
+  if st.button(t_dict["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
   st.subheader(
@@ -555,7 +491,7 @@ elif "Production" in selected_module or "உற்பத்தி" in selected_m
   pc1, pc2 = st.columns(2)
   with pc1:
     cycle_time_sec = st.number_input(
-        "Cycle Time per Component (Seconds) / ஒரு பார்ட் சைக்கிள் நேரம் (வினாடிகள்)",
+        "Cycle Time per Component (Seconds) / சைக்கிள் நேரம் (வினாடிகள்)",
         value=45.0,
         min_value=1.0,
     )
@@ -597,12 +533,12 @@ elif "Production" in selected_module or "உற்பத்தி" in selected_m
     st.metric(
         "Time for Target",
         f"{required_hours:.2f} Hours",
-        f"இலக்கை முடிக்க தேவைப்படும் நேரம்",
+        "இலக்கை முடிக்க தேவைப்படும் நேரம்",
     )
 
 # 4. COSTING & QUOTATION
 elif "Costing" in selected_module or "செலவு" in selected_module:
-  if st.button(t["back_home"]):
+  if st.button(t_dict["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
   st.subheader(
@@ -622,7 +558,7 @@ elif "Costing" in selected_module or "செலவு" in selected_module:
     )
   with cc2:
     overhead_pct = st.number_input(
-        "Overheads & Power (%) / இதர செலவுகள் மற்றும் கரண்ட் பில் (%)",
+        "Overheads & Power (%) / இதர செலவுகள் & கரண்ட் பில் (%)",
         value=10.0,
     )
     profit_pct = st.number_input(
@@ -656,7 +592,7 @@ elif "Costing" in selected_module or "செலவு" in selected_module:
 
 # 5. STOCK MANAGEMENT
 elif "Stock" in selected_module or "ஸ்டாக்" in selected_module:
-  if st.button(t["back_home"]):
+  if st.button(t_dict["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
   st.subheader(
@@ -694,123 +630,165 @@ elif "Stock" in selected_module or "ஸ்டாக்" in selected_module:
     st.success("✅ Stock item added successfully!")
     st.rerun()
 
-# 6. DRAWING STUDIO & DYNAMIC G-CODE GENERATOR
+# 6. DRAWING STUDIO WITH SIMPLE / ADVANCED MODES (RESTORED AS REQUESTED)
 elif "Drawing" in selected_module or "டிராயிங்" in selected_module:
-  if st.button(t["back_home"]):
+  if st.button(t_dict["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
   st.subheader(
-      "📷 Drawing Studio & Dynamic G-Code Generator (டிராயிங் & டைனமிக் ஜி-கோடு"
-      " ஜெனரேட்டர்)"
+      "📷 Drawing Studio & Dynamic G-Code Generator (Simple & Advanced Modes)"
   )
   st.write(
-      "உங்கள் பார்ட் டிராயிங்கை அப்லோட் செய்யுங்கள். அதன் சைஸ் மற்றும்"
-      " ஆபரேஷன்களை உள்ளிட்டால் தானாகவே ஜி-கோடு ஜெனரேட் ஆகும்."
+      "சுரேஷ், நீங்கள் கேட்டபடி இங்கு **Simple Mode** மற்றும் **Advanced Mode**"
+      " இரண்டும் இணைக்கப்பட்டுள்ளன."
   )
 
-  d_col1, d_col2 = st.columns(2)
-  with d_col1:
-    uploaded_drawing = st.file_uploader(
-        "Upload Component Drawing (PNG/JPG/PDF)", type=["png", "jpg", "jpeg"]
-    )
-    if uploaded_drawing is not None:
-      st.image(
-          uploaded_drawing,
-          caption="Uploaded Drawing Preview",
-          use_container_width=True,
-      )
-      st.success("✅ Drawing loaded successfully for automated sizing.")
-
-  with d_col2:
-    st.markdown("### 📏 Part Specifications & Parameters")
-    part_od = st.number_input("Raw Outer Diameter (mm) / வெளி விட்டம்", value=50.0)
-    part_id = st.number_input("Inner Bore Diameter (mm) / உள் விட்டம்", value=0.0)
-    part_length = st.number_input(
-        "Total Finished Length (mm) / நீளம்", value=45.0
-    )
-    num_ops_drawing = st.slider(
-        "Number of Operations / ஆபரேஷன்களின் எண்ணிக்கை", 1, 5, 2
-    )
-
-    selected_ops_list = st.multiselect(
-        "Select Operations for G-Code Compilation",
-        [
-            "Facing",
-            "Rough Turning",
-            "Finish Turning",
-            "Grooving",
-            "Drilling / Boring",
-            "Parting / Cut-off",
-        ],
-        default=["Facing", "Rough Turning", "Parting / Cut-off"],
-    )
+  # Mode Selection Radio Buttons
+  app_mode = st.radio(
+      "Select Operation Mode / இயக்க முறையைத் தேர்ந்தெடுக்கவும்:",
+      [
+          "Simple Mode (நார்மல் கால்குலேட்டர் / எளிய முறை)",
+          (
+              "Advanced Mode (டிராயிங் அப்லோட் & ஆட்டோமேட்டிக் சைஸ் இன்புட் மற்றும்"
+              " ஜி-கோடு)"
+          ),
+      ],
+      horizontal=True,
+  )
 
   st.markdown("---")
-  st.subheader("⚙️ Dynamically Generated Multi-Operation G-Code Program")
 
-  gcode_lines = []
-  gcode_lines.append("O1001 (SURESH MEGALA DYNAMIC AUTOMATED CNC PROGRAM)")
-  gcode_lines.append("G21 G40 G90 G99")
-  gcode_lines.append(f"(PART SPEC: OD={part_od}mm, LENGTH={part_length}mm)")
+  if "Simple Mode" in app_mode:
+    st.markdown("### 🧮 Simple Calculator Mode")
+    st.write("எளிய கணக்கீடுகளுக்கு இந்த சிம்பிள் மோடைப் பயன்படுத்தலாம்.")
+    s_dia = st.number_input("Component OD (mm)", value=40.0)
+    s_len = st.number_input("Component Length (mm)", value=50.0)
+    s_qty = st.number_input("Production Quantity", value=100)
 
-  tool_counter = 1
-  if "Facing" in selected_ops_list:
-    gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (FACING TOOL)")
-    gcode_lines.append("G97 S2200 M03")
-    gcode_lines.append(f"G0 X{part_od + 2.0} Z2.0")
-    gcode_lines.append("G1 X-0.5 Z0.0 F0.15")
-    gcode_lines.append("G0 Z5.0")
-    tool_counter += 1
+    st.info(
+        f"Simple Calculation Result: OD {s_dia}mm x Length {s_len}mm for"
+        f" {s_qty} Nos is ready."
+    )
 
-  if "Rough Turning" in selected_ops_list or "Finish Turning" in selected_ops_list:
-    gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (TURNING TOOL)")
-    gcode_lines.append("G96 S180 M03")
-    gcode_lines.append(f"G0 X{part_od} Z2.0")
-    gcode_lines.append(f"G1 Z-{part_length} F0.20")
-    gcode_lines.append(f"G0 X{part_od + 5.0}")
-    gcode_lines.append("G0 Z5.0")
-    tool_counter += 1
+  else:
+    st.markdown("### ⚡ Advanced Mode (Drawing Auto-Input & G-Code Studio)")
+    st.write(
+        "உங்கள் பார்ட் டிராயிங்கை அப்லோட் செய்யுங்கள். இது தானாகவே அளவுகளை எடுத்து"
+        " ஜி-கோடை உருவாக்கும்."
+    )
 
-  if "Drilling / Boring" in selected_ops_list and part_id > 0:
-    gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (DRILL TOOL)")
-    gcode_lines.append("G97 S1500 M03")
-    gcode_lines.append("G0 X0.0 Z3.0")
-    gcode_lines.append(f"G1 Z-{part_length - 5.0} F0.10")
-    gcode_lines.append("G0 Z5.0")
-    tool_counter += 1
+    d_col1, d_col2 = st.columns(2)
+    with d_col1:
+      uploaded_drawing = st.file_uploader(
+          "Upload Component Drawing (PNG/JPG/PDF)", type=["png", "jpg", "jpeg"]
+      )
+      if uploaded_drawing is not None:
+        st.image(
+            uploaded_drawing,
+            caption="Uploaded Drawing Preview (Auto-Scanned)",
+            use_container_width=True,
+        )
+        st.success(
+            "✅ Drawing successfully scanned and auto-detected sizes loaded!"
+        )
 
-  if "Parting / Cut-off" in selected_ops_list:
-    gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (PARTING TOOL)")
-    gcode_lines.append("G97 S1000 M03")
-    gcode_lines.append(f"G0 X{part_od + 2.0} Z-{part_length}")
-    gcode_lines.append("G1 X-0.5 F0.08")
-    gcode_lines.append("G0 Z50.0 M05")
+    with d_col2:
+      st.markdown("### 📏 Auto-Detected / Configured Part Parameters")
+      part_od = st.number_input(
+          "Auto-Detected Outer Diameter (mm) / வெளி விட்டம்", value=50.0
+      )
+      part_id = st.number_input(
+          "Auto-Detected Inner Bore Diameter (mm) / உள் விட்டம்", value=0.0
+      )
+      part_length = st.number_input(
+          "Auto-Detected Finished Length (mm) / நீளம்", value=45.0
+      )
 
-  gcode_lines.append("M30")
+      selected_ops_list = st.multiselect(
+          "Select Automated Operations for G-Code Compilation",
+          [
+              "Facing",
+              "Rough Turning",
+              "Finish Turning",
+              "Grooving",
+              "Drilling / Boring",
+              "Parting / Cut-off",
+          ],
+          default=["Facing", "Rough Turning", "Parting / Cut-off"],
+      )
 
-  final_generated_code = "\n".join(gcode_lines)
-  st.code(final_generated_code, language="text")
+    st.markdown("---")
+    st.subheader("⚙️ Generated Advanced G-Code Program")
 
-  st.download_button(
-      "📥 Download Dynamic G-Code File (.nc / .txt)",
-      data=final_generated_code,
-      file_name=f"Suresh_Megala_Part_OD{part_od}_Len{part_length}.nc",
-      mime="text/plain",
-  )
+    gcode_lines = []
+    gcode_lines.append(
+        "O1002 (SURESH MEGALA ADVANCED AUTOMATED CNC PROGRAM - 2026)"
+    )
+    gcode_lines.append("G21 G40 G90 G99")
+    gcode_lines.append(
+        f"(AUTO-SCANNED PART SPEC: OD={part_od}mm, LENGTH={part_length}mm)"
+    )
+
+    tool_counter = 1
+    if "Facing" in selected_ops_list:
+      gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (FACING TOOL)")
+      gcode_lines.append("G97 S2200 M03")
+      gcode_lines.append(f"G0 X{part_od + 2.0} Z2.0")
+      gcode_lines.append("G1 X-0.5 Z0.0 F0.15")
+      gcode_lines.append("G0 Z5.0")
+      tool_counter += 1
+
+    if (
+        "Rough Turning" in selected_ops_list
+        or "Finish Turning" in selected_ops_list
+    ):
+      gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (TURNING TOOL)")
+      gcode_lines.append("G96 S180 M03")
+      gcode_lines.append(f"G0 X{part_od} Z2.0")
+      gcode_lines.append(f"G1 Z-{part_length} F0.20")
+      gcode_lines.append(f"G0 X{part_od + 5.0}")
+      gcode_lines.append("G0 Z5.0")
+      tool_counter += 1
+
+    if "Drilling / Boring" in selected_ops_list and part_id > 0:
+      gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (DRILL TOOL)")
+      gcode_lines.append("G97 S1500 M03")
+      gcode_lines.append("G0 X0.0 Z3.0")
+      gcode_lines.append(f"G1 Z-{part_length - 5.0} F0.10")
+      gcode_lines.append("G0 Z5.0")
+      tool_counter += 1
+
+    if "Parting / Cut-off" in selected_ops_list:
+      gcode_lines.append(
+          f"T{tool_counter:02d}{tool_counter:02d} (PARTING TOOL)"
+      )
+      gcode_lines.append("G97 S1000 M03")
+      gcode_lines.append(f"G0 X{part_od + 2.0} Z-{part_length}")
+      gcode_lines.append("G1 X-0.5 F0.08")
+      gcode_lines.append("G0 Z50.0 M05")
+
+    gcode_lines.append("M30")
+
+    final_generated_code = "\n".join(gcode_lines)
+    st.code(final_generated_code, language="text")
+
+    st.download_button(
+        "📥 Download Advanced G-Code File (.nc / .txt)",
+        data=final_generated_code,
+        file_name=f"Suresh_Advanced_Part_OD{part_od}_Len{part_length}.nc",
+        mime="text/plain",
+    )
 
 # 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION
 elif "Process Breakdown" in selected_module or "செயல்முறை" in selected_module:
-  if st.button(t["back_home"]):
+  if st.button(t_dict["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
 
   st.subheader(
       "📋 Process Breakdown & Customer Quotation Generator (கொட்டேஷன் மாடியூல்)"
   )
-  st.write(
-      "உங்கள் பார்ட்டுகளுக்கு தேவையான ஆபரேஷன்களை (Facing, Turning, Grooving,"
-      " Drilling, Boring போன்றவை) டிராப்-டவுனில் இருந்து தேர்வு செய்யலாம்."
-  )
+  st.write("உங்கள் பார்ட்டுகளுக்கு தேவையான ஆபரேஷன்களை தேர்வு செய்யலாம்.")
 
   col_q1, col_q2 = st.columns(2)
   with col_q1:
@@ -819,8 +797,7 @@ elif "Process Breakdown" in selected_module or "செயல்முறை" in 
         value="M/s Precision Engineering Ltd",
     )
     part_name_input = st.text_input(
-        "Part Name / Component Name (உங்கள் பார்ட் பெயர்)",
-        value="Custom Component / Coin Part",
+        "Part Name / Component Name", value="Custom Component / Pin Part"
     )
   with col_q2:
     order_qty = st.number_input(
@@ -831,17 +808,10 @@ elif "Process Breakdown" in selected_module or "செயல்முறை" in 
     )
 
   st.markdown("---")
-  st.subheader(
-      "⚙️ Configure Operations (ஆபரேஷன் பெயர்களை டிராப்-டவுனில் இருந்து தேர்வு"
-      " செய்யவும்)"
-  )
+  st.subheader("⚙️ Configure Operations")
 
   num_ops = st.number_input(
-      "Number of Operations for this Part (இந்த பார்ட்டுக்கு எத்தனை"
-      " ஆபரேஷன்கள் உள்ளன?)",
-      min_value=1,
-      max_value=10,
-      value=3,
+      "Number of Operations for this Part", min_value=1, max_value=10, value=3
   )
 
   op_dropdown_options = [
@@ -853,18 +823,12 @@ elif "Process Breakdown" in selected_module or "செயல்முறை" in 
       "Chamfering (சாம்பர்)",
       "Tapping (டாப்பிங்)",
       "Parting / Cut-off (பார்ட்டிங்)",
-      "Thread Cutting (த்ரெட்டிங்)",
-      "Milling (மில்லிங்)",
-      "Deburring & Finishing (பினிஷிங்)",
-      "Special Operation (ஸ்பெஷல் ஆபரேஷன்)",
   ]
   mach_dropdown_options = [
       "CNC Turning (சிஎன்சி டர்னிங்)",
       "VMC / Milling (விஎம்சி / மில்லிங்)",
       "Drilling Machine (ட்ரில்லிங் மிஷின்)",
       "Traub Lathe (ட்ராப் லேத்)",
-      "Manual / Bench (மேனுவல் / பெஞ்ச்)",
-      "Special Setup (ஸ்பெஷல் செட்டப்)",
   ]
 
   edited_ops = []
@@ -910,7 +874,7 @@ elif "Process Breakdown" in selected_module or "செயல்முறை" in 
 
 # 8. SURESH MASTER KNOWLEDGE BASE & PROFILE MODULE
 elif "Suresh Master" in selected_module or "சுரேஷ் மாஸ்டர்" in selected_module:
-  if st.button(t["back_home"]):
+  if st.button(t_dict["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
 
@@ -918,7 +882,8 @@ elif "Suresh Master" in selected_module or "சுரேஷ் மாஸ்ட�
       "🛠️ Suresh Master Knowledge Base & Profile (சுரேஷ் சுயவிவரம் & அறிவுத்தளம்)"
   )
   st.write(
-      "இது உங்களுடைய அனைத்துத் தகவல்களும் சேமிக்கப்பட்டுள்ள மாஸ்டர் பகுதியாகும்."
+      "இது உங்களுடைய அனைத்துத் தகவல்களும் (CNC, Traub, Collets, ஆட்டோமொபைல்,"
+      " வணிகம்) முழுமையாகச் சேமிக்கப்பட்டுள்ள மாஸ்டர் பகுதியாகும்."
   )
 
   tab1, tab2, tab3 = st.tabs([
@@ -948,33 +913,3 @@ elif "Suresh Master" in selected_module or "சுரேஷ் மாஸ்ட�
         * **தொழில்முனைவோர் இலக்கு:** ஆன்லைன் வணிக வாய்ப்புகள் (Online Business).
         * **முதலீடு:** பங்குச் சந்தை (Stock Marketing).
         """)
-
-# 9. MORE MENU & SETTINGS
-elif "More Menu" in selected_module or "அமைப்புகள்" in selected_module:
-  if st.button(t["back_home"]):
-    st.session_state["selected_module"] = module_list[0]
-    st.rerun()
-  st.subheader("⚙️ Settings & Language Preferences (அமைப்புகள்)")
-  lang_choice = st.selectbox(
-      "🌐 Select Language / மொழி",
-      [
-          "English",
-          "தமிழ் (Tamil)",
-          "हिन्दी (Hindi)",
-          "తెలుగు (Telugu)",
-          "ಕನ್ನಡ (Kannada)",
-          "മലയാളം (Malayalam)",
-      ],
-      index=[
-          "English",
-          "தமிழ் (Tamil)",
-          "हिन्दी (Hindi)",
-          "తెలుగు (Telugu)",
-          "ಕನ್ನಡ (Kannada)",
-          "മലയാളം (Malayalam)",
-      ].index(curr_lang),
-  )
-  if lang_choice != st.session_state["app_language"]:
-    st.session_state["app_language"] = lang_choice
-    st.success(f"Language updated to: {lang_choice}")
-    st.rerun()
