@@ -535,7 +535,6 @@ elif page == t["quote_hub"]:
         if st.button("🔍 Auto-Extract Drawing Specs & Sync Data"):
             used_api = api_key if api_key else os.environ.get("GOOGLE_API_KEY", "")
             
-            # Default extracted values matching typical engineering drawings
             extracted = {
                 "outer_dia": 38.10,
                 "part_len": 73.00,
@@ -562,7 +561,6 @@ elif page == t["quote_hub"]:
                 except Exception as e:
                     st.info(f"Using default smart-extracted values (AI sync note: {e})")
 
-            # Update Session State so all calculators use the exact detected dimensions
             st.session_state["ext_dia"] = float(extracted.get("outer_dia", 38.10))
             st.session_state["ext_len"] = float(extracted.get("part_len", 73.00))
             st.session_state["ext_inner_dia"] = float(extracted.get("inner_dia", 25.80))
@@ -593,7 +591,6 @@ elif page == t["quote_hub"]:
             cur_rate = st.number_input(t["material_rate"], value=90.0, step=5.0)
             cur_margin = st.slider(t["profit_margin"], 5, 50, 25)
 
-        # Financial Calculations based on synced data
         vol = math.pi * (((cur_dia / 2) ** 2) - ((cur_inner / 2) ** 2)) * cur_len
         weight = (vol * 0.00785) / 1000
         mat_cost = weight * (cur_rate / 1000)
