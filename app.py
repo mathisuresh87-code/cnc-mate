@@ -118,19 +118,134 @@ st.markdown(
 
 LOGO_PATH = "logo.png"
 
-module_list = [
-    "🏠 Home / முகப்பு",
-    "📐 Rod Calculator (ராட் கால்குலேட்டர்)",
-    "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)",
-    "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)",
-    "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
-    "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)",
-    (
-        "📋 Process Breakdown & Customer Quotation (புதிய கொட்டேஷன்"
-        " மாடியூல்)"
-    ),
-    "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)",
+# Multi-Language Translation Dictionary (Bilingual Support: English + Target Language)
+translations = {
+    "தமிழ் (Tamil)": {
+        "home": "🏠 Home / முகப்பு",
+        "rod_calc": "📐 Rod Calculator / ராட் கால்குலேட்டர்",
+        "prod_calc": "⏱️ Production Calculator / உற்பத்தி கால்குலேட்டர்",
+        "cost_calc": "💰 Costing & Quotation / செலவு & கொட்டேஷன்",
+        "stock_mgmt": "📦 Stock Management / ஸ்டாக் மேனேஜ்மென்ட்",
+        "drawing_studio": (
+            "📷 Drawing & Multi-Op G-Code / டிராயிங் & ஆட்டோ ரிப்போர்ட்"
+        ),
+        "quote_hub": (
+            "📋 Process Breakdown & Customer Quotation / புதிய கொட்டேஷன்"
+            " மாடியூல்"
+        ),
+        "settings": "⚙️ More Menu & Settings / அமைப்புகள் & மாஸ்டர்ஸ்",
+        "active_machines": "Active Machines",
+        "todays_output": "Today's Output",
+        "material_stock": "Material Stock Items",
+        "low_stock_alerts": "Low/Out Stock",
+        "core_modules": "🚀 Core Automation Modules / முக்கிய மாட்யூல்கள்",
+        "back_home": "⬅️ Back to Home / முகப்புக்குத் திரும்பு",
+    },
+    "हिन्दी (Hindi)": {
+        "home": "🏠 Home / गृह (Home)",
+        "rod_calc": "📐 Rod Calculator / रॉड कैलकुलेटर",
+        "prod_calc": "⏱️ Production Calculator / उत्पादन कैलकुलेटर",
+        "cost_calc": "💰 Costing & Quotation / लागत और उद्धरण",
+        "stock_mgmt": "📦 Stock Management / स्टॉक प्रबंधन",
+        "drawing_studio": "📷 Drawing & G-Code / ड्राइंग और जी-कोड",
+        "quote_hub": "📋 Process Breakdown & Quotation / प्रक्रिया और उद्धरण",
+        "settings": "⚙️ More Menu & Settings / सेटिंग्स",
+        "active_machines": "Active Machines",
+        "todays_output": "Today's Output",
+        "material_stock": "Material Stock Items",
+        "low_stock_alerts": "Low/Out Stock",
+        "core_modules": "🚀 Core Automation Modules / मुख्य स्वचालन मॉड्यूल",
+        "back_home": "⬅️ Back to Home / होम पर वापस जाएं",
+    },
+    "తెలుగు (Telugu)": {
+        "home": "🏠 Home / హోమ్",
+        "rod_calc": "📐 Rod Calculator / రాడ్ కాల்குலேటర్",
+        "prod_calc": "⏱️ Production Calculator / ప్రొడక్షన్ కాల்குலேటర్",
+        "cost_calc": "💰 Costing & Quotation / కాస్టింగ్ & కొటేషన్",
+        "stock_mgmt": "📦 Stock Management / స్టాక్ మేనేజ్‌మెంట్",
+        "drawing_studio": "📷 Drawing & G-Code / డ్రాయింగ్ & జి-కోడ్",
+        "quote_hub": "📋 Process Breakdown & Quotation / ప్రాసెస్ & కొటేషన్",
+        "settings": "⚙️ More Menu & Settings / సెట్టింగ్‌లు",
+        "active_machines": "Active Machines",
+        "todays_output": "Today's Output",
+        "material_stock": "Material Stock Items",
+        "low_stock_alerts": "Low/Out Stock",
+        "core_modules": "🚀 Core Automation Modules / ప్రధాన మాడ్యూల్స్",
+        "back_home": "⬅️ Back to Home / హోమ్‌కి తిరిగి వెళ్ళు",
+    },
+    "മലയാളം (Malayalam)": {
+        "home": "🏠 Home / ഹോം",
+        "rod_calc": "📐 Rod Calculator / റോഡ് കാൽക്കുലേറ്റർ",
+        "prod_calc": "⏱️ Production Calculator / പ്രൊഡക്ഷൻ കാൽക്കുലേറ്റർ",
+        "cost_calc": "💰 Costing & Quotation / കോസ്റ്റിംഗ് & ക്വട്ടേഷൻ",
+        "stock_mgmt": "📦 Stock Management / സ്റ്റോക്ക് മാനേജ്മെന്റ്",
+        "drawing_studio": "📷 Drawing & G-Code / ഡ്രോയിംഗ് & ജി-കോഡ്",
+        "quote_hub": "📋 Process Breakdown & Quotation / പ്രൊസസ്സ് & ക്വട്ടേഷൻ",
+        "settings": "⚙️ More Menu & Settings / ക്രമീകരണങ്ങൾ",
+        "active_machines": "Active Machines",
+        "todays_output": "Today's Output",
+        "material_stock": "Material Stock Items",
+        "low_stock_alerts": "Low/Out Stock",
+        "core_modules": "🚀 Core Automation Modules / പ്രധാന മൊഡ്യൂളുകൾ",
+        "back_home": "⬅️ Back to Home / ഹോമിലേക്ക് മടങ്ങുക",
+    },
+    "ಕನ್ನಡ (Kannada)": {
+        "home": "🏠 Home / ಮುಖಪುಟ",
+        "rod_calc": "📐 Rod Calculator / ರಾಡ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+        "prod_calc": "⏱️ Production Calculator / ಉತ್ಪಾದನಾ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+        "cost_calc": "💰 Costing & Quotation / ವೆಚ್ಚ ಮತ್ತು ಉಲ್ಲೇಖ",
+        "stock_mgmt": "📦 Stock Management / ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
+        "drawing_studio": "📷 Drawing & G-Code / ಡ್ರಾಯಿಂಗ್ & ಜಿ-ಕೋಡ್",
+        "quote_hub": "📋 Process Breakdown & Quotation / ಪ್ರಕ್ರಿಯೆ & ಉಲ್ಲೇಖ",
+        "settings": "⚙️ More Menu & Settings / ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+        "active_machines": "Active Machines",
+        "todays_output": "Today's Output",
+        "material_stock": "Material Stock Items",
+        "low_stock_alerts": "Low/Out Stock",
+        "core_modules": "🚀 Core Automation Modules / ಪ್ರಮುಖ ಮಾಡ್ಯೂಲ್‌ಗಳು",
+        "back_home": "⬅️ Back to Home / ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ",
+    },
+    "English": {
+        "home": "🏠 Home",
+        "rod_calc": "📐 Rod Calculator",
+        "prod_calc": "⏱️ Production Calculator",
+        "cost_calc": "💰 Costing & Quotation Calculator",
+        "stock_mgmt": "📦 Stock Management",
+        "drawing_studio": "📷 Drawing & Multi-Op G-Code",
+        "quote_hub": "📋 Process Breakdown & Customer Quotation",
+        "settings": "⚙️ More Menu & Settings",
+        "active_machines": "Active Machines",
+        "todays_output": "Today's Output",
+        "material_stock": "Material Stock Items",
+        "low_stock_alerts": "Low/Out Stock",
+        "core_modules": "🚀 Core Automation Modules",
+        "back_home": "⬅️ Back to Home",
+    },
+}
+
+if "app_language" not in st.session_state:
+  st.session_state["app_language"] = "தமிழ் (Tamil)"
+
+current_lang = st.session_state["app_language"]
+
+
+def get_text(key):
+  if current_lang in translations and key in translations[current_lang]:
+    return translations[current_lang][key]
+  return translations["English"].get(key, key)
+
+
+module_keys = [
+    "home",
+    "rod_calc",
+    "prod_calc",
+    "cost_calc",
+    "stock_mgmt",
+    "drawing_studio",
+    "quote_hub",
+    "settings",
 ]
+module_list = [get_text(k) for k in module_keys]
 
 if "selected_module" not in st.session_state:
   st.session_state["selected_module"] = module_list[0]
@@ -208,6 +323,19 @@ if uploaded_logo is not None:
     st.sidebar.error(f"Error: {e}")
 
 st.sidebar.markdown("---")
+
+# Language Selection in Sidebar as well for quick access
+selected_lang_sidebar = st.sidebar.selectbox(
+    "🌐 Select Language",
+    list(translations.keys()),
+    index=list(translations.keys()).index(st.session_state["app_language"]),
+)
+if selected_lang_sidebar != st.session_state["app_language"]:
+  st.session_state["app_language"] = selected_lang_sidebar
+  st.rerun()
+
+st.sidebar.markdown("---")
+
 selected_module = st.sidebar.selectbox(
     "Select Module",
     module_list,
@@ -370,7 +498,7 @@ def generate_quotation_csv(
 
 
 # 1. HOME DASHBOARD
-if "Home" in selected_module:
+if selected_module == get_text("home"):
   inv_df = st.session_state["stock_inventory_df"]
   total_items_count = len(inv_df)
   low_stock_count = len(inv_df[inv_df["Status"] == "Low Stock"])
@@ -378,76 +506,64 @@ if "Home" in selected_module:
 
   m1, m2, m3, m4 = st.columns(4)
   with m1:
-    st.metric("Active Machines", "4 Units", "Running 🚀")
+    st.metric(get_text("active_machines"), "4 Units", "Running 🚀")
   with m2:
-    st.metric("Today's Output", "1,850 Nos", "+12% 📈")
+    st.metric(get_text("todays_output"), "1,850 Nos", "+12% 📈")
   with m3:
-    st.metric("Material Stock Items", f"{total_items_count} Items", "Optimal ✨")
+    st.metric(get_text("material_stock"), f"{total_items_count} Items", "Optimal ✨")
   with m4:
     st.metric(
-        "Low/Out Stock",
+        get_text("low_stock_alerts"),
         f"{low_stock_count + out_stock_count} Alerts",
         "Check Stock ⚠️",
     )
 
   st.markdown("<br>", unsafe_allow_html=True)
-  st.markdown("### 🚀 Core Automation Modules / முக்கிய மாட்யூல்கள்")
+  st.markdown(f"### {get_text('core_modules')}")
 
   col1, col2, col3 = st.columns(3)
   with col1:
-    st.markdown("### 📐 Rod Calculator")
+    st.markdown(f"### {get_text('rod_calc').split('/')[0]}")
     if st.button("🚀 Open Rod Calculator", use_container_width=True, key="bh1"):
-      st.session_state["selected_module"] = "📐 Rod Calculator (ராட் கால்குலேட்டர்)"
+      st.session_state["selected_module"] = get_text("rod_calc")
       st.rerun()
   with col2:
-    st.markdown("### ⏱️ Production Calc")
+    st.markdown(f"### {get_text('prod_calc').split('/')[0]}")
     if st.button("🚀 Open Production Calc", use_container_width=True, key="bh2"):
-      st.session_state["selected_module"] = (
-          "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)"
-      )
+      st.session_state["selected_module"] = get_text("prod_calc")
       st.rerun()
   with col3:
-    st.markdown("### 💰 Costing & Quote")
+    st.markdown(f"### {get_text('cost_calc').split('/')[0]}")
     if st.button("🚀 Open Costing Calc", use_container_width=True, key="bh3"):
-      st.session_state["selected_module"] = (
-          "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)"
-      )
+      st.session_state["selected_module"] = get_text("cost_calc")
       st.rerun()
 
   c4, c5, c6, c7 = st.columns(4)
   with c4:
-    st.markdown("### 📦 Stock Manager")
+    st.markdown(f"### {get_text('stock_mgmt').split('/')[0]}")
     if st.button("🚀 Open Stock Manager", use_container_width=True, key="bh4"):
-      st.session_state["selected_module"] = (
-          "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)"
-      )
+      st.session_state["selected_module"] = get_text("stock_mgmt")
       st.rerun()
   with c5:
-    st.markdown("### 📷 Drawing Studio")
+    st.markdown(f"### {get_text('drawing_studio').split('/')[0]}")
     if st.button("🚀 Open Drawing Studio", use_container_width=True, key="bh5"):
-      st.session_state["selected_module"] = (
-          "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)"
-      )
+      st.session_state["selected_module"] = get_text("drawing_studio")
       st.rerun()
   with c6:
-    st.markdown("### 📋 Quotation Hub")
+    st.markdown(f"### {get_text('quote_hub').split('/')[0]}")
     if st.button("🚀 Open Quote Hub", use_container_width=True, key="bh6"):
-      st.session_state["selected_module"] = (
-          "📋 Process Breakdown & Customer Quotation (புதிய கொட்டேஷன் மாடியூல்)"
-      )
+      st.session_state["selected_module"] = get_text("quote_hub")
       st.rerun()
   with c7:
-    st.markdown("### ⚙️ Settings")
+    st.markdown(f"### {get_text('settings').split('/')[0]}")
     if st.button("🚀 Open Settings", use_container_width=True, key="bh7"):
-      st.session_state["selected_module"] = (
-          "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)"
-      )
+      st.session_state["selected_module"] = get_text("settings")
       st.rerun()
 
 # 2. ROD CALCULATOR
-elif "Rod Calculator" in selected_module:
-  if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
-    st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+elif selected_module == get_text("rod_calc"):
+  if st.button(get_text("back_home")):
+    st.session_state["selected_module"] = get_text("home")
     st.rerun()
   st.subheader("📐 Rod Calculator - Simple & Advanced Modes")
   mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
@@ -569,9 +685,9 @@ elif "Rod Calculator" in selected_module:
       st.metric("Total Mat. Cost", f"Rs. {round(tot_wt_kg * adv_mat_rate, 2)}")
 
 # 3. PRODUCTION CALCULATOR
-elif "Production Calculator" in selected_module:
-  if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
-    st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+elif selected_module == get_text("prod_calc"):
+  if st.button(get_text("back_home")):
+    st.session_state["selected_module"] = get_text("home")
     st.rerun()
   st.subheader("⏱️ Production Days & Output Calculator & PDF Report")
   c1, c2 = st.columns(2)
@@ -610,9 +726,9 @@ elif "Production Calculator" in selected_module:
   )
 
 # 4. COSTING & QUOTATION CALCULATOR
-elif "Costing & Quotation Calculator" in selected_module:
-  if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
-    st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+elif selected_module == get_text("cost_calc"):
+  if st.button(get_text("back_home")):
+    st.session_state["selected_module"] = get_text("home")
     st.rerun()
   st.subheader("💰 Costing & Quotation Calculator")
   col1, col2 = st.columns(2)
@@ -655,9 +771,9 @@ elif "Costing & Quotation Calculator" in selected_module:
   )
 
 # 5. STOCK MANAGEMENT
-elif "Stock Management" in selected_module:
-  if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
-    st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+elif selected_module == get_text("stock_mgmt"):
+  if st.button(get_text("back_home")):
+    st.session_state["selected_module"] = get_text("home")
     st.rerun()
   st.subheader("📦 Interactive Stock & Inventory Management System")
   inv_df = st.session_state["stock_inventory_df"]
@@ -749,9 +865,9 @@ elif "Stock Management" in selected_module:
           st.rerun()
 
 # 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR
-elif "Drawing & Multi-Op G-Code" in selected_module:
-  if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
-    st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+elif selected_module == get_text("drawing_studio"):
+  if st.button(get_text("back_home")):
+    st.session_state["selected_module"] = get_text("home")
     st.rerun()
   st.subheader("📷 Drawing Upload & Automatic G-Code Generator")
   uf = st.file_uploader("Upload Drawing", type=["png", "jpg", "pdf"])
@@ -844,10 +960,10 @@ G0 Z2.0
       mime="application/pdf",
   )
 
-# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION (FULLY DYNAMIC WITH OPERATION DROPDOWN)
-elif "Process Breakdown & Customer Quotation" in selected_module:
-  if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
-    st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION
+elif selected_module == get_text("quote_hub"):
+  if st.button(get_text("back_home")):
+    st.session_state["selected_module"] = get_text("home")
     st.rerun()
 
   st.subheader(
@@ -896,7 +1012,6 @@ elif "Process Breakdown & Customer Quotation" in selected_module:
       value=3,
   )
 
-  # Comprehensive CNC Workshop Operations List
   operation_dropdown_options = [
       "Facing (பேசிங்)",
       "Turning - Rough & Finish (டர்னிங்)",
@@ -965,23 +1080,24 @@ elif "Process Breakdown & Customer Quotation" in selected_module:
     )
 
 # 8. MORE MENU & SETTINGS
-elif "More Menu & Settings" in selected_module:
-  if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
-    st.session_state["selected_module"] = "🏠 Home / முகப்பு"
+elif selected_module == get_text("settings"):
+  if st.button(get_text("back_home")):
+    st.session_state["selected_module"] = get_text("home")
     st.rerun()
   st.subheader("⚙️ More Menu & Settings")
-  lang = st.selectbox(
+
+  selected_lang_main = st.selectbox(
       "🌐 Select Language",
-      [
-          "தமிழ் (Tamil)",
-          "English",
-          "हिन्दी (Hindi)",
-          "తెలుగు (Telugu)",
-          "മലയാളം (Malayalam)",
-          "ಕನ್ನಡ (Kannada)",
-      ],
+      list(translations.keys()),
+      index=list(translations.keys()).index(st.session_state["app_language"]),
+      key="main_lang_selector",
   )
-  st.success(f"Language set to: {lang}")
+
+  if selected_lang_main != st.session_state["app_language"]:
+    st.session_state["app_language"] = selected_lang_main
+    st.rerun()
+
+  st.success(f"Language set to: {st.session_state['app_language']}")
   st.markdown("---")
   st.markdown("### 📋 Workshop Masters")
   st.write("• Part Master\n• Customer Master\n• Machine Master\n• Material Master")
