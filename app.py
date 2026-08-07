@@ -13,13 +13,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# Vibrant, Colorful & Tactile Interactive SaaS Custom CSS
+# Ultra-Vibrant, Colorful & Tactile Interactive SaaS Custom CSS
 st.markdown("""
     <style>
-    /* Global Background with Deep Tech Balanced Gradient */
+    /* Global Background with Deep Cyber-Tech Gradient */
     .stApp {
-        background: linear-gradient(135deg, #070b19 0%, #0f172a 50%, #020617 100%);
-        color: #f1f5f9;
+        background: linear-gradient(135deg, #090d1f 0%, #111827 40%, #1e1b4b 100%);
+        color: #f8fafc;
         font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     
@@ -29,15 +29,15 @@ st.markdown("""
         align-items: center;
         gap: 20px;
         padding: 10px 0 20px 0;
-        border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+        border-bottom: 2px solid rgba(236, 72, 153, 0.3);
         margin-bottom: 25px;
     }
 
-    /* Professional & Balanced Title Styling */
+    /* Ultra-Bright Neon Gradient Title */
     .main-title {
         font-size: 2.8rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+        font-weight: 900;
+        background: linear-gradient(135deg, #38bdf8 0%, #c084fc 50%, #ec4899 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0 0 4px 0;
@@ -45,114 +45,115 @@ st.markdown("""
         letter-spacing: 1.5px;
         text-transform: uppercase;
         line-height: 1.1;
-        filter: drop-shadow(0 2px 10px rgba(56, 189, 248, 0.3));
+        filter: drop-shadow(0 0 20px rgba(192, 132, 252, 0.5));
     }
     
     /* Sleek Professional Sub-Header */
     .sub-title {
         font-size: 0.92rem;
-        color: #94a3b8;
+        color: #38bdf8;
         margin: 0;
-        font-weight: 600;
-        letter-spacing: 1.5px;
+        font-weight: 700;
+        letter-spacing: 2px;
         text-transform: uppercase;
+        text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
     }
 
-    /* Balanced Professional Badges */
+    /* Vibrant Glowing Badges */
     .auto-badge {
-        background: linear-gradient(135deg, rgba(79, 70, 229, 0.3) 0%, rgba(56, 189, 248, 0.3) 100%);
-        color: #38bdf8;
-        padding: 6px 16px;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(139, 92, 246, 0.4) 100%);
+        color: #f472b6;
+        padding: 6px 18px;
         border-radius: 20px;
         font-size: 0.85rem;
-        font-weight: 700;
+        font-weight: 800;
         display: inline-block;
         margin-bottom: 16px;
-        border: 1px solid rgba(56, 189, 248, 0.4);
+        border: 1.5px solid rgba(236, 72, 153, 0.6);
         text-transform: uppercase;
-        letter-spacing: 1px;
-        box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+        letter-spacing: 1.2px;
+        box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
     }
 
-    /* --- VIBRANT & TACTILE DASHBOARD CARDS --- */
+    /* --- ULTRA-COLORFUL & TACTILE DASHBOARD CARDS --- */
     div[data-testid="column"] {
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.85) 100%);
-        border: 1px solid rgba(56, 189, 248, 0.2);
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(49, 46, 129, 0.5) 100%);
+        border: 1.5px solid rgba(139, 92, 246, 0.4);
         padding: 24px;
-        border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(16px);
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 20px;
     }
     
     div[data-testid="column"]:hover {
-        border-color: #38bdf8;
-        transform: translateY(-6px) scale(1.01);
-        box-shadow: 0 15px 40px rgba(56, 189, 248, 0.3), inset 0 1px 15px rgba(56, 189, 248, 0.25);
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(30, 58, 138, 0.4) 100%);
+        border-color: #ec4899;
+        transform: translateY(-8px) scale(1.015);
+        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4), 0 0 30px rgba(56, 189, 248, 0.3), inset 0 1px 20px rgba(236, 72, 153, 0.4);
+        background: linear-gradient(145deg, rgba(55, 48, 163, 0.7) 0%, rgba(131, 24, 67, 0.5) 100%);
     }
 
-    /* --- HIGHLY RESPONSIVE TACTILE BUTTONS --- */
+    /* --- HIGHLY RESPONSIVE NEON BUTTONS --- */
     div.stButton > button {
-        background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+        background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #ec4899 100%);
         color: #ffffff !important;
-        border-radius: 12px;
-        border: 1px solid rgba(56, 189, 248, 0.4);
-        font-weight: 700;
-        letter-spacing: 0.8px;
-        transition: all 0.25s ease-in-out;
-        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        border-radius: 14px;
+        border: 1.5px solid rgba(236, 72, 153, 0.6);
+        font-weight: 800;
+        letter-spacing: 1px;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 20px rgba(147, 51, 234, 0.5);
     }
     
     div.stButton > button:hover {
-        background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #f43f5e 100%);
         border-color: #38bdf8;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.7), 0 0 20px rgba(56, 189, 248, 0.6);
     }
 
     /* Tactile Click/Touch Active Effect */
     div.stButton > button:active, div.stButton > button:focus {
-        background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%) !important;
+        background: linear-gradient(135deg, #db2777 0%, #7c3aed 100%) !important;
         color: #ffffff !important;
         border-color: #38bdf8 !important;
-        transform: scale(0.96) !important;
-        box-shadow: 0 0 20px rgba(56, 189, 248, 0.7) !important;
+        transform: scale(0.95) !important;
+        box-shadow: 0 0 25px rgba(236, 72, 153, 0.9) !important;
     }
 
     /* Colorful Metric Cards Styling */
     div[data-testid="metric-container"] {
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
-        border: 1px solid rgba(56, 189, 248, 0.25);
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(49, 46, 129, 0.7) 100%);
+        border: 1.5px solid rgba(56, 189, 248, 0.4);
         padding: 18px;
-        border-radius: 14px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
         transition: all 0.3s ease;
     }
     div[data-testid="metric-container"]:hover {
-        border-color: #38bdf8;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+        border-color: #ec4899;
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4), 0 0 15px rgba(56, 189, 248, 0.4);
     }
 
     /* Sidebar Styling & Compact Logo Uploader Alignment */
     section[data-testid="stSidebar"] {
-        background: #050811;
-        border-right: 1px solid rgba(56, 189, 248, 0.15);
+        background: linear-gradient(180deg, #070b19 0%, #0f172a 100%);
+        border-right: 1.5px solid rgba(139, 92, 246, 0.3);
         padding-top: 0.5rem;
     }
     section[data-testid="stSidebar"] .stFileUploader {
-        background: rgba(30, 41, 59, 0.5);
-        border: 1px solid rgba(56, 189, 248, 0.3);
-        border-radius: 12px;
+        background: rgba(30, 41, 59, 0.7);
+        border: 1.5px solid rgba(236, 72, 153, 0.4);
+        border-radius: 14px;
         padding: 10px;
         margin-bottom: 10px;
     }
     section[data-testid="stSidebar"] .stFileUploader label {
-        color: #38bdf8 !important;
+        color: #f472b6 !important;
         font-size: 0.85rem !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -178,11 +179,11 @@ if "selected_module" not in st.session_state:
 # Sidebar Navigation Header & Permanent Logo Uploader
 st.sidebar.markdown("""
     <div style="text-align: center; padding: 5px 0 10px 0;">
-        <h3 style="color: #38bdf8; margin: 0; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 0 10px rgba(56,189,248,0.4);">MEGALA CNC MATE</h3>
+        <h3 style="color: #ec4899; margin: 0; font-size: 1.15rem; font-weight: 900; letter-spacing: 1.5px; text-shadow: 0 0 15px rgba(236,72,153,0.6);">MEGALA CNC MATE</h3>
     </div>
 """, unsafe_allow_html=True)
 
-st.sidebar.markdown("<p style='font-size: 0.82rem; font-weight: 700; color: #38bdf8; margin-bottom: 5px; text-transform: uppercase;'>🖼️ Company Logo</p>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='font-size: 0.85rem; font-weight: 800; color: #ec4899; margin-bottom: 5px; text-transform: uppercase;'>🖼️ Company Logo</p>", unsafe_allow_html=True)
 uploaded_logo = st.sidebar.file_uploader("Upload Permanent Logo", type=["png", "jpg", "jpeg"], key="sidebar_logo_upload", label_visibility="collapsed")
 
 if uploaded_logo is not None:
@@ -194,7 +195,7 @@ if uploaded_logo is not None:
         st.sidebar.error(f"Error: {e}")
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("<p style='font-size: 0.82rem; font-weight: 700; color: #38bdf8; margin-bottom: 5px; text-transform: uppercase;'>🚀 Navigation Hub</p>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='font-size: 0.85rem; font-weight: 800; color: #38bdf8; margin-bottom: 5px; text-transform: uppercase;'>🚀 Navigation Hub</p>", unsafe_allow_html=True)
 selected_module = st.sidebar.selectbox(
     "Select Module",
     module_list,
@@ -217,14 +218,14 @@ with col_logo:
     encoded_img = get_base64_image(LOGO_PATH)
     if encoded_img:
         st.markdown(f"""
-            <div style="background: rgba(56, 189, 248, 0.15); border: 2px solid #38bdf8; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4); overflow: hidden; backdrop-filter: blur(8px);">
+            <div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(56, 189, 248, 0.3)); border: 2.5px solid #ec4899; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(236, 72, 153, 0.6); overflow: hidden; backdrop-filter: blur(8px);">
                 <img src="data:image/png;base64,{encoded_img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
             </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown("""
-            <div style="background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%); border: 2px solid #38bdf8; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);">
-                <span style="font-size: 1.5rem; font-weight: 800; color: #ffffff;">MC</span>
+            <div style="background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%); border: 2.5px solid #38bdf8; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);">
+                <span style="font-size: 1.6rem; font-weight: 900; color: #ffffff;">MC</span>
             </div>
         """, unsafe_allow_html=True)
 
@@ -232,7 +233,7 @@ with col_title:
     st.markdown('<h1 class="main-title">MEGALA CNC MATE</h1>', unsafe_allow_html=True)
     st.markdown('<p class="sub-title">ENTERPRISE CNC AUTOMATION & WORKSHOP INTELLIGENCE SYSTEM</p>', unsafe_allow_html=True)
 
-st.markdown("<hr style='margin-top: 0px; border-color: rgba(56, 189, 248, 0.2);'>", unsafe_allow_html=True)
+st.markdown("<hr style='margin-top: 0px; border-color: rgba(236, 72, 153, 0.3);'>", unsafe_allow_html=True)
 
 # Helper to clean text for FPDF (replaces unicode symbols like ₹ with Rs.)
 def clean_text(text):
