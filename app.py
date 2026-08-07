@@ -9,7 +9,7 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="Megala CNC Mate - Enterprise CNC Automation",
+    page_title="Megala CNC Mate - Suresh Enterprise Automation",
     page_icon="⚙️",
     layout="wide",
 )
@@ -100,11 +100,12 @@ LOGO_PATH = "logo.png"
 if "app_language" not in st.session_state:
   st.session_state["app_language"] = "தமிழ் (Tamil)"
 
-# Sidebar Language Selection
+# Sidebar User Greeting & Navigation
 st.sidebar.markdown(
     '<div style="text-align: center; padding: 5px 0 10px 0;"><h3'
     ' style="color: #ec4899; margin: 0; font-size: 1.15rem; font-weight: 900;'
-    ' letter-spacing: 1.5px;">MEGALA CNC MATE</h3></div>',
+    ' letter-spacing: 1.5px;">MEGALA CNC MATE</h3><p style="color: #38bdf8;'
+    ' font-size: 0.85rem; margin: 5px 0 0 0;">Owner: Suresh (சுரேஷ்)</p></div>',
     unsafe_allow_html=True,
 )
 
@@ -145,9 +146,10 @@ translations = {
             "📦 Stock & Inventory Management",
             "📷 Drawing Studio & G-Code Generator",
             "📋 Process Breakdown & Customer Quotation",
+            "🛠️ Suresh Master Knowledge Base & Profile",
             "⚙️ More Menu & Settings",
         ],
-        "home_title": "Enterprise Control Dashboard",
+        "home_title": "Enterprise Control Dashboard - Suresh",
         "active_machines": "Active Machines",
         "todays_output": "Today's Output",
         "stock_items": "Material Stock Items",
@@ -161,12 +163,18 @@ translations = {
             "📐 Rod / Bar Weight & Cost Calculator / ராட் எடை & விலை கால்குலேட்டர்",
             "⏱️ CNC Production & Cycle Time Calculator / உற்பத்தி & சைக்கிள் டைம்",
             "💰 Enterprise Costing & Quotation / செலவு & கொட்டேஷன் கால்குலேட்டர்",
-            "📦 Stock & Inventory Management / ஸ்டாக் & இன்வென்토리 மேனேஜ்மென்ட்",
+            "📦 Stock & Inventory Management / ஸ்டாக் & இன்வென்டோரி மேனேஜ்மென்ட்",
             "📷 Drawing Studio & G-Code Generator / டிராயிங் & ஜி-கோடு ஜெனரேட்டர்",
             "📋 Process Breakdown & Customer Quotation / செயல்முறை & கொட்டேஷன்",
+            (
+                "🛠️ Suresh Master Knowledge Base & Profile / சுரேஷ் மாஸ்டர்"
+                " சுயவிவரம் & அறிவுத்தளம்"
+            ),
             "⚙️ More Menu & Settings / அமைப்புகள் & மாஸ்டர்ஸ்",
         ],
-        "home_title": "Enterprise Control Dashboard / நிறுவன கட்டுப்பாட்டு முகப்பு",
+        "home_title": (
+            "Enterprise Control Dashboard / நிறுவன கட்டுப்பாட்டு முகப்பு (சுரேஷ்)"
+        ),
         "active_machines": "Active Machines / இயங்கும் இயந்திரங்கள்",
         "todays_output": "Today's Output / இன்றைய உற்பத்தி",
         "stock_items": "Material Stock Items / ஸ்டாக் பொருட்கள்",
@@ -183,9 +191,12 @@ translations = {
             "📦 Stock Management / स्टॉक और इन्वेंटरी मैनेजमेंट",
             "📷 Drawing & G-Code / ड्राइंग और जी-कोड जनरेटर",
             "📋 Process Breakdown & Quotation / प्रोसेस और कोटेशन",
+            "🛠️ Suresh Profile & Knowledge Base / सुरेश प्रोफाइल और नॉलेज बेस",
             "⚙️ More Menu & Settings / सेटिंग्स",
         ],
-        "home_title": "Enterprise Control Dashboard / एंटरप्राइज़ कंट्रोल डैशबोर्ड",
+        "home_title": (
+            "Enterprise Control Dashboard / एंटरप्राइज़ कंट्रोल डैशबोर्ड (सुरेश)"
+        ),
         "active_machines": "Active Machines / सक्रिय मशीनें",
         "todays_output": "Today's Output / आज का उत्पादन",
         "stock_items": "Material Stock Items / स्टॉक आइटम",
@@ -202,9 +213,12 @@ translations = {
             "📦 Stock Management / స్టాక్ & ఇన్వెంటరీ మేనేజ్‌మెంట్",
             "📷 Drawing & G-Code / డ్రాయింగ్ & జి-కోడ్ జనరేటర్",
             "📋 Process Breakdown & Quotation / ప్రాసెస్ & కొటేషన్",
+            "🛠️ Suresh Profile & Knowledge Base / సురేష్ ప్రొఫైల్ & నాలెడ్జ్ బేస్",
             "⚙️ More Menu & Settings / సెట్టింగ్‌లు",
         ],
-        "home_title": "Enterprise Control Dashboard / ఎంటర్‌ప్రైజ్ కంట్రోల్ డాష్‌బోర్డ్",
+        "home_title": (
+            "Enterprise Control Dashboard / ఎంటర్‌ప్రైజ్ కంట్రోల్ డాష్‌బోర్డ్ (సురేష్)"
+        ),
         "active_machines": "Active Machines / పనిచేస్తున్న మెషిన్లు",
         "todays_output": "Today's Output / నేటి ఉత్పత్తి",
         "stock_items": "Material Stock Items / స్టాక్ ఐటమ్స్",
@@ -221,10 +235,15 @@ translations = {
             "📦 Stock Management / ಸ್ಟಾಕ್ ಮತ್ತು ದಾಸ್ತಾನು ನಿರ್ವಹಣೆ",
             "📷 Drawing & G-Code / ಡ್ರಾಯಿಂಗ್ ಮತ್ತು ಜಿ-ಕೋಡ್ ಜನರೇಟರ್",
             "📋 Process Breakdown & Quotation / ಪ್ರಕ್ರಿಯೆ ಮತ್ತು ಉಲ್ಲೇಖ",
+            (
+                "🛠️ Suresh Profile & Knowledge Base / ಸುರೇಶ್ ಪ್ರೊಫೈಲ್ ಮತ್ತು"
+                " ಜ್ಞಾನ ಬೇಸ್"
+            ),
             "⚙️ More Menu & Settings / ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
         ],
         "home_title": (
             "Enterprise Control Dashboard / ಎಂಟರ್‌ಪ್ರೈಸ್ ಕಂಟ್ರೋಲ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್"
+            " (ಸುರೇಶ್)"
         ),
         "active_machines": "Active Machines / ಸಕ್ರಿಯ ಯಂತ್ರಗಳು",
         "todays_output": "Today's Output / ಇಂದಿನ ಉತ್ಪಾದನೆ",
@@ -242,9 +261,13 @@ translations = {
             "📦 Stock Management / സ്റ്റോക്ക് മാനേജ്മെന്റ്",
             "📷 Drawing & G-Code / ഡ്രോയിംഗ് & ജി-കോഡ് ജനറേറ്റർ",
             "📋 Process Breakdown & Quotation / പ്രോസസ്സ് & കൊട്ടേഷൻ",
+            "🛠️ Suresh Profile & Knowledge Base / സുരേഷ് പ്രൊഫൈൽ & നോളッジ്",
             "⚙️ More Menu & Settings / ക്രമീകരണങ്ങൾ",
         ],
-        "home_title": "Enterprise Control Dashboard / എന്റർപ്രൈസ് കൺട്രോൾ ഡാഷ്‌ബോർഡ്",
+        "home_title": (
+            "Enterprise Control Dashboard / എന്റർപ്രൈസ് കൺട്രോൾ ഡാഷ്‌ബോർഡ്"
+            " (സുരേഷ്)"
+        ),
         "active_machines": "Active Machines / പ്രവർത്തിക്കുന്ന മെഷീനുകൾ",
         "todays_output": "Today's Output / ഇന്നത്തെ ഉൽപ്പാദനം",
         "stock_items": "Material Stock Items / സ്റ്റോക്ക് ഇനങ്ങൾ",
@@ -346,12 +369,13 @@ with col_logo:
         '<div style="background: linear-gradient(135deg, #4f46e5, #ec4899);'
         ' width: 85px; height: 85px; border-radius: 50%; display: flex;'
         ' align-items: center; justify-content: center; font-weight: 900;'
-        ' color: white;">MC</div>',
+        ' color: white;">SU</div>',
         unsafe_allow_html=True,
     )
 with col_title:
   st.markdown(
-      '<h1 class="main-title">MEGALA INDUSTRIES</h1>', unsafe_allow_html=True
+      '<h1 class="main-title">MEGALA INDUSTRIES (SURESH)</h1>',
+      unsafe_allow_html=True,
   )
   st.markdown(
       '<p class="sub-title">PRECISION CNC MACHINING & ENTERPRISE AUTOMATION</p>',
@@ -371,10 +395,10 @@ def generate_quotation_csv(
   rows.append(
       ["MEGALA INDUSTRIES - PRECISION CNC MACHINING & ENTERPRISE AUTOMATION"]
   )
-  rows.append([f"Customer Name: {customer_name}", f"Part Name: {part_name}"])
+  rows.append([f"Owner / Proprietor: Suresh", f"Customer Name: {customer_name}"])
   rows.append([
+      f"Part Name: {part_name}",
       f"Date: {datetime.now().strftime('%Y-%m-%d')}",
-      "Quotation No: MI/Q/2026-08/01",
   ])
   rows.append([])
   rows.append([
@@ -430,65 +454,29 @@ if "Home Dashboard" in selected_module or "முகப்பு" in selected_mo
 
   col1, col2, col3 = st.columns(3)
   with col1:
-    if st.button(
-        "📐 Rod Calculator"
-        if curr_lang == "English"
-        else "📐 Rod / Bar Calculator (ராட் கால்குலேட்டர்)",
-        use_container_width=True,
-        key="bh1",
-    ):
+    if st.button("📐 Rod Calculator", use_container_width=True, key="bh1"):
       st.session_state["selected_module"] = module_list[1]
       st.rerun()
   with col2:
-    if st.button(
-        "⏱️ Production Calc"
-        if curr_lang == "English"
-        else "⏱️ Production Calc (உற்பத்தி கால்குலேட்டர்)",
-        use_container_width=True,
-        key="bh2",
-    ):
+    if st.button("⏱️ Production Calc", use_container_width=True, key="bh2"):
       st.session_state["selected_module"] = module_list[2]
       st.rerun()
   with col3:
-    if st.button(
-        "💰 Costing & Quote"
-        if curr_lang == "English"
-        else "💰 Costing & Quote (செலவு & கொட்டேஷன்)",
-        use_container_width=True,
-        key="bh3",
-    ):
+    if st.button("💰 Costing & Quote", use_container_width=True, key="bh3"):
       st.session_state["selected_module"] = module_list[3]
       st.rerun()
 
   col4, col5, col6 = st.columns(3)
   with col4:
-    if st.button(
-        "📦 Stock Management"
-        if curr_lang == "English"
-        else "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
-        use_container_width=True,
-        key="bh4",
-    ):
+    if st.button("📦 Stock Management", use_container_width=True, key="bh4"):
       st.session_state["selected_module"] = module_list[4]
       st.rerun()
   with col5:
-    if st.button(
-        "📷 Drawing Studio"
-        if curr_lang == "English"
-        else "📷 Drawing Studio (டிராயிங் ஸ்டுடியோ)",
-        use_container_width=True,
-        key="bh5",
-    ):
+    if st.button("📷 Drawing Studio", use_container_width=True, key="bh5"):
       st.session_state["selected_module"] = module_list[5]
       st.rerun()
   with col6:
-    if st.button(
-        "📋 Process Quotation"
-        if curr_lang == "English"
-        else "📋 Process Quotation (புதிய கொட்டேஷன்)",
-        use_container_width=True,
-        key="bh6",
-    ):
+    if st.button("📋 Process Quotation", use_container_width=True, key="bh6"):
       st.session_state["selected_module"] = module_list[6]
       st.rerun()
 
@@ -529,7 +517,6 @@ elif "Rod" in selected_module or "ராட்" in selected_module:
         "Material Rate per Kg (Rs.) / ஒரு கிலோ விலை (ரூ.)", value=85.0
     )
 
-  # Calculation Formula: Weight = (pi * (dia/2)^2 * length * density) / 1,000,000 per piece
   single_wt_kg = (
       math.pi * (dia / 2) ** 2 * length_mm * density
   ) / 1000000.0  # in kg
@@ -707,39 +694,109 @@ elif "Stock" in selected_module or "ஸ்டாக்" in selected_module:
     st.success("✅ Stock item added successfully!")
     st.rerun()
 
-# 6. DRAWING STUDIO & G-CODE
+# 6. DRAWING STUDIO & DYNAMIC G-CODE GENERATOR
 elif "Drawing" in selected_module or "டிராயிங்" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
   st.subheader(
-      "📷 Drawing Studio & G-Code Generator (டிராயிங் & ஜி-கோடு ஜெனரேட்டர்)"
+      "📷 Drawing Studio & Dynamic G-Code Generator (டிராயிங் & டைனமிக் ஜி-கோடு"
+      " ஜெனரேட்டர்)"
   )
   st.write(
-      "Upload component engineering drawings and instantly generate baseline"
-      " CNC G-Code."
+      "உங்கள் பார்ட் டிராயிங்கை அப்லோட் செய்யுங்கள். அதன் சைஸ் மற்றும்"
+      " ஆபரேஷன்களை உள்ளிட்டால் தானாகவே ஜி-கோடு ஜெனரேட் ஆகும்."
   )
 
-  uploaded_drawing = st.file_uploader(
-      "Upload Component Drawing (PNG/JPG/PDF)", type=["png", "jpg", "jpeg"]
-  )
-  if uploaded_drawing is not None:
-    st.image(
-        uploaded_drawing, caption="Uploaded Drawing", use_container_width=True
+  d_col1, d_col2 = st.columns(2)
+  with d_col1:
+    uploaded_drawing = st.file_uploader(
+        "Upload Component Drawing (PNG/JPG/PDF)", type=["png", "jpg", "jpeg"]
     )
-    st.success("✅ Drawing successfully loaded for analysis.")
+    if uploaded_drawing is not None:
+      st.image(
+          uploaded_drawing,
+          caption="Uploaded Drawing Preview",
+          use_container_width=True,
+      )
+      st.success("✅ Drawing loaded successfully for automated sizing.")
 
-  st.markdown("### Generated G-Code Program Preview")
-  gcode_sample = """O0001 (MEGALA INDUSTRIES PART PROGRAM)
-G21 G40 G90 G99
-T0101 (CENTER DRILL / FACING TOOL)
-G97 S2000 M03
-G0 X0 Z5
-G1 Z-1 F0.15
-G0 Z5
-M05
-M30"""
-  st.code(gcode_sample, language="text")
+  with d_col2:
+    st.markdown("### 📏 Part Specifications & Parameters")
+    part_od = st.number_input("Raw Outer Diameter (mm) / வெளி விட்டம்", value=50.0)
+    part_id = st.number_input("Inner Bore Diameter (mm) / உள் விட்டம்", value=0.0)
+    part_length = st.number_input(
+        "Total Finished Length (mm) / நீளம்", value=45.0
+    )
+    num_ops_drawing = st.slider(
+        "Number of Operations / ஆபரேஷன்களின் எண்ணிக்கை", 1, 5, 2
+    )
+
+    selected_ops_list = st.multiselect(
+        "Select Operations for G-Code Compilation",
+        [
+            "Facing",
+            "Rough Turning",
+            "Finish Turning",
+            "Grooving",
+            "Drilling / Boring",
+            "Parting / Cut-off",
+        ],
+        default=["Facing", "Rough Turning", "Parting / Cut-off"],
+    )
+
+  st.markdown("---")
+  st.subheader("⚙️ Dynamically Generated Multi-Operation G-Code Program")
+
+  gcode_lines = []
+  gcode_lines.append("O1001 (SURESH MEGALA DYNAMIC AUTOMATED CNC PROGRAM)")
+  gcode_lines.append("G21 G40 G90 G99")
+  gcode_lines.append(f"(PART SPEC: OD={part_od}mm, LENGTH={part_length}mm)")
+
+  tool_counter = 1
+  if "Facing" in selected_ops_list:
+    gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (FACING TOOL)")
+    gcode_lines.append("G97 S2200 M03")
+    gcode_lines.append(f"G0 X{part_od + 2.0} Z2.0")
+    gcode_lines.append("G1 X-0.5 Z0.0 F0.15")
+    gcode_lines.append("G0 Z5.0")
+    tool_counter += 1
+
+  if "Rough Turning" in selected_ops_list or "Finish Turning" in selected_ops_list:
+    gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (TURNING TOOL)")
+    gcode_lines.append("G96 S180 M03")
+    gcode_lines.append(f"G0 X{part_od} Z2.0")
+    gcode_lines.append(f"G1 Z-{part_length} F0.20")
+    gcode_lines.append(f"G0 X{part_od + 5.0}")
+    gcode_lines.append("G0 Z5.0")
+    tool_counter += 1
+
+  if "Drilling / Boring" in selected_ops_list and part_id > 0:
+    gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (DRILL TOOL)")
+    gcode_lines.append("G97 S1500 M03")
+    gcode_lines.append("G0 X0.0 Z3.0")
+    gcode_lines.append(f"G1 Z-{part_length - 5.0} F0.10")
+    gcode_lines.append("G0 Z5.0")
+    tool_counter += 1
+
+  if "Parting / Cut-off" in selected_ops_list:
+    gcode_lines.append(f"T{tool_counter:02d}{tool_counter:02d} (PARTING TOOL)")
+    gcode_lines.append("G97 S1000 M03")
+    gcode_lines.append(f"G0 X{part_od + 2.0} Z-{part_length}")
+    gcode_lines.append("G1 X-0.5 F0.08")
+    gcode_lines.append("G0 Z50.0 M05")
+
+  gcode_lines.append("M30")
+
+  final_generated_code = "\n".join(gcode_lines)
+  st.code(final_generated_code, language="text")
+
+  st.download_button(
+      "📥 Download Dynamic G-Code File (.nc / .txt)",
+      data=final_generated_code,
+      file_name=f"Suresh_Megala_Part_OD{part_od}_Len{part_length}.nc",
+      mime="text/plain",
+  )
 
 # 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION
 elif "Process Breakdown" in selected_module or "செயல்முறை" in selected_module:
@@ -748,13 +805,11 @@ elif "Process Breakdown" in selected_module or "செயல்முறை" in 
     st.rerun()
 
   st.subheader(
-      "📋 Process Breakdown & Customer Quotation Generator (புதிய கொட்டேஷன்"
-      " மாடியூல்)"
+      "📋 Process Breakdown & Customer Quotation Generator (கொட்டேஷன் மாடியூல்)"
   )
   st.write(
       "உங்கள் பார்ட்டுகளுக்கு தேவையான ஆபரேஷன்களை (Facing, Turning, Grooving,"
-      " Drilling, Boring, Chamfering, Tapping போன்றவை) டிராப்-டவுனில் இருந்து"
-      " எளிதாகத் தேர்வு செய்யலாம்."
+      " Drilling, Boring போன்றவை) டிராப்-டவுனில் இருந்து தேர்வு செய்யலாம்."
   )
 
   col_q1, col_q2 = st.columns(2)
@@ -789,145 +844,28 @@ elif "Process Breakdown" in selected_module or "செயல்முறை" in 
       value=3,
   )
 
-  # Language-based Operations and Machines Lists
-  if curr_lang == "English":
-    op_dropdown_options = [
-        "Facing",
-        "Turning - Rough & Finish",
-        "Grooving",
-        "Drilling",
-        "Boring",
-        "Chamfering",
-        "Tapping",
-        "Parting / Cut-off",
-        "Thread Cutting",
-        "Milling",
-        "Deburring & Finishing",
-        "Special Operation",
-    ]
-    mach_dropdown_options = [
-        "CNC Turning",
-        "VMC / Milling",
-        "Drilling Machine",
-        "Traub Lathe",
-        "Manual / Bench",
-        "Special Setup",
-    ]
-  elif curr_lang == "தமிழ் (Tamil)":
-    op_dropdown_options = [
-        "Facing (பேசிங்)",
-        "Turning - Rough & Finish (டர்னிங்)",
-        "Grooving (குரூவிங்)",
-        "Drilling (ட்ரில்லிங்)",
-        "Boring (போரிங்)",
-        "Chamfering (சாம்பர்)",
-        "Tapping (டாப்பிங்)",
-        "Parting / Cut-off (பார்ட்டிங்)",
-        "Thread Cutting (த்ரெட்டிங்)",
-        "Milling (மில்லிங்)",
-        "Deburring & Finishing (பினிஷிங்)",
-        "Special Operation (ஸ்பெஷல் ஆபரேஷன்)",
-    ]
-    mach_dropdown_options = [
-        "CNC Turning (சிஎன்சி டர்னிங்)",
-        "VMC / Milling (விஎம்சி / மில்லிங்)",
-        "Drilling Machine (ட்ரில்லிங் மிஷின்)",
-        "Traub Lathe (ட்ராப் லேத்)",
-        "Manual / Bench (மேனுவல் / பெஞ்ச்)",
-        "Special Setup (ஸ்பெஷல் செட்டப்)",
-    ]
-  elif curr_lang == "हिन्दी (Hindi)":
-    op_dropdown_options = [
-        "Facing (फेसिंग)",
-        "Turning - Rough & Finish (टर्निंग)",
-        "Grooving (ग्रूविंग)",
-        "Drilling (ड्रिलिंग)",
-        "Boring (बोरिंग)",
-        "Chamfering (चमफेरिंग)",
-        "Tapping (टैपिंग)",
-        "Parting / Cut-off (पार्टिंग)",
-        "Thread Cutting (थ्रेड कटिंग)",
-        "Milling (मिलिंग)",
-        "Deburring & Finishing (फिनिशिंग)",
-        "Special Operation (विशेष ऑपरेशन)",
-    ]
-    mach_dropdown_options = [
-        "CNC Turning (सीएनसी टर्निंग)",
-        "VMC / Milling (वीएमसी / मिलिंग)",
-        "Drilling Machine (ड्रिलिंग मशीन)",
-        "Traub Lathe (ट्रॉब लेथ)",
-        "Manual / Bench (मैनुअल / बेंच)",
-        "Special Setup (विशेष सेटअप)",
-    ]
-  elif curr_lang == "తెలుగు (Telugu)":
-    op_dropdown_options = [
-        "Facing (ఫేసింగ్)",
-        "Turning - Rough & Finish (టర్నింగ్)",
-        "Grooving (గ్రూవింగ్)",
-        "Drilling (డ్రిల్లింగ్)",
-        "Boring (బోరింగ్)",
-        "Chamfering (చాంపరింగ్)",
-        "Tapping (టాపింగ్)",
-        "Parting / Cut-off (పార్టింగ్)",
-        "Thread Cutting (థ్రెడ్ కటింగ్)",
-        "Milling (మిల్లింగ్)",
-        "Deburring & Finishing (ఫినిషింగ్)",
-        "Special Operation (స్పెషల్ ఆపరేషన్)",
-    ]
-    mach_dropdown_options = [
-        "CNC Turning (సిఎన్‌సి టర్నింగ్)",
-        "VMC / Milling (విఎంసి / మిల్లింగ్)",
-        "Drilling Machine (డ్రిల్లింగ్ మెషిన్)",
-        "Traub Lathe (ట్రాబ్ లేత్)",
-        "Manual / Bench (మాన్యువల్ / బెంచ్)",
-        "Special Setup (స్పెషల్ సెటప్)",
-    ]
-  elif curr_lang == "ಕನ್ನಡ (Kannada)":
-    op_dropdown_options = [
-        "Facing (ಫೇಸಿಂಗ್)",
-        "Turning - Rough & Finish (ಟರ್ನಿಂಗ್)",
-        "Grooving (ಗ್ರೂವಿಂಗ್)",
-        "Drilling (ಡ್ರಿಲ್ಯಿಂಗ್)",
-        "Boring (ಬೋರಿಂಗ್)",
-        "Chamfering (ಚಾಂಫರಿಂಗ್)",
-        "Tapping (ಟ್ಯಾಪಿಂಗ್)",
-        "Parting / Cut-off (ಪಾರ್ಟಿಂಗ್)",
-        "Thread Cutting (ಥ್ರೆಡ್ ಕಟಿಂಗ್)",
-        "Milling (ಮಿಲಿಂಗ್)",
-        "Deburring & Finishing (ಫಿನಿಶಿಂಗ್)",
-        "Special Operation (ವಿಶೇಷ ಕಾರ್ಯಾಚರಣೆ)",
-    ]
-    mach_dropdown_options = [
-        "CNC Turning (ಸಿಎನ್‌ಸಿ ಟರ್ನಿಂಗ್)",
-        "VMC / Milling (ವಿಎಮ್‌ಸಿ / ಮಿಲ್ಲಿಂಗ್)",
-        "Drilling Machine (ಡ್ರಿಲ್ಯಿಂಗ್ ಮೆಷಿನ್)",
-        "Traub Lathe (ಟ್ರಾಬ್ ಲೇಥ್)",
-        "Manual / Bench (ಮ್ಯಾನುವಲ್ / ಬೆಂಚ್)",
-        "Special Setup (ವಿಶೇಷ ಸೆಟಪ್)",
-    ]
-  else:  # Malayalam
-    op_dropdown_options = [
-        "Facing (ഫേസിംഗ്)",
-        "Turning - Rough & Finish (ടേണിംഗ്)",
-        "Grooving (ഗ്രൂവിംഗ്)",
-        "Drilling (ഡ്രില്ലിംഗ്)",
-        "Boring (ബോറിംഗ്)",
-        "Chamfering (ചാമ്പറിംഗ്)",
-        "Tapping (ടാപ്പിംഗ്)",
-        "Parting / Cut-off (പാർട്ടിംഗ്)",
-        "Thread Cutting (ത്രെഡ് കട്ടിംഗ്)",
-        "Milling (മില്ലിംഗ്)",
-        "Deburring & Finishing (ഫിനിഷിംഗ്)",
-        "Special Operation (സ്പെഷ്യൽ ഓപ്പറേഷൻ)",
-    ]
-    mach_dropdown_options = [
-        "CNC Turning (സിഎൻസി ടേണിംഗ്)",
-        "VMC / Milling (വിഎംസി / മില്ലിംഗ്)",
-        "Drilling Machine (ഡ്രില്ലിംഗ് മെഷീൻ)",
-        "Traub Lathe (ട്രോബ് ലേത്)",
-        "Manual / Bench (മാനുവൽ / ബെഞ്ച്)",
-        "Special Setup (സ്പെഷ്യൽ സെറ്റപ്പ്)",
-    ]
+  op_dropdown_options = [
+      "Facing (பேசிங்)",
+      "Turning - Rough & Finish (டர்னிங்)",
+      "Grooving (குரூவிங்)",
+      "Drilling (ட்ரில்லிங்)",
+      "Boring (போரிங்)",
+      "Chamfering (சாம்பர்)",
+      "Tapping (டாப்பிங்)",
+      "Parting / Cut-off (பார்ட்டிங்)",
+      "Thread Cutting (த்ரெட்டிங்)",
+      "Milling (மில்லிங்)",
+      "Deburring & Finishing (பினிஷிங்)",
+      "Special Operation (ஸ்பெஷல் ஆபரேஷன்)",
+  ]
+  mach_dropdown_options = [
+      "CNC Turning (சிஎன்சி டர்னிங்)",
+      "VMC / Milling (விஎம்சி / மில்லிங்)",
+      "Drilling Machine (ட்ரில்லிங் மிஷின்)",
+      "Traub Lathe (ட்ராப் லேத்)",
+      "Manual / Bench (மேனுவல் / பெஞ்ச்)",
+      "Special Setup (ஸ்பெஷல் செட்டப்)",
+  ]
 
   edited_ops = []
   for i in range(int(num_ops)):
@@ -961,7 +899,7 @@ elif "Process Breakdown" in selected_module or "செயல்முறை" in 
     csv_data = generate_quotation_csv(
         cust_name, part_name_input, edited_ops, transport_amt
     )
-    filename = f"Megala_Industries_Quotation_{part_name_input.replace(' ', '_').replace('/', '_')}.csv"
+    filename = f"Suresh_Megala_Quotation_{part_name_input.replace(' ', '_').replace('/', '_')}.csv"
     st.success(f"✅ CSV successfully generated: {filename}")
     st.download_button(
         "📥 Download CSV Quotation (.csv)",
@@ -970,7 +908,48 @@ elif "Process Breakdown" in selected_module or "செயல்முறை" in 
         mime="text/csv",
     )
 
-# 8. MORE MENU & SETTINGS
+# 8. SURESH MASTER KNOWLEDGE BASE & PROFILE MODULE
+elif "Suresh Master" in selected_module or "சுரேஷ் மாஸ்டர்" in selected_module:
+  if st.button(t["back_home"]):
+    st.session_state["selected_module"] = module_list[0]
+    st.rerun()
+
+  st.subheader(
+      "🛠️ Suresh Master Knowledge Base & Profile (சுரேஷ் சுயவிவரம் & அறிவுத்தளம்)"
+  )
+  st.write(
+      "இது உங்களுடைய அனைத்துத் தகவல்களும் சேமிக்கப்பட்டுள்ள மாஸ்டர் பகுதியாகும்."
+  )
+
+  tab1, tab2, tab3 = st.tabs([
+      "⚙️ CNC & Machining Expertise",
+      "🚗 Automobile Interests",
+      "📈 Business & Stock Goals",
+  ])
+
+  with tab1:
+    st.markdown("### இயந்திரவியல் மற்றும் CNC திறன்கள் (CNC & Machining)")
+    st.markdown("""
+        * **இயமையங்கள் & செட்டப்:** Traub Automatic Lathes, Vertical Machining Center (VMC) Simulators.
+        * **டூல்ஸ் & ஆபரேஷன்ஸ்:** Cross-drilling tools, Machine Collets troubleshooting மற்றும் நுணுக்கங்கள்.
+        * **கற்றல் சாலைவரைபடம்:** CNC புரோகிராமிங் மற்றும் மேம்பட்ட ஆட்டோமேஷன் முறைகள்.
+        """)
+
+  with tab2:
+    st.markdown("### வாகனங்கள் மீதான ஆர்வம் (Automobiles)")
+    st.markdown("""
+        * **கார்கள் (Cars):** Mahindra Scorpio, Grand Vitara, Tata Punch.
+        * **இருசக்கர வாகனம் (Bike):** Yamaha R15 V4.
+        """)
+
+  with tab3:
+    st.markdown("### வணிகத் திட்டங்கள் (Business & Investments)")
+    st.markdown("""
+        * **தொழில்முனைவோர் இலக்கு:** ஆன்லைன் வணிக வாய்ப்புகள் (Online Business).
+        * **முதலீடு:** பங்குச் சந்தை (Stock Marketing).
+        """)
+
+# 9. MORE MENU & SETTINGS
 elif "More Menu" in selected_module or "அமைப்புகள்" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
