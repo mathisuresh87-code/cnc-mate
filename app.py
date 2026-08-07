@@ -4,6 +4,7 @@ import base64
 import streamlit as st
 import pandas as pd
 from PIL import Image
+from datetime import datetime
 from fpdf import FPDF
 
 # Page Configuration
@@ -176,6 +177,20 @@ module_list = [
 if "selected_module" not in st.session_state:
     st.session_state["selected_module"] = module_list[0]
 
+# Initialize Stock Inventory Session State Database
+if "stock_inventory_df" not in st.session_state:
+    st.session_state["stock_inventory_df"] = pd.DataFrame({
+        "Item ID": ["ITM-001", "ITM-002", "ITM-003", "ITM-004"],
+        "Material / Part Name": ["EN8 Round Bar - 12mm", "MS Round Bar - 20mm", "EN24 Round Bar - 16mm", "Finished Bush-01"],
+        "Category": ["Raw Material", "Raw Material", "Raw Material", "Finished Goods"],
+        "Quantity": [120.50, 45.20, 0.00, 650.00],
+        "Unit": ["Kg", "Kg", "Kg", "Nos"],
+        "Status": ["In Stock", "Low Stock", "Out of Stock", "Dispatch Ready"]
+    })
+
+if "stock_logs_df" not in st.session_state:
+    st.session_state["stock_logs_df"] = pd.DataFrame(columns=["Timestamp", "Item ID", "Action", "Qty Changed", "User/Notes"])
+
 # Sidebar Navigation Header & Permanent Logo Uploader
 st.sidebar.markdown("""
     <div style="text-align: center; padding: 5px 0 10px 0;">
@@ -295,15 +310,20 @@ if "d_draw_part_len" not in st.session_state:
 
 # 1. HOME DASHBOARD
 if "Home" in selected_module:
+    inv_df = st.session_state["stock_inventory_df"]
+    total_items_count = len(inv_df)
+    low_stock_count = len(inv_df[inv_df["Status"] == "Low Stock"])
+    out_stock_count = len(inv_df[inv_df["Status"] == "Out of Stock"])
+
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.metric("Active Machines", "4 Units", "Running 🚀")
     with m2:
         st.metric("Today's Output", "1,850 Nos", "+12% 📈")
     with m3:
-        st.metric("Material Stock", "1,240 Kg", "Optimal ✨")
+        st.metric("Material Stock Items", f"{total_items_count} Items", "Optimal ✨")
     with m4:
-        st.metric("System Status", "100%", "Online ⚡")
+        st.metric("Low/Out Stock", f"{low_stock_count + out_stock_count} Alerts", "Check Stock ⚠️")
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 🚀 Core Automation Modules / முக்கிய மாட்யூல்கள்")
@@ -617,30 +637,122 @@ elif "Costing & Quotation Calculator" in selected_module:
         mime="application/pdf"
     )
 
-# 5. STOCK MANAGEMENT
+# 5. STOCK MANAGEMENT (INTERACTIVE CRUD & TRANSACTION LOG)
 elif "Stock Management" in selected_module:
     if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
         st.session_state["selected_module"] = "🏠 Home / முகப்பு"
         st.rerun()
-    st.subheader("📦 Stock & Inventory Management")
+    st.subheader("📦 Interactive Stock & Inventory Management System")
+    
+    inv_df = st.session_state["stock_inventory_df"]
+    
+    total_items = len(inv_df)
+    low_stock = len(inv_df[inv_df["Status"] == "Low Stock"])
+    out_stock = len(inv_df[inv_df["Status"] == "Out of Stock"])
     
     s1, s2, s3 = st.columns(3)
     with s1:
-        st.metric("Total Items", "128")
+        st.metric("Total Inventory Items", str(total_items))
     with s2:
-        st.metric("Low Stock", "8", delta_color="inverse")
+        st.metric("Low Stock Items", str(low_stock), delta_color="inverse")
     with s3:
-        st.metric("Out of Stock", "3", delta_color="inverse")
+        st.metric("Out of Stock Items", str(out_stock), delta_color="inverse")
         
-    st.text_input("🔍 Search Part / Material...")
+    st.markdown("---")
     
-    stock_data = {
-        "Material / Part": ["EN8 Round Bar - 12mm", "MS Round Bar - 20mm", "EN24 Round Bar - 16mm", "Finished Bush-01"],
-        "Category": ["Raw Material", "Raw Material", "Raw Material", "Finished Goods"],
-        "Stock Qty": ["120.50 Kg", "45.20 Kg", "0.00 Kg", "650 Nos"],
-        "Status": ["In Stock", "Low Stock", "Out of Stock", "Dispatch Ready"]
-    }
-    st.dataframe(pd.DataFrame(stock_data), use_container_width=True)
+    # Tabs for Inventory Management: View/Search, Add New Item, Stock In/Out Transaction
+    tab1, tab2, tab3 = st.tabs(["📋 Current Stock Table", "➕ Add New Item", "🔄 Stock In / Out Transaction"])
+    
+    with tab1:
+        search_query = st.text_input("🔍 Search Part / Material Name or ID...", key="stock_search_box")
+        if search_query:
+            filtered_df = inv_df[inv_df['Material / Part Name'].str.contains(search_query, case=False, na=False) | inv_df['Item ID'].str.contains(search_query, case=False, na=False)]
+        else:
+            filtered_df = inv_df
+            
+        st.dataframe(filtered_df, use_container_width=True)
+        
+    with tab2:
+        st.write("### Add New Material or Finished Part to Inventory")
+        with st.form("add_stock_form"):
+            new_id = f"ITM-{len(inv_df)+1:03d}"
+            n_name = st.text_input("Material / Part Name (e.g., EN19 Round Bar - 25mm)")
+            n_cat = st.selectbox("Category", ["Raw Material", "Finished Goods", "Hardware / Tools", "Consumables"])
+            n_qty = st.number_input("Initial Quantity", min_value=0.0, value=50.0)
+            n_unit = st.selectbox("Unit", ["Kg", "Nos", "Meters", "Litres", "Sets"])
+            
+            submit_add = st.form_submit_button("➕ Add Item to Inventory")
+            if submit_add and n_name:
+                n_status = "In Stock"
+                if n_qty == 0:
+                    n_status = "Out of Stock"
+                elif n_qty < 10:
+                    n_status = "Low Stock"
+                    
+                new_row = pd.DataFrame({
+                    "Item ID": [new_id],
+                    "Material / Part Name": [n_name],
+                    "Category": [n_cat],
+                    "Quantity": [n_qty],
+                    "Unit": [n_unit],
+                    "Status": [n_status]
+                })
+                st.session_state["stock_inventory_df"] = pd.concat([inv_df, new_row], ignore_index=True)
+                st.success(f"✅ Success! Added '{n_name}' to inventory with ID {new_id}.")
+                st.rerun()
+
+    with tab3:
+        st.write("### Record Stock In (Purchase/Add) or Stock Out (Production Issue/Dispatch)")
+        if len(inv_df) > 0:
+            with st.form("trans_stock_form"):
+                selected_item_id = st.selectbox("Select Item", inv_df["Item ID"] + " - " + inv_df["Material / Part Name"])
+                trans_type = st.selectbox("Transaction Type", ["Stock In (Purchase/Addition)", "Stock Out (Production Issue/Dispatch)"])
+                trans_qty = st.number_input("Quantity to Add/Deduct", min_value=0.1, value=10.0)
+                trans_notes = st.text_input("Notes / Reference (e.g. PO No, Job Order No)")
+                
+                submit_trans = st.form_submit_button("🔄 Update Stock Quantity")
+                if submit_trans:
+                    item_id_extracted = selected_item_id.split(" - ")[0]
+                    idx = st.session_state["stock_inventory_df"].index[st.session_state["stock_inventory_df"]["Item ID"] == item_id_extracted][0]
+                    curr_qty = st.session_state["stock_inventory_df"].at[idx, "Quantity"]
+                    
+                    if "In" in trans_type:
+                        new_qty_val = curr_qty + trans_qty
+                        action_str = "STOCK IN"
+                    else:
+                        new_qty_val = max(0.0, curr_qty - trans_qty)
+                        action_str = "STOCK OUT"
+                        
+                    # Recalculate status
+                    if new_qty_val == 0:
+                        new_stat = "Out of Stock"
+                    elif new_qty_val < 10:
+                        new_stat = "Low Stock"
+                    else:
+                        new_stat = "In Stock" if st.session_state["stock_inventory_df"].at[idx, "Category"] == "Raw Material" else "Dispatch Ready"
+                        
+                    st.session_state["stock_inventory_df"].at[idx, "Quantity"] = new_qty_val
+                    st.session_state["stock_inventory_df"].at[idx, "Status"] = new_stat
+                    
+                    # Log transaction
+                    new_log = pd.DataFrame({
+                        "Timestamp": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
+                        "Item ID": [item_id_extracted],
+                        "Action": [action_str],
+                        "Qty Changed": [trans_qty],
+                        "User/Notes": [trans_notes if trans_notes else "Direct Update"]
+                    })
+                    st.session_state["stock_logs_df"] = pd.concat([st.session_state["stock_logs_df"], new_log], ignore_index=True)
+                    st.success(f"✅ Stock successfully updated! New Qty for {item_id_extracted}: {new_qty_val}")
+                    st.rerun()
+                    
+            st.markdown("#### 📜 Recent Transaction History Log")
+            if len(st.session_state["stock_logs_df"]) > 0:
+                st.dataframe(st.session_state["stock_logs_df"], use_container_width=True)
+            else:
+                st.info("No stock transactions recorded yet.")
+        else:
+            st.warning("No inventory items found.")
 
 # 6. DRAWING & MULTI-OPERATION G-CODE GENERATOR / AUTO REPORT
 elif "Drawing & Multi-Op G-Code" in selected_module:
