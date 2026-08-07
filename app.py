@@ -218,7 +218,7 @@ selected_module = st.sidebar.selectbox(
 )
 st.session_state["selected_module"] = selected_module
 
-# Header
+# Header Layout
 col_logo, col_title = st.columns([0.15, 0.85], vertical_alignment="center")
 with col_logo:
   encoded_img = get_base64_image(LOGO_PATH)
