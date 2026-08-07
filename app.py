@@ -116,7 +116,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-LOGO_PATH = "company_logo_permanent.png"
+# GitHub-ல் உள்ள சரியான லோகோ பெயர்
+LOGO_PATH = "logo.png"
 
 module_list = [
     "🏠 Home / முகப்பு",
@@ -185,6 +186,15 @@ if encoded_sidebar_img:
       " height: 75px; border-radius: 50%; margin: 0 auto; display: flex;"
       " align-items: center; justify-content: center; overflow: hidden;"><img"
       f" src="data:image/png;base64,{encoded_sidebar_img}" style="width: 100%;" /></div></div>""",
+      unsafe_allow_html=True,
+  )
+else:
+  st.sidebar.markdown(
+      """<div style="text-align: center; margin-bottom: 12px;"><div style="background:"
+      " linear-gradient(135deg, #4f46e5, #ec4899); border: 2.5px solid #ec4899;"
+      " width: 75px; height: 75px; border-radius: 50%; margin: 0 auto; display:"
+      " flex; align-items: center; justify-content: center; font-weight: 900;"
+      ' color: white;">MC</div></div>',
       unsafe_allow_html=True,
   )
 
@@ -838,7 +848,7 @@ G0 Z2.0
       mime="application/pdf",
   )
 
-# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION (NEW MODULE)
+# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION
 elif "Process Breakdown & Customer Quotation" in selected_module:
   if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
     st.session_state["selected_module"] = "🏠 Home / முகப்பு"
