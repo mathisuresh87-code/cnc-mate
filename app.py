@@ -116,7 +116,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# GitHub-ல் உள்ள சரியான லோகோ பெயர்
 LOGO_PATH = "logo.png"
 
 module_list = [
@@ -171,30 +170,31 @@ def get_base64_image(path):
 
 # Sidebar Navigation
 st.sidebar.markdown(
-    """<div style="text-align: center; padding: 5px 0 10px 0;"><h3"
-    " style="color: #ec4899; margin: 0; font-size: 1.15rem; font-weight: 900;"
-    " letter-spacing: 1.5px;">MEGALA CNC MATE</h3></div>""",
+    '<div style="text-align: center; padding: 5px 0 10px 0;"><h3'
+    ' style="color: #ec4899; margin: 0; font-size: 1.15rem; font-weight: 900;'
+    ' letter-spacing: 1.5px;">MEGALA CNC MATE</h3></div>',
     unsafe_allow_html=True,
 )
 
 encoded_sidebar_img = get_base64_image(LOGO_PATH)
 if encoded_sidebar_img:
-  st.sidebar.markdown(
-      f"""<div style="text-align: center; margin-bottom: 12px;"><div"
-      " style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.3),"
+  sidebar_html = (
+      '<div style="text-align: center; margin-bottom: 12px;"><div'
+      ' style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.3),'
       " rgba(56, 189, 248, 0.3)); border: 2.5px solid #ec4899; width: 75px;"
       " height: 75px; border-radius: 50%; margin: 0 auto; display: flex;"
-      " align-items: center; justify-content: center; overflow: hidden;"><img"
-      f" src="data:image/png;base64,{encoded_sidebar_img}" style="width: 100%;" /></div></div>""",
-      unsafe_allow_html=True,
+      " align-items: center; justify-content: center; overflow: hidden;"
+      f'"><img src="data:image/png;base64,{encoded_sidebar_img}"'
+      ' style="width: 100%;" /></div></div>'
   )
+  st.sidebar.markdown(sidebar_html, unsafe_allow_html=True)
 else:
   st.sidebar.markdown(
-      """<div style="text-align: center; margin-bottom: 12px;"><div style="background:"
-      " linear-gradient(135deg, #4f46e5, #ec4899); border: 2.5px solid #ec4899;"
-      " width: 75px; height: 75px; border-radius: 50%; margin: 0 auto; display:"
-      " flex; align-items: center; justify-content: center; font-weight: 900;"
-      ' color: white;">MC</div></div>',
+      '<div style="text-align: center; margin-bottom: 12px;"><div'
+      ' style="background: linear-gradient(135deg, #4f46e5, #ec4899); border:'
+      ' 2.5px solid #ec4899; width: 75px; height: 75px; border-radius: 50%;'
+      ' margin: 0 auto; display: flex; align-items: center; justify-content:'
+      ' center; font-weight: 900; color: white;">MC</div></div>',
       unsafe_allow_html=True,
   )
 
@@ -230,19 +230,20 @@ col_logo, col_title = st.columns([0.15, 0.85], vertical_alignment="center")
 with col_logo:
   encoded_img = get_base64_image(LOGO_PATH)
   if encoded_img:
-    st.markdown(
-        f"""<div style="border: 2.5px solid #ec4899; width: 85px; height: 85px;"
-        " border-radius: 50%; display: flex; align-items: center;"
-        " justify-content: center; overflow: hidden;"><img"
-        f" src="data:image/png;base64,{encoded_img}" style="width: 100%;" /></div>""",
-        unsafe_allow_html=True,
+    header_html = (
+        '<div style="border: 2.5px solid #ec4899; width: 85px; height: 85px;'
+        ' border-radius: 50%; display: flex; align-items: center;'
+        ' justify-content: center; overflow: hidden;"'
+        f'><img src="data:image/png;base64,{encoded_img}"'
+        ' style="width: 100%;" /></div>'
     )
+    st.markdown(header_html, unsafe_allow_html=True)
   else:
     st.markdown(
-        """<div style="background: linear-gradient(135deg, #4f46e5, #ec4899);"
-        " width: 85px; height: 85px; border-radius: 50%; display: flex;"
-        " align-items: center; justify-content: center; font-weight: 900;"
-        " color: white;">MC</div>""",
+        '<div style="background: linear-gradient(135deg, #4f46e5, #ec4899);'
+        ' width: 85px; height: 85px; border-radius: 50%; display: flex;'
+        ' align-items: center; justify-content: center; font-weight: 900;'
+        ' color: white;">MC</div>',
         unsafe_allow_html=True,
     )
 with col_title:
