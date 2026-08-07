@@ -23,14 +23,6 @@ st.markdown(
         color: #f8fafc;
         font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
-    .header-container {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 10px 0 20px 0;
-        border-bottom: 2px solid rgba(236, 72, 153, 0.3);
-        margin-bottom: 25px;
-    }
     .main-title {
         font-size: 2.8rem;
         font-weight: 900;
@@ -53,20 +45,6 @@ st.markdown(
         text-transform: uppercase;
         text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
     }
-    .auto-badge {
-        background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(139, 92, 246, 0.4) 100%);
-        color: #f472b6;
-        padding: 6px 18px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 800;
-        display: inline-block;
-        margin-bottom: 16px;
-        border: 1.5px solid rgba(236, 72, 153, 0.6);
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
-    }
     div[data-testid="column"] {
         background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(49, 46, 129, 0.5) 100%);
         border: 1.5px solid rgba(139, 92, 246, 0.4);
@@ -80,7 +58,7 @@ st.markdown(
     div[data-testid="column"]:hover {
         border-color: #ec4899;
         transform: translateY(-8px) scale(1.015);
-        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4), 0 0 30px rgba(56, 189, 248, 0.3), inset 0 1px 20px rgba(236, 72, 153, 0.4);
+        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4), 0 0 30px rgba(56, 189, 248, 0.3);
         background: linear-gradient(145deg, rgba(55, 48, 163, 0.7) 0%, rgba(131, 24, 67, 0.5) 100%);
     }
     div.stButton > button {
@@ -155,222 +133,123 @@ if selected_lang != st.session_state["app_language"]:
 
 curr_lang = st.session_state["app_language"]
 
-# Multi-Language Dictionary Setup
+# Translations Dictionary for Modules and UI Labels
 translations = {
     "English": {
         "back_home": "⬅️ Back to Home",
         "modules": [
-            "🏠 Home",
-            "📐 Rod Calculator",
-            "⏱️ Production Calculator",
-            "💰 Costing & Quotation",
-            "📦 Stock Management",
-            "📷 Drawing & Multi-Op G-Code",
+            "🏠 Home Dashboard",
+            "📐 Rod / Bar Weight & Cost Calculator",
+            "⏱️ CNC Production & Cycle Time Calculator",
+            "💰 Enterprise Costing & Quotation",
+            "📦 Stock & Inventory Management",
+            "📷 Drawing Studio & G-Code Generator",
             "📋 Process Breakdown & Customer Quotation",
             "⚙️ More Menu & Settings",
         ],
-        "q_title": "Process Breakdown & Customer Quotation Generator",
-        "q_desc": (
-            "Easily configure operations (Facing, Turning, Grooving, Drilling,"
-            " Boring, Chamfering, Tapping, etc.) from the dropdown for your"
-            " parts."
-        ),
-        "cust_name": "Customer Company Name",
-        "part_name": "Part Name / Component Name",
-        "order_qty": "Order Quantity (Nos)",
-        "transport_charges": "Transport & Logistics Charges (Rs.)",
-        "configure_ops": "Configure Operations",
-        "num_ops": "Number of Operations for this Part",
-        "op_name": "Operation Name",
-        "machine": "Machine",
-        "unit_rate": "Unit Rate (Rs.)",
-        "gen_csv": "Generate CSV Quotation File",
+        "home_title": "Enterprise Control Dashboard",
+        "active_machines": "Active Machines",
+        "todays_output": "Today's Output",
+        "stock_items": "Material Stock Items",
+        "stock_alerts": "Stock Alerts",
+        "core_modules": "🚀 Core Enterprise Modules",
     },
     "தமிழ் (Tamil)": {
         "back_home": "⬅️ Back to Home / முகப்புக்குத் திரும்பு",
         "modules": [
-            "🏠 Home / முகப்பு",
-            "📐 Rod Calculator (ராட் கால்குலேட்டர்)",
-            "⏱️ Production Calculator (உற்பத்தி கால்குலேட்டர்)",
-            "💰 Costing & Quotation Calculator (செலவு & கொட்டேஷன்)",
-            "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
-            "📷 Drawing & Multi-Op G-Code (டிராயிங் & ஆட்டோ ரிப்போர்ட்)",
-            "📋 Process Breakdown & Customer Quotation (புதிய கொட்டேஷன் மாடியூல்)",
-            "⚙️ More Menu & Settings (அமைப்புகள் & மாஸ்டர்ஸ்)",
+            "🏠 Home Dashboard / முகப்பு டேஷ்போர்டு",
+            "📐 Rod / Bar Weight & Cost Calculator / ராட் எடை & விலை கால்குலேட்டர்",
+            "⏱️ CNC Production & Cycle Time Calculator / உற்பத்தி & சைக்கிள் டைம்",
+            "💰 Enterprise Costing & Quotation / செலவு & கொட்டேஷன் கால்குலேட்டர்",
+            "📦 Stock & Inventory Management / ஸ்டாக் & இன்வென்토리 மேனேஜ்மென்ட்",
+            "📷 Drawing Studio & G-Code Generator / டிராயிங் & ஜி-கோடு ஜெனரேட்டர்",
+            "📋 Process Breakdown & Customer Quotation / செயல்முறை & கொட்டேஷன்",
+            "⚙️ More Menu & Settings / அமைப்புகள் & மாஸ்டர்ஸ்",
         ],
-        "q_title": (
-            "Process Breakdown & Customer Quotation Generator (புதிய கொட்டேஷன்"
-            " மாடியூல்)"
-        ),
-        "q_desc": (
-            "உங்கள் பார்ட்டுகளுக்கு தேவையான ஆபரேஷன்களை (Facing, Turning,"
-            " Grooving, Drilling, Boring, Chamfering, Tapping போன்றவை)"
-            " டிராப்-டவுனில் இருந்து எளிதாகத் தேர்வு செய்யலாம்."
-        ),
-        "cust_name": "Customer Company Name / வாடிக்கையாளர் பெயர்",
-        "part_name": (
-            "Part Name / Component Name (உங்கள் பார்ட் பெயர் அல்லது புதிய"
-            " பார்ட்)"
-        ),
-        "order_qty": "Order Quantity / ஆர்டர் எண்ணிக்கை (Nos)",
-        "transport_charges": "Transport & Logistics Charges (Rs.)",
-        "configure_ops": (
-            "Configure Operations (ஆபரேஷன் பெயர்களை டிராப்-டவுனில் இருந்து தேர்வு"
-            " செய்யவும்)"
-        ),
-        "num_ops": (
-            "Number of Operations for this Part (இந்த பார்ட்டுக்கு எத்தனை"
-            " ஆபரேஷன்கள் உள்ளன?)"
-        ),
-        "op_name": "Operation Name",
-        "machine": "Machine",
-        "unit_rate": "Unit Rate (Rs.)",
-        "gen_csv": "Generate CSV Quotation File",
+        "home_title": "Enterprise Control Dashboard / நிறுவன கட்டுப்பாட்டு முகப்பு",
+        "active_machines": "Active Machines / இயங்கும் இயந்திரங்கள்",
+        "todays_output": "Today's Output / இன்றைய உற்பத்தி",
+        "stock_items": "Material Stock Items / ஸ்டாக் பொருட்கள்",
+        "stock_alerts": "Stock Alerts / ஸ்டாக் எச்சரிக்கைகள்",
+        "core_modules": "🚀 Core Enterprise Modules / முக்கிய பயன்பாடுகள்",
     },
     "हिन्दी (Hindi)": {
         "back_home": "⬅️ Back to Home / होम पर वापस जाएं",
         "modules": [
-            "🏠 Home / होम",
-            "📐 Rod Calculator / रॉड कैलकुलेटर",
-            "⏱️ Production Calculator / प्रोडक्शन कैलकुलेटर",
-            "💰 Costing & Quotation / कॉस्टिंग और कोटेशन",
-            "📦 Stock Management / स्टॉक मैनेजमेंट",
-            "📷 Drawing & Multi-Op G-Code / ड्राइंग और जी-कोड",
-            "📋 Process Breakdown & Customer Quotation / प्रोसेस और कोटेशन",
+            "🏠 Home Dashboard / होम डैशबोर्ड",
+            "📐 Rod Calculator / रॉड वजन और लागत कैलकुलेटर",
+            "⏱️ Production Calculator / प्रोडक्शन और साइकिल टाइम",
+            "💰 Enterprise Costing & Quotation / कॉस्टिंग और कोटेशन",
+            "📦 Stock Management / स्टॉक और इन्वेंटरी मैनेजमेंट",
+            "📷 Drawing & G-Code / ड्राइंग और जी-कोड जनरेटर",
+            "📋 Process Breakdown & Quotation / प्रोसेस और कोटेशन",
             "⚙️ More Menu & Settings / सेटिंग्स",
         ],
-        "q_title": (
-            "Process Breakdown & Customer Quotation Generator (प्रक्रिया और"
-            " कोटेशन जनरेटर)"
-        ),
-        "q_desc": (
-            "अपने पार्ट्स के लिए ड्रॉप-डाउन से आसानी से ऑपरेशन (Facing, Turning,"
-            " Grooving, Drilling, Boring, Chamfering, Tapping आदि) चुनें।"
-        ),
-        "cust_name": "Customer Company Name / ग्राहक कंपनी का नाम",
-        "part_name": "Part Name / Component Name / पार्ट का नाम",
-        "order_qty": "Order Quantity / ऑर्डर मात्रा (Nos)",
-        "transport_charges": "Transport & Logistics Charges (Rs.) / परिवहन शुल्क",
-        "configure_ops": (
-            "Configure Operations (ड्रॉप-डाउन से ऑपरेशन चुनें)"
-        ),
-        "num_ops": (
-            "Number of Operations for this Part / इस पार्ट के लिए ऑपरेशन की"
-            " संख्या"
-        ),
-        "op_name": "Operation Name / ऑपरेशन का नाम",
-        "machine": "Machine / मशीन",
-        "unit_rate": "Unit Rate (Rs.) / यूनिट रेट",
-        "gen_csv": "Generate CSV Quotation File / कोटेशन फाइल जेनरेट करें",
+        "home_title": "Enterprise Control Dashboard / एंटरप्राइज़ कंट्रोल डैशबोर्ड",
+        "active_machines": "Active Machines / सक्रिय मशीनें",
+        "todays_output": "Today's Output / आज का उत्पादन",
+        "stock_items": "Material Stock Items / स्टॉक आइटम",
+        "stock_alerts": "Stock Alerts / स्टॉक अलर्ट",
+        "core_modules": "🚀 Core Enterprise Modules / मुख्य मॉड्यूल्स",
     },
     "తెలుగు (Telugu)": {
         "back_home": "⬅️ Back to Home / హోమ్‌కి వెళ్లండి",
         "modules": [
-            "🏠 Home / హోమ్",
-            "📐 Rod Calculator / రాడ్ కాలిక్యులేటర్",
-            "⏱️ Production Calculator / ప్రొడక్షన్ కాలిక్యులేటర్",
-            "💰 Costing & Quotation / కాస్టింగ్ & కొటేషన్",
-            "📦 Stock Management / స్టాక్ మేనేజ్‌మెంట్",
-            "📷 Drawing & Multi-Op G-Code / డ్రాయింగ్ & జి-కోడ్",
-            "📋 Process Breakdown & Customer Quotation / ప్రాసెస్ & కొటేషన్",
+            "🏠 Home Dashboard / హోమ్ డాష్‌బోర్డ్",
+            "📐 Rod Calculator / రాడ్ బరువు & ఖర్చు కాలిక్యులేటర్",
+            "⏱️ Production Calculator / ప్రొడక్షన్ & సైకిల్ టైమ్",
+            "💰 Enterprise Costing & Quotation / కాస్టింగ్ & కొటేషన్",
+            "📦 Stock Management / స్టాక్ & ఇన్వెంటరీ మేనేజ్‌మెంట్",
+            "📷 Drawing & G-Code / డ్రాయింగ్ & జి-కోడ్ జనరేటర్",
+            "📋 Process Breakdown & Quotation / ప్రాసెస్ & కొటేషన్",
             "⚙️ More Menu & Settings / సెట్టింగ్‌లు",
         ],
-        "q_title": (
-            "Process Breakdown & Customer Quotation Generator (కొటేషన్ జనరేటర్)"
-        ),
-        "q_desc": (
-            "మీ భాగాల కోసం డ్రాప్-డౌన్ నుండి ఆపరేషన్‌లను (Facing, Turning,"
-            " Grooving, Drilling, Boring, Chamfering, Tapping మొదలైనవి)"
-            " సులభంగా ఎంచుకోండి."
-        ),
-        "cust_name": "Customer Company Name / కస్టమర్ కంపెనీ పేరు",
-        "part_name": "Part Name / Component Name / పార్ట్ పేరు",
-        "order_qty": "Order Quantity / ఆర్డర్ పరిమాణం (Nos)",
-        "transport_charges": "Transport & Logistics Charges (Rs.) / రవాణా ఛార్జీలు",
-        "configure_ops": (
-            "Configure Operations (డ్రాప్-డౌన్ నుండి ఆపరేషన్‌లను ఎంచుకోండి)"
-        ),
-        "num_ops": (
-            "Number of Operations for this Part / ఈ పార్ట్ కోసం ఆపరేషన్‌ల"
-            " సంఖ్య"
-        ),
-        "op_name": "Operation Name / ఆపరేషన్ పేరు",
-        "machine": "Machine / మెషిన్",
-        "unit_rate": "Unit Rate (Rs.) / యూనిట్ రేట్",
-        "gen_csv": "Generate CSV Quotation File",
+        "home_title": "Enterprise Control Dashboard / ఎంటర్‌ప్రైజ్ కంట్రోల్ డాష్‌బోర్డ్",
+        "active_machines": "Active Machines / పనిచేస్తున్న మెషిన్లు",
+        "todays_output": "Today's Output / నేటి ఉత్పత్తి",
+        "stock_items": "Material Stock Items / స్టాక్ ఐటమ్స్",
+        "stock_alerts": "Stock Alerts / స్టాక్ హెచ్చరికలు",
+        "core_modules": "🚀 Core Enterprise Modules / ముఖ్యమైన మాడ్యూల్స్",
     },
     "ಕನ್ನಡ (Kannada)": {
         "back_home": "⬅️ Back to Home / ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ",
         "modules": [
-            "🏠 Home / ಮುಖಪುಟ",
-            "📐 Rod Calculator / ರಾಡ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
-            "⏱️ Production Calculator / ಉತ್ಪಾದನಾ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
-            "💰 Costing & Quotation / ವೆಚ್ಚ ಮತ್ತು ಉಲ್ಲೇಖ",
-            "📦 Stock Management / ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
-            "📷 Drawing & Multi-Op G-Code / ಡ್ರಾಯಿಂಗ್ ಮತ್ತು ಜಿ-ಕೋಡ್",
-            "📋 Process Breakdown & Customer Quotation / ಪ್ರಕ್ರಿಯೆ ಮತ್ತು ಉಲ್ಲೇಖ",
+            "🏠 Home Dashboard / ಮುಖಪುಟ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+            "📐 Rod Calculator / ರಾಡ್ ತೂಕ ಮತ್ತು ವೆಚ್ಚದ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+            "⏱️ Production Calculator / ಉತ್ಪಾದನೆ ಮತ್ತು ಸೈಕಲ್ ಸಮಯ",
+            "💰 Enterprise Costing & Quotation / ವೆಚ್ಚ ಮತ್ತು ಉಲ್ಲೇಖ",
+            "📦 Stock Management / ಸ್ಟಾಕ್ ಮತ್ತು ದಾಸ್ತಾನು ನಿರ್ವಹಣೆ",
+            "📷 Drawing & G-Code / ಡ್ರಾಯಿಂಗ್ ಮತ್ತು ಜಿ-ಕೋಡ್ ಜನರೇಟರ್",
+            "📋 Process Breakdown & Quotation / ಪ್ರಕ್ರಿಯೆ ಮತ್ತು ಉಲ್ಲೇಖ",
             "⚙️ More Menu & Settings / ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
         ],
-        "q_title": (
-            "Process Breakdown & Customer Quotation Generator (ಉಲ್ಲೇಖ ಜನರೇಟರ್)"
+        "home_title": (
+            "Enterprise Control Dashboard / ಎಂಟರ್‌ಪ್ರೈಸ್ ಕಂಟ್ರೋಲ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್"
         ),
-        "q_desc": (
-            "ನಿಮ್ಮ ಭಾಗಗಳಿಗಾಗಿ ಡ್ರಾಪ್-ಡೌನ್‌ನಿಂದ ಆಪರೇಷನ್‌ಗಳನ್ನು (Facing, Turning,"
-            " Grooving, Drilling, Boring, Chamfering, Tapping ಇತ್ಯಾದಿ) ಸುಲಭವಾಗಿ"
-            " ಆಯ್ಕೆಮಾಡಿ."
-        ),
-        "cust_name": "Customer Company Name / ಗ್ರಾಹಕರ ಕಂಪನಿಯ ಹೆಸರು",
-        "part_name": "Part Name / Component Name / ಭಾಗದ ಹೆಸರು",
-        "order_qty": "Order Quantity / ಆದೇಶದ ಪ್ರಮಾಣ (Nos)",
-        "transport_charges": "Transport & Logistics Charges (Rs.) / ಸಾರಿಗೆ ಶುಲ್ಕ",
-        "configure_ops": (
-            "Configure Operations (ಡ್ರಾಪ್-ಡೌನ್‌ನಿಂದ ಕಾರ್ಯಾಚರಣೆಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ)"
-        ),
-        "num_ops": (
-            "Number of Operations for this Part / ಈ ಭಾಗಕ್ಕೆ ಕಾರ್ಯಾಚರಣೆಗಳ ಸಂಖ್ಯೆ"
-        ),
-        "op_name": "Operation Name / ಕಾರ್ಯಾಚರಣೆಯ ಹೆಸರು",
-        "machine": "Machine / ಯಂತ್ರ",
-        "unit_rate": "Unit Rate (Rs.) / ಯುನಿಟ್ ದರ",
-        "gen_csv": "Generate CSV Quotation File",
+        "active_machines": "Active Machines / ಸಕ್ರಿಯ ಯಂತ್ರಗಳು",
+        "todays_output": "Today's Output / ಇಂದಿನ ಉತ್ಪಾದನೆ",
+        "stock_items": "Material Stock Items / ಸ್ಟಾಕ್ ವಸ್ತುಗಳು",
+        "stock_alerts": "Stock Alerts / ಸ್ಟಾಕ್ ಎಚ್ಚರಿಕೆಗಳು",
+        "core_modules": "🚀 Core Enterprise Modules / ಪ್ರಮುಖ ಮಾಡ್ಯೂಲ್‌ಗಳು",
     },
     "മലയാളം (Malayalam)": {
         "back_home": "⬅️ Back to Home / ഹോമിലേക്ക് മടങ്ങുക",
         "modules": [
-            "🏠 Home / ഹോം",
-            "📐 Rod Calculator / റോഡ് കാൽക്കുലേറ്റർ",
-            "⏱️ Production Calculator / പ്രൊഡക്ഷൻ കാൽക്കുലേറ്റർ",
-            "💰 Costing & Quotation / കോസ്റ്റിംഗ് & കൊട്ടേഷൻ",
+            "🏠 Home Dashboard / ഹോം ഡാഷ്‌ബോർഡ്",
+            "📐 Rod Calculator / റോഡ് ഭാരവും വിലയും കാൽക്കുലേറ്റർ",
+            "⏱️ Production Calculator / ഉൽപ്പാദന & സൈക്കിൾ ടൈം",
+            "💰 Enterprise Costing & Quotation / കോസ്റ്റിംഗ് & കൊട്ടേഷൻ",
             "📦 Stock Management / സ്റ്റോക്ക് മാനേജ്മെന്റ്",
-            "📷 Drawing & Multi-Op G-Code / ഡ്രോയിംഗ് & ജി-കോഡ്",
-            "📋 Process Breakdown & Customer Quotation / പ്രോസസ്സ് & കൊട്ടേഷൻ",
+            "📷 Drawing & G-Code / ഡ്രോയിംഗ് & ജി-കോഡ് ജനറേറ്റർ",
+            "📋 Process Breakdown & Quotation / പ്രോസസ്സ് & കൊട്ടേഷൻ",
             "⚙️ More Menu & Settings / ക്രമീകരണങ്ങൾ",
         ],
-        "q_title": (
-            "Process Breakdown & Customer Quotation Generator (കൊട്ടേഷൻ"
-            " ജനറേറ്റർ)"
-        ),
-        "q_desc": (
-            "നിങ്ങളുടെ ഭാഗങ്ങൾക്കായി ഡ്രോപ്പ്-ഡൗണിൽ നിന്ന് പ്രവർത്തനങ്ങൾ"
-            " (Facing, Turning, Grooving, Drilling, Boring, Chamfering,"
-            " Tapping തുടങ്ങിയവ) എളുപ്പത്തിൽ തിരഞ്ഞെടുക്കുക."
-        ),
-        "cust_name": "Customer Company Name / കസ്റ്റമർ കമ്പനിയുടെ പേര്",
-        "part_name": "Part Name / Component Name / ഭാഗത്തിന്റെ പേര്",
-        "order_qty": "Order Quantity / ഓർഡർ അളവ് (Nos)",
-        "transport_charges": "Transport & Logistics Charges (Rs.) / ഗതാഗത നിരക്കുകൾ",
-        "configure_ops": (
-            "Configure Operations (ഡ്രോപ്പ്-ഡൗണിൽ നിന്ന് പ്രവർത്തനങ്ങൾ"
-            " തിരഞ്ഞെടുക്കുക)"
-        ),
-        "num_ops": (
-            "Number of Operations for this Part / ഈ ഭാഗത്തിനുള്ള"
-            " പ്രവർത്തനങ്ങളുടെ എണ്ണം"
-        ),
-        "op_name": "Operation Name / ഓപ്പറേഷന്റെ പേര്",
-        "machine": "Machine / മെഷീൻ",
-        "unit_rate": "Unit Rate (Rs.) / യൂണിറ്റ് റേറ്റ്",
-        "gen_csv": "Generate CSV Quotation File",
+        "home_title": "Enterprise Control Dashboard / എന്റർപ്രൈസ് കൺട്രോൾ ഡാഷ്‌ബോർഡ്",
+        "active_machines": "Active Machines / പ്രവർത്തിക്കുന്ന മെഷീനുകൾ",
+        "todays_output": "Today's Output / ഇന്നത്തെ ഉൽപ്പാദനം",
+        "stock_items": "Material Stock Items / സ്റ്റോക്ക് ഇനങ്ങൾ",
+        "stock_alerts": "Stock Alerts / സ്റ്റോക്ക് അലേർട്ടുകൾ",
+        "core_modules": "🚀 Core Enterprise Modules / പ്രധാന മൊഡ്യൂളുകൾ",
     },
 }
 
@@ -485,12 +364,6 @@ st.markdown(
 )
 
 
-def clean_text(text):
-  return (
-      str(text).replace("₹", "Rs.").encode("latin-1", "replace").decode("latin-1")
-  )
-
-
 def generate_quotation_csv(
     customer_name, part_name, operations_list, transport_cost=0.0
 ):
@@ -517,14 +390,9 @@ def generate_quotation_csv(
   for idx, op in enumerate(operations_list, 1):
     row_total = op["qty"] * op["rate"]
     total_amt += row_total
-    rows.append([
-        idx,
-        op["name"],
-        op["machine"],
-        op["qty"],
-        op["rate"],
-        row_total,
-    ])
+    rows.append(
+        [idx, op["name"], op["machine"], op["qty"], op["rate"], row_total]
+    )
 
   if transport_cost > 0:
     total_amt += transport_cost
@@ -545,97 +413,381 @@ def generate_quotation_csv(
 
 
 # 1. HOME DASHBOARD
-if "Home" in selected_module:
+if "Home Dashboard" in selected_module or "முகப்பு" in selected_module:
+  st.markdown(f"### 📊 {t['home_title']}")
   m1, m2, m3, m4 = st.columns(4)
   with m1:
-    st.metric("Active Machines", "4 Units", "Running 🚀")
+    st.metric(t["active_machines"], "4 Units", "Running 🚀")
   with m2:
-    st.metric("Today's Output", "1,850 Nos", "+12% 📈")
+    st.metric(t["todays_output"], "1,850 Nos", "+12% 📈")
   with m3:
-    st.metric("Material Stock Items", "4 Items", "Optimal ✨")
+    st.metric(t["stock_items"], "4 Items", "Optimal ✨")
   with m4:
-    st.metric("Stock Alerts", "0 Alerts", "Check Stock ⚠️")
+    st.metric(t["stock_alerts"], "0 Alerts", "Check Stock ⚠️")
 
   st.markdown("<br>", unsafe_allow_html=True)
-  st.markdown("### 🚀 Core Modules")
+  st.markdown(f"### {t['core_modules']}")
 
   col1, col2, col3 = st.columns(3)
   with col1:
-    if st.button("🚀 Rod Calculator", use_container_width=True, key="bh1"):
+    if st.button(
+        "📐 Rod Calculator"
+        if curr_lang == "English"
+        else "📐 Rod / Bar Calculator (ராட் கால்குலேட்டர்)",
+        use_container_width=True,
+        key="bh1",
+    ):
       st.session_state["selected_module"] = module_list[1]
       st.rerun()
   with col2:
-    if st.button("🚀 Production Calc", use_container_width=True, key="bh2"):
+    if st.button(
+        "⏱️ Production Calc"
+        if curr_lang == "English"
+        else "⏱️ Production Calc (உற்பத்தி கால்குலேட்டர்)",
+        use_container_width=True,
+        key="bh2",
+    ):
       st.session_state["selected_module"] = module_list[2]
       st.rerun()
   with col3:
-    if st.button("🚀 Costing & Quote", use_container_width=True, key="bh3"):
+    if st.button(
+        "💰 Costing & Quote"
+        if curr_lang == "English"
+        else "💰 Costing & Quote (செலவு & கொட்டேஷன்)",
+        use_container_width=True,
+        key="bh3",
+    ):
       st.session_state["selected_module"] = module_list[3]
       st.rerun()
 
+  col4, col5, col6 = st.columns(3)
+  with col4:
+    if st.button(
+        "📦 Stock Management"
+        if curr_lang == "English"
+        else "📦 Stock Management (ஸ்டாக் மேனேஜ்மென்ட்)",
+        use_container_width=True,
+        key="bh4",
+    ):
+      st.session_state["selected_module"] = module_list[4]
+      st.rerun()
+  with col5:
+    if st.button(
+        "📷 Drawing Studio"
+        if curr_lang == "English"
+        else "📷 Drawing Studio (டிராயிங் ஸ்டுடியோ)",
+        use_container_width=True,
+        key="bh5",
+    ):
+      st.session_state["selected_module"] = module_list[5]
+      st.rerun()
+  with col6:
+    if st.button(
+        "📋 Process Quotation"
+        if curr_lang == "English"
+        else "📋 Process Quotation (புதிய கொட்டேஷன்)",
+        use_container_width=True,
+        key="bh6",
+    ):
+      st.session_state["selected_module"] = module_list[6]
+      st.rerun()
+
 # 2. ROD CALCULATOR
-elif "Rod Calculator" in selected_module:
+elif "Rod" in selected_module or "ராட்" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
-  st.subheader("📐 Rod Calculator")
-  st.write("Rod calculation module active.")
+  st.subheader(
+      "📐 Rod / Bar Weight & Cost Calculator (ராட் எடை & விலை கால்குலேட்டர்)"
+  )
+  st.write(
+      "Calculate raw material round bar weight, length, and total material cost"
+      " for your CNC production."
+  )
+
+  rc1, rc2 = st.columns(2)
+  with rc1:
+    dia = st.number_input(
+        "Rod Diameter (mm) / ராட் விட்டம் (மி.மீ)",
+        value=25.0,
+        min_value=1.0,
+    )
+    length_mm = st.number_input(
+        "Length per Piece (mm) / ஒரு பீஸ் நீளம் (மி.மீ)",
+        value=150.0,
+        min_value=1.0,
+    )
+  with rc2:
+    qty_nos = st.number_input(
+        "Total Quantity (Nos) / மொத்த எண்ணிக்கைகள்", value=500, min_value=1
+    )
+    density = st.number_input(
+        "Material Density (g/cm³) / மெட்டீரியல் டென்சிட்டி (ஸ்டீல்: 7.85)",
+        value=7.85,
+    )
+    rate_per_kg = st.number_input(
+        "Material Rate per Kg (Rs.) / ஒரு கிலோ விலை (ரூ.)", value=85.0
+    )
+
+  # Calculation Formula: Weight = (pi * (dia/2)^2 * length * density) / 1,000,000 per piece
+  single_wt_kg = (
+      math.pi * (dia / 2) ** 2 * length_mm * density
+  ) / 1000000.0  # in kg
+  total_wt_kg = single_wt_kg * qty_nos
+  total_mat_cost = total_wt_kg * rate_per_kg
+
+  st.markdown("<br>", unsafe_allow_html=True)
+  res1, res2, res3 = st.columns(3)
+  with res1:
+    st.metric(
+        "Single Piece Weight", f"{single_wt_kg:.3f} Kg", "ஒன்றுக்கு எடை"
+    )
+  with res2:
+    st.metric(
+        "Total Material Weight", f"{total_wt_kg:.2f} Kg", "மொத்த மெட்டீரியல் எடை"
+    )
+  with res3:
+    st.metric(
+        "Total Material Cost",
+        f"Rs. {total_mat_cost:,.2f}",
+        "மொத்த மெட்டீரியல் செலவு",
+    )
 
 # 3. PRODUCTION CALCULATOR
-elif "Production Calculator" in selected_module:
+elif "Production" in selected_module or "உற்பத்தி" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
-  st.subheader("⏱️ Production Calculator")
-  st.write("Production calculation module active.")
+  st.subheader(
+      "⏱️ CNC Production & Cycle Time Calculator (உற்பத்தி & சைக்கிள் டைம்)"
+  )
+  st.write(
+      "Calculate shift output, hourly production rates, and machine efficiency."
+  )
+
+  pc1, pc2 = st.columns(2)
+  with pc1:
+    cycle_time_sec = st.number_input(
+        "Cycle Time per Component (Seconds) / ஒரு பார்ட் சைக்கிள் நேரம் (வினாடிகள்)",
+        value=45.0,
+        min_value=1.0,
+    )
+    shift_hours = st.number_input(
+        "Shift Working Hours / ஷிப்ட் வேலை மணி நேரம்", value=8.0, min_value=1.0
+    )
+  with pc2:
+    efficiency_pct = st.slider(
+        "Machine Efficiency (%) / இயந்திர திறன் (%)", 50, 100, 85
+    )
+    target_nos = st.number_input(
+        "Target Production Quantity (Nos) / இலக்கு உற்பத்தி", value=500
+    )
+
+  parts_per_hour = 3600.0 / cycle_time_sec
+  effective_parts_per_hour = parts_per_hour * (efficiency_pct / 100.0)
+  total_shift_output = effective_parts_per_hour * shift_hours
+  required_hours = (
+      target_nos / effective_parts_per_hour
+      if effective_parts_per_hour > 0
+      else 0
+  )
+
+  st.markdown("<br>", unsafe_allow_html=True)
+  pr1, pr2, pr3 = st.columns(3)
+  with pr1:
+    st.metric(
+        "Hourly Output",
+        f"{int(effective_parts_per_hour)} Nos/hr",
+        "ஒரு மணி நேர உற்பத்தி",
+    )
+  with pr2:
+    st.metric(
+        "Shift Output",
+        f"{int(total_shift_output)} Nos",
+        f"மொத்த ஷிப்ட் உற்பத்தி ({shift_hours} மணி நேரம்)",
+    )
+  with pr3:
+    st.metric(
+        "Time for Target",
+        f"{required_hours:.2f} Hours",
+        f"இலக்கை முடிக்க தேவைப்படும் நேரம்",
+    )
 
 # 4. COSTING & QUOTATION
-elif "Costing & Quotation" in selected_module:
+elif "Costing" in selected_module or "செலவு" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
-  st.subheader("💰 Costing & Quotation Calculator")
-  st.write("Costing module active.")
+  st.subheader(
+      "💰 Enterprise Costing & Quotation Calculator (செலவு & கொட்டேஷன்)"
+  )
+  st.write("Calculate component machining cost, overheads, and profit margin.")
+
+  cc1, cc2 = st.columns(2)
+  with cc1:
+    mat_cost_per_pc = st.number_input(
+        "Material Cost per Piece (Rs.) / ஒரு பார்ட் மெட்டீரியல் விலை",
+        value=35.0,
+    )
+    machining_cost_per_pc = st.number_input(
+        "Machining & Labor Cost per Piece (Rs.) / மிஷினிங் & லேபர் செலவு",
+        value=20.0,
+    )
+  with cc2:
+    overhead_pct = st.number_input(
+        "Overheads & Power (%) / இதர செலவுகள் மற்றும் கரண்ட் பில் (%)",
+        value=10.0,
+    )
+    profit_pct = st.number_input(
+        "Profit Margin (%) / லாப சதவீதம் (%)", value=20.0
+    )
+
+  subtotal = mat_cost_per_pc + machining_cost_per_pc
+  overhead_amt = subtotal * (overhead_pct / 100.0)
+  cost_price = subtotal + overhead_amt
+  profit_amt = cost_price * (profit_pct / 100.0)
+  selling_price = cost_price + profit_amt
+
+  st.markdown("<br>", unsafe_allow_html=True)
+  cr1, cr2, cr3 = st.columns(3)
+  with cr1:
+    st.metric(
+        "Total Cost Price", f"Rs. {cost_price:.2f}", "உற்பத்தி அடக்க விலை"
+    )
+  with cr2:
+    st.metric(
+        "Profit Amount per Piece",
+        f"Rs. {profit_amt:.2f}",
+        f"லாபம் ({profit_pct}%)",
+    )
+  with cr3:
+    st.metric(
+        "Suggested Selling Price",
+        f"Rs. {selling_price:.2f}",
+        "விற்க வேண்டிய இறுதி விலை",
+    )
 
 # 5. STOCK MANAGEMENT
-elif "Stock Management" in selected_module:
+elif "Stock" in selected_module or "ஸ்டாக்" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
-  st.subheader("📦 Stock Management")
+  st.subheader(
+      "📦 Stock & Inventory Management (ஸ்டாக் & இன்வென்டோரி மேனேஜ்மென்ட்)"
+  )
   st.dataframe(st.session_state["stock_inventory_df"], use_container_width=True)
 
-# 6. DRAWING & MULTI-OP G-CODE
-elif "Drawing" in selected_module:
+  st.markdown("### Add / Update Stock Item (புதிய ஸ்டாக் சேர்க்க)")
+  s_col1, s_col2, s_col3 = st.columns(3)
+  with s_col1:
+    new_item_name = st.text_input("Item Name / பொருளின் பெயர்")
+    new_cat = st.selectbox(
+        "Category / வகை", ["Raw Material", "Finished Goods", "Tools & Consumables"]
+    )
+  with s_col2:
+    new_qty = st.number_input("Quantity / அளவு", value=100.0)
+    new_unit = st.selectbox("Unit / அலகு", ["Kg", "Nos", "Pcs", "Mtrs"])
+  with s_col3:
+    new_status = st.selectbox(
+        "Status / நிலை", ["In Stock", "Low Stock", "Out of Stock"]
+    )
+
+  if st.button("➕ Add to Inventory Stock (ஸ்டாக்கில் சேர்)"):
+    new_row = pd.DataFrame({
+        "Item ID": [f"ITM-00{len(st.session_state['stock_inventory_df'])+1}"],
+        "Material / Part Name": [new_item_name],
+        "Category": [new_cat],
+        "Quantity": [new_qty],
+        "Unit": [new_unit],
+        "Status": [new_status],
+    })
+    st.session_state["stock_inventory_df"] = pd.concat(
+        [st.session_state["stock_inventory_df"], new_row], ignore_index=True
+    )
+    st.success("✅ Stock item added successfully!")
+    st.rerun()
+
+# 6. DRAWING STUDIO & G-CODE
+elif "Drawing" in selected_module or "டிராயிங்" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
-  st.subheader("📷 Drawing Studio & G-Code")
-  st.write("Drawing studio module active.")
+  st.subheader(
+      "📷 Drawing Studio & G-Code Generator (டிராயிங் & ஜி-கோடு ஜெனரேட்டர்)"
+  )
+  st.write(
+      "Upload component engineering drawings and instantly generate baseline"
+      " CNC G-Code."
+  )
 
-# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION (FULLY DYNAMIC LANGUAGE DROPDOWNS)
-elif "Process Breakdown" in selected_module:
+  uploaded_drawing = st.file_uploader(
+      "Upload Component Drawing (PNG/JPG/PDF)", type=["png", "jpg", "jpeg"]
+  )
+  if uploaded_drawing is not None:
+    st.image(
+        uploaded_drawing, caption="Uploaded Drawing", use_container_width=True
+    )
+    st.success("✅ Drawing successfully loaded for analysis.")
+
+  st.markdown("### Generated G-Code Program Preview")
+  gcode_sample = """O0001 (MEGALA INDUSTRIES PART PROGRAM)
+G21 G40 G90 G99
+T0101 (CENTER DRILL / FACING TOOL)
+G97 S2000 M03
+G0 X0 Z5
+G1 Z-1 F0.15
+G0 Z5
+M05
+M30"""
+  st.code(gcode_sample, language="text")
+
+# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION
+elif "Process Breakdown" in selected_module or "செயல்முறை" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
 
-  st.subheader(f"📋 {t['q_title']}")
-  st.write(t["q_desc"])
+  st.subheader(
+      "📋 Process Breakdown & Customer Quotation Generator (புதிய கொட்டேஷன்"
+      " மாடியூல்)"
+  )
+  st.write(
+      "உங்கள் பார்ட்டுகளுக்கு தேவையான ஆபரேஷன்களை (Facing, Turning, Grooving,"
+      " Drilling, Boring, Chamfering, Tapping போன்றவை) டிராப்-டவுனில் இருந்து"
+      " எளிதாகத் தேர்வு செய்யலாம்."
+  )
 
   col_q1, col_q2 = st.columns(2)
   with col_q1:
-    cust_name = st.text_input(t["cust_name"], value="M/s Precision Engineering Ltd")
+    cust_name = st.text_input(
+        "Customer Company Name / வாடிக்கையாளர் பெயர்",
+        value="M/s Precision Engineering Ltd",
+    )
     part_name_input = st.text_input(
-        t["part_name"], value="Custom Component / Coin Part"
+        "Part Name / Component Name (உங்கள் பார்ட் பெயர்)",
+        value="Custom Component / Coin Part",
     )
   with col_q2:
-    order_qty = st.number_input(t["order_qty"], value=1000, min_value=1)
-    transport_amt = st.number_input(t["transport_charges"], value=1500.0)
+    order_qty = st.number_input(
+        "Order Quantity / ஆர்டர் எண்ணிக்கை (Nos)", value=1000, min_value=1
+    )
+    transport_amt = st.number_input(
+        "Transport & Logistics Charges (Rs.)", value=1500.0
+    )
 
   st.markdown("---")
-  st.subheader(f"⚙️ {t['configure_ops']}")
+  st.subheader(
+      "⚙️ Configure Operations (ஆபரேஷன் பெயர்களை டிராப்-டவுனில் இருந்து தேர்வு"
+      " செய்யவும்)"
+  )
 
-  num_ops = st.number_input(t["num_ops"], min_value=1, max_value=10, value=3)
+  num_ops = st.number_input(
+      "Number of Operations for this Part (இந்த பார்ட்டுக்கு எத்தனை"
+      " ஆபரேஷன்கள் உள்ளன?)",
+      min_value=1,
+      max_value=10,
+      value=3,
+  )
 
   # Language-based Operations and Machines Lists
   if curr_lang == "English":
@@ -735,7 +887,7 @@ elif "Process Breakdown" in selected_module:
         "Facing (ಫೇಸಿಂಗ್)",
         "Turning - Rough & Finish (ಟರ್ನಿಂಗ್)",
         "Grooving (ಗ್ರೂವಿಂಗ್)",
-        "Drilling (ಡ್ರಿಲ್ಲಿಂಗ್)",
+        "Drilling (ಡ್ರಿಲ್ಯಿಂಗ್)",
         "Boring (ಬೋರಿಂಗ್)",
         "Chamfering (ಚಾಂಫರಿಂಗ್)",
         "Tapping (ಟ್ಯಾಪಿಂಗ್)",
@@ -748,7 +900,7 @@ elif "Process Breakdown" in selected_module:
     mach_dropdown_options = [
         "CNC Turning (ಸಿಎನ್‌ಸಿ ಟರ್ನಿಂಗ್)",
         "VMC / Milling (ವಿಎಮ್‌ಸಿ / ಮಿಲ್ಲಿಂಗ್)",
-        "Drilling Machine (ಡ್ರಿಲ್ಲಿಂಗ್ ಮೆಷಿನ್)",
+        "Drilling Machine (ಡ್ರಿಲ್ಯಿಂಗ್ ಮೆಷಿನ್)",
         "Traub Lathe (ಟ್ರಾಬ್ ಲೇಥ್)",
         "Manual / Bench (ಮ್ಯಾನುವಲ್ / ಬೆಂಚ್)",
         "Special Setup (ವಿಶೇಷ ಸೆಟಪ್)",
@@ -783,22 +935,18 @@ elif "Process Breakdown" in selected_module:
     col_a, col_b, col_c = st.columns([3, 2, 2])
     with col_a:
       op_name = st.selectbox(
-          f"{t['op_name']} {i+1}",
+          f"Operation Name {i+1}",
           op_dropdown_options,
           index=min(i, len(op_dropdown_options) - 1),
           key=f"dyn_op_n_{i}",
       )
     with col_b:
       mach_name = st.selectbox(
-          f"{t['machine']} {i+1}",
-          mach_dropdown_options,
-          key=f"dyn_op_m_{i}",
+          f"Machine {i+1}", mach_dropdown_options, key=f"dyn_op_m_{i}"
       )
     with col_c:
       op_rate = st.number_input(
-          f"{t['unit_rate']} {i+1}",
-          value=15.0 + (i * 5.0),
-          key=f"dyn_op_r_{i}",
+          f"Unit Rate (Rs.) {i+1}", value=15.0 + (i * 5.0), key=f"dyn_op_r_{i}"
       )
 
     edited_ops.append({
@@ -809,7 +957,7 @@ elif "Process Breakdown" in selected_module:
     })
 
   st.markdown("<br>", unsafe_allow_html=True)
-  if st.button(f"🚀 {t['gen_csv']}", use_container_width=True):
+  if st.button("🚀 Generate CSV Quotation File", use_container_width=True):
     csv_data = generate_quotation_csv(
         cust_name, part_name_input, edited_ops, transport_amt
     )
@@ -823,11 +971,11 @@ elif "Process Breakdown" in selected_module:
     )
 
 # 8. MORE MENU & SETTINGS
-elif "More Menu" in selected_module:
+elif "More Menu" in selected_module or "அமைப்புகள்" in selected_module:
   if st.button(t["back_home"]):
     st.session_state["selected_module"] = module_list[0]
     st.rerun()
-  st.subheader("⚙️ Settings & Language Preferences")
+  st.subheader("⚙️ Settings & Language Preferences (அமைப்புகள்)")
   lang_choice = st.selectbox(
       "🌐 Select Language / மொழி",
       [
