@@ -3,9 +3,6 @@ from datetime import datetime
 import math
 import os
 from fpdf import FPDF
-import openpyxl
-from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
-from openpyxl.utils import get_column_letter
 import pandas as pd
 from PIL import Image
 import streamlit as st
@@ -313,126 +310,57 @@ def get_cross_section_area(shape, dia_or_size, inner_dia=0.0):
   return math.pi * (dia_or_size / 2.0) ** 2
 
 
-def generate_quotation_excel(
+def generate_quotation_csv(
     customer_name, part_name, operations_list, transport_cost=0.0
 ):
-  wb = openpyxl.Workbook()
-  ws = wb.active
-  ws.title = "Commercial Quotation"
-  ws.views.sheetView[0].showGridLines = True
-
-  font_company = Font(name="Calibri", size=16, bold=True, color="1F4E78")
-  font_sub = Font(name="Calibri", size=9, italic=True, color="595959")
-  font_title = Font(name="Calibri", size=13, bold=True, color="000000")
-  font_header = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
-  font_bold = Font(name="Calibri", size=11, bold=True)
-  font_normal = Font(name="Calibri", size=11)
-
-  fill_header = PatternFill(
-      start_color="1F4E78", end_color="1F4E78", fill_type="solid"
+  rows = []
+  rows.append(
+      ["MEGALA INDUSTRIES - PRECISION CNC MACHINING & ENTERPRISE AUTOMATION"]
   )
-  border_thin = Border(
-      left=Side(style="thin", color="D9D9D9"),
-      right=Side(style="thin", color="D9D9D9"),
-      top=Side(style="thin", color="D9D9D9"),
-      bottom=Side(style="thin", color="D9D9D9"),
-  )
-  border_total = Border(
-      top=Side(style="thin", color="000000"),
-      bottom=Side(style="double", color="000000"),
-  )
-
-  ws["A1"] = "MEGALA INDUSTRIES"
-  ws["A1"].font = font_company
-  ws["A2"] = (
-      "Precision CNC Machining, VMC Components & Turning | Hosur, Tamil Nadu"
-  )
-  ws["A2"].font = font_sub
-  ws["A4"] = "COMMERCIAL QUOTATION & PROCESS BREAKDOWN"
-  ws["A4"].font = font_title
-  ws["A5"] = f"Customer Name: {customer_name}"
-  ws["B5"] = f"Part Name: {part_name}"
-  ws["A6"] = f"Date: {datetime.now().strftime('%Y-%m-%d')}"
-  ws["B6"] = "Quotation No: MI/Q/2026-08/01"
-
-  for r in range(5, 7):
-    ws[f"A{r}"].font = font_bold
-    ws[f"B{r}"].font = font_bold
-
-  headers = [
+  rows.append([f"Customer Name: {customer_name}", f"Part Name: {part_name}"])
+  rows.append([
+      f"Date: {datetime.now().strftime('%Y-%m-%d')}",
+      "Quotation No: MI/Q/2026-08/01",
+  ])
+  rows.append([])
+  rows.append([
       "S.No",
       "Operation / Process Description",
       "Machine / Setup",
       "Qty",
-      "Unit Rate (₹)",
-      "Total Amount (₹)",
-  ]
-  start_row = 9
-  for col_idx, header in enumerate(headers, 1):
-    cell = ws.cell(row=start_row, column=col_idx, value=header)
-    cell.font = font_header
-    cell.fill = fill_header
-    cell.alignment = Alignment(
-        horizontal="center", vertical="center", wrap_text=True
-    )
+      "Unit Rate (Rs.)",
+      "Total Amount (Rs.)",
+  ])
 
-  current_row = start_row + 1
+  total_amt = 0.0
   for idx, op in enumerate(operations_list, 1):
-    ws.cell(row=current_row, column=1, value=idx).alignment = Alignment(
-        horizontal="center"
-    )
-    ws.cell(row=current_row, column=2, value=op["name"])
-    ws.cell(row=current_row, column=3, value=op["machine"])
-    ws.cell(row=current_row, column=4, value=op["qty"]).alignment = Alignment(
-        horizontal="right"
-    )
-    ws.cell(row=current_row, column=5, value=op["rate"]).number_format = (
-        "₹#,##0.00"
-    )
-    ws.cell(
-        row=current_row, column=6, value=f"=D{current_row}*E{current_row}"
-    ).number_format = "₹#,##0.00"
-    for c in range(1, 7):
-      cell = ws.cell(row=current_row, column=c)
-      cell.font = font_normal
-      cell.border = border_thin
-    current_row += 1
+    row_total = op["qty"] * op["rate"]
+    total_amt += row_total
+    rows.append([
+        idx,
+        op["name"],
+        op["machine"],
+        op["qty"],
+        op["rate"],
+        row_total,
+    ])
 
   if transport_cost > 0:
-    ws.cell(row=current_row, column=2, value="Transport & Logistics Charges")
-    ws.cell(row=current_row, column=4, value=1).alignment = Alignment(
-        horizontal="right"
-    )
-    ws.cell(row=current_row, column=5, value=transport_cost).number_format = (
-        "₹#,##0.00"
-    )
-    ws.cell(
-        row=current_row, column=6, value=f"=E{current_row}"
-    ).number_format = "₹#,##0.00"
-    for c in range(1, 7):
-      ws.cell(row=current_row, column=c).font = font_normal
-      ws.cell(row=current_row, column=c).border = border_thin
-    current_row += 1
+    total_amt += transport_cost
+    rows.append([
+        "",
+        "Transport & Logistics Charges",
+        "Logistics",
+        1,
+        transport_cost,
+        transport_cost,
+    ])
 
-  gt_row = current_row
-  ws.cell(row=gt_row, column=5, value="Grand Total").font = font_bold
-  ws.cell(row=gt_row, column=5).alignment = Alignment(horizontal="right")
-  ws.cell(
-      row=gt_row, column=6, value=f"=SUM(F{start_row+1}:F{current_row-1})"
-  ).number_format = "₹#,##0.00"
-  ws.cell(row=gt_row, column=6).font = font_bold
-  ws.cell(row=gt_row, column=6).border = border_total
+  rows.append([])
+  rows.append(["", "", "", "", "Grand Total", total_amt])
 
-  for col in ws.columns:
-    max_length = max(len(str(cell.value or "")) for cell in col)
-    col_letter = get_column_letter(col[0].column)
-    ws.column_dimensions[col_letter].width = max(max_length + 4, 14)
-
-  filename = (
-      f"Megala_Industries_Quotation_{part_name.replace(' ', '_')}.xlsx"
-  )
-  wb.save(filename)
-  return filename
+  df_csv = pd.DataFrame(rows)
+  return df_csv.to_csv(index=False, header=False).encode("utf-8")
 
 
 # 1. HOME DASHBOARD
@@ -921,7 +849,7 @@ elif "Process Breakdown & Customer Quotation" in selected_module:
   )
   st.write(
       "Enter custom operations for parts like **Large Pin** or **Trunnion** to"
-      " generate professional Excel & PDF quotations instantly."
+      " generate professional CSV & PDF quotations instantly."
   )
 
   col_q1, col_q2 = st.columns(2)
@@ -1036,20 +964,20 @@ elif "Process Breakdown & Customer Quotation" in selected_module:
         "rate": op_rate,
     })
 
-  if st.button("🚀 Generate Excel Quotation File", use_container_width=True):
-    excel_file = generate_quotation_excel(
+  if st.button("🚀 Generate CSV Quotation File", use_container_width=True):
+    csv_data = generate_quotation_csv(
         cust_name, part_type, edited_ops, transport_amt
     )
-    st.success(f"✅ Quotation Excel successfully generated: {excel_file}")
-    with open(excel_file, "rb") as f:
-      st.download_button(
-          "📥 Download Excel Quotation (.xlsx)",
-          data=f,
-          file_name=excel_file,
-          mime=(
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          ),
-      )
+    filename = (
+        f"Megala_Industries_Quotation_{part_type.replace(' ', '_')}.csv"
+    )
+    st.success(f"✅ Quotation CSV successfully generated: {filename}")
+    st.download_button(
+        "📥 Download CSV Quotation (.csv)",
+        data=csv_data,
+        file_name=filename,
+        mime="text/csv",
+    )
 
 # 8. MORE MENU & SETTINGS
 elif "More Menu & Settings" in selected_module:
