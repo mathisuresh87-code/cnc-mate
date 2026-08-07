@@ -23,14 +23,6 @@ st.markdown(
         color: #f8fafc;
         font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
-    .header-container {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 10px 0 20px 0;
-        border-bottom: 2px solid rgba(236, 72, 153, 0.3);
-        margin-bottom: 25px;
-    }
     .main-title {
         font-size: 2.8rem;
         font-weight: 900;
@@ -118,7 +110,7 @@ st.markdown(
 
 LOGO_PATH = "logo.png"
 
-# Multi-Language Translation Dictionary (Bilingual Support: English + Target Language)
+# Comprehensive Bilingual Translations Dictionary
 translations = {
     "தமிழ் (Tamil)": {
         "home": "🏠 Home / முகப்பு",
@@ -126,52 +118,220 @@ translations = {
         "prod_calc": "⏱️ Production Calculator / உற்பத்தி கால்குலேட்டர்",
         "cost_calc": "💰 Costing & Quotation / செலவு & கொட்டேஷன்",
         "stock_mgmt": "📦 Stock Management / ஸ்டாக் மேனேஜ்மென்ட்",
-        "drawing_studio": (
-            "📷 Drawing & Multi-Op G-Code / டிராயிங் & ஆட்டோ ரிப்போர்ட்"
-        ),
-        "quote_hub": (
-            "📋 Process Breakdown & Customer Quotation / புதிய கொட்டேஷன்"
-            " மாடியூல்"
-        ),
-        "settings": "⚙️ More Menu & Settings / அமைப்புகள் & மாஸ்டர்ஸ்",
-        "active_machines": "Active Machines",
-        "todays_output": "Today's Output",
-        "material_stock": "Material Stock Items",
-        "low_stock_alerts": "Low/Out Stock",
+        "drawing_studio": "📷 Drawing & G-Code / டிராயிங் & ஜி-கோடு ஸ்டுடியோ",
+        "quote_hub": "📋 Process Breakdown & Quotation / கொட்டேஷன் ஹப்",
+        "settings": "⚙️ Settings & Masters / அமைப்புகள்",
+        "active_machines": "Active Machines / இயங்கும் இயந்திரங்கள்",
+        "todays_output": "Today's Output / இன்றைய உற்பத்தி",
+        "material_stock": "Material Stock / பொருள் இருப்பு",
+        "low_stock_alerts": "Low/Out Stock / குறைந்த இருப்பு எச்சரிக்கை",
         "core_modules": "🚀 Core Automation Modules / முக்கிய மாட்யூல்கள்",
         "back_home": "⬅️ Back to Home / முகப்புக்குத் திரும்பு",
+        "simple_mode": "Simple Mode / எளிய முறை",
+        "advanced_mode": "Advanced Mode / மேம்பட்ட முறை",
+        "rod_length": "Rod Length (Meter) / ராட் நீளம் (மீட்டர்)",
+        "part_length": "Part Length (mm) / பார்ட் நீளம் (மிமீ)",
+        "cutting_allowance": "Cutting Allowance (mm) / வெட்டும் அளவு (மிமீ)",
+        "material_shape": "Material Shape / பொருளின் வடிவம்",
+        "cycle_time": "Cycle Time (Seconds) / சுழற்சி நேரம் (வினாடிகள்)",
+        "required_qty": "Required Quantity / தேவையான எண்ணிக்கை",
+        "parts_per_rod": "Parts / Rod / ஒரு ராட்டுக்கான பார்ட்கள்",
+        "required_rods": "Required Rods / தேவையான ராட்கள்",
+        "balance_scrap": "Balance Scrap / மீதமுள்ள ஸ்கிராப்",
+        "total_stock_len": "Total Stock Length / மொத்த ராட் நீளம்",
+        "prod_per_hr": "Production / Hour / மணி நேர உற்பத்தி",
+        "tot_mach_time": "Total Machine Time / மொத்த இயந்திர நேரம்",
+        "upload_drawing": "Upload Part Drawing / பார்ட் டோயிங் பதிவேற்றவும்",
+        "material_dia": "Material Diameter / Size (mm) / விட்டம் (மிமீ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / குழாய் உள் விட்டம்",
+        "material_density": "Material Density (g/mm³) / அடர்த்தி",
+        "material_rate": "Material Rate / Kg (Rs.) / ஒரு கிலோ விலை (ரூ)",
+        "wastage_pct": "Additional Wastage (%) / கூடுதல் கழிவு (%)",
+        "part_weight": "Part Weight / பார்ட் எடை",
+        "total_mat_weight": "Total Mat. Weight / மொத்த பொருளின் எடை",
+        "total_mat_cost": "Total Mat. Cost / மொத்த பொருளின் விலை",
+        "avail_time": "Available Time / Day (hr) / கிடைக்கும் நேரம் / நாள்",
+        "machine_efficiency": "Machine Efficiency (%) / இயந்திர திறன் (%)",
+        "break_time": "Break Time (min) / இடைவெளி நேரம் (நிமிடங்கள்)",
+        "prod_day": "Production / Day / நாள் உற்பத்தி",
+        "download_prod_pdf": (
+            "📥 Download Production Report PDF / உற்பத்தி அறிக்கையைப் பதிவிறக்குக"
+        ),
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / இயந்திர செலவு / மணி",
+        "labour_cost_part": "Labour Cost / Part (Rs.) / தொழிலாளர் செலவு / பார்ட்",
+        "overhead_pct": "Overhead (%) / மேல்செலவு (%)",
+        "profit_margin": "Profit Margin (%) / லாப வரம்பு (%)",
+        "cost_part": "Cost / Part / ஒரு பார்ட்டின் செலவு",
+        "cost_1000_parts": "Cost / 1000 Parts / 1000 பார்ட்களுக்கான செலவு",
+        "selling_price_part": "Selling Price / Part / விற்பனை விலை / பார்ட்",
+        "download_quote_pdf": "📥 Download Quotation PDF / கொட்டேஷன் PDF பதிவிறக்குக",
+        "total_items": "Total Items / மொத்த பொருட்கள்",
+        "low_stock": "Low Stock / குறைந்த இருப்பு",
+        "out_of_stock": "Out of Stock / இருப்பு இல்லை",
+        "current_stock": "📋 Current Stock / தற்போதைய இருப்பு",
+        "add_item": "➕ Add Item / புதிய பொருள் சேர்",
+        "stock_in_out": "🔄 Stock In / Out / ஸ்டாக் உள்ளே / வெளியே",
+        "search_inventory": "🔍 Search Inventory / தேடுக...",
+        "part_name": "Part Name / பார்ட் பெயர்",
+        "category": "Category / வகை",
+        "quantity": "Quantity / எண்ணிக்கை",
+        "unit": "Unit / அலகு",
+        "update_stock": "🔄 Update Stock / ஸ்டாக்கை அப்டேட் செய்",
+        "num_operations": "Number of Operations / ஆபரேஷன்களின் எண்ணிக்கை",
+        "generate_gcode": "📥 Download G-Code PDF / G-Code PDF பதிவிறக்குக",
+        "cust_company": "Customer Company Name / வாடிக்கையாளர் பெயர்",
+        "transport_charges": "Transport & Logistics Charges (Rs.) / போக்குவரத்து செலவு",
+        "generate_csv": (
+            "🚀 Generate CSV Quotation File / கொட்டேஷன் CSV கோப்பை உருவாக்கு"
+        ),
+        "language_label": "🌐 Select Language / மொழியைத் தேர்ந்தெடுக்கவும்",
     },
     "हिन्दी (Hindi)": {
-        "home": "🏠 Home / गृह (Home)",
+        "home": "🏠 Home / गृह",
         "rod_calc": "📐 Rod Calculator / रॉड कैलकुलेटर",
         "prod_calc": "⏱️ Production Calculator / उत्पादन कैलकुलेटर",
         "cost_calc": "💰 Costing & Quotation / लागत और उद्धरण",
         "stock_mgmt": "📦 Stock Management / स्टॉक प्रबंधन",
         "drawing_studio": "📷 Drawing & G-Code / ड्राइंग और जी-कोड",
-        "quote_hub": "📋 Process Breakdown & Quotation / प्रक्रिया और उद्धरण",
-        "settings": "⚙️ More Menu & Settings / सेटिंग्स",
-        "active_machines": "Active Machines",
-        "todays_output": "Today's Output",
-        "material_stock": "Material Stock Items",
-        "low_stock_alerts": "Low/Out Stock",
+        "quote_hub": "📋 Process Breakdown & Quotation / उद्धरण केंद्र",
+        "settings": "⚙️ Settings & Masters / सेटिंग्स",
+        "active_machines": "Active Machines / सक्रिय मशीनें",
+        "todays_output": "Today's Output / आज का उत्पादन",
+        "material_stock": "Material Stock / सामग्री स्टॉक",
+        "low_stock_alerts": "Low/Out Stock / कम/समाप्त स्टॉक",
         "core_modules": "🚀 Core Automation Modules / मुख्य स्वचालन मॉड्यूल",
         "back_home": "⬅️ Back to Home / होम पर वापस जाएं",
+        "simple_mode": "Simple Mode / सरल मोड",
+        "advanced_mode": "Advanced Mode / उन्नत मोड",
+        "rod_length": "Rod Length (Meter) / रॉड की लंबाई (मीटर)",
+        "part_length": "Part Length (mm) / भाग की लंबाई (मिमी)",
+        "cutting_allowance": "Cutting Allowance (mm) / कटिंग अलाउंस (मिमी)",
+        "material_shape": "Material Shape / सामग्री का आकार",
+        "cycle_time": "Cycle Time (Seconds) / चक्र का समय (सेकंड)",
+        "required_qty": "Required Quantity / आवश्यक मात्रा",
+        "parts_per_rod": "Parts / Rod / प्रति रॉड भाग",
+        "required_rods": "Required Rods / आवश्यक रॉड",
+        "balance_scrap": "Balance Scrap / शेष स्क्रैप",
+        "total_stock_len": "Total Stock Length / कुल स्टॉक लंबाई",
+        "prod_per_hr": "Production / Hour / प्रति घंटा उत्पादन",
+        "tot_mach_time": "Total Machine Time / कुल मशीन समय",
+        "upload_drawing": "Upload Part Drawing / ड्राइंग अपलोड करें",
+        "material_dia": "Material Diameter / Size (mm) / व्यास (मिमी)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ट्यूब का आंतरिक व्यास",
+        "material_density": "Material Density (g/mm³) / सामग्री घनत्व",
+        "material_rate": "Material Rate / Kg (Rs.) / प्रति किलो दर (रु)",
+        "wastage_pct": "Additional Wastage (%) / अतिरिक्त अपव्यय (%)",
+        "part_weight": "Part Weight / भाग का वजन",
+        "total_mat_weight": "Total Mat. Weight / कुल सामग्री वजन",
+        "total_mat_cost": "Total Mat. Cost / कुल सामग्री लागत",
+        "avail_time": "Available Time / Day (hr) / उपलब्ध समय / दिन",
+        "machine_efficiency": "Machine Efficiency (%) / मशीन दक्षता (%)",
+        "break_time": "Break Time (min) / ब्रेक का समय (मिनट)",
+        "prod_day": "Production / Day / प्रति दिन उत्पादन",
+        "download_prod_pdf": (
+            "📥 Download Production Report PDF / उत्पादन रिपोर्ट डाउनलोड करें"
+        ),
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / मशीन लागत / घंटा",
+        "labour_cost_part": "Labour Cost / Part (Rs.) / श्रम लागत / भाग",
+        "overhead_pct": "Overhead (%) / ओवरहेड (%)",
+        "profit_margin": "Profit Margin (%) / लाभ मार्जिन (%)",
+        "cost_part": "Cost / Part / प्रति भाग लागत",
+        "cost_1000_parts": "Cost / 1000 Parts / 1000 भागों की लागत",
+        "selling_price_part": "Selling Price / Part / विक्रय मूल्य / भाग",
+        "download_quote_pdf": (
+            "📥 Download Quotation PDF / उद्धरण पीडीएफ डाउनलोड करें"
+        ),
+        "total_items": "Total Items / कुल वस्तुएं",
+        "low_stock": "Low Stock / कम स्टॉक",
+        "out_of_stock": "Out of Stock / स्टॉक समाप्त",
+        "current_stock": "📋 Current Stock / वर्तमान स्टॉक",
+        "add_item": "➕ Add Item / वस्तु जोड़ें",
+        "stock_in_out": "🔄 Stock In / Out / स्टॉक इन / आउट",
+        "search_inventory": "🔍 Search Inventory / इन्वेंट्री खोजें",
+        "part_name": "Part Name / भाग का नाम",
+        "category": "Category / श्रेणी",
+        "quantity": "Quantity / मात्रा",
+        "unit": "Unit / इकाई",
+        "update_stock": "🔄 Update Stock / स्टॉक अपडेट करें",
+        "num_operations": "Number of Operations / संचालन की संख्या",
+        "generate_gcode": "📥 Download G-Code PDF / जी-कोड पीडीएफ डाउनलोड करें",
+        "cust_company": "Customer Company Name / ग्राहक कंपनी का नाम",
+        "transport_charges": "Transport & Logistics Charges (Rs.) / परिवहन शुल्क",
+        "generate_csv": "🚀 Generate CSV Quotation File / सीएसवी उद्धरण फ़ाइल बनाएं",
+        "language_label": "🌐 Select Language / भाषा चुनें",
     },
     "తెలుగు (Telugu)": {
         "home": "🏠 Home / హోమ్",
-        "rod_calc": "📐 Rod Calculator / రాడ్ కాల்குலேటర్",
-        "prod_calc": "⏱️ Production Calculator / ప్రొడక్షన్ కాల்குலேటర్",
+        "rod_calc": "📐 Rod Calculator / రాడ్ కాల்குலேட்டர்",
+        "prod_calc": "⏱️ Production Calculator / ప్రొడక్షన్ కాల்குலேட்டர்",
         "cost_calc": "💰 Costing & Quotation / కాస్టింగ్ & కొటేషన్",
         "stock_mgmt": "📦 Stock Management / స్టాక్ మేనేజ్‌మెంట్",
         "drawing_studio": "📷 Drawing & G-Code / డ్రాయింగ్ & జి-కోడ్",
         "quote_hub": "📋 Process Breakdown & Quotation / ప్రాసెస్ & కొటేషన్",
-        "settings": "⚙️ More Menu & Settings / సెట్టింగ్‌లు",
-        "active_machines": "Active Machines",
-        "todays_output": "Today's Output",
-        "material_stock": "Material Stock Items",
-        "low_stock_alerts": "Low/Out Stock",
+        "settings": "⚙️ Settings & Masters / సెట్టింగ్‌లు",
+        "active_machines": "Active Machines / యాక్టివ్ మెషీన్లు",
+        "todays_output": "Today's Output / నేటి ఉత్పత్తి",
+        "material_stock": "Material Stock / మెటీరియల్ స్టాక్",
+        "low_stock_alerts": "Low/Out Stock / తక్కువ/స్టాక్ లేదు",
         "core_modules": "🚀 Core Automation Modules / ప్రధాన మాడ్యూల్స్",
         "back_home": "⬅️ Back to Home / హోమ్‌కి తిరిగి వెళ్ళు",
+        "simple_mode": "Simple Mode / సాధారణ మోడ్",
+        "advanced_mode": "Advanced Mode / అధునాతన మోడ్",
+        "rod_length": "Rod Length (Meter) / రాడ్ పొడవు (మీటర్)",
+        "part_length": "Part Length (mm) / భాగం పొడవు (మిమీ)",
+        "cutting_allowance": "Cutting Allowance (mm) / కటింగ్ అలవెన్స్ (మిమీ)",
+        "material_shape": "Material Shape / మెటీరియల్ ఆకారం",
+        "cycle_time": "Cycle Time (Seconds) / సైకిల్ సమయం (సెకన్లు)",
+        "required_qty": "Required Quantity / కావలసిన పరిమాణం",
+        "parts_per_rod": "Parts / Rod / ఒక్కో రాడ్‌కు భాగాలు",
+        "required_rods": "Required Rods / కావలసిన రాడ్లు",
+        "balance_scrap": "Balance Scrap / మిగిలిన స్క్రాప్",
+        "total_stock_len": "Total Stock Length / మొత్తం స్టాక్ పొడవు",
+        "prod_per_hr": "Production / Hour / గంటకు ఉత్పత్తి",
+        "tot_mach_time": "Total Machine Time / మొత్తం మెషిన్ సమయం",
+        "upload_drawing": "Upload Part Drawing / డ్రాయింగ్ అప్‌लोड చేయండి",
+        "material_dia": "Material Diameter / Size (mm) / వ్యాసం (మిమీ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ట్యూబ్ లోపలి వ్యాసం",
+        "material_density": "Material Density (g/mm³) / సాంద్రత",
+        "material_rate": "Material Rate / Kg (Rs.) / రేటు / కిలో (రూ)",
+        "wastage_pct": "Additional Wastage (%) / అదనపు వృధా (%)",
+        "part_weight": "Part Weight / భాగం బరువు",
+        "total_mat_weight": "Total Mat. Weight / మొత్తం మెటీరియల్ బరువు",
+        "total_mat_cost": "Total Mat. Cost / మొత్తం మెటీరియల్ ధర",
+        "avail_time": "Available Time / Day (hr) / అందుబాటులో ఉన్న సమయం",
+        "machine_efficiency": "Machine Efficiency (%) / మెషిన్ సామర్థ్యం (%)",
+        "break_time": "Break Time (min) / విరామ సమయం (నిమి)",
+        "prod_day": "Production / Day / రోజువారీ ఉత్పత్తి",
+        "download_prod_pdf": (
+            "📥 Download Production Report PDF / ప్రొడక్షన్ రిపోర్ట్ డౌన్‌లోడ్"
+            " చేయండి"
+        ),
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / మెషిన్ ఖర్చు / గంట",
+        "labour_cost_part": "Labour Cost / Part (Rs.) / కార్మికుల ఖర్చు",
+        "overhead_pct": "Overhead (%) / ఓవర్‌హెడ్ (%)",
+        "profit_margin": "Profit Margin (%) / లాభ మార్జిన్ (%)",
+        "cost_part": "Cost / Part / భాగం ఖర్చు",
+        "cost_1000_parts": "Cost / 1000 Parts / 1000 భాగాల ఖర్చు",
+        "selling_price_part": "Selling Price / Part / అమ్మకపు ధర",
+        "download_quote_pdf": "📥 Download Quotation PDF / కొటేషన్ PDF డౌన్‌లోడ్",
+        "total_items": "Total Items / మొత్తం అంశాలు",
+        "low_stock": "Low Stock / తక్కువ స్టాక్",
+        "out_of_stock": "Out of Stock / స్టాక్ లేదు",
+        "current_stock": "📋 Current Stock / ప్రస్తుత స్టాక్",
+        "add_item": "➕ Add Item / అంశాన్ని జోడించు",
+        "stock_in_out": "🔄 Stock In / Out / స్టాక్ ఇన్ / అవుట్",
+        "search_inventory": "🔍 Search Inventory / ఇన్వెంటరీ శోధించండి",
+        "part_name": "Part Name / భాగం పేరు",
+        "category": "Category / వర్గం",
+        "quantity": "Quantity / పరిమాణం",
+        "unit": "Unit / యూనిట్",
+        "update_stock": "🔄 Update Stock / స్టాక్ అప్‌డేట్ చేయండి",
+        "num_operations": "Number of Operations / ఆపరేషన్ల సంఖ్య",
+        "generate_gcode": "📥 Download G-Code PDF / జి-కోడ్ PDF డౌన్‌లోడ్",
+        "cust_company": "Customer Company Name / కస్టమర్ కంపెనీ పేరు",
+        "transport_charges": "Transport & Logistics Charges (Rs.) / రవాణా ఛార్జీలు",
+        "generate_csv": "🚀 Generate CSV Quotation File / CSV కొటేషన్ ఫైల్",
+        "language_label": "🌐 Select Language / భాషను ఎంచుకోండి",
     },
     "മലയാളം (Malayalam)": {
         "home": "🏠 Home / ഹോം",
@@ -180,14 +340,73 @@ translations = {
         "cost_calc": "💰 Costing & Quotation / കോസ്റ്റിംഗ് & ക്വട്ടേഷൻ",
         "stock_mgmt": "📦 Stock Management / സ്റ്റോക്ക് മാനേജ്മെന്റ്",
         "drawing_studio": "📷 Drawing & G-Code / ഡ്രോയിംഗ് & ജി-കോഡ്",
-        "quote_hub": "📋 Process Breakdown & Quotation / പ്രൊസസ്സ് & ക്വട്ടേഷൻ",
-        "settings": "⚙️ More Menu & Settings / ക്രമീകരണങ്ങൾ",
-        "active_machines": "Active Machines",
-        "todays_output": "Today's Output",
-        "material_stock": "Material Stock Items",
-        "low_stock_alerts": "Low/Out Stock",
+        "quote_hub": "📋 Process Breakdown & Quotation / ക്വട്ടേഷൻ ഹബ്",
+        "settings": "⚙️ Settings & Masters / ക്രമീകരണങ്ങൾ",
+        "active_machines": "Active Machines / സജീവമായ മെഷീനുകൾ",
+        "todays_output": "Today's Output / ഇന്നത്തെ ഉൽപ്പാദനം",
+        "material_stock": "Material Stock / മെറ്റീരിയൽ സ്റ്റോക്ക്",
+        "low_stock_alerts": "Low/Out Stock / കുറഞ്ഞ/സ്റ്റോക്ക് ഇല്ല",
         "core_modules": "🚀 Core Automation Modules / പ്രധാന മൊഡ്യൂളുകൾ",
         "back_home": "⬅️ Back to Home / ഹോമിലേക്ക് മടങ്ങുക",
+        "simple_mode": "Simple Mode / ലളിതമായ മോഡ്",
+        "advanced_mode": "Advanced Mode / വിപുലമായ മോഡ്",
+        "rod_length": "Rod Length (Meter) / റോഡിന്റെ നീളം (മീറ്റർ)",
+        "part_length": "Part Length (mm) / ഭാഗത്തിന്റെ നീളം (മിമീ)",
+        "cutting_allowance": "Cutting Allowance (mm) / കട്ടിംഗ് അലവൻസ്",
+        "material_shape": "Material Shape / മെറ്റീരിയൽ ആകൃതി",
+        "cycle_time": "Cycle Time (Seconds) / സൈക്കിൾ സമയം (സെക്കൻഡ്)",
+        "required_qty": "Required Quantity / ആവശ്യമായ അളവ്",
+        "parts_per_rod": "Parts / Rod / ഒരു റോഡിലെ ഭാഗങ്ങൾ",
+        "required_rods": "Required Rods / ആവശ്യമായ റോഡുകൾ",
+        "balance_scrap": "Balance Scrap / ബാക്കി സ്ക്രാപ്പ്",
+        "total_stock_len": "Total Stock Length / മൊത്തം സ്റ്റോക്ക് നീളം",
+        "prod_per_hr": "Production / Hour / മണിക്കൂർ ഉൽപ്പാദനം",
+        "tot_mach_time": "Total Machine Time / മൊത്തം മെഷീൻ സമയം",
+        "upload_drawing": "Upload Part Drawing / ഡ്രോയിംഗ് അപ്‌ലോഡ് ചെയ്യുക",
+        "material_dia": "Material Diameter / Size (mm) / വ്യാസം (മിമീ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ട്യൂബ് ഉൾവ്യാസം",
+        "material_density": "Material Density (g/mm³) / സാന്ദ്രത",
+        "material_rate": "Material Rate / Kg (Rs.) / നിരക്ക് / കിലോ (രൂ)",
+        "wastage_pct": "Additional Wastage (%) / അധിക പാഴാക്കൽ (%)",
+        "part_weight": "Part Weight / ഭാഗത്തിന്റെ ഭാരം",
+        "total_mat_weight": "Total Mat. Weight / മൊത്തം മെറ്റീരിയൽ ഭാരം",
+        "total_mat_cost": "Total Mat. Cost / മൊത്തം മെറ്റീരിയൽ വില",
+        "avail_time": "Available Time / Day (hr) / ലഭ്യമായ സമയം / ദിവസം",
+        "machine_efficiency": "Machine Efficiency (%) / മെഷീൻ കാര്യക്ഷമത (%)",
+        "break_time": "Break Time (min) / ഇടവേള സമയം (മിനിറ്റ്)",
+        "prod_day": "Production / Day / പ്രതിദിന ഉൽപ്പാദനം",
+        "download_prod_pdf": (
+            "📥 Download Production Report PDF / പ്രൊഡക്ഷൻ റിപ്പോർട്ട് ഡൗൺലോഡ്"
+            " ചെയ്യുക"
+        ),
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / മെഷീൻ ചെലവ് / മണിക്കൂർ",
+        "labour_cost_part": "Labour Cost / Part (Rs.) / ലേബർ ചെലവ് / ഭാഗം",
+        "overhead_pct": "Overhead (%) / ഓവർഹെഡ് (%)",
+        "profit_margin": "Profit Margin (%) / ലാഭവിഹിതം (%)",
+        "cost_part": "Cost / Part / ഒരു ഭാഗത്തിന്റെ ചെലവ്",
+        "cost_1000_parts": "Cost / 1000 Parts / 1000 ഭാഗങ്ങളുടെ ചെലവ്",
+        "selling_price_part": "Selling Price / Part / വിൽപ്പന വില / ഭാഗം",
+        "download_quote_pdf": (
+            "📥 Download Quotation PDF / ക്വട്ടേഷൻ PDF ഡൗൺലോഡ് ചെയ്യുക"
+        ),
+        "total_items": "Total Items / മൊത്തം ഇനങ്ങൾ",
+        "low_stock": "Low Stock / കുറഞ്ഞ സ്റ്റോക്ക്",
+        "out_of_stock": "Out of Stock / സ്റ്റോക്ക് തീർന്നു",
+        "current_stock": "📋 Current Stock / നിലവിലുള്ള സ്റ്റോക്ക്",
+        "add_item": "➕ Add Item / ഇനം ചേർക്കുക",
+        "stock_in_out": "🔄 Stock In / Out / സ്റ്റോക്ക് ഇൻ / ഔട്ട്",
+        "search_inventory": "🔍 Search Inventory / ഇൻവെന്ററി തിരയുക",
+        "part_name": "Part Name / ഭാഗത്തിന്റെ പേര്",
+        "category": "Category / വിഭാഗം",
+        "quantity": "Quantity / അളവ്",
+        "unit": "Unit / യൂണിറ്റ്",
+        "update_stock": "🔄 Update Stock / സ്റ്റോക്ക് അപ്ഡേറ്റ് ചെയ്യുക",
+        "num_operations": "Number of Operations / പ്രവർത്തനങ്ങളുടെ എണ്ണം",
+        "generate_gcode": "📥 Download G-Code PDF / ജി-കോഡ് PDF ഡൗൺലോഡ്",
+        "cust_company": "Customer Company Name / ഉപഭോക്തൃ കമ്പനിയുടെ പേര്",
+        "transport_charges": "Transport & Logistics Charges (Rs.) / യാത്രാക്കൂലി",
+        "generate_csv": "🚀 Generate CSV Quotation File / CSV ക്വട്ടേഷൻ ഫയൽ",
+        "language_label": "🌐 Select Language / ഭാഷ തിരഞ്ഞെടുക്കുക",
     },
     "ಕನ್ನಡ (Kannada)": {
         "home": "🏠 Home / ಮುಖಪುಟ",
@@ -196,30 +415,145 @@ translations = {
         "cost_calc": "💰 Costing & Quotation / ವೆಚ್ಚ ಮತ್ತು ಉಲ್ಲೇಖ",
         "stock_mgmt": "📦 Stock Management / ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
         "drawing_studio": "📷 Drawing & G-Code / ಡ್ರಾಯಿಂಗ್ & ಜಿ-ಕೋಡ್",
-        "quote_hub": "📋 Process Breakdown & Quotation / ಪ್ರಕ್ರಿಯೆ & ಉಲ್ಲೇಖ",
-        "settings": "⚙️ More Menu & Settings / ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
-        "active_machines": "Active Machines",
-        "todays_output": "Today's Output",
-        "material_stock": "Material Stock Items",
-        "low_stock_alerts": "Low/Out Stock",
+        "quote_hub": "📋 Process Breakdown & Quotation / ಉಲ್ಲೇಖ ಕೇಂದ್ರ",
+        "settings": "⚙️ Settings & Masters / ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+        "active_machines": "Active Machines / ಸಕ್ರಿಯ ಯಂತ್ರಗಳು",
+        "todays_output": "Today's Output / ಇಂದಿನ ಉತ್ಪಾದನೆ",
+        "material_stock": "Material Stock / ವಸ್ತು ಸ್ಟಾಕ್",
+        "low_stock_alerts": "Low/Out Stock / ಕಡಿಮೆ/ಸ್ಟಾಕ್ ಇಲ್ಲ",
         "core_modules": "🚀 Core Automation Modules / ಪ್ರಮುಖ ಮಾಡ್ಯೂಲ್‌ಗಳು",
         "back_home": "⬅️ Back to Home / ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ",
+        "simple_mode": "Simple Mode / ಸರಳ ಮೋಡ್",
+        "advanced_mode": "Advanced Mode / ಸುಧಾರಿತ ಮೋಡ್",
+        "rod_length": "Rod Length (Meter) / ರಾಡ್ ಉದ್ದ (ಮೀಟರ್)",
+        "part_length": "Part Length (mm) / ಭಾಗದ ಉದ್ದ (ಮಿಮೀ)",
+        "cutting_allowance": "Cutting Allowance (mm) / ಕಟಿಂಗ್ ಭತ್ಯೆ (ಮಿಮೀ)",
+        "material_shape": "Material Shape / ವಸ್ತುವಿನ ಆಕಾರ",
+        "cycle_time": "Cycle Time (Seconds) / ಚಕ್ರದ ಸಮಯ (ಸೆಕೆಂಡುಗಳು)",
+        "required_qty": "Required Quantity / ಅಗತ್ಯವಿರುವ ಪ್ರಮಾಣ",
+        "parts_per_rod": "Parts / Rod / ಪ್ರತಿ ರಾಡ್‌ಗೆ ಭಾಗಗಳು",
+        "required_rods": "Required Rods / ಅಗತ್ಯವಿರುವ ರಾಡ್‌ಗಳು",
+        "balance_scrap": "Balance Scrap / ಉಳಿದ ಸ್ಕ್ರ್ಯಾಪ್",
+        "total_stock_len": "Total Stock Length / ಒಟ್ಟು ಸ್ಟಾಕ್ ಉದ್ದ",
+        "prod_per_hr": "Production / Hour / ಪ್ರತಿ ಗಂಟೆಯ ಉತ್ಪಾದನೆ",
+        "tot_mach_time": "Total Machine Time / ಒಟ್ಟು ಯಂತ್ರದ ಸಮಯ",
+        "upload_drawing": "Upload Part Drawing / ಡ್ರಾಯಿಂಗ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+        "material_dia": "Material Diameter / Size (mm) / ವ್ಯಾಸ (ಮಿಮೀ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ಟ್ಯೂಬ್ ಒಳ ವ್ಯಾಸ",
+        "material_density": "Material Density (g/mm³) / ಸಾಂದ್ರತೆ",
+        "material_rate": "Material Rate / Kg (Rs.) / ದರ / ಕೆಜಿ (ರೂ)",
+        "wastage_pct": "Additional Wastage (%) / ಹೆಚ್ಚುವರಿ ವ್ಯರ್ಥ (%)",
+        "part_weight": "Part Weight / ಭಾಗದ ತೂಕ",
+        "total_mat_weight": "Total Mat. Weight / ಒಟ್ಟು ವಸ್ತುವಿನ ತೂಕ",
+        "total_mat_cost": "Total Mat. Cost / ಒಟ್ಟು ವಸ್ತುವಿನ ವೆಚ್ಚ",
+        "avail_time": "Available Time / Day (hr) / ಲಭ್ಯವಿರುವ ಸಮಯ / ದಿನ",
+        "machine_efficiency": "Machine Efficiency (%) / ಯಂತ್ರದ ದಕ್ಷತೆ (%)",
+        "break_time": "Break Time (min) / ವಿರಾಮ ಸಮಯ (ನಿಮಿಷ)",
+        "prod_day": "Production / Day / ದಿನದ ಉತ್ಪಾದನೆ",
+        "download_prod_pdf": (
+            "📥 Download Production Report PDF / ಉತ್ಪಾದನಾ ವರದಿ PDF ಡೌನ್‌ಲೋಡ್"
+            " ಮಾಡಿ"
+        ),
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / ಯಂತ್ರ ವೆಚ್ಚ / ಗಂಟೆ",
+        "labour_cost_part": "Labour Cost / Part (Rs.) / ಕಾರ್ಮಿಕ ವೆಚ್ಚ / ಭಾಗ",
+        "overhead_pct": "Overhead (%) / ಓವರ್‌ಹೆಡ್ (%)",
+        "profit_margin": "Profit Margin (%) / ಲಾಭದ ಮಾರ್ಜಿನ್ (%)",
+        "cost_part": "Cost / Part / ಪ್ರತಿ ಭಾಗದ ವೆಚ್ಚ",
+        "cost_1000_parts": "Cost / 1000 Parts / 1000 ಭಾಗಗಳ ವೆಚ್ಚ",
+        "selling_price_part": "Selling Price / Part / ಮಾರಾಟ ಬೆಲೆ / ಭಾಗ",
+        "download_quote_pdf": (
+            "📥 Download Quotation PDF / ಉಲ್ಲೇಖ PDF ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ"
+        ),
+        "total_items": "Total Items / ಒಟ್ಟು ವಸ್ತುಗಳು",
+        "low_stock": "Low Stock / ಕಡಿಮೆ ಸ್ಟಾಕ್",
+        "out_of_stock": "Out of Stock / ಸ್ಟಾಕ್ ಖಾಲಿಯಾಗಿದೆ",
+        "current_stock": "📋 Current Stock / ಪ್ರಸ್ತುತ ಸ್ಟಾಕ್",
+        "add_item": "➕ Add Item / ವಸ್ತು ಸೇರಿಸಿ",
+        "stock_in_out": "🔄 Stock In / Out / ಸ್ಟಾಕ್ ಇನ್ / ಔಟ್",
+        "search_inventory": "🔍 Search Inventory / ದಾಸ್ತಾನು ಹುಡುಕಿ",
+        "part_name": "Part Name / ಭಾಗದ ಹೆಸರು",
+        "category": "Category / ವರ್ಗ",
+        "quantity": "Quantity / ಪ್ರಮಾಣ",
+        "unit": "Unit / ಘಟಕ",
+        "update_stock": "🔄 Update Stock / ಸ್ಟಾಕ್ ನವೀಕರಿಸಿ",
+        "num_operations": "Number of Operations / ಕಾರ್ಯಾಚರಣೆಗಳ ಸಂಖ್ಯೆ",
+        "generate_gcode": "📥 Download G-Code PDF / ಜಿ-ಕೋಡ್ PDF ಡೌನ್‌ಲೋಡ್",
+        "cust_company": "Customer Company Name / ಗ್ರಾಹಕರ ಕಂಪನಿ ಹೆಸರು",
+        "transport_charges": (
+            "Transport & Logistics Charges (Rs.) / ಸಾರಿಗೆ ಶುಲ್ಕ"
+        ),
+        "generate_csv": "🚀 Generate CSV Quotation File / CSV ಉಲ್ಲೇಖ ಫೈಲ್",
+        "language_label": "🌐 Select Language / ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
     },
     "English": {
         "home": "🏠 Home",
         "rod_calc": "📐 Rod Calculator",
         "prod_calc": "⏱️ Production Calculator",
-        "cost_calc": "💰 Costing & Quotation Calculator",
+        "cost_calc": "💰 Costing & Quotation",
         "stock_mgmt": "📦 Stock Management",
-        "drawing_studio": "📷 Drawing & Multi-Op G-Code",
-        "quote_hub": "📋 Process Breakdown & Customer Quotation",
-        "settings": "⚙️ More Menu & Settings",
+        "drawing_studio": "📷 Drawing & G-Code Studio",
+        "quote_hub": "📋 Process Breakdown & Quotation Hub",
+        "settings": "⚙️ Settings & Masters",
         "active_machines": "Active Machines",
         "todays_output": "Today's Output",
-        "material_stock": "Material Stock Items",
+        "material_stock": "Material Stock",
         "low_stock_alerts": "Low/Out Stock",
         "core_modules": "🚀 Core Automation Modules",
         "back_home": "⬅️ Back to Home",
+        "simple_mode": "Simple Mode",
+        "advanced_mode": "Advanced Mode",
+        "rod_length": "Rod Length (Meter)",
+        "part_length": "Part Length (mm)",
+        "cutting_allowance": "Cutting Allowance (mm)",
+        "material_shape": "Material Shape",
+        "cycle_time": "Cycle Time (Seconds)",
+        "required_qty": "Required Quantity",
+        "parts_per_rod": "Parts / Rod",
+        "required_rods": "Required Rods",
+        "balance_scrap": "Balance Scrap",
+        "total_stock_len": "Total Stock Length",
+        "prod_per_hr": "Production / Hour",
+        "tot_mach_time": "Total Machine Time",
+        "upload_drawing": "Upload Part Drawing",
+        "material_dia": "Material Diameter / Size (mm)",
+        "tube_inner_dia": "Tube Inner Diameter (mm)",
+        "material_density": "Material Density (g/mm³)",
+        "material_rate": "Material Rate / Kg (Rs.)",
+        "wastage_pct": "Additional Wastage (%)",
+        "part_weight": "Part Weight",
+        "total_mat_weight": "Total Mat. Weight",
+        "total_mat_cost": "Total Mat. Cost",
+        "avail_time": "Available Time / Day (hr)",
+        "machine_efficiency": "Machine Efficiency (%)",
+        "break_time": "Break Time (min)",
+        "prod_day": "Production / Day",
+        "download_prod_pdf": "📥 Download Production Report PDF",
+        "machine_cost_hr": "Machine Cost / Hr (Rs.)",
+        "labour_cost_part": "Labour Cost / Part (Rs.)",
+        "overhead_pct": "Overhead (%)",
+        "profit_margin": "Profit Margin (%)",
+        "cost_part": "Cost / Part",
+        "cost_1000_parts": "Cost / 1000 Parts",
+        "selling_price_part": "Selling Price / Part",
+        "download_quote_pdf": "📥 Download Quotation PDF",
+        "total_items": "Total Items",
+        "low_stock": "Low Stock",
+        "out_of_stock": "Out of Stock",
+        "current_stock": "📋 Current Stock",
+        "add_item": "➕ Add Item",
+        "stock_in_out": "🔄 Stock In / Out",
+        "search_inventory": "🔍 Search Inventory",
+        "part_name": "Part Name",
+        "category": "Category",
+        "quantity": "Quantity",
+        "unit": "Unit",
+        "update_stock": "🔄 Update Stock",
+        "num_operations": "Number of Operations",
+        "generate_gcode": "📥 Download G-Code PDF",
+        "cust_company": "Customer Company Name",
+        "transport_charges": "Transport & Logistics Charges (Rs.)",
+        "generate_csv": "🚀 Generate CSV Quotation File",
+        "language_label": "🌐 Select Language",
     },
 }
 
@@ -324,11 +658,12 @@ if uploaded_logo is not None:
 
 st.sidebar.markdown("---")
 
-# Language Selection in Sidebar as well for quick access
+# Language Selection in Sidebar
 selected_lang_sidebar = st.sidebar.selectbox(
-    "🌐 Select Language",
+    get_text("language_label"),
     list(translations.keys()),
     index=list(translations.keys()).index(st.session_state["app_language"]),
+    key="sidebar_lang_selector",
 )
 if selected_lang_sidebar != st.session_state["app_language"]:
   st.session_state["app_language"] = selected_lang_sidebar
@@ -336,12 +671,15 @@ if selected_lang_sidebar != st.session_state["app_language"]:
 
 st.sidebar.markdown("---")
 
+# Sync selected module index accurately
+current_selected_module = st.session_state["selected_module"]
+# Find corresponding key if possible, or default
 selected_module = st.sidebar.selectbox(
     "Select Module",
     module_list,
     index=(
-        module_list.index(st.session_state["selected_module"])
-        if st.session_state["selected_module"] in module_list
+        module_list.index(current_selected_module)
+        if current_selected_module in module_list
         else 0
     ),
     label_visibility="collapsed",
@@ -565,25 +903,37 @@ elif selected_module == get_text("rod_calc"):
   if st.button(get_text("back_home")):
     st.session_state["selected_module"] = get_text("home")
     st.rerun()
-  st.subheader("📐 Rod Calculator - Simple & Advanced Modes")
-  mode = st.radio("Mode Selection", ["Simple Mode", "Advanced Mode"], horizontal=True)
+  st.subheader(f"📐 {get_text('rod_calc')}")
+  mode = st.radio(
+      "Mode Selection",
+      [get_text("simple_mode"), get_text("advanced_mode")],
+      horizontal=True,
+  )
 
-  if mode == "Simple Mode":
-    st.write("### 🟢 Simple Mode: Quick Parts & Remnant Calculation")
+  if mode == get_text("simple_mode"):
+    st.write(f"### 🟢 {get_text('simple_mode')}")
     col1, col2 = st.columns(2)
     with col1:
-      rod_length = st.number_input("Rod Length (Meter)", value=6.0, min_value=0.0)
-      part_length = st.number_input("Part Length (mm)", value=38.70, min_value=0.0)
+      rod_length = st.number_input(
+          get_text("rod_length"), value=6.0, min_value=0.0
+      )
+      part_length = st.number_input(
+          get_text("part_length"), value=38.70, min_value=0.0
+      )
       cutting_allowance = st.number_input(
-          "Cutting / Parting Allowance (mm)", value=3.0, min_value=0.0
+          get_text("cutting_allowance"), value=3.0, min_value=0.0
       )
     with col2:
       shape_type = st.selectbox(
-          "Material Shape",
+          get_text("material_shape"),
           ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"],
       )
-      cycle_time = st.number_input("Cycle Time (Seconds)", value=20, min_value=0)
-      required_qty = st.number_input("Required Quantity", value=500, min_value=0)
+      cycle_time = st.number_input(
+          get_text("cycle_time"), value=20, min_value=0
+      )
+      required_qty = st.number_input(
+          get_text("required_qty"), value=500, min_value=0
+      )
 
     eff_len = part_length + cutting_allowance
     parts_per_rod = (
@@ -593,62 +943,73 @@ elif selected_module == get_text("rod_calc"):
     req_rods = int(required_qty / parts_per_rod) if parts_per_rod > 0 else 0
     prod_per_hr = int(3600 / cycle_time) if cycle_time > 0 else 0
 
-    st.markdown('<div class="auto-badge">⚡ SIMPLE MODE RESULT</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="auto-badge">⚡ {get_text("simple_mode")} RESULT</div>',
+        unsafe_allow_html=True,
+    )
     r1, r2, r3 = st.columns(3)
     with r1:
-      st.metric("Parts / Rod", f"{parts_per_rod} Nos")
-      st.metric("Required Rods", f"{req_rods} Nos")
+      st.metric(get_text("parts_per_rod"), f"{parts_per_rod} Nos")
+      st.metric(get_text("required_rods"), f"{req_rods} Nos")
     with r2:
-      st.metric("Balance Scrap / Remnant", f"{remnant} mm")
-      st.metric("Total Stock Length", f"{round(req_rods * rod_length, 2)} Meters")
+      st.metric(get_text("balance_scrap"), f"{remnant} mm")
+      st.metric(get_text("total_stock_len"), f"{round(req_rods * rod_length, 2)} Meters")
     with r3:
-      st.metric("Production / Hour", f"{prod_per_hr} Nos")
-      st.metric("Total Machine Time", f"{round((required_qty * cycle_time)/3600, 2)} Hr")
+      st.metric(get_text("prod_per_hr"), f"{prod_per_hr} Nos")
+      st.metric(
+          get_text("tot_mach_time"),
+          f"{round((required_qty * cycle_time)/3600, 2)} Hr",
+      )
 
   else:
-    st.write("### 🔵 Advanced Mode: Drawing Upload & Exact Gram/Scrap Analysis")
+    st.write(f"### 🔵 {get_text('advanced_mode')}")
     adv_file = st.file_uploader(
-        "Upload Part Drawing / Photo", type=["png", "jpg", "pdf"]
+        get_text("upload_drawing"), type=["png", "jpg", "pdf"]
     )
     if adv_file:
-      st.success(
-          f"📂 Drawing '{adv_file.name}' uploaded! Auto-detected Diameter:"
-          " 18.0 mm, Part Length: 38.70 mm."
-      )
+      st.success(f"📂 '{adv_file.name}' uploaded successfully!")
       if adv_file.type in ["image/png", "image/jpeg"]:
         st.image(adv_file, width=350)
 
     ac1, ac2 = st.columns(2)
     with ac1:
       adv_shape = st.selectbox(
-          "Material Shape",
+          get_text("material_shape"),
           ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"],
           key="as",
       )
       adv_rod_len_m = st.number_input(
-          "Rod Length (Meters)", value=6.0, key="arl"
+          get_text("rod_length"), value=6.0, key="arl"
       )
       adv_part_len = st.number_input(
-          "Part Length from Drawing (mm)", value=38.70, key="apl"
+          get_text("part_length"), value=38.70, key="apl"
       )
       adv_cut_allow = st.number_input(
-          "Cutting Allowance (mm)", value=3.0, key="aca"
+          get_text("cutting_allowance"), value=3.0, key="aca"
       )
-      adv_req_qty = st.number_input("Required Order Quantity", value=500, key="arq")
+      adv_req_qty = st.number_input(
+          get_text("required_qty"), value=500, key="arq"
+      )
     with ac2:
       adv_dia = st.number_input(
-          "Raw Material Diameter / Size (mm)", value=18.0, key="add"
+          get_text("material_dia"), value=18.0, key="add"
       )
       adv_inner_dia = (
-          st.number_input("Tube Inner Diameter (mm)", value=20.0, key="aid")
+          st.number_input(
+              get_text("tube_inner_dia"), value=20.0, key="aid"
+          )
           if adv_shape == "Tube / Pipe"
           else 0.0
       )
       adv_density = st.number_input(
-          "Material Density (g/mm³)", value=0.00785, format="%.5f", key="adn"
+          get_text("material_density"), value=0.00785, format="%.5f", key="adn"
       )
-      adv_mat_rate = st.number_input("Material Rate / Kg (Rs.)", value=90.0, key="amr")
-      adv_wastage_pct = st.slider("Additional Wastage (%)", 0, 10, 2, key="awt")
+      adv_mat_rate = st.number_input(
+          get_text("material_rate"), value=90.0, key="amr"
+      )
+      adv_wastage_pct = st.slider(
+          get_text("wastage_pct"), 0, 10, 2, key="awt"
+      )
 
     cross_area = get_cross_section_area(adv_shape, adv_dia, adv_inner_dia)
     eff_l = adv_part_len + adv_cut_allow
@@ -669,34 +1030,37 @@ elif selected_module == get_text("rod_calc"):
         * (1 + adv_wastage_pct / 100)
     )
 
-    st.markdown('<div class="auto-badge">⚡ ADVANCED ANALYSIS RESULT</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="auto-badge">⚡ {get_text("advanced_mode")} RESULT</div>',
+        unsafe_allow_html=True,
+    )
     ar1, ar2, ar3, ar4 = st.columns(4)
     with ar1:
-      st.metric("Parts / Rod", f"{parts_bar} Nos")
-      st.metric("Part Weight", f"{part_wt} g")
+      st.metric(get_text("parts_per_rod"), f"{parts_bar} Nos")
+      st.metric(get_text("part_weight"), f"{part_wt} g")
     with ar2:
-      st.metric("Remnant / End Bit", f"{rem_mm} mm")
+      st.metric(get_text("balance_scrap"), f"{rem_mm} mm")
       st.metric("End Bit Weight", f"{round((cross_area * rem_mm)*adv_density, 2)} g")
     with ar3:
-      st.metric("Required Rods", f"{req_rd} Nos")
+      st.metric(get_text("required_rods"), f"{req_rd} Nos")
       st.metric("Total Scrap / Rod", f"{round((cross_area*(rem_mm + (parts_bar*adv_cut_allow)))*adv_density, 2)} g")
     with ar4:
-      st.metric("Total Mat. Weight", f"{round(tot_wt_kg, 2)} Kg")
-      st.metric("Total Mat. Cost", f"Rs. {round(tot_wt_kg * adv_mat_rate, 2)}")
+      st.metric(get_text("total_mat_weight"), f"{round(tot_wt_kg, 2)} Kg")
+      st.metric(get_text("total_mat_cost"), f"Rs. {round(tot_wt_kg * adv_mat_rate, 2)}")
 
 # 3. PRODUCTION CALCULATOR
 elif selected_module == get_text("prod_calc"):
   if st.button(get_text("back_home")):
     st.session_state["selected_module"] = get_text("home")
     st.rerun()
-  st.subheader("⏱️ Production Days & Output Calculator & PDF Report")
+  st.subheader(f"⏱️ {get_text('prod_calc')}")
   c1, c2 = st.columns(2)
   with c1:
-    cyc_time = st.number_input("Cycle Time (sec)", value=20)
-    avail_time = st.number_input("Available Time / Day (hr)", value=8.0)
+    cyc_time = st.number_input(get_text("cycle_time"), value=20)
+    avail_time = st.number_input(get_text("avail_time"), value=8.0)
   with c2:
-    efficiency = st.slider("Machine Efficiency (%)", 50, 100, 85)
-    break_time = st.number_input("Break Time (min)", value=30)
+    efficiency = st.slider(get_text("machine_efficiency"), 50, 100, 85)
+    break_time = st.number_input(get_text("break_time"), value=30)
 
   eff_hrs = avail_time - (break_time / 60)
   prod_hr = int(3600 / cyc_time * (efficiency / 100)) if cyc_time > 0 else 0
@@ -705,21 +1069,21 @@ elif selected_module == get_text("prod_calc"):
   st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
   r1, r2 = st.columns(2)
   with r1:
-    st.metric("Production / Hour", f"{prod_hr} Nos")
+    st.metric(get_text("prod_per_hr"), f"{prod_hr} Nos")
   with r2:
-    st.metric("Production / Day", f"{prod_day} Nos")
+    st.metric(get_text("prod_day"), f"{prod_day} Nos")
 
   st.markdown("---")
-  st.subheader("📄 Download Production Report as PDF")
+  st.subheader("📄 Report Export")
   p_dict = {
-      "Cycle Time (sec)": cyc_time,
+      "Cycle Time": cyc_time,
       "Available Time / Day (hr)": avail_time,
       "Machine Efficiency (%)": efficiency,
       "Production / Hour": f"{prod_hr} Nos",
       "Production / Day": f"{prod_day} Nos",
   }
   st.download_button(
-      "📥 Download Production Report PDF",
+      get_text("download_prod_pdf"),
       data=generate_production_pdf(p_dict),
       file_name="Production_Report.pdf",
       mime="application/pdf",
@@ -730,16 +1094,16 @@ elif selected_module == get_text("cost_calc"):
   if st.button(get_text("back_home")):
     st.session_state["selected_module"] = get_text("home")
     st.rerun()
-  st.subheader("💰 Costing & Quotation Calculator")
+  st.subheader(f"💰 {get_text('cost_calc')}")
   col1, col2 = st.columns(2)
   with col1:
-    mat_cost_kg = st.number_input("Material Cost / Kg (Rs.)", value=85.0)
+    mat_cost_kg = st.number_input(get_text("material_rate"), value=85.0)
     mat_wt_part = st.number_input("Material Weight / Part (Kg)", value=0.05)
-    machine_cost_hr = st.number_input("Machine Cost / Hr (Rs.)", value=600.0)
+    machine_cost_hr = st.number_input(get_text("machine_cost_hr"), value=600.0)
   with col2:
-    labour_cost_part = st.number_input("Labour Cost / Part (Rs.)", value=1.20)
-    overhead_pct = st.number_input("Overhead (%)", value=15.0)
-    profit_margin = st.slider("Profit Margin (%)", 0, 50, 20)
+    labour_cost_part = st.number_input(get_text("labour_cost_part"), value=1.20)
+    overhead_pct = st.number_input(get_text("overhead_pct"), value=15.0)
+    profit_margin = st.slider(get_text("profit_margin"), 0, 50, 20)
 
   subtotal = (
       (mat_cost_kg * mat_wt_part) + ((machine_cost_hr / 3600) * 20) + labour_cost_part
@@ -750,21 +1114,21 @@ elif selected_module == get_text("cost_calc"):
   st.markdown('<div class="auto-badge">⚡ AUTO CALCULATED</div>', unsafe_allow_html=True)
   p1, p2, p3 = st.columns(3)
   with p1:
-    st.metric("Cost / Part", f"Rs. {round(cost_part, 2)}")
+    st.metric(get_text("cost_part"), f"Rs. {round(cost_part, 2)}")
   with p2:
-    st.metric("Cost / 1000 Parts", f"Rs. {round(cost_part * 1000, 2)}")
+    st.metric(get_text("cost_1000_parts"), f"Rs. {round(cost_part * 1000, 2)}")
   with p3:
-    st.metric("Selling Price / Part", f"Rs. {round(selling_price, 2)}")
+    st.metric(get_text("selling_price_part"), f"Rs. {round(selling_price, 2)}")
 
   st.markdown("---")
-  st.subheader("📄 Download Quotation PDF")
+  st.subheader("📄 Quotation Export")
   q_dict = {
       "Cost Per Part": f"Rs. {round(cost_part, 2)}",
       "Selling Price Per Part": f"Rs. {round(selling_price, 2)}",
       "Cost for 1000 Parts": f"Rs. {round(cost_part * 1000, 2)}",
   }
   st.download_button(
-      "📥 Download Quotation PDF",
+      get_text("download_quote_pdf"),
       data=generate_quotation_pdf(q_dict),
       file_name="Quotation.pdf",
       mime="application/pdf",
@@ -775,25 +1139,25 @@ elif selected_module == get_text("stock_mgmt"):
   if st.button(get_text("back_home")):
     st.session_state["selected_module"] = get_text("home")
     st.rerun()
-  st.subheader("📦 Interactive Stock & Inventory Management System")
+  st.subheader(f"📦 {get_text('stock_mgmt')}")
   inv_df = st.session_state["stock_inventory_df"]
 
   s1, s2, s3 = st.columns(3)
   with s1:
-    st.metric("Total Items", str(len(inv_df)))
+    st.metric(get_text("total_items"), str(len(inv_df)))
   with s2:
-    st.metric("Low Stock", str(len(inv_df[inv_df["Status"] == "Low Stock"])))
+    st.metric(get_text("low_stock"), str(len(inv_df[inv_df["Status"] == "Low Stock"])))
   with s3:
     st.metric(
-        "Out of Stock", str(len(inv_df[inv_df["Status"] == "Out of Stock"]))
+        get_text("out_of_stock"), str(len(inv_df[inv_df["Status"] == "Out of Stock"]))
     )
 
   st.markdown("---")
   tab1, tab2, tab3 = st.tabs(
-      ["📋 Current Stock", "➕ Add Item", "🔄 Stock In / Out"]
+      [get_text("current_stock"), get_text("add_item"), get_text("stock_in_out")]
   )
   with tab1:
-    sq = st.text_input("🔍 Search Inventory...")
+    sq = st.text_input(get_text("search_inventory"))
     st.dataframe(
         inv_df[
             inv_df["Material / Part Name"]
@@ -806,13 +1170,13 @@ elif selected_module == get_text("stock_mgmt"):
   with tab2:
     with st.form("add_form"):
       nid = f"ITM-{len(inv_df)+1:03d}"
-      nn = st.text_input("Part Name")
+      nn = st.text_input(get_text("part_name"))
       nc = st.selectbox(
-          "Category", ["Raw Material", "Finished Goods", "Consumables"]
+          get_text("category"), ["Raw Material", "Finished Goods", "Consumables"]
       )
-      nq = st.number_input("Quantity", value=50.0)
-      nu = st.selectbox("Unit", ["Kg", "Nos", "Meters"])
-      if st.form_submit_button("➕ Add") and nn:
+      nq = st.number_input(get_text("quantity"), value=50.0)
+      nu = st.selectbox(get_text("unit"), ["Kg", "Nos", "Meters"])
+      if st.form_submit_button("➕ Add Item") and nn:
         nst = (
             "Out of Stock"
             if nq == 0
@@ -844,9 +1208,9 @@ elif selected_module == get_text("stock_mgmt"):
         t_type = st.selectbox(
             "Type", ["Stock In (Purchase)", "Stock Out (Dispatch)"]
         )
-        t_qty = st.number_input("Qty", value=10.0)
+        t_qty = st.number_input(get_text("quantity"), value=10.0)
         t_note = st.text_input("Notes / PO Ref")
-        if st.form_submit_button("🔄 Update Stock"):
+        if st.form_submit_button(get_text("update_stock")):
           i_id = s_item.split(" - ")[0]
           idx = st.session_state["stock_inventory_df"].index[
               st.session_state["stock_inventory_df"]["Item ID"] == i_id
@@ -869,8 +1233,8 @@ elif selected_module == get_text("drawing_studio"):
   if st.button(get_text("back_home")):
     st.session_state["selected_module"] = get_text("home")
     st.rerun()
-  st.subheader("📷 Drawing Upload & Automatic G-Code Generator")
-  uf = st.file_uploader("Upload Drawing", type=["png", "jpg", "pdf"])
+  st.subheader(f"📷 {get_text('drawing_studio')}")
+  uf = st.file_uploader(get_text("upload_drawing"), type=["png", "jpg", "pdf"])
   if uf:
     st.success(f"📂 '{uf.name}' uploaded successfully!")
     if uf.type in ["image/png", "image/jpeg"]:
@@ -880,24 +1244,26 @@ elif selected_module == get_text("drawing_studio"):
   dc1, dc2 = st.columns(2)
   with dc1:
     d_shape = st.selectbox(
-        "Profile",
+        get_text("material_shape"),
         ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"],
         key="ds",
     )
-    d_rlen = st.number_input("Rod Length (mm)", value=6000.0, key="drl")
-    d_plen = st.number_input("Part Length (mm)", value=38.70, key="dpl")
-    d_callow = st.number_input("Cutting Allowance (mm)", value=3.0, key="dca")
+    d_rlen = st.number_input(get_text("rod_length"), value=6000.0, key="drl")
+    d_plen = st.number_input(get_text("part_length"), value=38.70, key="dpl")
+    d_callow = st.number_input(
+        get_text("cutting_allowance"), value=3.0, key="dca"
+    )
   with dc2:
-    d_rdia = st.number_input("Diameter (mm)", value=18.0, key="drd")
+    d_rdia = st.number_input(get_text("material_dia"), value=18.0, key="drd")
     d_india = (
-        st.number_input("Inner Bore (mm)", value=20.0, key="did")
+        st.number_input(get_text("tube_inner_dia"), value=20.0, key="did")
         if d_shape == "Tube / Pipe"
         else 0.0
     )
     d_dens = st.number_input(
-        "Density (g/mm³)", value=0.00785, format="%.5f", key="ddens"
+        get_text("material_density"), value=0.00785, format="%.5f", key="ddens"
     )
-    d_mrate = st.number_input("Rate / Kg", value=90.0, key="dmr")
+    d_mrate = st.number_input(get_text("material_rate"), value=90.0, key="dmr")
 
   c_area = get_cross_section_area(d_shape, d_rdia, d_india)
   eff_pl = d_plen + d_callow
@@ -908,24 +1274,26 @@ elif selected_module == get_text("drawing_studio"):
   st.markdown('<div class="auto-badge">⚡ ANALYSIS RESULT</div>', unsafe_allow_html=True)
   m1, m2, m3 = st.columns(3)
   with m1:
-    st.metric("Parts / Rod", f"{ppb} Nos")
-    st.metric("Part Weight", f"{p_wt} g")
+    st.metric(get_text("parts_per_rod"), f"{ppb} Nos")
+    st.metric(get_text("part_weight"), f"{p_wt} g")
   with m2:
-    st.metric("Remnant / End Bit", f"{rem} mm")
+    st.metric(get_text("balance_scrap"), f"{rem} mm")
     st.metric("End Bit Weight", f"{round((c_area * rem) * d_dens, 2)} g")
   with m3:
     st.metric("Total Scrap / Rod", f"{round((c_area * (rem + (ppb * d_callow))) * d_dens, 2)} g")
 
   st.markdown("---")
   st.subheader("🛠️ Multi-Operation Setup & G-Code Generator")
-  num_ops = st.selectbox("Number of Operations", [1, 2, 3, 4, 5])
+  num_ops = st.selectbox(get_text("num_operations"), [1, 2, 3, 4, 5])
   all_gcodes = []
 
   for i in range(num_ops):
     with st.expander(f"📌 Operation {i+1} Details", expanded=(i == 0)):
       oc1, oc2 = st.columns(2)
       with oc1:
-        t_no = st.text_input(f"Tool No (Op {i+1})", f"T{i+1:02d}{i+1:02d}", key=f"t_{i}")
+        t_no = st.text_input(
+            f"Tool No (Op {i+1})", f"T{i+1:02d}{i+1:02d}", key=f"t_{i}"
+        )
         o_type = st.selectbox(
             f"Operation Type (Op {i+1})",
             [
@@ -938,8 +1306,12 @@ elif selected_module == get_text("drawing_studio"):
         )
         rpm = st.number_input(f"RPM (Op {i+1})", value=1200, key=f"rpm_{i}")
       with oc2:
-        feed = st.number_input(f"Feed (mm/rev - Op {i+1})", value=0.15, key=f"fd_{i}")
-        t_dia = st.number_input(f"Target Dia (Op {i+1})", value=d_rdia - 5.0, key=f"td_{i}")
+        feed = st.number_input(
+            f"Feed (mm/rev - Op {i+1})", value=0.15, key=f"fd_{i}"
+        )
+        t_dia = st.number_input(
+            f"Target Dia (Op {i+1})", value=d_rdia - 5.0, key=f"td_{i}"
+        )
 
       code = f"""( --- OP {i+1}: {o_type.upper()} --- )
 {t_no}
@@ -954,7 +1326,7 @@ G0 Z2.0
   final_prog = "%\nO2026 (MEGALA CNC MATE)\nG21 G90 G40 G95\n" + "\n".join(all_gcodes) + "M05\nM30\n%"
   st.code(final_prog, language="text")
   st.download_button(
-      "📥 Download G-Code PDF",
+      get_text("generate_gcode"),
       data=generate_program_pdf(final_prog),
       file_name="CNC_Program.pdf",
       mime="application/pdf",
@@ -966,65 +1338,44 @@ elif selected_module == get_text("quote_hub"):
     st.session_state["selected_module"] = get_text("home")
     st.rerun()
 
-  st.subheader(
-      "📋 Process Breakdown & Customer Quotation Generator (Dynamic Operations"
-      " Dropdown)"
-  )
-  st.write(
-      "உங்கள் 30+ பார்ட்டுகளுக்கும் மற்றும் புதிய பார்ட்டுகளுக்கும்"
-      " தேவையான ஆபரேஷன்களை (Facing, Turning, Grooving, Drilling, Boring,"
-      " Chamfering, Tapping போன்றவை) டிராப்-டவுனில் இருந்து எளிதாகத் தேர்வு"
-      " செய்யலாம்."
-  )
+  st.subheader(f"📋 {get_text('quote_hub')}")
 
   col_q1, col_q2 = st.columns(2)
   with col_q1:
     cust_name = st.text_input(
-        "Customer Company Name / வாடிக்கையாளர் பெயர்",
-        value="M/s Precision Engineering Ltd",
+        get_text("cust_company"), value="M/s Precision Engineering Ltd"
     )
     part_name_input = st.text_input(
-        "Part Name / Component Name (உங்கள் பார்ட் பெயர் அல்லது புதிய"
-        " பார்ட்)",
-        value="Custom Component / Coin Part",
+        get_text("part_name"), value="Custom Component / Coin Part"
     )
   with col_q2:
     order_qty = st.number_input(
-        "Order Quantity / ஆர்டர் எண்ணிக்கை (Nos)",
-        value=1000,
-        min_value=1,
+        get_text("required_qty"), value=1000, min_value=1
     )
     transport_amt = st.number_input(
-        "Transport & Logistics Charges (Rs.)", value=1500.0
+        get_text("transport_charges"), value=1500.0
     )
 
   st.markdown("---")
-  st.subheader(
-      "⚙️ Configure Operations (ஆபரேஷன் பெயர்களை டிராப்-டவுனில் இருந்து தேர்வு"
-      " செய்யவும்)"
-  )
+  st.subheader("⚙️ Configure Operations")
 
   num_ops = st.number_input(
-      "Number of Operations for this Part (இந்த பார்ட்டுக்கு எத்தனை"
-      " ஆபரேஷன்கள் உள்ளன?)",
-      min_value=1,
-      max_value=10,
-      value=3,
+      get_text("num_operations"), min_value=1, max_value=10, value=3
   )
 
   operation_dropdown_options = [
-      "Facing (பேசிங்)",
-      "Turning - Rough & Finish (டர்னிங்)",
-      "Grooving (குரூவிங்)",
-      "Drilling (ட்ரில்லிங்)",
-      "Boring (போரிங்)",
-      "Chamfering (சாம்பர்)",
-      "Tapping (டாப்பிங்)",
-      "Parting / Cut-off (பார்ட்டிங்)",
-      "Thread Cutting (த்ரெட்டிங்)",
-      "Milling (மில்லிங்)",
-      "Deburring & Finishing (பினிஷிங்)",
-      "Special Operation (ஸ்பெஷல் ஆபரேஷன்)",
+      "Facing",
+      "Turning - Rough & Finish",
+      "Grooving",
+      "Drilling",
+      "Boring",
+      "Chamfering",
+      "Tapping",
+      "Parting / Cut-off",
+      "Thread Cutting",
+      "Milling",
+      "Deburring & Finishing",
+      "Special Operation",
   ]
 
   edited_ops = []
@@ -1066,7 +1417,7 @@ elif selected_module == get_text("quote_hub"):
     })
 
   st.markdown("<br>", unsafe_allow_html=True)
-  if st.button("🚀 Generate CSV Quotation File", use_container_width=True):
+  if st.button(get_text("generate_csv"), use_container_width=True):
     csv_data = generate_quotation_csv(
         cust_name, part_name_input, edited_ops, transport_amt
     )
@@ -1084,10 +1435,10 @@ elif selected_module == get_text("settings"):
   if st.button(get_text("back_home")):
     st.session_state["selected_module"] = get_text("home")
     st.rerun()
-  st.subheader("⚙️ More Menu & Settings")
+  st.subheader(f"⚙️ {get_text('settings')}")
 
   selected_lang_main = st.selectbox(
-      "🌐 Select Language",
+      get_text("language_label"),
       list(translations.keys()),
       index=list(translations.keys()).index(st.session_state["app_language"]),
       key="main_lang_selector",
