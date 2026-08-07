@@ -849,125 +849,99 @@ G0 Z2.0
       mime="application/pdf",
   )
 
-# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION
+# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION (FULLY DYNAMIC FOR ALL 30+ PARTS & NEW CUSTOMER PARTS)
 elif "Process Breakdown & Customer Quotation" in selected_module:
   if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
     st.session_state["selected_module"] = "🏠 Home / முகப்பு"
     st.rerun()
 
   st.subheader(
-      "📋 Process Breakdown & Customer Quotation Generator (Large Pin & Trunnion)"
+      "📋 Process Breakdown & Customer Quotation Generator (Dynamic Parts"
+      " & Custom Operations)"
   )
   st.write(
-      "Enter custom operations for parts like **Large Pin** or **Trunnion** to"
-      " generate professional CSV & PDF quotations instantly."
+      "உங்கள் நிறுவனத்தின் 30+ பார்ட்டுகளுக்கும் மற்றும் வாடிக்கையாளர்"
+      " வழங்கும் புதிய பார்ட்டுகளுக்கும் (Samples/Drawings) தேவையான"
+      " ஆபரேஷன்களை (Facing, Boring, Drilling, Turning, Traub போன்றவை) உங்கள்"
+      " விருப்பப்படி மாற்றி கொட்டேஷன் தயாரிக்கலாம்."
   )
 
   col_q1, col_q2 = st.columns(2)
   with col_q1:
     cust_name = st.text_input(
-        "Customer Company Name", value="M/s Precision Engineering Ltd"
+        "Customer Company Name / வாடிக்கையாளர் பெயர்",
+        value="M/s Precision Engineering Ltd",
     )
-    part_type = st.selectbox(
-        "Select Standard Part Template",
-        ["Large Pin", "Trunnion", "Custom Part / Bush"],
+    # Allow typing any part name for any of the 30 parts or new coin/sample parts
+    part_name_input = st.text_input(
+        "Part Name / Component Name (உங்கள் பார்ட் பெயர் அல்லது புதிய"
+        " பார்ட்)",
+        value="Custom Component / Coin Part",
     )
   with col_q2:
-    order_qty = st.number_input("Order Quantity (Nos)", value=1000, min_value=1)
+    order_qty = st.number_input(
+        "Order Quantity / ஆர்டர் எண்ணிக்கை (Nos)",
+        value=1000,
+        min_value=1,
+    )
     transport_amt = st.number_input(
-        "Transport / Logistics Charges (Rs.)", value=1500.0
+        "Transport & Logistics Charges (Rs.)", value=1500.0
     )
 
-  if part_type == "Large Pin":
-    default_ops = [
-        {
-            "name": "Facing & Turning (Op 1)",
-            "machine": "CNC Turning",
-            "qty": order_qty,
-            "rate": 15.0,
-        },
-        {
-            "name": "Milling (Op 2)",
-            "machine": "VMC / Milling",
-            "qty": order_qty,
-            "rate": 20.0,
-        },
-        {
-            "name": "Drilling (Op 3)",
-            "machine": "Drilling Machine",
-            "qty": order_qty,
-            "rate": 18.0,
-        },
-        {
-            "name": "Chamfering & Deburring (Op 4)",
-            "machine": "Bench / Manual",
-            "qty": order_qty,
-            "rate": 5.0,
-        },
-        {
-            "name": "Tapping Operation (Op 5)",
-            "machine": "Tapping Setup",
-            "qty": order_qty,
-            "rate": 10.0,
-        },
-        {
-            "name": "Tooling, Coolant & Process Consumables",
-            "machine": "Overhead",
-            "qty": order_qty,
-            "rate": 6.0,
-        },
-    ]
-  elif part_type == "Trunnion":
-    default_ops = [
-        {
-            "name": "CNC Drilling Operation (Op 1)",
-            "machine": "CNC Machining Center",
-            "qty": order_qty,
-            "rate": 25.0,
-        },
-        {
-            "name": "Cross Drill & Rotary Setup (Op 2)",
-            "machine": "Special Setup",
-            "qty": order_qty,
-            "rate": 30.0,
-        },
-        {
-            "name": "Chamfering & Finishing (Op 3)",
-            "machine": "Manual / VMC",
-            "qty": order_qty,
-            "rate": 8.0,
-        },
-        {
-            "name": "Tooling & Consumables Allocation",
-            "machine": "Overhead",
-            "qty": order_qty,
-            "rate": 7.0,
-        },
-    ]
-  else:
-    default_ops = [{
-        "name": "General Machining Operation",
-        "machine": "CNC Lathe",
-        "qty": order_qty,
-        "rate": 20.0,
-    }]
+  st.markdown("---")
+  st.subheader(
+      "⚙️ Configure Operations (தேவையான ஆபரேஷன்களை எண்ணிக்கையுடன்"
+      " அமைக்கவும்)"
+  )
 
-  st.markdown("### ✏️ Customize Operations & Unit Rates")
+  # Dynamic number of operations from 1 to 10
+  num_ops = st.number_input(
+      "Number of Operations for this Part (இந்த பார்ட்டுக்கு எத்தனை"
+      " ஆபரேஷன்கள் உள்ளன?)",
+      min_value=1,
+      max_value=10,
+      value=3,
+  )
+
+  st.write(
+      "கீழே ஒவ்வொரு ஆபரேஷனுக்கான பெயரையும், மெஷினையும் மற்றும் கட்டணத்தையும்"
+      " உங்கள் தேவற்கேற்ப மாற்றி அமைக்கவும்:"
+  )
+
   edited_ops = []
-  for idx, op in enumerate(default_ops):
+  for i in range(int(num_ops)):
+    st.markdown(f"**Operation {i+1} Setup**")
     col_a, col_b, col_c = st.columns([3, 2, 2])
     with col_a:
       op_name = st.text_input(
-          f"Operation {idx+1} Name", value=op["name"], key=f"op_n_{idx}"
+          f"Operation Name {i+1}",
+          value=(
+              "CNC Facing & Turning"
+              if i == 0
+              else ("Drilling / Boring" if i == 1 else "Finishing & Deburring")
+          ),
+          key=f"dyn_op_n_{i}",
       )
     with col_b:
-      mach_name = st.text_input(
-          f"Machine {idx+1}", value=op["machine"], key=f"op_m_{idx}"
+      mach_name = st.selectbox(
+          f"Machine {i+1}",
+          [
+              "CNC Turning",
+              "VMC / Milling",
+              "Drilling Machine",
+              "Traub Lathe",
+              "Manual / Bench",
+              "Special Setup",
+          ],
+          key=f"dyn_op_m_{i}",
       )
     with col_c:
       op_rate = st.number_input(
-          f"Unit Rate (Rs.) {idx+1}", value=op["rate"], key=f"op_r_{idx}"
+          f"Unit Rate (Rs.) {i+1}",
+          value=15.0 + (i * 5.0),
+          key=f"dyn_op_r_{i}",
       )
+
     edited_ops.append({
         "name": op_name,
         "machine": mach_name,
@@ -975,13 +949,12 @@ elif "Process Breakdown & Customer Quotation" in selected_module:
         "rate": op_rate,
     })
 
+  st.markdown("<br>", unsafe_allow_html=True)
   if st.button("🚀 Generate CSV Quotation File", use_container_width=True):
     csv_data = generate_quotation_csv(
-        cust_name, part_type, edited_ops, transport_amt
+        cust_name, part_name_input, edited_ops, transport_amt
     )
-    filename = (
-        f"Megala_Industries_Quotation_{part_type.replace(' ', '_')}.csv"
-    )
+    filename = f"Megala_Industries_Quotation_{part_name_input.replace(' ', '_').replace('/', '_')}.csv"
     st.success(f"✅ Quotation CSV successfully generated: {filename}")
     st.download_button(
         "📥 Download CSV Quotation (.csv)",
