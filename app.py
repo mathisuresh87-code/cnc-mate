@@ -155,11 +155,6 @@ if "stock_inventory_df" not in st.session_state:
       "Status": ["In Stock", "Low Stock", "Out of Stock", "Dispatch Ready"],
   })
 
-if "stock_logs_df" not in st.session_state:
-  st.session_state["stock_logs_df"] = pd.DataFrame(
-      columns=["Timestamp", "Item ID", "Action", "Qty Changed", "User/Notes"]
-  )
-
 
 def get_base64_image(path):
   if os.path.exists(path):
@@ -849,21 +844,21 @@ G0 Z2.0
       mime="application/pdf",
   )
 
-# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION (FULLY DYNAMIC FOR ALL 30+ PARTS & NEW CUSTOMER PARTS)
+# 7. PROCESS BREAKDOWN & CUSTOMER QUOTATION (FULLY DYNAMIC WITH OPERATION DROPDOWN)
 elif "Process Breakdown & Customer Quotation" in selected_module:
   if st.button("⬅️ Back to Home / முகப்புக்குத் திரும்பு"):
     st.session_state["selected_module"] = "🏠 Home / முகப்பு"
     st.rerun()
 
   st.subheader(
-      "📋 Process Breakdown & Customer Quotation Generator (Dynamic Parts"
-      " & Custom Operations)"
+      "📋 Process Breakdown & Customer Quotation Generator (Dynamic Operations"
+      " Dropdown)"
   )
   st.write(
-      "உங்கள் நிறுவனத்தின் 30+ பார்ட்டுகளுக்கும் மற்றும் வாடிக்கையாளர்"
-      " வழங்கும் புதிய பார்ட்டுகளுக்கும் (Samples/Drawings) தேவையான"
-      " ஆபரேஷன்களை (Facing, Boring, Drilling, Turning, Traub போன்றவை) உங்கள்"
-      " விருப்பப்படி மாற்றி கொட்டேஷன் தயாரிக்கலாம்."
+      "உங்கள் 30+ பார்ட்டுகளுக்கும் மற்றும் புதிய பார்ட்டுகளுக்கும்"
+      " தேவையான ஆபரேஷன்களை (Facing, Turning, Grooving, Drilling, Boring,"
+      " Chamfering, Tapping போன்றவை) டிராப்-டவுனில் இருந்து எளிதாகத் தேர்வு"
+      " செய்யலாம்."
   )
 
   col_q1, col_q2 = st.columns(2)
@@ -872,7 +867,6 @@ elif "Process Breakdown & Customer Quotation" in selected_module:
         "Customer Company Name / வாடிக்கையாளர் பெயர்",
         value="M/s Precision Engineering Ltd",
     )
-    # Allow typing any part name for any of the 30 parts or new coin/sample parts
     part_name_input = st.text_input(
         "Part Name / Component Name (உங்கள் பார்ட் பெயர் அல்லது புதிய"
         " பார்ட்)",
@@ -890,11 +884,10 @@ elif "Process Breakdown & Customer Quotation" in selected_module:
 
   st.markdown("---")
   st.subheader(
-      "⚙️ Configure Operations (தேவையான ஆபரேஷன்களை எண்ணிக்கையுடன்"
-      " அமைக்கவும்)"
+      "⚙️ Configure Operations (ஆபரேஷன் பெயர்களை டிராப்-டவுனில் இருந்து தேர்வு"
+      " செய்யவும்)"
   )
 
-  # Dynamic number of operations from 1 to 10
   num_ops = st.number_input(
       "Number of Operations for this Part (இந்த பார்ட்டுக்கு எத்தனை"
       " ஆபரேஷன்கள் உள்ளன?)",
@@ -903,23 +896,31 @@ elif "Process Breakdown & Customer Quotation" in selected_module:
       value=3,
   )
 
-  st.write(
-      "கீழே ஒவ்வொரு ஆபரேஷனுக்கான பெயரையும், மெஷினையும் மற்றும் கட்டணத்தையும்"
-      " உங்கள் தேவற்கேற்ப மாற்றி அமைக்கவும்:"
-  )
+  # Comprehensive CNC Workshop Operations List
+  operation_dropdown_options = [
+      "Facing (பேசிங்)",
+      "Turning - Rough & Finish (டர்னிங்)",
+      "Grooving (குரூவிங்)",
+      "Drilling (ட்ரில்லிங்)",
+      "Boring (போரிங்)",
+      "Chamfering (சாம்பர்)",
+      "Tapping (டாப்பிங்)",
+      "Parting / Cut-off (பார்ட்டிங்)",
+      "Thread Cutting (த்ரெட்டிங்)",
+      "Milling (மில்லிங்)",
+      "Deburring & Finishing (பினிஷிங்)",
+      "Special Operation (ஸ்பெஷல் ஆபரேஷன்)",
+  ]
 
   edited_ops = []
   for i in range(int(num_ops)):
     st.markdown(f"**Operation {i+1} Setup**")
     col_a, col_b, col_c = st.columns([3, 2, 2])
     with col_a:
-      op_name = st.text_input(
+      op_name = st.selectbox(
           f"Operation Name {i+1}",
-          value=(
-              "CNC Facing & Turning"
-              if i == 0
-              else ("Drilling / Boring" if i == 1 else "Finishing & Deburring")
-          ),
+          operation_dropdown_options,
+          index=min(i, len(operation_dropdown_options) - 1),
           key=f"dyn_op_n_{i}",
       )
     with col_b:
