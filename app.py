@@ -114,7 +114,7 @@ LOGO_PATH = "logo.png"
 translations = {
     "தமிழ் (Tamil)": {
         "home": "🏠 Home / முகப்பு",
-        "rod_calc": "📐 Rod Calculator / ராட் கால்குலேட்டர்",
+        "rod_calc": "📐 Rod & Tube Calculator / ராட் & டியூப் கால்குலேட்டர்",
         "prod_calc": "⏱️ Production Calculator / உற்பத்தி கால்குலேட்டர்",
         "cost_calc": "💰 Costing & Quotation / செலவு & கொட்டேஷன்",
         "stock_mgmt": "📦 Stock Management / ஸ்டாக் மேனேஜ்மென்ட்",
@@ -134,7 +134,7 @@ translations = {
         "cutting_allowance": "Cutting Allowance (mm) / வெட்டும் அளவு (மிமீ)",
         "material_shape": "Material Shape / பொருளின் வடிவம்",
         "cycle_time": "Cycle Time (Seconds) / சுழற்சி நேரம் (வினாடிகள்)",
-        "required_qty": "Required Quantity / தேவையான எண்ணிக்கை",
+        "required_qty": "Required Quantity (Optional) / தேவையான எண்ணிக்கை",
         "parts_per_rod": "Parts / Rod / ஒரு ராட்டுக்கான பார்ட்கள்",
         "required_rods": "Required Rods / தேவையான ராட்கள்",
         "balance_scrap": "Balance Scrap / மீதமுள்ள ஸ்கிராப்",
@@ -142,7 +142,7 @@ translations = {
         "prod_per_hr": "Production / Hour / மணி நேர உற்பத்தி",
         "tot_mach_time": "Total Machine Time / மொத்த இயந்திர நேரம்",
         "upload_drawing": "Upload Part Drawing / பார்ட் டோயிங் பதிவேற்றவும்",
-        "material_dia": "Material Diameter / Size (mm) / விட்டம் (மிமீ)",
+        "material_dia": "Material Diameter / Size (mm) / விட்டம் அல்லது சைஸ் (மிமீ)",
         "tube_inner_dia": "Tube Inner Diameter (mm) / குழாய் உள் விட்டம்",
         "material_density": "Material Density (g/mm³) / அடர்த்தி",
         "material_rate": "Material Rate / Kg (Rs.) / ஒரு கிலோ விலை (ரூ)",
@@ -188,7 +188,7 @@ translations = {
     },
     "हिन्दी (Hindi)": {
         "home": "🏠 Home / गृह",
-        "rod_calc": "📐 Rod Calculator / रॉड कैलकुलेटर",
+        "rod_calc": "📐 Rod & Tube Calculator / रॉड और ट्यूब कैलकुलेटर",
         "prod_calc": "⏱️ Production Calculator / उत्पादन कैलकुलेटर",
         "cost_calc": "💰 Costing & Quotation / लागत और उद्धरण",
         "stock_mgmt": "📦 Stock Management / स्टॉक प्रबंधन",
@@ -208,7 +208,7 @@ translations = {
         "cutting_allowance": "Cutting Allowance (mm) / कटिंग अलाउंस (मिमी)",
         "material_shape": "Material Shape / सामग्री का आकार",
         "cycle_time": "Cycle Time (Seconds) / चक्र का समय (सेकंड)",
-        "required_qty": "Required Quantity / आवश्यक मात्रा",
+        "required_qty": "Required Quantity (Optional) / आवश्यक मात्रा",
         "parts_per_rod": "Parts / Rod / प्रति रॉड भाग",
         "required_rods": "Required Rods / आवश्यक रॉड",
         "balance_scrap": "Balance Scrap / शेष स्क्रैप",
@@ -216,7 +216,7 @@ translations = {
         "prod_per_hr": "Production / Hour / प्रति घंटा उत्पादन",
         "tot_mach_time": "Total Machine Time / कुल मशीन समय",
         "upload_drawing": "Upload Part Drawing / ड्राइंग अपलोड करें",
-        "material_dia": "Material Diameter / Size (mm) / व्यास (मिमी)",
+        "material_dia": "Material Diameter / Size (mm) / व्यास/साइज़ (मिमी)",
         "tube_inner_dia": "Tube Inner Diameter (mm) / ट्यूब का आंतरिक व्यास",
         "material_density": "Material Density (g/mm³) / सामग्री घनत्व",
         "material_rate": "Material Rate / Kg (Rs.) / प्रति किलो दर (रु)",
@@ -262,7 +262,7 @@ translations = {
     },
     "English": {
         "home": "🏠 Home",
-        "rod_calc": "📐 Rod Calculator",
+        "rod_calc": "📐 Rod & Tube Calculator",
         "prod_calc": "⏱️ Production Calculator",
         "cost_calc": "💰 Costing & Quotation",
         "stock_mgmt": "📦 Stock Management",
@@ -282,7 +282,7 @@ translations = {
         "cutting_allowance": "Cutting Allowance (mm)",
         "material_shape": "Material Shape",
         "cycle_time": "Cycle Time (Seconds)",
-        "required_qty": "Required Quantity",
+        "required_qty": "Required Quantity (Optional)",
         "parts_per_rod": "Parts / Rod",
         "required_rods": "Required Rods",
         "balance_scrap": "Balance Scrap",
@@ -375,7 +375,7 @@ if "stock_inventory_df" not in st.session_state:
       "Item ID": ["ITM-001", "ITM-002", "ITM-003", "ITM-004"],
       "Material / Part Name": [
           "EN8 Round Bar - 12mm",
-          "MS Round Bar - 20mm",
+          "MS Hexagon Bar - 19mm",
           "EN24 Round Bar - 16mm",
           "Finished Large Pin",
       ],
@@ -550,20 +550,24 @@ def generate_program_pdf(code_text):
   return pdf.output(dest="S").encode("latin1")
 
 
-def get_cross_section_area(shape, dia_or_size, inner_dia=0.0):
+def get_cross_section_area(shape, size_val, inner_dia=0.0):
+  """Calculates accurate cross-section area for Round, Hexagon (AF), Square, and Tube/Pipe"""
   if shape == "Round Rod":
-    return math.pi * (dia_or_size / 2.0) ** 2
-  elif shape == "Square Rod":
-    return dia_or_size**2
+    return math.pi * (size_val / 2.0) ** 2
   elif shape == "Hexagon Rod":
-    return (math.sqrt(3) / 2.0) * (dia_or_size**2)
+    # size_val is Across Flats (AF)
+    return (math.sqrt(3) / 2.0) * (size_val**2)
+  elif shape == "Square Rod":
+    # size_val is Side length
+    return size_val**2
   elif shape == "Tube / Pipe":
+    # size_val is Outer Diameter (OD), inner_dia is ID
     return max(
         0.0,
-        (math.pi * (dia_or_size / 2.0) ** 2)
+        (math.pi * (size_val / 2.0) ** 2)
         - (math.pi * (inner_dia / 2.0) ** 2),
     )
-  return math.pi * (dia_or_size / 2.0) ** 2
+  return math.pi * (size_val / 2.0) ** 2
 
 
 def generate_quotation_csv(
@@ -682,7 +686,7 @@ if selected_module == get_text("home"):
       st.session_state["selected_module"] = get_text("settings")
       st.rerun()
 
-# 2. ROD CALCULATOR
+# 2. ROD & TUBE CALCULATOR (Fully supports Round, Hexagon, Square, Tube with Meters/Kg & Optional Req Qty)
 elif selected_module == get_text("rod_calc"):
   if st.button(get_text("back_home")):
     st.session_state["selected_module"] = get_text("home")
@@ -696,57 +700,165 @@ elif selected_module == get_text("rod_calc"):
 
   if mode == get_text("simple_mode"):
     st.write(f"### 🟢 {get_text('simple_mode')}")
+
+    # Input unit selector: Meters or Kg
+    input_unit_type = st.selectbox(
+        "Stock Input Unit / இருப்பு உள்ளீட்டு முறை",
+        ["📏 Length (Meters / மீட்டர்)", "⚖️ Weight (Kg / கிலோ)"],
+        key="simple_input_type",
+    )
+
     col1, col2 = st.columns(2)
     with col1:
-      rod_length = st.number_input(
-          get_text("rod_length"), value=6.0, min_value=0.0
+      shape_type = st.selectbox(
+          get_text("material_shape"),
+          ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"],
+          key="simple_shape",
       )
+
+      # Dynamic Size Input based on Shape
+      if shape_type == "Hexagon Rod":
+        mat_size = st.number_input(
+            "Hexagon Size Across Flats (AF mm) / எக்ஸகன் அகலம் (மிமீ)",
+            value=19.0,
+            min_value=0.1,
+            key="s_hex_size",
+        )
+        inner_dia = 0.0
+      elif shape_type == "Square Rod":
+        mat_size = st.number_input(
+            "Square Side Size (mm) / சதுர பக்க அளவு (மிமீ)",
+            value=20.0,
+            min_value=0.1,
+            key="s_sq_size",
+        )
+        inner_dia = 0.0
+      elif shape_type == "Tube / Pipe":
+        mat_size = st.number_input(
+            "Tube Outer Diameter (OD mm) / டியூப் வெளி விட்டம்",
+            value=38.1,
+            min_value=0.1,
+            key="s_tube_od",
+        )
+        inner_dia = st.number_input(
+            get_text("tube_inner_dia"),
+            value=25.8,
+            min_value=0.0,
+            key="s_tube_id",
+        )
+      else:
+        mat_size = st.number_input(
+            get_text("material_dia"),
+            value=25.0,
+            min_value=0.1,
+            key="s_round_dia",
+        )
+        inner_dia = 0.0
+
       part_length = st.number_input(
           get_text("part_length"),
           value=st.session_state["extracted_drawing_data"]["part_length"],
           min_value=0.0,
+          key="s_part_len",
       )
       cutting_allowance = st.number_input(
-          get_text("cutting_allowance"), value=3.0, min_value=0.0
-      )
-    with col2:
-      shape_type = st.selectbox(
-          get_text("material_shape"),
-          ["Round Rod", "Hexagon Rod", "Square Rod", "Tube / Pipe"],
-      )
-      cycle_time = st.number_input(
-          get_text("cycle_time"), value=20, min_value=0
-      )
-      required_qty = st.number_input(
-          get_text("required_qty"), value=500, min_value=0
+          get_text("cutting_allowance"), value=3.0, min_value=0.0, key="s_cut_all"
       )
 
-    eff_len = part_length + cutting_allowance
-    parts_per_rod = (
-        int((rod_length * 1000) / eff_len) if eff_len > 0 else 0
+    with col2:
+      if "Length" in input_unit_type:
+        stock_len_input = st.number_input(
+            "Total Stock Length (Meters) / மொத்த ராட் நீளம் (மீட்டர்)",
+            value=6.0,
+            min_value=0.0,
+            key="s_stock_len",
+        )
+        stock_wt_input = 0.0
+      else:
+        stock_wt_input = st.number_input(
+            "Total Stock Weight (Kg) / மொத்த எடை (கிலோ)",
+            value=25.0,
+            min_value=0.0,
+            key="s_stock_wt",
+        )
+        stock_len_input = 0.0
+
+      cycle_time = st.number_input(
+          get_text("cycle_time"), value=20, min_value=0, key="s_cyc_time"
+      )
+      required_qty = st.number_input(
+          get_text("required_qty"),
+          value=0,
+          min_value=0,
+          help="Set to 0 if not targeting specific order qty / குறிப்பிட்ட ஆர்டர் இல்லையெனில் 0 எனவும் கொடுக்கலாம்",
+          key="s_req_qty",
+      )
+
+    eff_len = part_length + cutting_allowance  # mm
+    assumed_density = 0.00785  # g/mm³
+    cross_area = get_cross_section_area(shape_type, mat_size, inner_dia)
+
+    if "Length" in input_unit_type:
+      parts_per_rod = (
+          int((stock_len_input * 1000) / eff_len) if eff_len > 0 else 0
+      )
+      remnant = (
+          round((stock_len_input * 1000) % eff_len, 2) if eff_len > 0 else 0.0
+      )
+      calc_total_stock_len = stock_len_input
+      total_parts_available = parts_per_rod
+    else:
+      wt_per_mm_kg = (cross_area * assumed_density) / 1000.0
+      total_len_mm = (
+          (stock_wt_input / wt_per_mm_kg) if wt_per_mm_kg > 0 else 0.0
+      )
+      calc_total_stock_len = total_len_mm / 1000.0
+      parts_per_rod = int(total_len_mm / eff_len) if eff_len > 0 else 0
+      remnant = round(total_len_mm % eff_len, 2) if eff_len > 0 else 0.0
+      total_parts_available = parts_per_rod
+
+    req_rods = (
+        int(math.ceil(required_qty / parts_per_rod))
+        if (required_qty > 0 and parts_per_rod > 0)
+        else 0
     )
-    remnant = round((rod_length * 1000) % eff_len, 2) if eff_len > 0 else 0.0
-    req_rods = int(required_qty / parts_per_rod) if parts_per_rod > 0 else 0
     prod_per_hr = int(3600 / cycle_time) if cycle_time > 0 else 0
 
     st.markdown(
-        f'<div class="auto-badge">⚡ {get_text("simple_mode")} RESULT</div>',
+        f'<div class="auto-badge">⚡ {get_text("simple_mode")} RESULT ({shape_type})</div>',
         unsafe_allow_html=True,
     )
     r1, r2, r3 = st.columns(3)
     with r1:
-      st.metric(get_text("parts_per_rod"), f"{parts_per_rod} Nos")
-      st.metric(get_text("required_rods"), f"{req_rods} Nos")
+      st.metric(
+          get_text("parts_per_rod")
+          if "Length" in input_unit_type
+          else "Total Possible Parts / மொத்த பார்ட்கள்",
+          f"{total_parts_available} Nos",
+          (
+              f"Input: {stock_len_input} m"
+              if "Length" in input_unit_type
+              else f"Input: {stock_wt_input} Kg"
+          ),
+      )
+      st.metric(
+          get_text("required_rods"),
+          f"{req_rods} Nos" if required_qty > 0 else "Not Specified (0)",
+      )
     with r2:
       st.metric(get_text("balance_scrap"), f"{remnant} mm")
       st.metric(
-          get_text("total_stock_len"), f"{round(req_rods * rod_length, 2)} Meters"
+          get_text("total_stock_len"), f"{round(calc_total_stock_len, 2)} Meters"
       )
     with r3:
       st.metric(get_text("prod_per_hr"), f"{prod_per_hr} Nos")
       st.metric(
           get_text("tot_mach_time"),
-          f"{round((required_qty * cycle_time)/3600, 2)} Hr",
+          (
+              f"{round((required_qty * cycle_time)/3600, 2)} Hr"
+              if required_qty > 0
+              else "0.0 Hr"
+          ),
       )
 
   else:
@@ -757,7 +869,6 @@ elif selected_module == get_text("rod_calc"):
     if adv_file:
       st.success(f"📂 '{adv_file.name}' uploaded successfully!")
       if st.button("🤖 Auto-Extract Drawing Dimensions (AI OCR)"):
-        # Auto-populate with parsed drawing dimensions (e.g. Bushing drawing: OD 38.1, ID 25.8, Length 73.0, Cross Hole 5.4)
         st.session_state["extracted_drawing_data"] = {
             "part_length": 73.0,
             "outer_dia": 38.1,
@@ -777,6 +888,16 @@ elif selected_module == get_text("rod_calc"):
 
     ext = st.session_state["extracted_drawing_data"]
 
+    # Advanced Input Unit Selection: Length or Weight
+    adv_input_type = st.selectbox(
+        "Advanced Input Unit / மேம்பட்ட உள்ளீட்டு முறை",
+        [
+            "📏 Length (Meters / மீட்டர் - Stock Rod Length)",
+            "⚖️ Weight (Kg / கிலோ - Total Stock Weight)",
+        ],
+        key="adv_input_type_sel",
+    )
+
     ac1, ac2 = st.columns(2)
     with ac1:
       adv_shape = st.selectbox(
@@ -785,28 +906,62 @@ elif selected_module == get_text("rod_calc"):
           index=0,
           key="as",
       )
-      adv_rod_len_m = st.number_input(
-          get_text("rod_length"), value=6.0, key="arl"
-      )
+
+      # Dynamic Size inputs for Advanced Mode
+      if adv_shape == "Hexagon Rod":
+        adv_size = st.number_input(
+            "Hexagon Size Across Flats (AF mm) / எக்ஸகன் அகலம்",
+            value=19.0,
+            key="a_hex_sz",
+        )
+        adv_inner_dia = 0.0
+      elif adv_shape == "Square Rod":
+        adv_size = st.number_input(
+            "Square Side Size (mm) / சதுர பக்க அளவு",
+            value=20.0,
+            key="a_sq_sz",
+        )
+        adv_inner_dia = 0.0
+      elif adv_shape == "Tube / Pipe":
+        adv_size = st.number_input(
+            "Tube Outer Diameter (OD mm) / வெளி விட்டம்",
+            value=ext["outer_dia"],
+            key="a_tube_od",
+        )
+        adv_inner_dia = st.number_input(
+            get_text("tube_inner_dia"), value=ext["inner_dia"], key="aid"
+        )
+      else:
+        adv_size = st.number_input(
+            get_text("material_dia"), value=ext["outer_dia"], key="add"
+        )
+        adv_inner_dia = 0.0
+
+      if "Length" in adv_input_type:
+        adv_rod_len_m = st.number_input(
+            get_text("rod_length"), value=6.0, key="arl"
+        )
+        adv_stock_wt_kg = 0.0
+      else:
+        adv_rod_len_m = 6.0
+        adv_stock_wt_kg = st.number_input(
+            "Total Stock Weight (Kg / மொத்த எடை)",
+            value=50.0,
+            key="aswt",
+        )
+
       adv_part_len = st.number_input(
           get_text("part_length"), value=ext["part_length"], key="apl"
       )
+    with ac2:
       adv_cut_allow = st.number_input(
           get_text("cutting_allowance"), value=3.0, key="aca"
       )
       adv_req_qty = st.number_input(
-          get_text("required_qty"), value=500, key="arq"
-      )
-    with ac2:
-      adv_dia = st.number_input(
-          get_text("material_dia"), value=ext["outer_dia"], key="add"
-      )
-      adv_inner_dia = (
-          st.number_input(
-              get_text("tube_inner_dia"), value=ext["inner_dia"], key="aid"
-          )
-          if adv_shape == "Tube / Pipe"
-          else 0.0
+          get_text("required_qty"),
+          value=0,
+          key="arq",
+          help="Set to 0 if not targeting specific order qty",
       )
       adv_density = st.number_input(
           get_text("material_density"), value=0.00785, format="%.5f", key="adn"
@@ -818,33 +973,52 @@ elif selected_module == get_text("rod_calc"):
           get_text("wastage_pct"), 0, 10, 2, key="awt"
       )
 
-    cross_area = get_cross_section_area(adv_shape, adv_dia, adv_inner_dia)
+    cross_area = get_cross_section_area(adv_shape, adv_size, adv_inner_dia)
     eff_l = adv_part_len + adv_cut_allow
-    part_wt = round((cross_area * adv_part_len) * adv_density, 2)
-    parts_bar = int((adv_rod_len_m * 1000) / eff_l) if eff_l > 0 else 0
-    rem_mm = round((adv_rod_len_m * 1000) % eff_l, 2) if eff_l > 0 else 0.0
-    req_rd = int(math.ceil(adv_req_qty / parts_bar)) if parts_bar > 0 else 0
-    tot_wt_kg = (
-        round(
-            (
-                req_rd
-                * adv_rod_len_m
-                * (cross_area * adv_density * 1000)
-                / 1000000
-            ),
-            2,
-        )
-        * (1 + adv_wastage_pct / 100)
-    )
+    part_wt = round((cross_area * adv_part_len) * adv_density, 2)  # grams
+
+    if "Length" in adv_input_type:
+      parts_bar = int((adv_rod_len_m * 1000) / eff_l) if eff_l > 0 else 0
+      rem_mm = round((adv_rod_len_m * 1000) % eff_l, 2) if eff_l > 0 else 0.0
+      req_rd = (
+          int(math.ceil(adv_req_qty / parts_bar))
+          if (adv_req_qty > 0 and parts_bar > 0)
+          else 0
+      )
+      tot_wt_kg = (
+          round(
+              (
+                  (req_rd if req_rd > 0 else 1)
+                  * adv_rod_len_m
+                  * (cross_area * adv_density * 1000)
+                  / 1000000
+              ),
+              2,
+          )
+          * (1 + adv_wastage_pct / 100)
+      )
+    else:
+      wt_per_mm_kg = (cross_area * adv_density) / 1000.0
+      total_len_mm_from_wt = (
+          (adv_stock_wt_kg / wt_per_mm_kg) if wt_per_mm_kg > 0 else 0.0
+      )
+      parts_bar = int(total_len_mm_from_wt / eff_l) if eff_l > 0 else 0
+      rem_mm = round(total_len_mm_from_wt % eff_l, 2) if eff_l > 0 else 0.0
+      req_rd = 1 if adv_stock_wt_kg > 0 else 0
+      tot_wt_kg = adv_stock_wt_kg * (1 + adv_wastage_pct / 100)
 
     st.markdown(
-        f'<div class="auto-badge">⚡ {get_text("advanced_mode")} RESULT (Auto'
-        " Extracted Specs Active)</div>",
+        f'<div class="auto-badge">⚡ {get_text("advanced_mode")} RESULT ({adv_shape})</div>',
         unsafe_allow_html=True,
     )
     ar1, ar2, ar3, ar4 = st.columns(4)
     with ar1:
-      st.metric(get_text("parts_per_rod"), f"{parts_bar} Nos")
+      st.metric(
+          get_text("parts_per_rod")
+          if "Length" in adv_input_type
+          else "Total Possible Parts / மொத்த பார்ட்கள்",
+          f"{parts_bar} Nos",
+      )
       st.metric(get_text("part_weight"), f"{part_wt} g")
     with ar2:
       st.metric(get_text("balance_scrap"), f"{rem_mm} mm")
@@ -852,10 +1026,11 @@ elif selected_module == get_text("rod_calc"):
           "End Bit Weight", f"{round((cross_area * rem_mm)*adv_density, 2)} g"
       )
     with ar3:
-      st.metric(get_text("required_rods"), f"{req_rd} Nos")
       st.metric(
-          "Cross Hole Drill Spec", f"Ø {ext['cross_hole_dia']} mm 🎯"
+          get_text("required_rods"),
+          f"{req_rd} Nos" if adv_req_qty > 0 else "Not Specified (0)",
       )
+      st.metric("Cross Hole Drill Spec", f"Ø {ext['cross_hole_dia']} mm 🎯")
     with ar4:
       st.metric(get_text("total_mat_weight"), f"{round(tot_wt_kg, 2)} Kg")
       st.metric(
