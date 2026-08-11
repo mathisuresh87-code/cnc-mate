@@ -133,7 +133,9 @@ translations = {
         "part_length": "Part Length (mm) / பார்ட் நீளம் (மிமீ)",
         "cutting_allowance": "Cutting Allowance (mm) / வெட்டும் அளவு (மிமீ)",
         "material_shape": "Material Shape / பொருளின் வடிவம்",
-        "cycle_time": "Cycle Time (Seconds) / சுழற்சி நேரம் (வினாடிகள்)",
+        "cycle_time": (
+            "Cycle Time (Seconds - Optional) / சுழற்சி நேரம் (வினாடிகள் - விருப்பம்)"
+        ),
         "required_qty": "Required Quantity (Optional) / தேவையான எண்ணிக்கை",
         "parts_per_rod": "Parts / Rod / ஒரு ராட்டுக்கான பார்ட்கள்",
         "required_rods": "Required Rods / தேவையான ராட்கள்",
@@ -207,7 +209,9 @@ translations = {
         "part_length": "Part Length (mm) / भाग की लंबाई (मिमी)",
         "cutting_allowance": "Cutting Allowance (mm) / कटिंग अलाउंस (मिमी)",
         "material_shape": "Material Shape / सामग्री का आकार",
-        "cycle_time": "Cycle Time (Seconds) / चक्र का समय (सेकंड)",
+        "cycle_time": (
+            "Cycle Time (Seconds - Optional) / चक्र का समय (सेकंड - वैकल्पिक)"
+        ),
         "required_qty": "Required Quantity (Optional) / आवश्यक मात्रा",
         "parts_per_rod": "Parts / Rod / प्रति रॉड भाग",
         "required_rods": "Required Rods / आवश्यक रॉड",
@@ -281,7 +285,7 @@ translations = {
         "part_length": "Part Length (mm)",
         "cutting_allowance": "Cutting Allowance (mm)",
         "material_shape": "Material Shape",
-        "cycle_time": "Cycle Time (Seconds)",
+        "cycle_time": "Cycle Time (Seconds - Optional)",
         "required_qty": "Required Quantity (Optional)",
         "parts_per_rod": "Parts / Rod",
         "required_rods": "Required Rods",
@@ -359,7 +363,6 @@ module_list = [get_text(k) for k in module_keys]
 if "selected_module" not in st.session_state:
   st.session_state["selected_module"] = module_list[0]
 
-# Session state variables for auto-extracted drawing data
 if "extracted_drawing_data" not in st.session_state:
   st.session_state["extracted_drawing_data"] = {
       "part_length": 73.0,
@@ -444,7 +447,6 @@ if uploaded_logo is not None:
 
 st.sidebar.markdown("---")
 
-# Language Selection in Sidebar
 selected_lang_sidebar = st.sidebar.selectbox(
     get_text("language_label"),
     list(translations.keys()),
@@ -555,13 +557,10 @@ def get_cross_section_area(shape, size_val, inner_dia=0.0):
   if shape == "Round Rod":
     return math.pi * (size_val / 2.0) ** 2
   elif shape == "Hexagon Rod":
-    # size_val is Across Flats (AF)
     return (math.sqrt(3) / 2.0) * (size_val**2)
   elif shape == "Square Rod":
-    # size_val is Side length
     return size_val**2
   elif shape == "Tube / Pipe":
-    # size_val is Outer Diameter (OD), inner_dia is ID
     return max(
         0.0,
         (math.pi * (size_val / 2.0) ** 2)
@@ -686,7 +685,7 @@ if selected_module == get_text("home"):
       st.session_state["selected_module"] = get_text("settings")
       st.rerun()
 
-# 2. ROD & TUBE CALCULATOR (Fully supports Round, Hexagon, Square, Tube with Meters/Kg & Optional Req Qty)
+# 2. ROD & TUBE CALCULATOR (Cycle Time Optional - Default 0)
 elif selected_module == get_text("rod_calc"):
   if st.button(get_text("back_home")):
     st.session_state["selected_module"] = get_text("home")
@@ -701,7 +700,6 @@ elif selected_module == get_text("rod_calc"):
   if mode == get_text("simple_mode"):
     st.write(f"### 🟢 {get_text('simple_mode')}")
 
-    # Input unit selector: Meters or Kg
     input_unit_type = st.selectbox(
         "Stock Input Unit / இருப்பு உள்ளீட்டு முறை",
         ["📏 Length (Meters / மீட்டர்)", "⚖️ Weight (Kg / கிலோ)"],
@@ -716,7 +714,6 @@ elif selected_module == get_text("rod_calc"):
           key="simple_shape",
       )
 
-      # Dynamic Size Input based on Shape
       if shape_type == "Hexagon Rod":
         mat_size = st.number_input(
             "Hexagon Size Across Flats (AF mm) / எக்ஸகன் அகலம் (மிமீ)",
@@ -783,14 +780,19 @@ elif selected_module == get_text("rod_calc"):
         )
         stock_len_input = 0.0
 
+      # Cycle Time set to default 0 (Optional)
       cycle_time = st.number_input(
-          get_text("cycle_time"), value=20, min_value=0, key="s_cyc_time"
+          get_text("cycle_time"),
+          value=0,
+          min_value=0,
+          help="Optional: Set to 0 if only material calculation is needed / விருப்பம்: சைக்கிள் டைம் தேவையில்லை எனில் 0 என வைக்கலாம்",
+          key="s_cyc_time",
       )
       required_qty = st.number_input(
           get_text("required_qty"),
           value=0,
           min_value=0,
-          help="Set to 0 if not targeting specific order qty / குறிப்பிட்ட ஆர்டர் இல்லையெனில் 0 எனவும் கொடுக்கலாம்",
+          help="Set to 0 if not targeting specific order qty",
           key="s_req_qty",
       )
 
@@ -851,13 +853,16 @@ elif selected_module == get_text("rod_calc"):
           get_text("total_stock_len"), f"{round(calc_total_stock_len, 2)} Meters"
       )
     with r3:
-      st.metric(get_text("prod_per_hr"), f"{prod_per_hr} Nos")
+      st.metric(
+          get_text("prod_per_hr"),
+          f"{prod_per_hr} Nos" if cycle_time > 0 else "N/A (Cycle Time = 0)",
+      )
       st.metric(
           get_text("tot_mach_time"),
           (
               f"{round((required_qty * cycle_time)/3600, 2)} Hr"
-              if required_qty > 0
-              else "0.0 Hr"
+              if (required_qty > 0 and cycle_time > 0)
+              else "N/A (0)"
           ),
       )
 
@@ -878,8 +883,7 @@ elif selected_module == get_text("rod_calc"):
             "material_grade": "TUFF DOM 52.3 / 1026 DOM",
         }
         st.success(
-            "✅ Drawing successfully analyzed! Dimensions auto-populated:"
-            " Length=73.0mm, OD=38.1mm, ID=25.8mm, Cross Hole=5.4mm."
+            "✅ Drawing successfully analyzed! Dimensions auto-populated."
         )
         st.rerun()
 
@@ -888,7 +892,6 @@ elif selected_module == get_text("rod_calc"):
 
     ext = st.session_state["extracted_drawing_data"]
 
-    # Advanced Input Unit Selection: Length or Weight
     adv_input_type = st.selectbox(
         "Advanced Input Unit / மேம்பட்ட உள்ளீட்டு முறை",
         [
@@ -907,7 +910,6 @@ elif selected_module == get_text("rod_calc"):
           key="as",
       )
 
-      # Dynamic Size inputs for Advanced Mode
       if adv_shape == "Hexagon Rod":
         adv_size = st.number_input(
             "Hexagon Size Across Flats (AF mm) / எக்ஸகன் அகலம்",
@@ -1244,10 +1246,7 @@ elif selected_module == get_text("drawing_studio"):
           "material_shape": "Tube / Pipe",
           "material_grade": "TUFF DOM 52.3",
       }
-      st.success(
-          "✅ Drawing analyzed successfully! Auto-extracted: Length=73.0mm,"
-          " OD=38.1mm, ID=25.8mm, Cross Hole Drill=Ø5.4mm."
-      )
+      st.success("✅ Drawing analyzed successfully!")
       st.rerun()
 
     if uf.type in ["image/png", "image/jpeg"]:
