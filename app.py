@@ -16,7 +16,7 @@ st.set_page_config(
     layout="wide",
 )
 
-# Ultra-Vibrant, Colorful & Tactile Interactive SaaS Custom CSS with Uniform Column Alignment
+# Perfect Uniform Alignment & Proportional Card CSS
 st.markdown(
     """
     <style>
@@ -26,7 +26,7 @@ st.markdown(
         font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     .main-title {
-        font-size: 2.8rem;
+        font-size: 2.4rem;
         font-weight: 900;
         background: linear-gradient(135deg, #38bdf8 0%, #c084fc 50%, #ec4899 100%);
         -webkit-background-clip: text;
@@ -36,74 +36,102 @@ st.markdown(
         letter-spacing: 1.5px;
         text-transform: uppercase;
         line-height: 1.1;
-        filter: drop-shadow(0 0 20px rgba(192, 132, 252, 0.5));
     }
     .sub-title {
-        font-size: 0.92rem;
+        font-size: 0.85rem;
         color: #38bdf8;
         margin: 0;
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
-        text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
     }
     .auto-badge {
         background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(139, 92, 246, 0.4) 100%);
         color: #f472b6;
-        padding: 6px 18px;
+        padding: 5px 14px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 800;
         display: inline-block;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
         border: 1.5px solid rgba(236, 72, 153, 0.6);
         text-transform: uppercase;
         letter-spacing: 1.2px;
-        box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
     }
-    /* Uniform Card Layout with Flexbox & Fixed Minimum Height for Perfect Alignment */
+    
+    /* Force Streamlit row columns to stretch to exact equal height and proportional padding */
+    div[data-testid="stHorizontalBlock"] {
+        align-items: stretch !important;
+    }
+    
     div[data-testid="column"] {
         background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(49, 46, 129, 0.5) 100%);
         border: 1.5px solid rgba(139, 92, 246, 0.4);
-        padding: 24px;
-        border-radius: 20px;
+        padding: 18px;
+        border-radius: 16px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(16px);
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        margin-bottom: 20px;
+        margin-bottom: 16px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 270px;
+        height: 100% !important;
+        min-height: 240px;
     }
     div[data-testid="column"]:hover {
         border-color: #ec4899;
-        transform: translateY(-8px) scale(1.015);
-        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4), 0 0 30px rgba(56, 189, 248, 0.3), inset 0 1px 20px rgba(236, 72, 153, 0.4);
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 15px 40px rgba(236, 72, 153, 0.4), 0 0 25px rgba(56, 189, 248, 0.3);
         background: linear-gradient(145deg, rgba(55, 48, 163, 0.7) 0%, rgba(131, 24, 67, 0.5) 100%);
     }
+    
+    /* Standardized Card Elements for Proportional Layout */
+    .card-icon {
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 6px;
+    }
+    .card-title-text {
+        font-size: 0.95rem;
+        font-weight: 800;
+        text-align: center;
+        color: #38bdf8;
+        margin-bottom: 6px;
+    }
+    .card-desc {
+        font-size: 0.78rem;
+        text-align: center;
+        color: #94a3b8;
+        flex-grow: 1;
+        margin-bottom: 12px;
+        line-height: 1.3;
+    }
+    
     div.stButton > button {
         background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #ec4899 100%);
         color: #ffffff !important;
-        border-radius: 14px;
+        border-radius: 12px;
         border: 1.5px solid rgba(236, 72, 153, 0.6);
         font-weight: 800;
-        letter-spacing: 1px;
+        font-size: 0.82rem;
+        letter-spacing: 0.8px;
         width: 100%;
+        padding: 6px 12px;
         transition: all 0.3s ease-in-out;
-        box-shadow: 0 4px 20px rgba(147, 51, 234, 0.5);
+        box-shadow: 0 4px 15px rgba(147, 51, 234, 0.5);
     }
     div.stButton > button:hover {
         background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #f43f5e 100%);
         border-color: #38bdf8;
-        transform: translateY(-4px);
-        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.7), 0 0 20px rgba(56, 189, 248, 0.6);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.7);
     }
     div[data-testid="metric-container"] {
         background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(49, 46, 129, 0.7) 100%);
         border: 1.5px solid rgba(56, 189, 248, 0.4);
-        padding: 18px;
-        border-radius: 16px;
+        padding: 14px;
+        border-radius: 14px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     }
     section[data-testid="stSidebar"] {
@@ -148,6 +176,7 @@ translations = {
         "quantity": "Quantity / எண்ணிக்கை",
         "unit": "Unit / அலகு",
         "generate_csv": "🚀 Generate CSV Quotation File / கொட்டேஷன் CSV கோப்பை உருவாக்கு",
+        "upload_drawing": "Upload Engineering Drawing / என்ஜினியரிங் டிராயிங் பதிவேற்றவும்",
     },
     "हिन्दी (Hindi)": {
         "home": "🏠 Home / गृह",
@@ -179,6 +208,7 @@ translations = {
         "quantity": "Quantity / मात्रा",
         "unit": "Unit / इकाई",
         "generate_csv": "🚀 Generate CSV Quotation File / CSV उद्धरण फ़ाइल बनाएं",
+        "upload_drawing": "Upload Engineering Drawing / इंजीनियरिंग ड्राइंग अपलोड करें",
     },
 }
 
@@ -187,7 +217,7 @@ st.sidebar.markdown("### ⚙️ Megala CNC Mate", help="Enterprise Automation Su
 selected_lang = st.sidebar.selectbox("🌐 Language / மொழி", list(translations.keys()))
 t = translations[selected_lang]
 
-# Initialize Session State for navigation and cached values
+# Initialize Session State
 if "page_selection" not in st.session_state:
     st.session_state["page_selection"] = t["home"]
 
@@ -210,7 +240,6 @@ if "inventory" not in st.session_state:
         }
     )
 
-# Sidebar Radio Navigation synced with session state
 page_options = [
     t["home"],
     t["rod_calc"],
@@ -228,7 +257,7 @@ st.sidebar.markdown("---")
 page = st.sidebar.radio("Navigation", page_options, index=page_options.index(st.session_state["page_selection"]))
 st.session_state["page_selection"] = page
 
-# --- HOME PAGE WITH PERFECTLY ALIGNED CARD GRID ---
+# --- HOME PAGE WITH UNIFORM PROPORTIONAL CARD GRID ---
 if page == t["home"]:
     st.markdown('<div class="main-title">Megala CNC Mate</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-title">Advanced CNC Estimation & Automation Hub</div>', unsafe_allow_html=True)
@@ -247,49 +276,57 @@ if page == t["home"]:
     st.markdown("---")
     st.markdown("### 🚀 Core Automation Modules")
 
-    # Row 1 Grid Cards
+    # Row 1 Grid Cards (3 Columns)
     r1_c1, r1_c2, r1_c3 = st.columns(3)
     with r1_c1:
-        st.markdown("#### 📐 Rod & Tube Calculator")
-        st.write("Calculate raw material requirements with Dual Input (Kg/Meters) & Hexagon/Round shapes.")
-        if st.button("🚀 Open Rod Calculator", key="btn_rod"):
+        st.markdown('<div class="card-icon">📐</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title-text">Rod & Tube Calculator</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-desc">Calculate raw material requirements with Dual Input (Kg/Meters) & Hexagon/Round shapes.</div>', unsafe_allow_html=True)
+        if st.button("Open", key="btn_rod"):
             st.session_state["page_selection"] = t["rod_calc"]
             st.rerun()
 
     with r1_c2:
-        st.markdown("#### ⏱️ Production Calculator")
-        st.write("Estimate accurate daily outputs, machine hour costs, and cycle efficiency.")
-        if st.button("🚀 Open Production Calc", key="btn_prod"):
+        st.markdown('<div class="card-icon">⏱️</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title-text">Production Calculator</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-desc">Estimate accurate daily outputs, machine hour costs, and cycle efficiency.</div>', unsafe_allow_html=True)
+        if st.button("Open", key="btn_prod"):
             st.session_state["page_selection"] = t["prod_calc"]
             st.rerun()
 
     with r1_c3:
-        st.markdown("#### 💰 Costing & Quotation")
-        st.write("Calculate exact manufacturing costs, profit margins, and part pricing.")
-        if st.button("🚀 Open Costing Calc", key="btn_cost"):
+        st.markdown('<div class="card-icon">💰</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title-text">Costing & Quotation</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-desc">Calculate exact manufacturing costs, profit margins, and part pricing.</div>', unsafe_allow_html=True)
+        if st.button("Open", key="btn_cost"):
             st.session_state["page_selection"] = t["cost_calc"]
             st.rerun()
 
-    # Row 2 Grid Cards
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Row 2 Grid Cards (3 Columns)
     r2_c1, r2_c2, r2_c3 = st.columns(3)
     with r2_c1:
-        st.markdown("#### 📦 Stock Management")
-        st.write("Monitor raw materials, components, and inventory items seamlessly.")
-        if st.button("🚀 Open Stock Manager", key="btn_stock"):
+        st.markdown('<div class="card-icon">📦</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title-text">Stock Management</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-desc">Monitor raw materials, components, and inventory items seamlessly.</div>', unsafe_allow_html=True)
+        if st.button("Open", key="btn_stock"):
             st.session_state["page_selection"] = t["stock_mgmt"]
             st.rerun()
 
     with r2_c2:
-        st.markdown("#### 📷 Drawing & G-Code")
-        st.write("Upload 2D/3D Engineering drawings to generate instant G-Code programs.")
-        if st.button("🚀 Open Drawing Studio", key="btn_drawing"):
+        st.markdown('<div class="card-icon">📷</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title-text">Drawing & G-Code</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-desc">Upload 2D/3D Engineering drawings to generate instant G-Code programs.</div>', unsafe_allow_html=True)
+        if st.button("Open", key="btn_drawing"):
             st.session_state["page_selection"] = t["drawing_studio"]
             st.rerun()
 
     with r2_c3:
-        st.markdown("#### 📋 Auto Drawing Quotation Hub")
-        st.write("AI Vision auto-detection for instant quotation generation from drawings.")
-        if st.button("🚀 Open Quote Hub", key="btn_quote"):
+        st.markdown('<div class="card-icon">📋</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title-text">Auto Quotation Hub</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-desc">AI Vision auto-detection for instant quotation generation from drawings.</div>', unsafe_allow_html=True)
+        if st.button("Open", key="btn_quote"):
             st.session_state["page_selection"] = t["quote_hub"]
             st.rerun()
 
