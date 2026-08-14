@@ -59,7 +59,6 @@ st.markdown(
         letter-spacing: 1.2px;
     }
     
-    /* Force Streamlit row columns to stretch to exact equal height and proportional padding */
     div[data-testid="stHorizontalBlock"] {
         align-items: stretch !important;
     }
@@ -86,7 +85,6 @@ st.markdown(
         background: linear-gradient(145deg, rgba(55, 48, 163, 0.7) 0%, rgba(131, 24, 67, 0.5) 100%);
     }
     
-    /* Standardized Card Elements for Proportional Layout */
     .card-icon {
         font-size: 2rem;
         text-align: center;
@@ -144,7 +142,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Comprehensive Bilingual Translations Dictionary
+# 6 Languages Translation Dictionary
 translations = {
     "தமிழ் (Tamil)": {
         "home": "🏠 Home / முகப்பு",
@@ -178,6 +176,38 @@ translations = {
         "generate_csv": "🚀 Generate CSV Quotation File / கொட்டேஷன் CSV கோப்பை உருவாக்கு",
         "upload_drawing": "Upload Engineering Drawing / என்ஜினியரிங் டிராயிங் பதிவேற்றவும்",
     },
+    "English": {
+        "home": "🏠 Home",
+        "rod_calc": "📐 Rod Calculator",
+        "prod_calc": "⏱️ Production Calculator",
+        "cost_calc": "💰 Costing & Quotation",
+        "stock_mgmt": "📦 Stock Management",
+        "drawing_studio": "📷 Drawing & G-Code Studio",
+        "quote_hub": "📋 Auto Quotation Hub",
+        "material_dia": "Material Diameter / Size (mm)",
+        "tube_inner_dia": "Tube Inner Diameter (mm)",
+        "part_length": "Part Length (mm)",
+        "cutting_allowance": "Cutting Allowance (mm)",
+        "material_rate": "Material Rate / Kg (Rs.)",
+        "cycle_time": "Cycle Time (Seconds)",
+        "required_qty": "Required Quantity",
+        "balance_scrap": "Balance Scrap",
+        "prod_per_hr": "Production / Hour",
+        "prod_day": "Production / Day",
+        "machine_cost_hr": "Machine Cost / Hr (Rs.)",
+        "profit_margin": "Profit Margin (%)",
+        "cost_part": "Cost / Part",
+        "selling_price_part": "Selling Price / Part",
+        "total_items": "Total Items",
+        "current_stock": "📋 Current Stock",
+        "add_item": "➕ Add Item",
+        "part_name": "Part Name",
+        "category": "Category",
+        "quantity": "Quantity",
+        "unit": "Unit",
+        "generate_csv": "🚀 Generate CSV Quotation File",
+        "upload_drawing": "Upload Engineering Drawing",
+    },
     "हिन्दी (Hindi)": {
         "home": "🏠 Home / गृह",
         "rod_calc": "📐 Rod Calculator / रॉड कैलकुलेटर",
@@ -210,11 +240,107 @@ translations = {
         "generate_csv": "🚀 Generate CSV Quotation File / CSV उद्धरण फ़ाइल बनाएं",
         "upload_drawing": "Upload Engineering Drawing / इंजीनियरिंग ड्राइंग अपलोड करें",
     },
+    "తెలుగు (Telugu)": {
+        "home": "🏠 Home / హోమ్",
+        "rod_calc": "📐 Rod Calculator / రాడ్ కాల்குலேட்டர்",
+        "prod_calc": "⏱️ Production Calculator / ఉత్పత్తి కాల்குலேட்டர்",
+        "cost_calc": "💰 Costing & Quotation / ఖర్చు & కొటేషన్",
+        "stock_mgmt": "📦 Stock Management / స్టాక్ నిర్వహణ",
+        "drawing_studio": "📷 Drawing & G-Code / డ్రாயிங் & జి-కోடு ஸ்டுடியோ",
+        "quote_hub": "📋 Auto Drawing Quotation Hub / ఆటో కొటేஷன் హబ్",
+        "material_dia": "Material Diameter / Size (mm) / మెటీరియల్ వ్యాసం (మిమీ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ట్యూబ్ అంతర్గత వ్యాసం",
+        "part_length": "Part Length (mm) / పార్ట్ పొడవు (మిమీ)",
+        "cutting_allowance": "Cutting Allowance (mm) / కటింగ్ అలవెన్స్ (మిమీ)",
+        "material_rate": "Material Rate / Kg (Rs.) / ఒక కిలో ధర (రూ)",
+        "cycle_time": "Cycle Time (Seconds) / సైకిల్ సమయం (సెకన్లు)",
+        "required_qty": "Required Quantity / కావలసిన పరిమాణం",
+        "balance_scrap": "Balance Scrap / మిగిలిన స్క్రాప్",
+        "prod_per_hr": "Production / Hour / గంట ఉత్పత్తి",
+        "prod_day": "Production / Day / రోజు ఉత్పత్తి",
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / మెషిన్ ఖర్చు / గంట",
+        "profit_margin": "Profit Margin (%) / లాభ మార్జిన్ (%)",
+        "cost_part": "Cost / Part / పార్ట్ ఖర్చు",
+        "selling_price_part": "Selling Price / Part / అమ్మకం ధర / పార్ట్",
+        "total_items": "Total Items / మొత్తం వస్తువులు",
+        "current_stock": "📋 Current Stock / ప్రస్తుత స్టాక్",
+        "add_item": "➕ Add Item / కొత్త వస్తువును జోడించు",
+        "part_name": "Part Name / పార్ట్ పేరు",
+        "category": "Category / వర్గం",
+        "quantity": "Quantity / పరిమాణం",
+        "unit": "Unit / యూనిట్",
+        "generate_csv": "🚀 Generate CSV Quotation File / CSV కొటేషన్ ఫైల్ సృష్టించు",
+        "upload_drawing": "Upload Engineering Drawing / ఇంజనీరింగ్ డ్రాయింగ్ అప్‌లోడ్ చేయండి",
+    },
+    "ಕನ್ನಡ (Kannada)": {
+        "home": "🏠 Home / ಮುಖಪುಟ",
+        "rod_calc": "📐 Rod Calculator / ರಾಡ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+        "prod_calc": "⏱️ Production Calculator / ಉತ್ಪಾದನಾ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+        "cost_calc": "💰 Costing & Quotation / ವೆಚ್ಚ & ಕೊಟೇಶನ್",
+        "stock_mgmt": "📦 Stock Management / ಸ್ಟಾಕ್ ನಿರ್ವಹಣೆ",
+        "drawing_studio": "📷 Drawing & G-Code / ಡ್ರಾಯಿಂಗ್ & ಜಿ-ಕೋಡ್ ಸ್ಟುಡಿಯೋ",
+        "quote_hub": "📋 Auto Drawing Quotation Hub / ಆಟೋ ಕೊಟೇಶನ್ ಹಬ್",
+        "material_dia": "Material Diameter / Size (mm) / ವಸ್ತು ವ್ಯಾಸ / ಗಾತ್ರ (ಮಿಮೀ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ಟ್ಯೂಬ್ ಒಳ ವ್ಯಾಸ",
+        "part_length": "Part Length (mm) / ಭಾಗದ ಉದ್ದ (ಮಿಮೀ)",
+        "cutting_allowance": "Cutting Allowance (mm) / ಕಟಿಂಗ್ ಅಲವನ್ಸ್ (ಮಿಮೀ)",
+        "material_rate": "Material Rate / Kg (Rs.) / ಪ್ರತಿ ಕೆಜಿ ಬೆಲೆ (ರೂ)",
+        "cycle_time": "Cycle Time (Seconds) / ಸೈಕಲ್ ಸಮಯ (ಸೆಕೆಂಡುಗಳು)",
+        "required_qty": "Required Quantity / ಅಗತ್ಯವಿರುವ ಪ್ರಮಾಣ",
+        "balance_scrap": "Balance Scrap / ಉಳಿದ ಸ್ಕ್ರ್ಯಾಪ್",
+        "prod_per_hr": "Production / Hour / ಪ್ರತಿ ಗಂಟೆಯ ಉತ್ಪಾದನೆ",
+        "prod_day": "Production / Day / ಪ್ರತಿ ದಿನದ ಉತ್ಪಾದನೆ",
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / ಯಂತ್ರದ ವೆಚ್ಚ / ಗಂಟೆ",
+        "profit_margin": "Profit Margin (%) / ಲಾಭದ ಅಂಚು (%)",
+        "cost_part": "Cost / Part / ಪ್ರತಿ ಭಾಗದ ವೆಚ್ಚ",
+        "selling_price_part": "Selling Price / Part / ಮಾರಾಟ ಬೆಲೆ / ಭಾಗ",
+        "total_items": "Total Items / ಒಟ್ಟು ವಸ್ತುಗಳು",
+        "current_stock": "📋 Current Stock / ಪ್ರಸ್ತುತ ಸ್ಟಾಕ್",
+        "add_item": "➕ Add Item / ಹೊಸ ವಸ್ತು ಸೇರಿಸಿ",
+        "part_name": "Part Name / ಭಾಗದ ಹೆಸರು",
+        "category": "Category / ವರ್ಗ",
+        "quantity": "Quantity / ಪ್ರಮಾಣ",
+        "unit": "Unit / ಘಟಕ",
+        "generate_csv": "🚀 Generate CSV Quotation File / CSV ಕೊಟೇಶನ್ ಫೈಲ್ ರಚಿಸಿ",
+        "upload_drawing": "Upload Engineering Drawing / ಇಂಜಿನಿಯರಿಂಗ್ ಡ್ರಾಯಿಂಗ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+    },
+    "മലയാളം (Malayalam)": {
+        "home": "🏠 Home / ഹോം",
+        "rod_calc": "📐 Rod Calculator / റോഡ് കാൽക്കുലേറ്റർ",
+        "prod_calc": "⏱️ Production Calculator / ഉൽപ്പാദന കാൽക്കുലേറ്റർ",
+        "cost_calc": "💰 Costing & Quotation / ചെലവ് & കൊട്ടേഷൻ",
+        "stock_mgmt": "📦 Stock Management / സ്റ്റോക്ക് മാനേജ്മെന്റ്",
+        "drawing_studio": "📷 Drawing & G-Code / ഡ്രോയിംഗ് & ജി-കോഡ് സ്റ്റുഡിയോ",
+        "quote_hub": "📋 Auto Drawing Quotation Hub / ഓട്ടോ കൊട്ടേഷൻ ഹബ്",
+        "material_dia": "Material Diameter / Size (mm) / മെറ്റീരിയൽ വ്യാസം (മില്ലീമീറ്റർ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ട്യൂബ് ഉൾവ്യാസം",
+        "part_length": "Part Length (mm) / ഭാഗത്തിന്റെ നീളം (മില്ലീമീറ്റർ)",
+        "cutting_allowance": "Cutting Allowance (mm) / കട്ടിംഗ് അലവൻസ്",
+        "material_rate": "Material Rate / Kg (Rs.) / ഒരു കിലോ വില (രൂപ)",
+        "cycle_time": "Cycle Time (Seconds) / സൈക്കിൾ സമയം (സെക്കൻഡ്)",
+        "required_qty": "Required Quantity / ആവശ്യമായ അളവ്",
+        "balance_scrap": "Balance Scrap / ബാക്കി സ്ക്രാപ്പ്",
+        "prod_per_hr": "Production / Hour / മണിക്കൂർ ഉൽപ്പാദനം",
+        "prod_day": "Production / Day / ദിവസത്തെ ഉൽപ്പാദനം",
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / മെഷീൻ ചെലവ് / മണിക്കൂർ",
+        "profit_margin": "Profit Margin (%) / ലാഭവിഹിതം (%)",
+        "cost_part": "Cost / Part / ഒരു ഭാഗത്തിന്റെ ചെലവ്",
+        "selling_price_part": "Selling Price / Part / വിൽപ്പന വില / ഭാഗം",
+        "total_items": "Total Items / ആകെ സാധനങ്ങൾ",
+        "current_stock": "📋 Current Stock / നിലവിലുള്ള സ്റ്റോക്ക്",
+        "add_item": "➕ Add Item / പുതിയ ഇനം ചേർക്കുക",
+        "part_name": "Part Name / ഭാഗത്തിന്റെ പേര്",
+        "category": "Category / വിഭാഗം",
+        "quantity": "Quantity / അളവ്",
+        "unit": "Unit / യൂണിറ്റ്",
+        "generate_csv": "🚀 Generate CSV Quotation File / CSV കൊട്ടേഷൻ ഫയൽ നിർമ്മിക്കുക",
+        "upload_drawing": "Upload Engineering Drawing / എൻജിനീയറിങ് ഡ്രോയിംഗ് അപ്‌ലോഡ് ചെയ്യുക",
+    }
 }
 
 # Sidebar Language Selection
 st.sidebar.markdown("### ⚙️ Megala CNC Mate", help="Enterprise Automation Suite")
-selected_lang = st.sidebar.selectbox("🌐 Language / மொழி", list(translations.keys()))
+selected_lang = st.sidebar.selectbox("🌐 Language / மொழி / भाषा / భాష", list(translations.keys()))
 t = translations[selected_lang]
 
 # Initialize Session State
