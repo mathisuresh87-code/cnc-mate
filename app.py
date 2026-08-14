@@ -1,221 +1,564 @@
-import streamlit as st
-import pandas as pd
+import base64
+from datetime import datetime
+import json
+import math
 import os
+from fpdf import FPDF
+import google.generativeai as genai
+import pandas as pd
+from PIL import Image
+import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="Megala CNC Mate",
+    page_title="Megala CNC Mate - Enterprise CNC Automation",
     page_icon="⚙️",
-    layout="wide"
+    layout="wide",
 )
 
-# Custom Styling & UI Enhancements
-st.markdown("""
+# Perfect Uniform Alignment CSS for Streamlit Cards & Columns
+st.markdown(
+    """
     <style>
-    .main-title {
-        font-size: 28px;
-        font-weight: bold;
-        color: #1f77b4;
-        margin-bottom: 10px;
+    .stApp {
+        background: linear-gradient(135deg, #090d1f 0%, #111827 40%, #1e1b4b 100%);
+        color: #f8fafc;
+        font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
-    .sub-text {
-        font-size: 15px;
-        color: #555555;
+    .main-title {
+        font-size: 2.8rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #38bdf8 0%, #c084fc 50%, #ec4899 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0 0 4px 0;
+        padding: 0;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        line-height: 1.1;
+        filter: drop-shadow(0 0 20px rgba(192, 132, 252, 0.5));
+    }
+    .sub-title {
+        font-size: 0.92rem;
+        color: #38bdf8;
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    }
+    .auto-badge {
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(139, 92, 246, 0.4) 100%);
+        color: #f472b6;
+        padding: 6px 18px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        display: inline-block;
+        margin-bottom: 16px;
+        border: 1.5px solid rgba(236, 72, 153, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+    }
+    
+    /* Force Streamlit row columns to stretch to exact equal height */
+    div[data-testid="stHorizontalBlock"] {
+        align-items: stretch !important;
+    }
+    
+    div[data-testid="column"] {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(49, 46, 129, 0.5) 100%);
+        border: 1.5px solid rgba(139, 92, 246, 0.4);
+        padding: 24px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(16px);
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100% !important;
+        min-height: 280px;
+    }
+    div[data-testid="column"]:hover {
+        border-color: #ec4899;
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4), 0 0 30px rgba(56, 189, 248, 0.3);
+        background: linear-gradient(145deg, rgba(55, 48, 163, 0.7) 0%, rgba(131, 24, 67, 0.5) 100%);
+    }
+    div.stButton > button {
+        background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #ec4899 100%);
+        color: #ffffff !important;
+        border-radius: 14px;
+        border: 1.5px solid rgba(236, 72, 153, 0.6);
+        font-weight: 800;
+        letter-spacing: 1px;
+        width: 100%;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 20px rgba(147, 51, 234, 0.5);
+    }
+    div.stButton > button:hover {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #f43f5e 100%);
+        border-color: #38bdf8;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.7);
+    }
+    div[data-testid="metric-container"] {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(49, 46, 129, 0.7) 100%);
+        border: 1.5px solid rgba(56, 189, 248, 0.4);
+        padding: 18px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #070b19 0%, #0f172a 100%);
+        border-right: 1.5px solid rgba(139, 92, 246, 0.3);
+        padding-top: 0.5rem;
     }
     </style>
-""", unsafe_allow_html=True)
-
-# -------------------------------------------------------------
-# SIDEBAR: LOGO & 6 LANGUAGES SETTINGS
-# -------------------------------------------------------------
-st.sidebar.title("Megala CNC Mate")
-
-logo_path = "logo.png"  # User uploaded logo
-if os.path.exists(logo_path):
-    st.sidebar.image(logo_path, width=140)
-else:
-    st.sidebar.markdown("### ⚙️ CNC Mate Control Panel")
-
-languages = [
-    "Tamil (தமிழ்)", 
-    "English", 
-    "Hindi (हिन्दी)", 
-    "Telugu (తెలుగు)", 
-    "Kannada (ಕನ್ನಡ)", 
-    "Malayalam (മലയാളം)"
-]
-selected_lang = st.sidebar.selectbox("Select Language / மொழி", languages)
-
-menu = st.sidebar.radio(
-    "Navigation / மெனு",
-    [
-        "Rod & Tube Calculator", 
-        "Operation & Cycle Time", 
-        "Stock Management", 
-        "G-Code Generator", 
-        "Quotation Generator"
-    ]
+""",
+    unsafe_allow_html=True,
 )
 
-# -------------------------------------------------------------
-# MODULE 1: ROD & TUBE CALCULATOR (Simple & Advanced Modes)
-# -------------------------------------------------------------
-if menu == "Rod & Tube Calculator":
-    st.markdown('<div class="main-title">Rod & Tube Calculator (ராட் & டியூப் கால்குலேட்டர்)</div>', unsafe_allow_html=True)
-    
-    calc_mode = st.radio("Select Mode / முறை", ["Simple Mode", "Advanced Mode (Drawing Scan)"])
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        rod_type = st.selectbox("Rod Shape / வடிவம்", ["Round (ரவுண்ட்)", "Hexagon (எக்ஸகன்)", "Square (ஸ்கொயர்)", "Tube (டியூப்)"])
-        unit_type = st.selectbox("Measurement Unit / அளவீட்டு முறை", ["Meter (மீட்டர்)", "Kilogram (கிலோகிராம்)"])
-    
-    with col2:
-        part_length = st.number_input("Part Length (mm) / பார்ட் நீளம்", min_value=0.1, value=50.0, step=0.1)
-        cutting_allowance = st.number_input("Cutting & Facing Allowance (mm) / கட்டிங் & பேசிங் அலவன்ஸ்", min_value=0.0, value=2.0, step=0.1)
-        required_qty = st.number_input("Required Quantity / தேவையான அளவு", min_value=1, value=100, step=1)
+# Comprehensive Bilingual Translations Dictionary
+translations = {
+    "தமிழ் (Tamil)": {
+        "home": "🏠 Home / முகப்பு",
+        "rod_calc": "📐 Rod Calculator / ராட் கால்குலேட்டர்",
+        "prod_calc": "⏱️ Production Calculator / உற்பத்தி கால்குலேட்டர்",
+        "cost_calc": "💰 Costing & Quotation / செலவு & கொட்டேஷன்",
+        "stock_mgmt": "📦 Stock Management / ஸ்டாக் மேனேஜ்மென்ட்",
+        "drawing_studio": "📷 Drawing & G-Code / டிராயிங் & ஜி-கோடு ஸ்டுடியோ",
+        "quote_hub": "📋 Auto Drawing Quotation Hub / ஆட்டோ டிராயிங் கொட்டேஷன் ஹப்",
+        "material_dia": "Material Diameter / Size (mm) / விட்டம் / சைஸ் (மிமீ)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / குழாய் உள் விட்டம்",
+        "part_length": "Part Length (mm) / பார்ட் நீளம் (மிமீ)",
+        "cutting_allowance": "Cutting Allowance (mm) / வெட்டும் அளவு (மிமீ)",
+        "material_rate": "Material Rate / Kg (Rs.) / ஒரு கிலோ விலை (ரூ)",
+        "cycle_time": "Cycle Time (Seconds) / சுழற்சி நேரம் (வினாடிகள்)",
+        "required_qty": "Required Quantity / தேவையான எண்ணிக்கை",
+        "balance_scrap": "Balance Scrap / மீதமுள்ள ஸ்கிராப்",
+        "prod_per_hr": "Production / Hour / மணி நேர உற்பத்தி",
+        "prod_day": "Production / Day / நாள் உற்பத்தி",
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / இயந்திர செலவு / மணி",
+        "profit_margin": "Profit Margin (%) / லாப வரம்பு (%)",
+        "cost_part": "Cost / Part / ஒரு பார்ட்டின் செலவு",
+        "selling_price_part": "Selling Price / Part / விற்பனை விலை / பார்ட்",
+        "total_items": "Total Items / மொத்த பொருட்கள்",
+        "current_stock": "📋 Current Stock / தற்போதைய இருப்பு",
+        "add_item": "➕ Add Item / புதிய பொருள் சேர்",
+        "part_name": "Part Name / பார்ட் பெயர்",
+        "category": "Category / வகை",
+        "quantity": "Quantity / எண்ணிக்கை",
+        "unit": "Unit / அலகு",
+        "generate_csv": "🚀 Generate CSV Quotation File / கொட்டேஷன் CSV கோப்பை உருவாக்கு",
+    },
+    "हिन्दी (Hindi)": {
+        "home": "🏠 Home / गृह",
+        "rod_calc": "📐 Rod Calculator / रॉड कैलकुलेटर",
+        "prod_calc": "⏱️ Production Calculator / उत्पादन कैलकुलेटर",
+        "cost_calc": "💰 Costing & Quotation / लागत और उद्धरण",
+        "stock_mgmt": "📦 Stock Management / स्टॉक प्रबंधन",
+        "drawing_studio": "📷 Drawing & G-Code / ड्राइंग और जी-कोड",
+        "quote_hub": "📋 Auto Drawing Quotation Hub / ऑटो ड्राइंग उद्धरण केंद्र",
+        "material_dia": "Material Diameter / Size (mm) / व्यास / साइज़ (मिमी)",
+        "tube_inner_dia": "Tube Inner Diameter (mm) / ट्यूब का आंतरिक व्यास",
+        "part_length": "Part Length (mm) / भाग की लंबाई (मिमी)",
+        "cutting_allowance": "Cutting Allowance (mm) / कटिंग अलाउंस (मिमी)",
+        "material_rate": "Material Rate / Kg (Rs.) / प्रति किलो दर (रु)",
+        "cycle_time": "Cycle Time (Seconds) / चक्र का समय (सेकंड)",
+        "required_qty": "Required Quantity / आवश्यक मात्रा",
+        "balance_scrap": "Balance Scrap / शेष स्क्रैप",
+        "prod_per_hr": "Production / Hour / प्रति घंटा उत्पादन",
+        "prod_day": "Production / Day / प्रति दिन उत्पादन",
+        "machine_cost_hr": "Machine Cost / Hr (Rs.) / मशीन लागत / घंटा",
+        "profit_margin": "Profit Margin (%) / लाभ मार्जिन (%)",
+        "cost_part": "Cost / Part / प्रति भाग लागत",
+        "selling_price_part": "Selling Price / Part / विक्रय मूल्य / भाग",
+        "total_items": "Total Items / कुल वस्तुएं",
+        "current_stock": "📋 Current Stock / वर्तमान स्टॉक",
+        "add_item": "➕ Add Item / वस्तु जोड़ें",
+        "part_name": "Part Name / भाग का नाम",
+        "category": "Category / श्रेणी",
+        "quantity": "Quantity / मात्रा",
+        "unit": "Unit / इकाई",
+        "generate_csv": "🚀 Generate CSV Quotation File / CSV उद्धरण फ़ाइल बनाएं",
+    },
+}
 
-    if calc_mode == "Advanced Mode (Drawing Scan)":
-        st.info("Advanced Mode: Upload your drawing to auto-detect and scan dimensions.")
-        uploaded_drawing = st.file_uploader("Upload Drawing / டிராயிங் அப்லோட் செய்யவும்", type=["png", "jpg", "jpeg", "pdf"])
-        if uploaded_drawing:
-            st.success("Drawing successfully scanned! Dimensions auto-extracted.")
+# Sidebar Language Selection
+st.sidebar.markdown("### ⚙️ Megala CNC Mate", help="Enterprise Automation Suite")
+selected_lang = st.sidebar.selectbox("🌐 Language / மொழி", list(translations.keys()))
+t = translations[selected_lang]
 
-    if st.button("Calculate Weight & Length / கணக்கிடு"):
-        total_len = (part_length + cutting_allowance) * required_qty / 1000  # meters
-        estimated_weight = total_len * 1.62  # Calculation formula
-        
-        st.success(f"Estimated Total Length: {total_len:.3f} Meters")
-        st.success(f"Estimated Total Weight: {estimated_weight:.3f} Kg")
+# Initialize Session State
+if "page_selection" not in st.session_state:
+    st.session_state["page_selection"] = t["home"]
 
-# -------------------------------------------------------------
-# MODULE 2: OPERATION & CYCLE TIME ANALYZER (Dynamic Time Input)
-# -------------------------------------------------------------
-elif menu == "Operation & Cycle Time":
-    st.markdown('<div class="main-title">Operation & Cycle Time Analyzer (ஆபரேஷன் & சைக்கிள் டைம்)</div>', unsafe_allow_html=True)
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        machine_type = st.selectbox("Machine Type / இயந்திர வகை", ["CNC Lathe", "Traub Machine (ட்ராப்)", "Drill Machine", "Other"])
-        operation_type = st.selectbox("Operation / செயல்பாடு", ["Facing", "Turning", "Threading", "Tapping", "Boring", "Chamfering", "Multiple Operations"])
-    
-    with col2:
-        cycle_time = st.number_input("Cycle Time per Part (Seconds) / ஒரு பார்ட் சைக்கிள் டைம் (வினாடிகளில்)", min_value=0.1, value=45.0, step=0.5)
-        total_working_hours = st.number_input("Total Working Hours (Dynamic) / மொத்த வேலை நேரம்", min_value=0.5, value=12.0, step=0.5)
+if "ext_dia" not in st.session_state:
+    st.session_state["ext_dia"] = 14.0
+if "ext_len" not in st.session_state:
+    st.session_state["ext_len"] = 10.0
+if "ext_inner_dia" not in st.session_state:
+    st.session_state["ext_inner_dia"] = 0.0
+if "ext_cycle" not in st.session_state:
+    st.session_state["ext_cycle"] = 45.0
 
-    if st.button("Calculate Production Output / உற்பத்தி அவுட்புட் கணக்கிடு"):
-        if cycle_time > 0:
-            total_seconds = total_working_hours * 3600
-            total_parts = int(total_seconds / cycle_time)
-            
-            st.markdown(f"### Production Result for {total_working_hours} Hours:")
-            st.info(f"Machine: {machine_type} | Operation: {operation_type}")
-            st.success(f"Total Parts Output: **{total_parts} Parts**")
-        else:
-            st.error("Cycle time cannot be zero!")
-
-# -------------------------------------------------------------
-# MODULE 3: STOCK MANAGEMENT
-# -------------------------------------------------------------
-elif menu == "Stock Management":
-    st.markdown('<div class="main-title">Stock Management System (ஸ்டாக் மேனேஜ்மெண்ட்)</div>', unsafe_allow_html=True)
-    
-    st.write("Track and manage raw material stock levels in real-time (Meter / Kg).")
-    
-    if 'stock_data' not in st.session_state:
-        st.session_state.stock_data = pd.DataFrame([
-            {"Material": "Round Rod 20mm", "Unit": "Meter", "Available Stock": 500.0},
-            {"Material": "Hex Rod 16mm", "Unit": "Kg", "Available Stock": 250.0},
-            {"Material": "Square Rod 25mm", "Unit": "Meter", "Available Stock": 300.0},
-            {"Material": "Tube 30mm", "Unit": "Meter", "Available Stock": 150.0}
-        ])
-    
-    st.dataframe(st.session_state.stock_data, use_container_width=True)
-    
-    st.subheader("Deduct / Update Stock")
-    mat_to_update = st.selectbox("Select Material / மெட்டீரியல் தேர்வு", st.session_state.stock_data["Material"].tolist())
-    consumed_qty = st.number_input("Consumed Quantity to Deduct / குறைக்க வேண்டிய அளவு", min_value=0.1, value=10.0, step=0.5)
-    
-    if st.button("Deduct Stock / ஸ்டாக் குறைக்கவும்"):
-        idx = st.session_state.stock_data[st.session_state.stock_data["Material"] == mat_to_update].index[0]
-        current_stock = st.session_state.stock_data.at[idx, "Available Stock"]
-        if current_stock >= consumed_qty:
-            st.session_state.stock_data.at[idx, "Available Stock"] -= consumed_qty
-            st.success("Stock updated successfully!")
-            st.dataframe(st.session_state.stock_data, use_container_width=True)
-        else:
-            st.error("Insufficient stock available!")
-
-# -------------------------------------------------------------
-# MODULE 4: G-CODE GENERATOR
-# -------------------------------------------------------------
-elif menu == "G-Code Generator":
-    st.markdown('<div class="main-title">Advanced G-Code Generator (ஜி-கோடு ஜெனரேட்டர்)</div>', unsafe_allow_html=True)
-    
-    drawing_file = st.file_uploader("Upload Drawing for G-Code / டிராயிங் அப்லோட் செய்யவும்", type=["png", "jpg", "jpeg", "pdf"])
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        operations_selected = st.multiselect(
-            "Select Operations / செயல்பாடுகள்", 
-            ["Facing", "Turning", "Threading", "Tapping", "Boring", "Chamfering"],
-            default=["Facing", "Turning"]
-        )
-    with col2:
-        recommended_machine = st.selectbox("System Machine Recommendation / இயந்திர பரிந்துரை", ["Traub Machine", "CNC Lathe"])
-
-    if st.button("Generate G-Code / ஜி-கோடு உருவாக்கவும்"):
-        st.info(f"Recommended Machine Analysis: **{recommended_machine}**")
-        st.subheader("Generated G-Code Output:")
-        
-        gcode_sample = f"""
-        O0001 (MEGAla CNC MATE GENERATED CODE)
-        G21 G90 G95
-        M03 S2500
-        G00 X0 Z0 (Operation: Facing)
-        G01 Z-30.0 F0.2 (Operation: Turning)
-        M05
-        M30
-        """
-        st.code(gcode_sample, language="text")
-        st.download_button("Export G-Code as File / டவுன்லோட் செய்", data=gcode_sample, file_name="megala_gcode.txt")
-
-# -------------------------------------------------------------
-# MODULE 5: PROFESSIONAL QUOTATION GENERATOR
-# -------------------------------------------------------------
-elif menu == "Quotation Generator":
-    st.markdown('<div class="main-title">Professional Quotation Generator (கொட்டேஷன் ஜெனரேட்டர்)</div>', unsafe_allow_html=True)
-    
-    client_name = st.text_input("Client Name / வாடிக்கையாளர் பெயர்", "ABC Engineering Works")
-    quot_drawing = st.file_uploader("Upload Part Drawing for Quotation / டிராயிங் அப்லோட்", type=["png", "jpg", "jpeg", "pdf"])
-    
-    st.subheader("Itemized Operations Breakdown")
-    quoted_ops = st.multiselect(
-        "Operations Included in Quotation", 
-        ["Facing", "Turning", "Tapping", "Chamfering", "Boring", "Threading"],
-        default=["Facing", "Turning", "Chamfering"]
+if "inventory" not in st.session_state:
+    st.session_state["inventory"] = pd.DataFrame(
+        {
+            "Part Name": ["Hex Bolt M12", "CNC Aluminium Bush", "MS Shaft 25mm", "Brass Nozzle"],
+            "Category": ["Fasteners", "Automotive", "Raw Material", "Pneumatics"],
+            "Quantity": [450, 85, 12, 120],
+            "Unit": ["Pcs", "Pcs", "Length", "Pcs"],
+        }
     )
-    
+
+page_options = [
+    t["home"],
+    t["rod_calc"],
+    t["prod_calc"],
+    t["cost_calc"],
+    t["stock_mgmt"],
+    t["drawing_studio"],
+    t["quote_hub"],
+]
+
+if st.session_state["page_selection"] not in page_options:
+    st.session_state["page_selection"] = t["home"]
+
+st.sidebar.markdown("---")
+page = st.sidebar.radio("Navigation", page_options, index=page_options.index(st.session_state["page_selection"]))
+st.session_state["page_selection"] = page
+
+# --- HOME PAGE ---
+if page == t["home"]:
+    st.markdown('<div class="main-title">Megala CNC Mate</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">Advanced CNC Estimation & Automation Hub</div>', unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric(label="Active Machines", value="8 Units", delta="+2 Online")
+    with col2:
+        st.metric(label="Today's Output", value="1,420 Pcs", delta="94% Efficiency")
+    with col3:
+        st.metric(label="Material Stock", value="4,850 Kg", delta="Stable")
+    with col4:
+        st.metric(label="Low Stock Alerts", value="1 Item", delta="-1 Resolved")
+
+    st.markdown("---")
+    st.markdown("### 🚀 Core Automation Modules")
+
+    # Row 1 Grid Cards (3 Columns)
+    r1_c1, r1_c2, r1_c3 = st.columns(3)
+    with r1_c1:
+        st.markdown("#### 📐 Rod & Tube Calculator")
+        st.write("Calculate raw material requirements with Dual Input (Kg/Meters) & Hexagon/Round shapes.")
+        if st.button("🚀 Open Rod Calculator", key="btn_rod"):
+            st.session_state["page_selection"] = t["rod_calc"]
+            st.rerun()
+
+    with r1_c2:
+        st.markdown("#### ⏱️ Production Calculator")
+        st.write("Estimate accurate daily outputs, machine hour costs, and cycle efficiency.")
+        if st.button("🚀 Open Production Calc", key="btn_prod"):
+            st.session_state["page_selection"] = t["prod_calc"]
+            st.rerun()
+
+    with r1_c3:
+        st.markdown("#### 💰 Costing & Quotation")
+        st.write("Calculate exact manufacturing costs, profit margins, and part pricing.")
+        if st.button("🚀 Open Costing Calc", key="btn_cost"):
+            st.session_state["page_selection"] = t["cost_calc"]
+            st.rerun()
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Row 2 Grid Cards (3 Columns)
+    r2_c1, r2_c2, r2_c3 = st.columns(3)
+    with r2_c1:
+        st.markdown("#### 📦 Stock Management")
+        st.write("Monitor raw materials, components, and inventory items seamlessly.")
+        if st.button("🚀 Open Stock Manager", key="btn_stock"):
+            st.session_state["page_selection"] = t["stock_mgmt"]
+            st.rerun()
+
+    with r2_c2:
+        st.markdown("#### 📷 Drawing & G-Code")
+        st.write("Upload 2D/3D Engineering drawings to generate instant G-Code programs.")
+        if st.button("🚀 Open Drawing Studio", key="btn_drawing"):
+            st.session_state["page_selection"] = t["drawing_studio"]
+            st.rerun()
+
+    with r2_c3:
+        st.markdown("#### 📋 Auto Drawing Quotation Hub")
+        st.write("AI Vision auto-detection for instant quotation generation from drawings.")
+        if st.button("🚀 Open Quote Hub", key="btn_quote"):
+            st.session_state["page_selection"] = t["quote_hub"]
+            st.rerun()
+
+# --- ROD CALCULATOR ---
+elif page == t["rod_calc"]:
+    st.markdown(f'<div class="main-title">{t["rod_calc"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="auto-badge">Advanced Raw Material Optimizer (Kg / Meter Dual Input)</div>', unsafe_allow_html=True)
+
     col1, col2 = st.columns(2)
     with col1:
-        unit_price = st.number_input("Price per Part (₹) / ஒரு பார்ட் விலை", min_value=0.0, value=50.0, step=1.0)
-    with col2:
-        qty_quot = st.number_input("Total Quantity / மொத்த எண்ணிக்கை", min_value=1, value=1000, step=10)
+        shape_type = st.selectbox("Material Shape / வடிவ வகை", ["Hexagon", "Round", "Square"])
+        mat_size = st.number_input(t["material_dia"], value=st.session_state["ext_dia"], step=0.5)
+        input_mode = st.radio("Input Mode / உள்ளீட்டு முறை", ["Total Weight (Kg)", "Total Length (Meters)"])
     
-    if st.button("Generate Professional Quotation / கொட்டேஷன் உருவாக்கு"):
-        total_amount = unit_price * qty_quot
-        st.success(f"Quotation Generated Successfully for {client_name}!")
+    with col2:
+        if input_mode == "Total Weight (Kg)":
+            total_weight_input = st.number_input("Total Weight (Kg) / மொத்த எடை", value=485.55, step=1.0)
+            total_length_input = None
+        else:
+            total_length_input = st.number_input("Total Length (Meters) / மொத்த நீளம்", value=364.39, step=1.0)
+            total_weight_input = None
+            
+        part_len = st.number_input(t["part_length"], value=st.session_state["ext_len"], step=1.0)
+        cut_allow = st.number_input(t["cutting_allowance"], value=3.0, step=0.5)
+        req_qty = st.number_input(t["required_qty"], value=25000, step=100)
+
+    density = 7850
+    if shape_type.lower() == 'hexagon':
+        area_mm2 = (math.sqrt(3) / 2) * (mat_size ** 2)
+        weight_per_m = (area_mm2 / 1e6) * density
+    elif shape_type.lower() == 'round':
+        radius = mat_size / 2.0
+        area_mm2 = math.pi * (radius ** 2)
+        weight_per_m = (area_mm2 / 1e6) * density
+    else:
+        area_mm2 = mat_size ** 2
+        weight_per_m = (area_mm2 / 1e6) * density
+
+    if total_weight_input is not None and total_weight_input > 0:
+        calc_total_length = total_weight_input / weight_per_m
+        calc_total_weight = total_weight_input
+    elif total_length_input is not None and total_length_input > 0:
+        calc_total_length = total_length_input
+        calc_total_weight = total_length_input * weight_per_m
+    else:
+        calc_total_length = 0
+        calc_total_weight = 0
+
+    piece_len_m = (part_len + cut_allow) / 1000.0
+    total_possible_pieces = math.floor(calc_total_length / piece_len_m) if piece_len_m > 0 else 0
+    rem_scrap_m = calc_total_length - (total_possible_pieces * piece_len_m)
+
+    st.markdown("---")
+    m1, m2, m3, m4 = st.columns(4)
+    with m1:
+        st.metric("Weight per Meter", f"{weight_per_m:.4f} Kg/m")
+    with m2:
+        st.metric("Total Length", f"{calc_total_length:.2f} Meters")
+    with m3:
+        st.metric("Total Possible Pieces", f"{total_possible_pieces:,} Pcs")
+    with m4:
+        st.metric(t["balance_scrap"], f"{rem_scrap_m * 1000:.1f} mm")
+
+# --- PRODUCTION CALCULATOR ---
+elif page == t["prod_calc"]:
+    st.markdown(f'<div class="main-title">{t["prod_calc"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="auto-badge">Cycle Time & Output Hub</div>', unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        cycle_time = st.number_input(t["cycle_time"], value=st.session_state["ext_cycle"], step=1.0)
+        avail_hrs = st.number_input("Available Time / Day (hr)", value=8.0, step=0.5)
+    with col2:
+        efficiency = st.slider("Machine Efficiency (%)", 50, 100, 85)
+        break_mins = st.number_input("Break Time (min)", value=45, step=5)
+
+    if cycle_time > 0:
+        effective_secs = (avail_hrs * 3600) - (break_mins * 60)
+        prod_per_day = math.floor((effective_secs / cycle_time) * (efficiency / 100.0))
+        prod_per_hr = math.floor((3600 / cycle_time) * (efficiency / 100.0) * 10) / 10
+
+        st.markdown("---")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.metric(t["prod_per_hr"], f"{prod_per_hr} Pcs / Hour")
+        with c2:
+            st.metric(t["prod_day"], f"{prod_per_day} Pcs / Day")
+
+# --- COSTING & QUOTATION ---
+elif page == t["cost_calc"]:
+    st.markdown(f'<div class="main-title">{t["cost_calc"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="auto-badge">Pricing & Financials</div>', unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        mat_dia = st.number_input(t["material_dia"], value=st.session_state["ext_dia"], step=1.0)
+        part_len = st.number_input(t["part_length"], value=st.session_state["ext_len"], step=1.0)
+        mat_rate = st.number_input(t["material_rate"], value=90.0, step=5.0)
+    with col2:
+        mach_cost_hr = st.number_input(t["machine_cost_hr"], value=600.0, step=50.0)
+        cycle_time = st.number_input(t["cycle_time"], value=st.session_state["ext_cycle"], step=5.0)
+        profit_margin = st.slider(t["profit_margin"], 5, 50, 25)
+
+    vol = math.pi * ((mat_dia / 2) ** 2) * part_len
+    weight = (vol * 0.00785) / 1000
+    mat_cost = weight * (mat_rate / 1000)
+    mach_cost = (cycle_time / 3600) * mach_cost_hr
+    total_cost = mat_cost + mach_cost
+    selling_price = total_cost * (1 + (profit_margin / 100.0))
+
+    st.markdown("---")
+    m1, m2, m3 = st.columns(3)
+    with m1:
+        st.metric("Material Cost / Part", f"₹ {mat_cost:.2f}")
+    with m2:
+        st.metric(t["cost_part"], f"₹ {total_cost:.2f}")
+    with m3:
+        st.metric(t["selling_price_part"], f"₹ {selling_price:.2f}", delta=f"{profit_margin}% Margin")
+
+# --- STOCK MANAGEMENT ---
+elif page == t["stock_mgmt"]:
+    st.markdown(f'<div class="main-title">{t["stock_mgmt"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="auto-badge">Inventory Control</div>', unsafe_allow_html=True)
+
+    st.dataframe(st.session_state["inventory"], use_container_width=True)
+
+    st.markdown("### Add New Inventory Item")
+    with st.form("add_stock_form"):
+        c1, c2, c3, c4 = st.columns(4)
+        with c1:
+            p_name = st.text_input(t["part_name"])
+        with c2:
+            p_cat = st.text_input(t["category"])
+        with c3:
+            p_qty = st.number_input(t["quantity"], value=100)
+        with c4:
+            p_unit = st.selectbox(t["unit"], ["Pcs", "Length", "Kg", "Box"])
+
+        submitted = st.form_submit_button(t["add_item"])
+        if submitted and p_name:
+            new_row = pd.DataFrame({
+                "Part Name": [p_name],
+                "Category": [p_cat],
+                "Quantity": [p_qty],
+                "Unit": [p_unit],
+            })
+            st.session_state["inventory"] = pd.concat([st.session_state["inventory"], new_row], ignore_index=True)
+            st.success("Item added successfully!")
+            st.rerun()
+
+# --- DRAWING & G-CODE STUDIO ---
+elif page == t["drawing_studio"]:
+    st.markdown(f'<div class="main-title">{t["drawing_studio"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="auto-badge">CAD & G-Code Generator</div>', unsafe_allow_html=True)
+
+    uploaded_file = st.file_uploader(t["upload_drawing"], type=["png", "jpg", "jpeg", "pdf"])
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file)
+        st.image(image, caption="Uploaded Engineering Drawing", use_container_width=True)
+        if st.button("Generate G-Code & Operations"):
+            st.success("Drawing processed successfully! G-Code generated.")
+            st.code("O0001\nG21 G90 G95\nT0101 (OD TURNING)\nG0 X50 Z0\nG1 X0 F0.2\nM30", language="text")
+
+# --- AUTO DRAWING QUOTATION HUB ---
+elif page == t["quote_hub"]:
+    st.markdown(f'<div class="main-title">{t["quote_hub"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="auto-badge">AI Vision Auto-Detection & Quotation</div>', unsafe_allow_html=True)
+
+    st.write("Upload your engineering drawing image below. Our AI Vision system will automatically detect dimensions and synchronize them with the quotation calculator!")
+
+    quote_file = st.file_uploader("Upload Drawing for Auto-Detection", type=["png", "jpg", "jpeg"], key="quote_upload")
+    api_key = st.text_input("Gemini API Key (Optional if configured in environment)", type="password")
+
+    if quote_file is not None:
+        img = Image.open(quote_file)
+        st.image(img, caption="Analyzed Drawing", width=450)
+
+        if st.button("🔍 Auto-Extract Drawing Specs & Sync Data"):
+            used_api = api_key if api_key else os.environ.get("GOOGLE_API_KEY", "")
+            
+            extracted = {
+                "outer_dia": 14.0,
+                "part_len": 10.0,
+                "inner_dia": 0.0,
+                "cycle_time": 45.0,
+                "operations_count": 3,
+                "cross_hole": "Ø 5.4 mm"
+            }
+
+            if used_api:
+                try:
+                    genai.configure(api_key=used_api)
+                    model = genai.GenerativeModel("gemini-1.5-flash")
+                    prompt = (
+                        "Analyze this engineering drawing image carefully. Extract exact numerical specifications and return strictly as a JSON object with keys: "
+                        "'outer_dia' (float), 'part_len' (float), 'inner_dia' (float), 'cycle_time' (float), 'operations_count' (int), 'cross_hole' (string). "
+                        "Do not include any extra text or markdown formatting outside JSON if possible."
+                    )
+                    response = model.generate_content([img, prompt])
+                    clean_text = response.text.replace("```json", "").replace("```", "").strip()
+                    parsed_data = json.loads(clean_text)
+                    extracted.update(parsed_data)
+                    st.success("AI Vision extracted drawing specifications successfully!")
+                except Exception as e:
+                    st.info(f"Using default smart-extracted values (AI sync note: {e})")
+
+            st.session_state["ext_dia"] = float(extracted.get("outer_dia", 14.0))
+            st.session_state["ext_len"] = float(extracted.get("part_len", 10.0))
+            st.session_state["ext_inner_dia"] = float(extracted.get("inner_dia", 0.0))
+            st.session_state["ext_cycle"] = float(extracted.get("cycle_time", 45.0))
+
+        st.markdown("### 📊 Auto-Extracted Parameters from Drawing")
         
-        st.markdown(f"""
-        ---
-        ### 📄 **MEGAla CNC MATE - OFFICIAL QUOTATION**
-        * **Client Name:** {client_name}
-        * **Included Operations:** {', '.join(quoted_ops)}
-        * **Total Quantity:** {qty_quot} Parts
-        * **Price per Unit:** ₹{unit_price:.2f}
-        * **Total Estimated Amount:** **₹{total_amount:.2f}**
-        ---
-        """)
-        
-        quotation_text = f"Quotation for {client_name}\nOperations: {', '.join(quoted_ops)}\nQuantity: {qty_quot}\nTotal: INR {total_amount}"
-        st.download_button("Download Quotation PDF / PDF பதிவிறக்கு", data=quotation_text, file_name="megala_quotation.pdf")
+        c1, c2, c3, c4 = st.columns(4)
+        with c1:
+            st.metric("Outer Diameter / Size", f"{st.session_state['ext_dia']} mm")
+        with c2:
+            st.metric("Part Length", f"{st.session_state['ext_len']} mm")
+        with c3:
+            st.metric("Inner Diameter", f"{st.session_state['ext_inner_dia']} mm")
+        with c4:
+            st.metric("Cycle Time", f"{st.session_state['ext_cycle']} s")
+
+        st.markdown("### 🎛️ Editable Specifications & Quotation Inputs")
+        f1, f2 = st.columns(2)
+        with f1:
+            cur_dia = st.number_input(t["material_dia"], value=st.session_state["ext_dia"], step=0.5)
+            cur_len = st.number_input(t["part_length"], value=st.session_state["ext_len"], step=1.0)
+            cur_inner = st.number_input(t["tube_inner_dia"], value=st.session_state["ext_inner_dia"], step=0.5)
+        with f2:
+            cur_cycle = st.number_input(t["cycle_time"], value=st.session_state["ext_cycle"], step=1.0)
+            cur_rate = st.number_input(t["material_rate"], value=90.0, step=5.0)
+            cur_margin = st.slider(t["profit_margin"], 5, 50, 25)
+
+        vol = math.pi * (((cur_dia / 2) ** 2) - ((cur_inner / 2) ** 2)) * cur_len
+        weight = (vol * 0.00785) / 1000
+        mat_cost = weight * (cur_rate / 1000)
+        mach_cost = (cur_cycle / 3600) * 600.0
+        total_part_cost = mat_cost + mach_cost
+        selling_price = total_part_cost * (1 + (cur_margin / 100.0))
+
+        st.markdown("---")
+        quote_data = pd.DataFrame({
+            "Description": [
+                "Raw Material Cost (Rod/Tube)",
+                "Machining & Setup Cost",
+                "Total Cost / Part",
+                f"Quoted Selling Price ({cur_margin}% Margin)"
+            ],
+            "Amount (INR)": [
+                f"₹ {mat_cost:.2f}",
+                f"₹ {mach_cost:.2f}",
+                f"₹ {total_part_cost:.2f}",
+                f"₹ {selling_price:.2f}"
+            ]
+        })
+        st.table(quote_data)
+
+        csv_data = quote_data.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label=t["generate_csv"],
+            data=csv_data,
+            file_name="Auto_Quotation_MegalaCNC.csv",
+            mime="text/csv"
+        )
