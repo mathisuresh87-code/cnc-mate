@@ -142,7 +142,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 6 Languages Translation Dictionary
+# 6 Languages Comprehensive Translation Dictionary
 translations = {
     "தமிழ் (Tamil)": {
         "home": "🏠 Home / முகப்பு",
@@ -174,6 +174,7 @@ translations = {
         "quantity": "Quantity / எண்ணிக்கை",
         "unit": "Unit / அலகு",
         "generate_csv": "🚀 Generate CSV Quotation File / கொட்டேஷன் CSV கோப்பை உருவாக்கு",
+        "generate_pdf": "📄 Generate PDF Quotation / PDF கொட்டேஷன் உருவாக்கு",
         "upload_drawing": "Upload Engineering Drawing / என்ஜினியரிங் டிராயிங் பதிவேற்றவும்",
     },
     "English": {
@@ -206,6 +207,7 @@ translations = {
         "quantity": "Quantity",
         "unit": "Unit",
         "generate_csv": "🚀 Generate CSV Quotation File",
+        "generate_pdf": "📄 Generate PDF Quotation",
         "upload_drawing": "Upload Engineering Drawing",
     },
     "हिन्दी (Hindi)": {
@@ -238,6 +240,7 @@ translations = {
         "quantity": "Quantity / मात्रा",
         "unit": "Unit / इकाई",
         "generate_csv": "🚀 Generate CSV Quotation File / CSV उद्धरण फ़ाइल बनाएं",
+        "generate_pdf": "📄 Generate PDF Quotation / PDF उद्धरण फ़ाइल बनाएं",
         "upload_drawing": "Upload Engineering Drawing / इंजीनियरिंग ड्राइंग अपलोड करें",
     },
     "తెలుగు (Telugu)": {
@@ -270,6 +273,7 @@ translations = {
         "quantity": "Quantity / పరిమాణం",
         "unit": "Unit / యూనిట్",
         "generate_csv": "🚀 Generate CSV Quotation File / CSV కొటేషన్ ఫైల్ సృష్టించు",
+        "generate_pdf": "📄 Generate PDF Quotation / PDF కొటేషన్ ఫైల్ సృష్టించు",
         "upload_drawing": "Upload Engineering Drawing / ఇంజనీరింగ్ డ్రాయింగ్ అప్‌లోడ్ చేయండి",
     },
     "ಕನ್ನಡ (Kannada)": {
@@ -302,6 +306,7 @@ translations = {
         "quantity": "Quantity / ಪ್ರಮಾಣ",
         "unit": "Unit / ಘಟಕ",
         "generate_csv": "🚀 Generate CSV Quotation File / CSV ಕೊಟೇಶನ್ ಫೈಲ್ ರಚಿಸಿ",
+        "generate_pdf": "📄 Generate PDF Quotation / PDF ಕೊಟೇಶನ್ ಫೈಲ್ ರಚಿಸಿ",
         "upload_drawing": "Upload Engineering Drawing / ಇಂಜಿನಿಯರಿಂಗ್ ಡ್ರಾಯಿಂಗ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
     },
     "മലയാളം (Malayalam)": {
@@ -334,9 +339,33 @@ translations = {
         "quantity": "Quantity / അളവ്",
         "unit": "Unit / യൂണിറ്റ്",
         "generate_csv": "🚀 Generate CSV Quotation File / CSV കൊട്ടേഷൻ ഫയൽ നിർമ്മിക്കുക",
+        "generate_pdf": "📄 Generate PDF Quotation / PDF കൊട്ടേഷൻ ഫയൽ നിർമ്മിക്കുക",
         "upload_drawing": "Upload Engineering Drawing / എൻജിനീയറിങ് ഡ്രോയിംഗ് അപ്‌ലോഡ് ചെയ്യുക",
     }
 }
+
+# PDF Generator Function
+def create_pdf_quotation(df_data, margin_val):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, txt="Megala CNC Mate - Enterprise Quotation", ln=True, align="C")
+    pdf.set_font("Arial", "", 10)
+    pdf.cell(200, 8, txt=f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", ln=True, align="C")
+    pdf.ln(10)
+    
+    # Table Header
+    pdf.set_font("Arial", "B", 11)
+    pdf.cell(120, 10, "Description", 1)
+    pdf.cell(70, 10, "Amount (INR)", 1, ln=True)
+    
+    # Table Rows
+    pdf.set_font("Arial", "", 11)
+    for index, row in df_data.iterrows():
+        pdf.cell(120, 10, str(row["Description"]), 1)
+        pdf.cell(70, 10, str(row["Amount (INR)"]), 1, ln=True)
+        
+    return pdf.output(dest='S').encode('latin1')
 
 # Sidebar Language Selection
 st.sidebar.markdown("### ⚙️ Megala CNC Mate", help="Enterprise Automation Suite")
@@ -722,10 +751,21 @@ elif page == t["quote_hub"]:
         })
         st.table(quote_data)
 
-        csv_data = quote_data.to_csv(index=False).encode('utf-8')
-        st.download_button(
-            label=t["generate_csv"],
-            data=csv_data,
-            file_name="Auto_Quotation_MegalaCNC.csv",
-            mime="text/csv"
-        )
+        # Download Buttons for CSV and PDF
+        d1, d2 = st.columns(2)
+        with d1:
+            csv_data = quote_data.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label=t["generate_csv"],
+                data=csv_data,
+                file_name="Auto_Quotation_MegalaCNC.csv",
+                mime="text/csv"
+            )
+        with d2:
+            pdf_bytes = create_pdf_quotation(quote_data, cur_margin)
+            st.download_button(
+                label=t["generate_pdf"],
+                data=pdf_bytes,
+                file_name="Auto_Quotation_MegalaCNC.pdf",
+                mime="application/pdf"
+            )
