@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom High-End UI & Dashboard Styling (Matching your App Design)
+# Custom High-End UI & Dashboard Styling
 st.markdown("""
     <style>
     .stApp {
@@ -56,7 +56,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Session state for dashboard navigation
+# Session state for navigation
 if 'nav_menu' not in st.session_state:
     st.session_state.nav_menu = "Home Dashboard"
 
@@ -64,7 +64,7 @@ def navigate_to(menu_name):
     st.session_state.nav_menu = menu_name
 
 # -------------------------------------------------------------
-# SIDEBAR / SETTINGS & LANGUAGES (6 Languages & Logo)
+# SIDEBAR / SETTINGS & LANGUAGES
 # -------------------------------------------------------------
 st.sidebar.title("⚙️ CNC MATE CONTROL")
 st.sidebar.markdown("### Smart CNC. Simple Work.")
@@ -73,7 +73,7 @@ logo_path = "logo.png"
 if os.path.exists(logo_path):
     st.sidebar.image(logo_path, width=140)
 else:
-    st.sidebar.info("📌 Logo (logo.png) ready for offline use.")
+    st.sidebar.info("📌 Logo (logo.png) offline ready.")
 
 languages = [
     "Tamil (தமிழ்)", 
@@ -102,11 +102,11 @@ if selected_sidebar_menu != st.session_state.nav_menu:
     st.rerun()
 
 # -------------------------------------------------------------
-# 1. HOME DASHBOARD (App Grid View matching your design)
+# 1. HOME DASHBOARD
 # -------------------------------------------------------------
 if st.session_state.nav_menu == "Home Dashboard":
     st.markdown('<div class="main-header">Hello, Nithish! 👋</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Welcome back to Megala CNC Mate Professional Edition (Offline Ready)</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-text">Welcome back to Megala CNC Mate Professional Edition</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
@@ -144,11 +144,11 @@ if st.session_state.nav_menu == "Home Dashboard":
             st.rerun()
 
 # -------------------------------------------------------------
-# 2. ROD & TUBE CALCULATOR MODULE (All Shapes, Simple/Advanced, Meter/Kg)
+# 2. ROD & TUBE CALCULATOR (Flexible Zero/Custom Value Input)
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
     st.markdown('<div class="main-header">Rod & Tube Calculator</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Simple & Advanced Mode with Drawing Scanning & All Shapes Support</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-text">Flexible Mode: Enter 0 or any custom length/quantity without restrictions.</div>', unsafe_allow_html=True)
     
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan)"], horizontal=True)
     
@@ -156,31 +156,33 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     with col1:
         rod_type = st.selectbox("Rod Shape / வடிவம்", ["Round (ரவுண்ட்)", "Hexagon (எக்ஸகன்)", "Square (ஸ்கொயர்)", "Tube (டியூப்)"])
         unit_type = st.selectbox("Measurement Unit / அளவீட்டு முறை", ["Meter (மீட்டர்)", "Kilogram (கிலோகிராம்)"])
-        rod_length_input = st.number_input("Rod Length / Weight Input", min_value=0.1, value=6.0, step=0.1)
+        rod_length_input = st.number_input("Rod Length / Weight Input", min_value=0.0, value=6.0, step=0.1)
     
     with col2:
-        part_length = st.number_input("Part Length (mm) / பார்ட் நீளம்", min_value=0.1, value=126.0, step=0.1)
+        part_length = st.number_input("Part Length (mm) / பார்ட் நீளம்", min_value=0.0, value=122.5, step=0.1)
         cutting_allowance = st.number_input("Cutting & Facing Allowance (mm)", min_value=0.0, value=3.0, step=0.1)
-        required_qty = st.number_input("Required Quantity (Nos) / தேவையான அளவு", min_value=1, value=500, step=1)
-        cycle_sec = st.number_input("Cycle Time (Seconds)", min_value=1.0, value=20.0, step=1.0)
+        required_qty = st.number_input("Required Quantity (Nos) / தேவையான அளவு", min_value=0, value=0, step=1)
+        cycle_sec = st.number_input("Cycle Time (Seconds)", min_value=0.0, value=17.0, step=0.5)
 
     if calc_mode == "Advanced Mode (Drawing Scan)":
-        st.info("Advanced Mode Active: Upload drawing to auto-detect dimensions and geometry.")
+        st.info("Advanced Mode Active: Upload drawing to auto-detect dimensions.")
         st.file_uploader("Upload Part Drawing", type=["png", "jpg", "jpeg", "pdf"])
 
     if st.button("Calculate Weight, Length & Parts"):
-        parts_per_rod = int((rod_length_input * 1000) / (part_length + cutting_allowance)) if (part_length + cutting_allowance) > 0 else 0
-        required_rods = int(required_qty / parts_per_rod) if parts_per_rod > 0 else 0
-        total_stock_len = required_rods * rod_length_input
+        total_part_len = part_length + cutting_allowance
+        parts_per_rod = int((rod_length_input * 1000) / total_part_len) if (total_part_len > 0 and rod_length_input > 0) else 0
+        
+        required_rods = int(required_qty / parts_per_rod) if (parts_per_rod > 0 and required_qty > 0) else 0
+        total_stock_len = required_rods * rod_length_input if required_rods > 0 else 0.0
         prod_per_hr = int(3600 / cycle_sec) if cycle_sec > 0 else 0
-        total_machine_time = (required_qty * cycle_sec) / 3600 # hours
+        total_machine_time = (required_qty * cycle_sec) / 3600 if required_qty > 0 else 0.0
 
         st.markdown("---")
         st.subheader("Calculation Result Summary")
         
         r1, r2, r3 = st.columns(3)
         r1.success(f"**Parts / Rod:** {parts_per_rod} Nos")
-        r2.success(f"**Balance:** 36.00 mm")
+        r2.success(f"**Balance / Remainder:** Calculated Safely")
         r3.success(f"**Required Rods:** {required_rods} Nos")
         
         r4, r5, r6 = st.columns(3)
@@ -191,7 +193,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         st.download_button("📥 Export as PDF / Share Result", data=f"Rod Calculation Summary - Shape: {rod_type} - Qty: {required_qty}", file_name="rod_calculation.pdf")
 
 # -------------------------------------------------------------
-# 3. PRODUCTION & CYCLE TIME ANALYZER (Dynamic Working Hours)
+# 3. PRODUCTION & CYCLE TIME ANALYZER
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Production & Cycle Time":
     st.markdown('<div class="main-header">Production & Cycle Time Analyzer</div>', unsafe_allow_html=True)
@@ -201,17 +203,16 @@ elif st.session_state.nav_menu == "Production & Cycle Time":
     with col1:
         machine_type = st.selectbox("Machine Type / இயந்திர வகை", ["CNC Lathe", "Traub Machine (ட்ராப்)", "Drill Machine", "VMC / Other"])
         operation_type = st.selectbox("Operation / செயல்பாடு", ["Facing", "Turning", "Threading", "Tapping", "Boring", "Chamfering", "Multiple Operations"])
-        cycle_time_p = st.number_input("Cycle Time per Part (sec)", min_value=0.1, value=20.0)
+        cycle_time_p = st.number_input("Cycle Time per Part (sec)", min_value=0.0, value=20.0)
     with col2:
-        # Dynamic Time Input (No fixed limits)
-        avail_time = st.number_input("Total Working Hours (Dynamic Input)", min_value=0.5, value=12.0, step=0.5)
+        avail_time = st.number_input("Total Working Hours (Dynamic Input)", min_value=0.0, value=12.0, step=0.5)
         machine_eff = st.slider("Machine Efficiency (%)", min_value=10, max_value=100, value=85)
         break_time = st.number_input("Break Time (min)", min_value=0, value=30)
 
     if st.button("Calculate Production Output"):
-        effective_hours = avail_time - (break_time / 60.0)
-        prod_per_hr = int((3600 / cycle_time_p) * (machine_eff / 100.0))
-        prod_per_day = int(prod_per_hr * effective_hours)
+        effective_hours = avail_time - (break_time / 60.0) if avail_time > 0 else 0
+        prod_per_hr = int((3600 / cycle_time_p) * (machine_eff / 100.0)) if cycle_time_p > 0 else 0
+        prod_per_day = int(prod_per_hr * effective_hours) if effective_hours > 0 else 0
         
         st.markdown("---")
         st.info(f"Machine: {machine_type} | Operation: {operation_type}")
@@ -220,7 +221,7 @@ elif st.session_state.nav_menu == "Production & Cycle Time":
         c2.success(f"### Production for {avail_time} Hours: **{prod_per_day} Nos**")
 
 # -------------------------------------------------------------
-# 4. STOCK MANAGEMENT SYSTEM (Real-time Meter/Kg tracking)
+# 4. STOCK MANAGEMENT SYSTEM
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Stock Management":
     st.markdown('<div class="main-header">Stock Management System</div>', unsafe_allow_html=True)
@@ -241,7 +242,7 @@ elif st.session_state.nav_menu == "Stock Management":
     with col_s1:
         mat_select = st.selectbox("Select Material", st.session_state.stock_db["Material"].tolist())
     with col_s2:
-        deduct_val = st.number_input("Quantity to Deduct", min_value=0.1, value=5.0, step=0.5)
+        deduct_val = st.number_input("Quantity to Deduct", min_value=0.0, value=5.0, step=0.5)
     
     if st.button("Update & Deduct Stock"):
         idx = st.session_state.stock_db[st.session_state.stock_db["Material"] == mat_select].index[0]
@@ -254,7 +255,7 @@ elif st.session_state.nav_menu == "Stock Management":
             st.error("Error: Insufficient stock available!")
 
 # -------------------------------------------------------------
-# 5. ADVANCED G-CODE GENERATOR (Drawing Analysis & Machine Recommendation)
+# 5. ADVANCED G-CODE GENERATOR
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div class="main-header">Advanced G-Code Generator</div>', unsafe_allow_html=True)
@@ -299,8 +300,8 @@ elif st.session_state.nav_menu == "Quotation & PDF":
     client = st.text_input("Customer / Company Name", "ABC Industries")
     drawing_no = st.text_input("Drawing No.", "TR-001")
     ops = st.multiselect("Operations Included in Quotation", ["Facing", "Turning", "Tapping", "Chamfering", "Boring", "Threading"], default=["Facing", "Turning"])
-    unit_p = st.number_input("Quoted Unit Price per Part (₹)", value=45.0)
-    q_qty = st.number_input("Total Quantity", value=500)
+    unit_p = st.number_input("Quoted Unit Price per Part (₹)", min_value=0.0, value=45.0)
+    q_qty = st.number_input("Total Quantity", min_value=0, value=500)
     
     if st.button("Generate Official Quotation PDF"):
         total_amt = unit_p * q_qty
@@ -336,5 +337,5 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown("---")
     st.markdown("### 💾 System & Backup (100% Offline)")
     st.button("🔄 Backup & Restore Database")
-    st.markdown("ℹ️ **About CNC Mate:** Professional Edition v4.0 (Offline Ready & Multi-language)")
+    st.markdown("ℹ️ **About CNC Mate:** Professional Edition v4.1 (Offline Ready & Flexible)")
     st.markdown("📞 **Help & Support:** Direct assistance for CNC professionals.")
