@@ -65,6 +65,9 @@ st.markdown("""
 if 'nav_menu' not in st.session_state:
     st.session_state.nav_menu = "Home Dashboard"
 
+if 'calc_results' not in st.session_state:
+    st.session_state.calc_results = None
+
 def navigate_to(menu_name):
     st.session_state.nav_menu = menu_name
 
@@ -143,7 +146,7 @@ if st.session_state.nav_menu == "Home Dashboard":
             st.rerun()
 
 # -------------------------------------------------------------
-# 2. ROD & TUBE CALCULATOR (With End Bit, Scrap & 3D Preview UI)
+# 2. ROD & TUBE CALCULATOR (Persistent Session State & 3D Preview)
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
     st.markdown('<div class="main-header">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
@@ -165,12 +168,12 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     with col1:
         rod_type = st.selectbox("Rod Shape / வடிவம்", ["Round (ரவுண்ட்)", "Hexagon (எக்ஸகன்)", "Square (ஸ்கொயர்)", "Tube (டியூப்)"])
         unit_type = st.selectbox("Measurement Unit / அளவீட்டு முறை", ["Meter (மீட்டர்)", "Kilogram (கிலோகிராம்)"])
-        rod_length_input = st.number_input("Rod Length / Weight Input", min_value=0.0, value=6.0, step=0.1)
+        rod_length_input = st.number_input("Rod Length / Weight Input", min_value=0.0, value=4.0, step=0.1)
     
     with col2:
         part_length = st.number_input("Part Length (mm) / பார்ட் நீளம்", min_value=0.0, value=122.5, step=0.1)
         cutting_allowance = st.number_input("Cutting & Facing Allowance (mm)", min_value=0.0, value=3.0, step=0.1)
-        required_qty = st.number_input("Required Quantity (Nos) / தேவையான அளவு", min_value=0, value=0, step=1)
+        required_qty = st.number_input("Required Quantity (Nos) / தேவையான அளவு", min_value=0, value=100, step=1)
         cycle_sec = st.number_input("Cycle Time (Seconds)", min_value=0.0, value=17.0, step=0.5)
 
     if st.button("Calculate & Render 3D Model"):
@@ -186,24 +189,41 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         prod_per_hr = int(3600 / cycle_sec) if cycle_sec > 0 else 0
         total_machine_time = (required_qty * cycle_sec) / 3600 if required_qty > 0 else 0.0
 
+        # Store in session state so it persists reliably
+        st.session_state.calc_results = {
+            "parts_per_rod": parts_per_rod,
+            "end_bit_mm": end_bit_mm,
+            "required_rods": required_rods,
+            "total_stock_len": total_stock_len,
+            "prod_per_hr": prod_per_hr,
+            "total_machine_time": total_machine_time,
+            "rod_type": rod_type,
+            "part_length": part_length,
+            "calc_mode": calc_mode,
+            "auto_operations": auto_operations
+        }
+
+    # Render results if available in session state
+    if st.session_state.calc_results is not None:
+        res = st.session_state.calc_results
         st.markdown("---")
         st.subheader("📊 Calculation Result Summary")
         
         r1, r2, r3 = st.columns(3)
-        r1.success(f"**Parts / Rod:** {parts_per_rod} Nos")
-        r2.warning(f"**End Bit / Scrap:** {end_bit_mm:.2f} mm")
-        r3.success(f"**Required Rods:** {required_rods} Nos")
+        r1.success(f"**Parts / Rod:** {res['parts_per_rod']} Nos")
+        r2.warning(f"**End Bit / Scrap:** {res['end_bit_mm']:.2f} mm")
+        r3.success(f"**Required Rods:** {res['required_rods']} Nos")
         
         r4, r5, r6 = st.columns(3)
-        r4.info(f"**Total Stock Length:** {total_stock_len:.2f} m")
-        r5.info(f"**Production / Hour:** {prod_per_hr} Nos")
-        r6.info(f"**Total Machine Time:** {total_machine_time:.2f} Hr")
+        r4.info(f"**Total Stock Length:** {res['total_stock_len']:.2f} m")
+        r5.info(f"**Production / Hour:** {res['prod_per_hr']} Nos")
+        r6.info(f"**Total Machine Time:** {res['total_machine_time']:.2f} Hr")
         
-        # Gorgeous Native 3D Cylinder Preview UI (Error-free)
+        # Gorgeous Native 3D Cylinder Preview UI
         st.markdown(f"""
         <div style="background: linear-gradient(145deg, #1E293B, #0F172A); padding: 25px; border-radius: 16px; border: 2px solid #48CAE4; text-align: center; margin-top: 20px; box-shadow: 0 10px 25px rgba(72, 202, 228, 0.2);">
             <h3 style="color: #48CAE4; margin-bottom: 5px;">🧊 Live 3D Part / Rod Preview</h3>
-            <p style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Shape: <b>{rod_type}</b> | Part Length: <b>{part_length} mm</b></p>
+            <p style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Shape: <b>{res['rod_type']}</b> | Part Length: <b>{res['part_length']} mm</b></p>
             <div style="display: flex; justify-content: center; align-items: center; height: 90px;">
                 <div style="width: 80%; max-width: 320px; height: 45px; background: linear-gradient(90deg, #1D4ED8, #48CAE4, #00B4D8, #1D4ED8); border-radius: 25px; box-shadow: 0 0 20px rgba(72, 202, 228, 0.7); display: flex; align-items: center; justify-content: center;">
                     <span style="color: #FFFFFF; font-weight: bold; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">3D Cylinder Model Rendered</span>
@@ -212,10 +232,10 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         </div>
         """, unsafe_allow_html=True)
 
-        if calc_mode == "Advanced Mode (Drawing Scan & 3D)":
-            st.info(f"📌 **Auto-Detected Operations from Drawing:** {', '.join(auto_operations)}")
+        if res['calc_mode'] == "Advanced Mode (Drawing Scan & 3D)":
+            st.info(f"📌 **Auto-Detected Operations from Drawing:** {', '.join(res['auto_operations'])}")
         
-        st.download_button("📥 Export as PDF / Share Result", data=f"Rod Calculation Summary - Shape: {rod_type} - End Bit/Scrap: {end_bit_mm:.2f}mm - Qty: {required_qty}", file_name="rod_calculation.pdf")
+        st.download_button("📥 Export as PDF / Share Result", data=f"Rod Calculation Summary - Shape: {res['rod_type']} - End Bit/Scrap: {res['end_bit_mm']:.2f}mm - Qty: {required_qty}", file_name="rod_calculation.pdf")
 
 # -------------------------------------------------------------
 # 3. PRODUCTION & CYCLE TIME ANALYZER (With Drilling)
@@ -363,5 +383,5 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown("---")
     st.markdown("### 💾 System & Backup (100% Offline)")
     st.button("🔄 Backup & Restore Database")
-    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v5.1 (Optimized & Error-Free)")
+    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v5.2 (Persistent State Fix)")
     st.markdown("📞 **Help & Support:** Direct assistance for CNC professionals.")
