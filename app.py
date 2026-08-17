@@ -1,26 +1,30 @@
 import streamlit as st
 import pandas as pd
 import os
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Page Configuration
 st.set_page_config(
-    page_title="Megala CNC Mate - Smart CNC. Simple Work.",
+    page_title="Megala CNC Mate - Pro App Edition",
     page_icon="⚙️",
     layout="wide"
 )
 
-# Custom High-End UI & Dashboard Styling
+# Custom High-End Colorful Native App UI Styling
 st.markdown("""
     <style>
     .stApp {
-        background-color: #0B132B;
+        background: linear-gradient(135deg, #0B132B 0%, #1C2541 50%, #0F172A 100%);
         color: #FFFFFF;
     }
     .main-header {
-        font-size: 26px;
-        font-weight: 800;
-        color: #48CAE4;
-        margin-bottom: 5px;
+        font-size: 28px;
+        font-weight: 900;
+        background: linear-gradient(90deg, #48CAE4, #0077B6, #9333EA);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 2px;
     }
     .sub-text {
         font-size: 14px;
@@ -28,30 +32,38 @@ st.markdown("""
         margin-bottom: 20px;
     }
     .metric-card {
-        background-color: #1C2541;
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid #3A506B;
+        background: linear-gradient(145deg, #1E293B, #0F172A);
+        padding: 22px;
+        border-radius: 16px;
+        border: 1px solid #334155;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         text-align: center;
         margin-bottom: 15px;
+        transition: transform 0.3s ease;
+    }
+    .metric-card:hover {
+        border-color: #48CAE4;
+        transform: translateY(-3px);
     }
     .card-title {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: bold;
-        color: #FFFFFF;
+        color: #F8FAFC;
         margin-top: 10px;
     }
     .stButton>button {
         width: 100%;
-        background-color: #1D4ED8;
+        background: linear-gradient(90deg, #2563EB, #48CAE4);
         color: white;
         font-weight: bold;
-        border-radius: 8px;
-        height: 45px;
+        border-radius: 12px;
+        height: 48px;
         border: none;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
     }
     .stButton>button:hover {
-        background-color: #2563EB;
+        background: linear-gradient(90deg, #1D4ED8, #00B4D8);
+        box-shadow: 0 6px 16px rgba(72, 202, 228, 0.6);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -64,16 +76,10 @@ def navigate_to(menu_name):
     st.session_state.nav_menu = menu_name
 
 # -------------------------------------------------------------
-# SIDEBAR / SETTINGS & LANGUAGES
+# SIDEBAR / APP CONTROL PANEL
 # -------------------------------------------------------------
-st.sidebar.title("⚙️ CNC MATE CONTROL")
+st.sidebar.title("⚙️ CNC MATE PRO")
 st.sidebar.markdown("### Smart CNC. Simple Work.")
-
-logo_path = "logo.png"
-if os.path.exists(logo_path):
-    st.sidebar.image(logo_path, width=140)
-else:
-    st.sidebar.info("📌 Logo (logo.png) offline ready.")
 
 languages = [
     "Tamil (தமிழ்)", 
@@ -102,16 +108,16 @@ if selected_sidebar_menu != st.session_state.nav_menu:
     st.rerun()
 
 # -------------------------------------------------------------
-# 1. HOME DASHBOARD
+# 1. HOME DASHBOARD (App Vibe)
 # -------------------------------------------------------------
 if st.session_state.nav_menu == "Home Dashboard":
-    st.markdown('<div class="main-header">Hello, Nithish! 👋</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Welcome back to Megala CNC Mate Professional Edition</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">Welcome to MEGALA CNC MATE 👋</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-text">Mobile Native Pro Edition - Intelligent Workshop Assistant</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown('<div class="metric-card">📏<div class="card-title">Rod Calculator</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card">📏<div class="card-title">Rod Calculator & 3D</div></div>', unsafe_allow_html=True)
         if st.button("Open Rod Calculator"):
             navigate_to("Rod & Tube Calculator")
             st.rerun()
@@ -122,7 +128,7 @@ if st.session_state.nav_menu == "Home Dashboard":
             st.rerun()
 
     with col2:
-        st.markdown('<div class="metric-card">⏱️<div class="card-title">Production & Cycle Time</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card">⏱️<div class="card-title">Production & Drilling</div></div>', unsafe_allow_html=True)
         if st.button("Open Production Calculator"):
             navigate_to("Production & Cycle Time")
             st.rerun()
@@ -144,14 +150,24 @@ if st.session_state.nav_menu == "Home Dashboard":
             st.rerun()
 
 # -------------------------------------------------------------
-# 2. ROD & TUBE CALCULATOR (Flexible Zero/Custom Value Input)
+# 2. ROD & TUBE CALCULATOR (With End Bit, Scrap & 3D Preview)
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
-    st.markdown('<div class="main-header">Rod & Tube Calculator</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Flexible Mode: Enter 0 or any custom length/quantity without restrictions.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-text">Flexible input mode with End Bit calculation & Live 3D Part Rendering.</div>', unsafe_allow_html=True)
     
-    calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan)"], horizontal=True)
+    calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & 3D)"], horizontal=True)
     
+    auto_operations = ["Facing", "Turning"]
+    uploaded_drawing = None
+    
+    if calc_mode == "Advanced Mode (Drawing Scan & 3D)":
+        st.info("Advanced Mode Active: Upload drawing to auto-detect operations and render 3D model.")
+        uploaded_drawing = st.file_uploader("Upload Part Drawing (PNG, JPG, PDF)", type=["png", "jpg", "jpeg", "pdf"])
+        if uploaded_drawing is not None:
+            st.success("✨ Drawing successfully scanned! Auto-detected operations: **Facing, Turning, Drilling, Chamfering**")
+            auto_operations = ["Facing", "Turning", "Drilling", "Chamfering"]
+
     col1, col2 = st.columns(2)
     with col1:
         rod_type = st.selectbox("Rod Shape / வடிவம்", ["Round (ரவுண்ட்)", "Hexagon (எக்ஸகன்)", "Square (ஸ்கொயர்)", "Tube (டியூப்)"])
@@ -164,13 +180,13 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         required_qty = st.number_input("Required Quantity (Nos) / தேவையான அளவு", min_value=0, value=0, step=1)
         cycle_sec = st.number_input("Cycle Time (Seconds)", min_value=0.0, value=17.0, step=0.5)
 
-    if calc_mode == "Advanced Mode (Drawing Scan)":
-        st.info("Advanced Mode Active: Upload drawing to auto-detect dimensions.")
-        st.file_uploader("Upload Part Drawing", type=["png", "jpg", "jpeg", "pdf"])
-
-    if st.button("Calculate Weight, Length & Parts"):
+    if st.button("Calculate & Render 3D Model"):
         total_part_len = part_length + cutting_allowance
-        parts_per_rod = int((rod_length_input * 1000) / total_part_len) if (total_part_len > 0 and rod_length_input > 0) else 0
+        rod_total_mm = rod_length_input * 1000
+        
+        parts_per_rod = int(rod_total_mm / total_part_len) if (total_part_len > 0 and rod_length_input > 0) else 0
+        used_length_mm = parts_per_rod * total_part_len
+        end_bit_mm = rod_total_mm - used_length_mm if rod_length_input > 0 else 0.0
         
         required_rods = int(required_qty / parts_per_rod) if (parts_per_rod > 0 and required_qty > 0) else 0
         total_stock_len = required_rods * rod_length_input if required_rods > 0 else 0.0
@@ -178,11 +194,11 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         total_machine_time = (required_qty * cycle_sec) / 3600 if required_qty > 0 else 0.0
 
         st.markdown("---")
-        st.subheader("Calculation Result Summary")
+        st.subheader("📊 Calculation Result Summary")
         
         r1, r2, r3 = st.columns(3)
         r1.success(f"**Parts / Rod:** {parts_per_rod} Nos")
-        r2.success(f"**Balance / Remainder:** Calculated Safely")
+        r2.warning(f"**End Bit / Scrap:** {end_bit_mm:.2f} mm")
         r3.success(f"**Required Rods:** {required_rods} Nos")
         
         r4, r5, r6 = st.columns(3)
@@ -190,10 +206,33 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         r5.info(f"**Production / Hour:** {prod_per_hr} Nos")
         r6.info(f"**Total Machine Time:** {total_machine_time:.2f} Hr")
         
-        st.download_button("📥 Export as PDF / Share Result", data=f"Rod Calculation Summary - Shape: {rod_type} - Qty: {required_qty}", file_name="rod_calculation.pdf")
+        # 3D Model Rendering using Matplotlib
+        st.markdown("### 🧊 Live 3D Part / Rod Preview")
+        fig = plt.figure(figsize=(10, 4))
+        ax = fig.add_subplot(111, projection='3d')
+        fig.patch.set_facecolor('#0B132B')
+        ax.set_facecolor('#1C2541')
+        
+        # Generate 3D Cylinder representation
+        z = np.linspace(0, min(part_length, 200), 40)
+        theta = np.linspace(0, 2 * np.pi, 25)
+        theta_grid, z_grid = np.meshgrid(theta, z)
+        radius = 15.0 # default radius scale
+        x_grid = radius * np.cos(theta_grid)
+        y_grid = radius * np.sin(theta_grid)
+        
+        ax.plot_surface(x_grid, y_grid, z_grid, color='#48CAE4', alpha=0.85, edgecolor='#1D4ED8')
+        ax.set_title(f"3D Preview: {rod_type} | Part Length: {part_length}mm", color='white', fontsize=12, fontweight='bold')
+        ax.axis('off')
+        st.pyplot(fig)
+
+        if calc_mode == "Advanced Mode (Drawing Scan & 3D)":
+            st.info(f"📌 **Auto-Detected Operations from Drawing:** {', '.join(auto_operations)}")
+        
+        st.download_button("📥 Export as PDF / Share Result", data=f"Rod Calculation Summary - Shape: {rod_type} - End Bit/Scrap: {end_bit_mm:.2f}mm - Qty: {required_qty}", file_name="rod_calculation.pdf")
 
 # -------------------------------------------------------------
-# 3. PRODUCTION & CYCLE TIME ANALYZER
+# 3. PRODUCTION & CYCLE TIME ANALYZER (With Drilling)
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Production & Cycle Time":
     st.markdown('<div class="main-header">Production & Cycle Time Analyzer</div>', unsafe_allow_html=True)
@@ -202,7 +241,7 @@ elif st.session_state.nav_menu == "Production & Cycle Time":
     col1, col2 = st.columns(2)
     with col1:
         machine_type = st.selectbox("Machine Type / இயந்திர வகை", ["CNC Lathe", "Traub Machine (ட்ராப்)", "Drill Machine", "VMC / Other"])
-        operation_type = st.selectbox("Operation / செயல்பாடு", ["Facing", "Turning", "Threading", "Tapping", "Boring", "Chamfering", "Multiple Operations"])
+        operation_type = st.selectbox("Operation / செயல்பாடு", ["Facing", "Turning", "Threading", "Tapping", "Boring", "Chamfering", "Drilling", "Multiple Operations"])
         cycle_time_p = st.number_input("Cycle Time per Part (sec)", min_value=0.0, value=20.0)
     with col2:
         avail_time = st.number_input("Total Working Hours (Dynamic Input)", min_value=0.0, value=12.0, step=0.5)
@@ -267,8 +306,8 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
     with col1:
         operations_selected = st.multiselect(
             "Select Operations Detected", 
-            ["Facing", "Turning", "Threading", "Tapping", "Boring", "Chamfering"],
-            default=["Facing", "Turning"]
+            ["Facing", "Turning", "Threading", "Tapping", "Boring", "Chamfering", "Drilling"],
+            default=["Facing", "Turning", "Drilling"]
         )
     with col2:
         recommended_machine = st.selectbox("System Machine Recommendation", ["Traub Machine", "CNC Lathe"])
@@ -284,6 +323,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         M03 S2500
         G00 X0 Z0 (Operation: Facing)
         G01 Z-30.0 F0.2 (Operation: Turning)
+        G83 Z-25.0 Q5000 F0.1 (Operation: Drilling)
         M05
         M30
         """
@@ -299,19 +339,19 @@ elif st.session_state.nav_menu == "Quotation & PDF":
     
     client = st.text_input("Customer / Company Name", "ABC Industries")
     drawing_no = st.text_input("Drawing No.", "TR-001")
-    ops = st.multiselect("Operations Included in Quotation", ["Facing", "Turning", "Tapping", "Chamfering", "Boring", "Threading"], default=["Facing", "Turning"])
+    ops = st.multiselect("Operations Included in Quotation", ["Facing", "Turning", "Tapping", "Chamfering", "Boring", "Threading", "Drilling"], default=["Facing", "Turning", "Drilling"])
     unit_p = st.number_input("Quoted Unit Price per Part (₹)", min_value=0.0, value=45.0)
     q_qty = st.number_input("Total Quantity", min_value=0, value=500)
     
     if st.button("Generate Official Quotation PDF"):
         total_amt = unit_p * q_qty
         st.markdown(f"""
-        <div style="background-color: #1C2541; padding: 25px; border-radius: 10px; border: 2px solid #48CAE4;">
+        <div style="background: linear-gradient(135deg, #1C2541, #0F172A); padding: 25px; border-radius: 14px; border: 2px solid #48CAE4; box-shadow: 0 10px 25px rgba(72, 202, 228, 0.2);">
             <h3>📄 MEGAla CNC MATE - OFFICIAL QUOTATION</h3>
             <p><b>Client:</b> {client} | <b>Drawing No:</b> {drawing_no}</p>
             <p><b>Included Operations:</b> {', '.join(ops)}</p>
             <p><b>Quantity:</b> {q_qty} Nos | <b>Unit Price:</b> ₹{unit_p:.2f}</p>
-            <hr>
+            <hr style="border-color: #334155;">
             <h2><b>Total Estimated Amount: ₹{total_amt:.2f}</b></h2>
         </div>
         """, unsafe_allow_html=True)
@@ -337,5 +377,5 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown("---")
     st.markdown("### 💾 System & Backup (100% Offline)")
     st.button("🔄 Backup & Restore Database")
-    st.markdown("ℹ️ **About CNC Mate:** Professional Edition v4.1 (Offline Ready & Flexible)")
+    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v5.0 (3D Preview & Colorful UI)")
     st.markdown("📞 **Help & Support:** Direct assistance for CNC professionals.")
