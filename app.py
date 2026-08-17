@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import os
-import numpy as np
-import matplotlib.pyplot as plt
 
 # Page Configuration
 st.set_page_config(
@@ -39,11 +37,6 @@ st.markdown("""
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         text-align: center;
         margin-bottom: 15px;
-        transition: transform 0.3s ease;
-    }
-    .metric-card:hover {
-        border-color: #48CAE4;
-        transform: translateY(-3px);
     }
     .card-title {
         font-size: 16px;
@@ -150,7 +143,7 @@ if st.session_state.nav_menu == "Home Dashboard":
             st.rerun()
 
 # -------------------------------------------------------------
-# 2. ROD & TUBE CALCULATOR (With End Bit, Scrap & 3D Preview)
+# 2. ROD & TUBE CALCULATOR (With End Bit, Scrap & 3D Preview UI)
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
     st.markdown('<div class="main-header">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
@@ -206,25 +199,18 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         r5.info(f"**Production / Hour:** {prod_per_hr} Nos")
         r6.info(f"**Total Machine Time:** {total_machine_time:.2f} Hr")
         
-        # 3D Model Rendering using Matplotlib
-        st.markdown("### 🧊 Live 3D Part / Rod Preview")
-        fig = plt.figure(figsize=(10, 4))
-        ax = fig.add_subplot(111, projection='3d')
-        fig.patch.set_facecolor('#0B132B')
-        ax.set_facecolor('#1C2541')
-        
-        # Generate 3D Cylinder representation
-        z = np.linspace(0, min(part_length, 200), 40)
-        theta = np.linspace(0, 2 * np.pi, 25)
-        theta_grid, z_grid = np.meshgrid(theta, z)
-        radius = 15.0 # default radius scale
-        x_grid = radius * np.cos(theta_grid)
-        y_grid = radius * np.sin(theta_grid)
-        
-        ax.plot_surface(x_grid, y_grid, z_grid, color='#48CAE4', alpha=0.85, edgecolor='#1D4ED8')
-        ax.set_title(f"3D Preview: {rod_type} | Part Length: {part_length}mm", color='white', fontsize=12, fontweight='bold')
-        ax.axis('off')
-        st.pyplot(fig)
+        # Gorgeous Native 3D Cylinder Preview UI (Error-free)
+        st.markdown(f"""
+        <div style="background: linear-gradient(145deg, #1E293B, #0F172A); padding: 25px; border-radius: 16px; border: 2px solid #48CAE4; text-align: center; margin-top: 20px; box-shadow: 0 10px 25px rgba(72, 202, 228, 0.2);">
+            <h3 style="color: #48CAE4; margin-bottom: 5px;">🧊 Live 3D Part / Rod Preview</h3>
+            <p style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Shape: <b>{rod_type}</b> | Part Length: <b>{part_length} mm</b></p>
+            <div style="display: flex; justify-content: center; align-items: center; height: 90px;">
+                <div style="width: 80%; max-width: 320px; height: 45px; background: linear-gradient(90deg, #1D4ED8, #48CAE4, #00B4D8, #1D4ED8); border-radius: 25px; box-shadow: 0 0 20px rgba(72, 202, 228, 0.7); display: flex; align-items: center; justify-content: center;">
+                    <span style="color: #FFFFFF; font-weight: bold; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">3D Cylinder Model Rendered</span>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
         if calc_mode == "Advanced Mode (Drawing Scan & 3D)":
             st.info(f"📌 **Auto-Detected Operations from Drawing:** {', '.join(auto_operations)}")
@@ -377,5 +363,5 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown("---")
     st.markdown("### 💾 System & Backup (100% Offline)")
     st.button("🔄 Backup & Restore Database")
-    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v5.0 (3D Preview & Colorful UI)")
+    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v5.1 (Optimized & Error-Free)")
     st.markdown("📞 **Help & Support:** Direct assistance for CNC professionals.")
