@@ -172,9 +172,22 @@ def navigate_to(menu_name):
   st.session_state.nav_menu = menu_name
 
 
-# SIDEBAR
-st.sidebar.title("⚙️ MEGALA CNC MATE")
-st.sidebar.markdown("### Smart CNC. Simple Work.")
+# SIDEBAR (Gear ⚙️ replaced with Logo)
+if logo_base64:
+  st.sidebar.markdown(
+      f"""
+        <div style="text-align: center; padding: 10px 0 15px 0;">
+            <div style="display: inline-block; padding: 6px; background: radial-gradient(circle, rgba(72, 202, 228, 0.3) 0%, rgba(10, 20, 40, 0.95) 100%); border-radius: 50%; box-shadow: 0 0 20px rgba(72, 202, 228, 0.7); border: 2px solid #48CAE4; margin-bottom: 8px;">
+                <img src="data:image/png;base64,{logo_base64}" width="65" style="border-radius: 50%; display: block; margin: auto;">
+            </div>
+            <h2 style="color: #FFFFFF; margin: 5px 0 0 0; font-size: 18px; font-weight: 900; letter-spacing: 1.5px;">MEGALA CNC MATE</h2>
+            <p style="color: #94A3B8; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;">Smart CNC. Simple Work.</p>
+        </div>
+    """,
+      unsafe_allow_html=True,
+  )
+else:
+  st.sidebar.title("MEGALA CNC MATE")
 
 languages = [
     "Tamil (தமிழ்)",
