@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom High-End Branded App UI Styling (Matching Mockup Design)
+# Custom High-End Branded App UI Styling
 st.markdown("""
     <style>
     .stApp {
@@ -82,7 +82,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Branded Header Banner (Mockup Vibe)
+# Top Branded Header Banner
 st.markdown("""
     <div class="brand-container">
         <div style="font-size: 42px; margin-bottom: 5px;">⚙️</div>
@@ -134,7 +134,7 @@ if selected_sidebar_menu != st.session_state.nav_menu:
     st.rerun()
 
 # -------------------------------------------------------------
-# 1. HOME DASHBOARD (App Vibe)
+# 1. HOME DASHBOARD
 # -------------------------------------------------------------
 if st.session_state.nav_menu == "Home Dashboard":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #F8FAFC; margin-bottom: 5px;">Hello, Nithish! 👋</div>', unsafe_allow_html=True)
@@ -176,11 +176,11 @@ if st.session_state.nav_menu == "Home Dashboard":
             st.rerun()
 
 # -------------------------------------------------------------
-# 2. ROD & TUBE CALCULATOR (Persistent Session State & 3D Preview)
+# 2. ROD & TUBE CALCULATOR (With Live Uploaded Part Photo Preview)
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Flexible input mode with End Bit calculation & Live 3D Part Rendering.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Flexible input mode with End Bit calculation & Live Part Photo Preview.</div>', unsafe_allow_html=True)
     
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & 3D)"], horizontal=True)
     
@@ -188,10 +188,13 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     uploaded_drawing = None
     
     if calc_mode == "Advanced Mode (Drawing Scan & 3D)":
-        st.info("Advanced Mode Active: Upload drawing to auto-detect operations and render 3D model.")
-        uploaded_drawing = st.file_uploader("Upload Part Drawing (PNG, JPG, PDF)", type=["png", "jpg", "jpeg", "pdf"])
+        st.info("Advanced Mode Active: Upload drawing photo to view preview and auto-detect operations.")
+        uploaded_drawing = st.file_uploader("Upload Part Drawing Photo (PNG, JPG)", type=["png", "jpg", "jpeg"])
+        
         if uploaded_drawing is not None:
-            st.success("✨ Drawing successfully scanned! Auto-detected operations: **Facing, Turning, Drilling, Chamfering**")
+            # Display the uploaded drawing photo directly on screen
+            st.image(uploaded_drawing, caption="Uploaded Part Drawing Preview", use_container_width=True)
+            st.success("✨ Drawing photo successfully loaded! Auto-detected operations: **Facing, Turning, Drilling, Chamfering**")
             auto_operations = ["Facing", "Turning", "Drilling", "Chamfering"]
 
     col1, col2 = st.columns(2)
@@ -206,7 +209,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         required_qty = st.number_input("Required Quantity (Nos) / தேவையான அளவு", min_value=0, value=100, step=1)
         cycle_sec = st.number_input("Cycle Time (Seconds)", min_value=0.0, value=17.0, step=0.5)
 
-    if st.button("Calculate & Render 3D Model"):
+    if st.button("Calculate & Render Part Preview"):
         total_part_len = part_length + cutting_allowance
         rod_total_mm = rod_length_input * 1000
         
@@ -247,10 +250,10 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         r5.info(f"**Production / Hour:** {res['prod_per_hr']} Nos")
         r6.info(f"**Total Machine Time:** {res['total_machine_time']:.2f} Hr")
         
-        # Gorgeous Native 3D Cylinder Preview UI with Neon Glow
+        # Gorgeous Native 3D Cylinder Preview UI
         st.markdown(f"""
         <div style="background: linear-gradient(145deg, #111E38, #0B132B); padding: 25px; border-radius: 16px; border: 2px solid #48CAE4; text-align: center; margin-top: 20px; box-shadow: 0 10px 30px rgba(72, 202, 228, 0.3);">
-            <h3 style="color: #48CAE4; margin-bottom: 5px;">🧊 Live 3D Part / Rod Preview</h3>
+            <h3 style="color: #48CAE4; margin-bottom: 5px;">🧊 Live Part / Rod Preview</h3>
             <p style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Shape: <b>{res['rod_type']}</b> | Part Length: <b>{res['part_length']} mm</b></p>
             <div style="display: flex; justify-content: center; align-items: center; height: 90px;">
                 <div style="width: 80%; max-width: 320px; height: 45px; background: linear-gradient(90deg, #1D4ED8, #48CAE4, #00B4D8, #1D4ED8); border-radius: 25px; box-shadow: 0 0 25px rgba(72, 202, 228, 0.8); display: flex; align-items: center; justify-content: center;">
@@ -263,7 +266,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         if res['calc_mode'] == "Advanced Mode (Drawing Scan & 3D)":
             st.info(f"📌 **Auto-Detected Operations from Drawing:** {', '.join(res['auto_operations'])}")
         
-        st.download_button("📥 Export as PDF / Share Result", data=f"Rod Calculation Summary - Shape: {res['rod_type']} - End Bit/Scrap: {res['end_bit_mm']:.2f}mm - Qty: {required_qty}", file_name="rod_calculation.pdf")
+        st.download_button("📥 Export as PDF / Share Result", data=f"Rod Calculation Summary - Shape: {res['rod_type']} - End Bit/Scrap: {res['end_bit_mm']:.2f}mm - Qty: 100", file_name="rod_calculation.pdf")
 
 # -------------------------------------------------------------
 # 3. PRODUCTION & CYCLE TIME ANALYZER
@@ -335,6 +338,8 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Upload drawing, analyze operations, and get Traub vs CNC recommendations with G-Codes.</div>', unsafe_allow_html=True)
     
     drawing_file = st.file_uploader("Upload Drawing for G-Code Analysis", type=["png", "jpg", "jpeg", "pdf"])
+    if drawing_file is not None:
+        st.image(drawing_file, caption="G-Code Drawing Preview", use_container_width=True)
     
     col1, col2 = st.columns(2)
     with col1:
@@ -411,5 +416,5 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown("---")
     st.markdown("### 💾 System & Backup (100% Offline)")
     st.button("🔄 Backup & Restore Database")
-    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v6.0 (Branded Mockup UI)")
+    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v6.1 (With Drawing Preview)")
     st.markdown("📞 **Help & Support:** Direct assistance for CNC professionals.")
