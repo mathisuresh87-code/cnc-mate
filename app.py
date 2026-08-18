@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom High-End Branded App UI Styling
+# Custom High-End Branded App UI Styling with Enhanced Logo Glow & Centering
 st.markdown("""
     <style>
     .stApp {
@@ -19,11 +19,22 @@ st.markdown("""
     }
     .brand-container {
         text-align: center;
-        padding: 15px 0 25px 0;
-        background: radial-gradient(circle, rgba(15,23,42,0.9) 0%, rgba(7,11,25,0.95) 100%);
+        padding: 20px 0 25px 0;
+        background: radial-gradient(circle, rgba(15,23,42,0.95) 0%, rgba(7,11,25,0.98) 100%);
         border-bottom: 1px solid #1E293B;
         margin-bottom: 20px;
-        border-radius: 0 0 20px 20px;
+        border-radius: 0 0 25px 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+    .brand-container img {
+        width: 170px !important;
+        max-width: 100% !important;
+        border-radius: 16px;
+        filter: brightness(1.35) contrast(1.15) drop-shadow(0 0 25px rgba(72, 202, 228, 0.8));
+        margin-bottom: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
     .brand-title {
         font-size: 36px;
@@ -32,7 +43,9 @@ st.markdown("""
         background: linear-gradient(90deg, #48CAE4, #0077B6, #FFFFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        margin-top: 8px;
         margin-bottom: 0px;
+        text-align: center;
         text-shadow: 0 0 30px rgba(72, 202, 228, 0.4);
     }
     .brand-subtitle {
@@ -42,6 +55,7 @@ st.markdown("""
         font-weight: 600;
         text-transform: uppercase;
         margin-top: 5px;
+        text-align: center;
     }
     .metric-card {
         background: linear-gradient(145deg, #111E38, #0B132B);
@@ -82,14 +96,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Branded Header Banner with Custom Logo Image
+# Top Branded Header Banner with Perfect Logo Centering & Bright Glow
 st.markdown('<div class="brand-container">', unsafe_allow_html=True)
 if os.path.exists("logo.png"):
     col_l1, col_l2, col_l3 = st.columns([1, 1, 1])
     with col_l2:
-        st.image("logo.png", width=120)
+        st.image("logo.png")
 else:
-    st.markdown('<div style="font-size: 42px; margin-bottom: 5px;">⚙️</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 50px; margin-bottom: 5px; text-align: center;">⚙️</div>', unsafe_allow_html=True)
 
 st.markdown("""
         <div class="brand-title">MEGALA CNC MATE</div>
