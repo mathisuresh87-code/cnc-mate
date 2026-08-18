@@ -4,58 +4,65 @@ import os
 
 # Page Configuration
 st.set_page_config(
-    page_title="MEGALA CNC MATE - Smart CNC. Simple Work.",
+    page_title="CNC MATE - Smart CNC. Simple Work.",
     page_icon="⚙️",
     layout="wide"
 )
 
-# Custom High-End Branded App UI Styling with Seamless Logo Glow & Transparent Background
+# Custom High-End Branded App UI Styling matching the exact Mockup Theme
 st.markdown("""
     <style>
     .stApp {
-        background: linear-gradient(135deg, #070B19 0%, #0F172A 50%, #070B19 100%);
+        background: linear-gradient(135deg, #050B18 0%, #0A1428 50%, #040711 100%);
         color: #FFFFFF;
         font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
     }
     .brand-container {
         text-align: center;
-        padding: 15px 0 20px 0;
-        background: radial-gradient(circle, rgba(15,23,42,0.95) 0%, rgba(7,11,25,0.98) 100%);
-        border-bottom: 1px solid #1E293B;
-        margin-bottom: 15px;
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        padding: 20px 0 25px 0;
+        background: radial-gradient(circle at center, #0F1C3F 0%, #070B19 100%);
+        border-bottom: 2px solid #1E3A8A;
+        margin-bottom: 20px;
+        border-radius: 0 0 24px 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    }
+    .logo-wrapper {
+        display: inline-block;
+        padding: 12px;
+        background: linear-gradient(145deg, #0A1428, #111E38);
+        border-radius: 20px;
+        border: 1px solid #48CAE4;
+        box-shadow: 0 0 30px rgba(72, 202, 228, 0.4);
+        margin-bottom: 12px;
     }
     .brand-container img {
-        width: 110px !important;
+        width: 100px !important;
         max-width: 100% !important;
         border-radius: 14px;
-        mix-blend-mode: screen;
-        filter: drop-shadow(0 0 22px rgba(72, 202, 228, 0.95)) brightness(1.2);
-        margin-bottom: 10px;
+        mix-blend-mode: luminosity;
+        filter: brightness(1.3) contrast(1.2);
         display: block;
-        margin-left: auto;
-        margin-right: auto;
+        margin: auto;
     }
     .brand-title {
-        font-size: 32px;
+        font-size: 36px;
         font-weight: 900;
-        letter-spacing: 2px;
+        letter-spacing: 3px;
         background: linear-gradient(90deg, #48CAE4, #0077B6, #FFFFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-top: 5px;
         margin-bottom: 0px;
         text-align: center;
-        text-shadow: 0 0 25px rgba(72, 202, 228, 0.4);
+        text-shadow: 0 0 30px rgba(72, 202, 228, 0.5);
     }
     .brand-subtitle {
-        font-size: 12px;
-        letter-spacing: 3px;
+        font-size: 13px;
+        letter-spacing: 4px;
         color: #94A3B8;
         font-weight: 600;
         text-transform: uppercase;
-        margin-top: 4px;
+        margin-top: 6px;
         text-align: center;
     }
     .metric-card {
@@ -97,18 +104,18 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Branded Header Banner with Glowing Logo
+# Top Branded Header Banner with Glowing Logo Mockup Style
 st.markdown('<div class="brand-container">', unsafe_allow_html=True)
 if os.path.exists("logo.png"):
-    col_l1, col_l2, col_l3 = st.columns([1, 1, 1])
-    with col_l2:
-        st.image("logo.png")
+    st.markdown('<div class="logo-wrapper">', unsafe_allow_html=True)
+    st.image("logo.png")
+    st.markdown('</div>', unsafe_allow_html=True)
 else:
-    st.markdown('<div style="font-size: 45px; margin-bottom: 5px; text-align: center;">⚙️</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 50px; margin-bottom: 5px; text-align: center;">⚙️</div>', unsafe_allow_html=True)
 
 st.markdown("""
-        <div class="brand-title">MEGALA CNC MATE</div>
-        <div class="brand-subtitle">Smart CNC. Simple Work.</div>
+        <div class="brand-title">CNC MATE</div>
+        <div class="brand-subtitle">SMART CNC. SIMPLE WORK.</div>
     </div>
 """, unsafe_allow_html=True)
 
@@ -125,7 +132,7 @@ def navigate_to(menu_name):
 # -------------------------------------------------------------
 # SIDEBAR / APP CONTROL PANEL
 # -------------------------------------------------------------
-st.sidebar.title("⚙️ MEGALA CNC PRO")
+st.sidebar.title("⚙️ CNC MATE PRO")
 st.sidebar.markdown("### Smart CNC. Simple Work.")
 
 languages = [
@@ -376,7 +383,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         st.subheader("Generated G-Code Output:")
         
         gcode_sample = f"""
-        O0001 (MEGALA CNC MATE GENERATED CODE)
+        O0001 (CNC MATE GENERATED CODE)
         G21 G90 G95
         M03 S2500
         G00 X0 Z0 (Operation: Facing)
@@ -386,7 +393,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         M30
         """
         st.code(gcode_sample, language="text")
-        st.download_button("Download G-Code File", data=gcode_sample, file_name="megala_cnc_gcode.txt")
+        st.download_button("Download G-Code File", data=gcode_sample, file_name="cnc_mate_gcode.txt")
 
 # -------------------------------------------------------------
 # 6. PROFESSIONAL QUOTATION & PDF GENERATOR
@@ -405,7 +412,7 @@ elif st.session_state.nav_menu == "Quotation & PDF":
         total_amt = unit_p * q_qty
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, #111E38, #0B132B); padding: 25px; border-radius: 14px; border: 2px solid #48CAE4; box-shadow: 0 10px 25px rgba(72, 202, 228, 0.2);">
-            <h3>📄 MEGALA CNC MATE - OFFICIAL QUOTATION</h3>
+            <h3>📄 CNC MATE - OFFICIAL QUOTATION</h3>
             <p><b>Client:</b> {client} | <b>Drawing No:</b> {drawing_no}</p>
             <p><b>Included Operations:</b> {', '.join(ops)}</p>
             <p><b>Quantity:</b> {q_qty} Nos | <b>Unit Price:</b> ₹{unit_p:.2f}</p>
@@ -435,5 +442,5 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown("---")
     st.markdown("### 💾 System & Backup (100% Offline)")
     st.button("🔄 Backup & Restore Database")
-    st.markdown("ℹ️ **About MEGALA CNC MATE:** Professional App Edition v7.0")
+    st.markdown("ℹ️ **About CNC MATE:** Professional App Edition v7.0")
     st.markdown("📞 **Help & Support:** Direct assistance for CNC professionals.")
