@@ -24,121 +24,115 @@ logo_base64 = get_image_base64("logo.png")
 # Custom UI Styling with Compact Logo & Glowing Neon Background
 st.markdown(
     """
-    <style>
-    .stApp {
-        background: linear-gradient(135deg, #050B18 0%, #0A1428 50%, #040711 100%);
-        color: #FFFFFF;
-        font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-    }
-    .brand-container {
-        text-align: center;
-        padding: 20px 0;
-        background: radial-gradient(circle at center, #0F1C3F 0%, #070B19 100%);
-        border-bottom: 2px solid #1E3A8A;
-        margin-bottom: 15px;
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-    }
-    .logo-glow-box {
-        display: inline-block;
-        padding: 8px;
-        background: radial-gradient(circle, rgba(72, 202, 228, 0.3) 0%, rgba(10, 20, 40, 0.95) 100%);
-        border-radius: 50%;
-        box-shadow: 0 0 30px rgba(72, 202, 228, 0.8), inset 0 0 15px rgba(72, 202, 228, 0.5);
-        border: 2px solid #48CAE4;
-        margin-bottom: 10px;
-    }
-    .logo-glow-box img {
-        width: 70px !important;
-        height: auto !important;
-        border-radius: 50%;
-        display: block;
-        margin: auto;
-    }
-    .brand-title {
-        font-size: 28px;
-        font-weight: 900;
-        letter-spacing: 3px;
-        background: linear-gradient(90deg, #48CAE4, #0077B6, #FFFFFF);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-top: 4px;
-        margin-bottom: 0px;
-        text-align: center;
-        text-shadow: 0 0 25px rgba(72, 202, 228, 0.5);
-    }
-    .brand-subtitle {
-        font-size: 11px;
-        letter-spacing: 3px;
-        color: #94A3B8;
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-top: 4px;
-        text-align: center;
-    }
-    .metric-card {
-        background: linear-gradient(145deg, #111E38, #0B132B);
-        padding: 22px;
-        border-radius: 16px;
-        border: 1px solid #1E3A8A;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        text-align: center;
-        margin-bottom: 15px;
-        transition: all 0.3s ease;
-    }
-    .metric-card:hover {
-        border-color: #48CAE4;
-        box-shadow: 0 10px 30px rgba(72, 202, 228, 0.3);
-        transform: translateY(-3px);
-    }
-    .card-title {
-        font-size: 16px;
-        font-weight: bold;
-        color: #F8FAFC;
-        margin-top: 10px;
-    }
-    .stButton>button {
-        width: 100%;
-        background: linear-gradient(90deg, #1D4ED8, #00B4D8);
-        color: white;
-        font-weight: bold;
-        border-radius: 12px;
-        height: 48px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(29, 78, 216, 0.5);
-        transition: all 0.3s ease;
-    }
-    .stButton>button:hover {
-        background: linear-gradient(90deg, #2563EB, #48CAE4);
-        box-shadow: 0 6px 20px rgba(72, 202, 228, 0.7);
-    }
-    </style>
+<style>
+.stApp {
+    background: linear-gradient(135deg, #050B18 0%, #0A1428 50%, #040711 100%);
+    color: #FFFFFF;
+    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+}
+.brand-container {
+    text-align: center;
+    padding: 20px 0;
+    background: radial-gradient(circle at center, #0F1C3F 0%, #070B19 100%);
+    border-bottom: 2px solid #1E3A8A;
+    margin-bottom: 15px;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+.logo-glow-box {
+    display: inline-block;
+    padding: 8px;
+    background: radial-gradient(circle, rgba(72, 202, 228, 0.3) 0%, rgba(10, 20, 40, 0.95) 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(72, 202, 228, 0.8), inset 0 0 15px rgba(72, 202, 228, 0.5);
+    border: 2px solid #48CAE4;
+    margin-bottom: 10px;
+}
+.logo-glow-box img {
+    width: 70px !important;
+    height: auto !important;
+    border-radius: 50%;
+    display: block;
+    margin: auto;
+}
+.brand-title {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, #48CAE4, #0077B6, #FFFFFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 4px;
+    margin-bottom: 0px;
+    text-align: center;
+    text-shadow: 0 0 25px rgba(72, 202, 228, 0.5);
+}
+.brand-subtitle {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #94A3B8;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 4px;
+    text-align: center;
+}
+.metric-card {
+    background: linear-gradient(145deg, #111E38, #0B132B);
+    padding: 22px;
+    border-radius: 16px;
+    border: 1px solid #1E3A8A;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    text-align: center;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+.metric-card:hover {
+    border-color: #48CAE4;
+    box-shadow: 0 10px 30px rgba(72, 202, 228, 0.3);
+    transform: translateY(-3px);
+}
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #F8FAFC;
+    margin-top: 10px;
+}
+.stButton>button {
+    width: 100%;
+    background: linear-gradient(90deg, #1D4ED8, #00B4D8);
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    height: 48px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.5);
+    transition: all 0.3s ease;
+}
+.stButton>button:hover {
+    background: linear-gradient(90deg, #2563EB, #48CAE4);
+    box-shadow: 0 6px 20px rgba(72, 202, 228, 0.7);
+}
+</style>
 """,
     unsafe_allow_html=True,
 )
 
-# Top Header Banner with Centered Glowing Logo & Title (Single Markdown Block)
+# Top Header Banner with Centered Glowing Logo & Title
 if logo_base64:
-  logo_display_html = f"""
-    <div class="logo-glow-box">
-        <img src="data:image/png;base64,{logo_base64}" />
-    </div>
-    """
+  logo_display_html = f"""<div class="logo-glow-box"><img src="data:image/png;base64,{logo_base64}" /></div>"""
 else:
   logo_display_html = (
       '<div style="font-size: 35px; margin-bottom: 2px;">⚙️</div>'
   )
 
-st.markdown(
-    f"""
-    <div class="brand-container">
-        {logo_display_html}
-        <div class="brand-title">MEGALA CNC MATE</div>
-        <div class="brand-subtitle">SMART CNC. SIMPLE WORK.</div>
-    </div>
-""",
-    unsafe_allow_html=True,
-)
+header_html = f"""
+<div class="brand-container">
+    {logo_display_html}
+    <div class="brand-title">MEGALA CNC MATE</div>
+    <div class="brand-subtitle">SMART CNC. SIMPLE WORK.</div>
+</div>
+"""
+st.markdown(header_html, unsafe_allow_html=True)
 
 # Session state for navigation & results
 if "nav_menu" not in st.session_state:
@@ -170,18 +164,16 @@ def navigate_to(menu_name):
 
 # SIDEBAR (Logo Center Aligned)
 if logo_base64:
-  st.sidebar.markdown(
-      f"""
-        <div style="text-align: center; padding: 10px 0 15px 0;">
-            <div style="display: inline-block; padding: 6px; background: radial-gradient(circle, rgba(72, 202, 228, 0.3) 0%, rgba(10, 20, 40, 0.95) 100%); border-radius: 50%; box-shadow: 0 0 20px rgba(72, 202, 228, 0.7); border: 2px solid #48CAE4; margin-bottom: 8px;">
-                <img src="data:image/png;base64,{logo_base64}" width="65" style="border-radius: 50%; display: block; margin: auto;">
-            </div>
-            <h2 style="color: #FFFFFF; margin: 5px 0 0 0; font-size: 18px; font-weight: 900; letter-spacing: 1.5px;">MEGALA CNC MATE</h2>
-            <p style="color: #94A3B8; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;">Smart CNC. Simple Work.</p>
-        </div>
-    """,
-      unsafe_allow_html=True,
-  )
+  sidebar_logo_html = f"""
+<div style="text-align: center; padding: 10px 0 15px 0;">
+    <div style="display: inline-block; padding: 6px; background: radial-gradient(circle, rgba(72, 202, 228, 0.3) 0%, rgba(10, 20, 40, 0.95) 100%); border-radius: 50%; box-shadow: 0 0 20px rgba(72, 202, 228, 0.7); border: 2px solid #48CAE4; margin-bottom: 8px;">
+        <img src="data:image/png;base64,{logo_base64}" width="65" style="border-radius: 50%; display: block; margin: auto;">
+    </div>
+    <h2 style="color: #FFFFFF; margin: 5px 0 0 0; font-size: 18px; font-weight: 900; letter-spacing: 1.5px;">MEGALA CNC MATE</h2>
+    <p style="color: #94A3B8; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;">Smart CNC. Simple Work.</p>
+</div>
+"""
+  st.sidebar.markdown(sidebar_logo_html, unsafe_allow_html=True)
 else:
   st.sidebar.title("MEGALA CNC MATE")
 
@@ -444,13 +436,12 @@ elif st.session_state.nav_menu == "Stock Management":
       " Management System</div>",
       unsafe_allow_html=True,
   )
-  # Using st.data_editor so that user changes/stocks are interactive and persisted without data loss
   st.session_state.stock_db = st.data_editor(
       st.session_state.stock_db, num_rows="dynamic", use_container_width=True
   )
 
 # 5. ADVANCED G-CODE GENERATOR
-elif st.session_state.nav_menu == "Advanced G-CodeGenerator":
+elif st.session_state.nav_menu == "Advanced G-Code Generator":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced'
       " G-Code Generator</div>",
