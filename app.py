@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom High-End Branded App UI Styling with Enhanced Logo Glow & Centering
+# Custom High-End Branded App UI Styling with Perfect Size & Glowing Logo
 st.markdown("""
     <style>
     .stApp {
@@ -19,42 +19,44 @@ st.markdown("""
     }
     .brand-container {
         text-align: center;
-        padding: 20px 0 25px 0;
+        padding: 15px 0 20px 0;
         background: radial-gradient(circle, rgba(15,23,42,0.95) 0%, rgba(7,11,25,0.98) 100%);
         border-bottom: 1px solid #1E293B;
-        margin-bottom: 20px;
-        border-radius: 0 0 25px 25px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        margin-bottom: 15px;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
     .brand-container img {
-        width: 170px !important;
+        width: 110px !important;
         max-width: 100% !important;
         border-radius: 16px;
-        filter: brightness(1.35) contrast(1.15) drop-shadow(0 0 25px rgba(72, 202, 228, 0.8));
+        border: 2px solid rgba(72, 202, 228, 0.7);
+        box-shadow: 0 0 20px rgba(72, 202, 228, 0.8), 0 0 40px rgba(0, 119, 182, 0.4);
+        filter: brightness(1.25) contrast(1.1);
         margin-bottom: 10px;
         display: block;
         margin-left: auto;
         margin-right: auto;
     }
     .brand-title {
-        font-size: 36px;
+        font-size: 32px;
         font-weight: 900;
         letter-spacing: 2px;
         background: linear-gradient(90deg, #48CAE4, #0077B6, #FFFFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-top: 8px;
+        margin-top: 5px;
         margin-bottom: 0px;
         text-align: center;
-        text-shadow: 0 0 30px rgba(72, 202, 228, 0.4);
+        text-shadow: 0 0 25px rgba(72, 202, 228, 0.4);
     }
     .brand-subtitle {
-        font-size: 13px;
+        font-size: 12px;
         letter-spacing: 3px;
         color: #94A3B8;
         font-weight: 600;
         text-transform: uppercase;
-        margin-top: 5px;
+        margin-top: 4px;
         text-align: center;
     }
     .metric-card {
@@ -96,14 +98,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Branded Header Banner with Perfect Logo Centering & Bright Glow
+# Top Branded Header Banner with Compact & Glowing Logo
 st.markdown('<div class="brand-container">', unsafe_allow_html=True)
 if os.path.exists("logo.png"):
     col_l1, col_l2, col_l3 = st.columns([1, 1, 1])
     with col_l2:
         st.image("logo.png")
 else:
-    st.markdown('<div style="font-size: 50px; margin-bottom: 5px; text-align: center;">⚙️</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 45px; margin-bottom: 5px; text-align: center;">⚙️</div>', unsafe_allow_html=True)
 
 st.markdown("""
         <div class="brand-title">MEGALA CNC MATE</div>
