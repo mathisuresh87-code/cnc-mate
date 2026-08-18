@@ -4,39 +4,59 @@ import os
 
 # Page Configuration
 st.set_page_config(
-    page_title="Megala CNC Mate - Pro App Edition",
+    page_title="CNC MATE - Smart CNC. Simple Work.",
     page_icon="⚙️",
     layout="wide"
 )
 
-# Custom High-End Colorful Native App UI Styling
+# Custom High-End Branded App UI Styling (Matching Mockup Design)
 st.markdown("""
     <style>
     .stApp {
-        background: linear-gradient(135deg, #0B132B 0%, #1C2541 50%, #0F172A 100%);
+        background: linear-gradient(135deg, #070B19 0%, #0F172A 50%, #070B19 100%);
         color: #FFFFFF;
+        font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
     }
-    .main-header {
-        font-size: 28px;
+    .brand-container {
+        text-align: center;
+        padding: 15px 0 25px 0;
+        background: radial-gradient(circle, rgba(15,23,42,0.9) 0%, rgba(7,11,25,0.95) 100%);
+        border-bottom: 1px solid #1E293B;
+        margin-bottom: 20px;
+        border-radius: 0 0 20px 20px;
+    }
+    .brand-title {
+        font-size: 36px;
         font-weight: 900;
-        background: linear-gradient(90deg, #48CAE4, #0077B6, #9333EA);
+        letter-spacing: 2px;
+        background: linear-gradient(90deg, #48CAE4, #0077B6, #FFFFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 2px;
+        margin-bottom: 0px;
+        text-shadow: 0 0 30px rgba(72, 202, 228, 0.4);
     }
-    .sub-text {
-        font-size: 14px;
+    .brand-subtitle {
+        font-size: 13px;
+        letter-spacing: 3px;
         color: #94A3B8;
-        margin-bottom: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 5px;
     }
     .metric-card {
-        background: linear-gradient(145deg, #1E293B, #0F172A);
+        background: linear-gradient(145deg, #111E38, #0B132B);
         padding: 22px;
         border-radius: 16px;
-        border: 1px solid #334155;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        border: 1px solid #1E3A8A;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         text-align: center;
         margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+    .metric-card:hover {
+        border-color: #48CAE4;
+        box-shadow: 0 10px 30px rgba(72, 202, 228, 0.3);
+        transform: translateY(-3px);
     }
     .card-title {
         font-size: 16px;
@@ -46,22 +66,32 @@ st.markdown("""
     }
     .stButton>button {
         width: 100%;
-        background: linear-gradient(90deg, #2563EB, #48CAE4);
+        background: linear-gradient(90deg, #1D4ED8, #00B4D8);
         color: white;
         font-weight: bold;
         border-radius: 12px;
         height: 48px;
         border: none;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        box-shadow: 0 4px 15px rgba(29, 78, 216, 0.5);
+        transition: all 0.3s ease;
     }
     .stButton>button:hover {
-        background: linear-gradient(90deg, #1D4ED8, #00B4D8);
-        box-shadow: 0 6px 16px rgba(72, 202, 228, 0.6);
+        background: linear-gradient(90deg, #2563EB, #48CAE4);
+        box-shadow: 0 6px 20px rgba(72, 202, 228, 0.7);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Session state for navigation
+# Top Branded Header Banner (Mockup Vibe)
+st.markdown("""
+    <div class="brand-container">
+        <div style="font-size: 42px; margin-bottom: 5px;">⚙️</div>
+        <div class="brand-title">CNC MATE</div>
+        <div class="brand-subtitle">Smart CNC. Simple Work.</div>
+    </div>
+""", unsafe_allow_html=True)
+
+# Session state for navigation & results
 if 'nav_menu' not in st.session_state:
     st.session_state.nav_menu = "Home Dashboard"
 
@@ -107,8 +137,8 @@ if selected_sidebar_menu != st.session_state.nav_menu:
 # 1. HOME DASHBOARD (App Vibe)
 # -------------------------------------------------------------
 if st.session_state.nav_menu == "Home Dashboard":
-    st.markdown('<div class="main-header">Welcome to MEGALA CNC MATE 👋</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Mobile Native Pro Edition - Intelligent Workshop Assistant</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #F8FAFC; margin-bottom: 5px;">Hello, Nithish! 👋</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Good Morning - Select a module below to start working</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
@@ -149,8 +179,8 @@ if st.session_state.nav_menu == "Home Dashboard":
 # 2. ROD & TUBE CALCULATOR (Persistent Session State & 3D Preview)
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
-    st.markdown('<div class="main-header">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Flexible input mode with End Bit calculation & Live 3D Part Rendering.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Flexible input mode with End Bit calculation & Live 3D Part Rendering.</div>', unsafe_allow_html=True)
     
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & 3D)"], horizontal=True)
     
@@ -189,7 +219,6 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         prod_per_hr = int(3600 / cycle_sec) if cycle_sec > 0 else 0
         total_machine_time = (required_qty * cycle_sec) / 3600 if required_qty > 0 else 0.0
 
-        # Store in session state so it persists reliably
         st.session_state.calc_results = {
             "parts_per_rod": parts_per_rod,
             "end_bit_mm": end_bit_mm,
@@ -203,7 +232,6 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
             "auto_operations": auto_operations
         }
 
-    # Render results if available in session state
     if st.session_state.calc_results is not None:
         res = st.session_state.calc_results
         st.markdown("---")
@@ -219,13 +247,13 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         r5.info(f"**Production / Hour:** {res['prod_per_hr']} Nos")
         r6.info(f"**Total Machine Time:** {res['total_machine_time']:.2f} Hr")
         
-        # Gorgeous Native 3D Cylinder Preview UI
+        # Gorgeous Native 3D Cylinder Preview UI with Neon Glow
         st.markdown(f"""
-        <div style="background: linear-gradient(145deg, #1E293B, #0F172A); padding: 25px; border-radius: 16px; border: 2px solid #48CAE4; text-align: center; margin-top: 20px; box-shadow: 0 10px 25px rgba(72, 202, 228, 0.2);">
+        <div style="background: linear-gradient(145deg, #111E38, #0B132B); padding: 25px; border-radius: 16px; border: 2px solid #48CAE4; text-align: center; margin-top: 20px; box-shadow: 0 10px 30px rgba(72, 202, 228, 0.3);">
             <h3 style="color: #48CAE4; margin-bottom: 5px;">🧊 Live 3D Part / Rod Preview</h3>
             <p style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Shape: <b>{res['rod_type']}</b> | Part Length: <b>{res['part_length']} mm</b></p>
             <div style="display: flex; justify-content: center; align-items: center; height: 90px;">
-                <div style="width: 80%; max-width: 320px; height: 45px; background: linear-gradient(90deg, #1D4ED8, #48CAE4, #00B4D8, #1D4ED8); border-radius: 25px; box-shadow: 0 0 20px rgba(72, 202, 228, 0.7); display: flex; align-items: center; justify-content: center;">
+                <div style="width: 80%; max-width: 320px; height: 45px; background: linear-gradient(90deg, #1D4ED8, #48CAE4, #00B4D8, #1D4ED8); border-radius: 25px; box-shadow: 0 0 25px rgba(72, 202, 228, 0.8); display: flex; align-items: center; justify-content: center;">
                     <span style="color: #FFFFFF; font-weight: bold; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">3D Cylinder Model Rendered</span>
                 </div>
             </div>
@@ -238,11 +266,11 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         st.download_button("📥 Export as PDF / Share Result", data=f"Rod Calculation Summary - Shape: {res['rod_type']} - End Bit/Scrap: {res['end_bit_mm']:.2f}mm - Qty: {required_qty}", file_name="rod_calculation.pdf")
 
 # -------------------------------------------------------------
-# 3. PRODUCTION & CYCLE TIME ANALYZER (With Drilling)
+# 3. PRODUCTION & CYCLE TIME ANALYZER
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Production & Cycle Time":
-    st.markdown('<div class="main-header">Production & Cycle Time Analyzer</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Dynamic Shift Output (8, 12, 16, 24 Hours) for CNC, Traub & Drill Machines</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Production & Cycle Time Analyzer</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Dynamic Shift Output (8, 12, 16, 24 Hours) for CNC, Traub & Drill Machines</div>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
@@ -269,8 +297,8 @@ elif st.session_state.nav_menu == "Production & Cycle Time":
 # 4. STOCK MANAGEMENT SYSTEM
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Stock Management":
-    st.markdown('<div class="main-header">Stock Management System</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Real-time raw material tracking (Meter / Kg) with auto-deduction.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Stock Management System</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Real-time raw material tracking (Meter / Kg) with auto-deduction.</div>', unsafe_allow_html=True)
     
     if 'stock_db' not in st.session_state:
         st.session_state.stock_db = pd.DataFrame([
@@ -303,8 +331,8 @@ elif st.session_state.nav_menu == "Stock Management":
 # 5. ADVANCED G-CODE GENERATOR
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
-    st.markdown('<div class="main-header">Advanced G-Code Generator</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Upload drawing, analyze operations, and get Traub vs CNC recommendations with G-Codes.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Upload drawing, analyze operations, and get Traub vs CNC recommendations with G-Codes.</div>', unsafe_allow_html=True)
     
     drawing_file = st.file_uploader("Upload Drawing for G-Code Analysis", type=["png", "jpg", "jpeg", "pdf"])
     
@@ -324,7 +352,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         st.subheader("Generated G-Code Output:")
         
         gcode_sample = f"""
-        O0001 (MEGAla CNC MATE GENERATED CODE)
+        O0001 (CNC MATE GENERATED CODE)
         G21 G90 G95
         M03 S2500
         G00 X0 Z0 (Operation: Facing)
@@ -334,14 +362,14 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         M30
         """
         st.code(gcode_sample, language="text")
-        st.download_button("Download G-Code File", data=gcode_sample, file_name="megala_gcode.txt")
+        st.download_button("Download G-Code File", data=gcode_sample, file_name="cnc_mate_gcode.txt")
 
 # -------------------------------------------------------------
 # 6. PROFESSIONAL QUOTATION & PDF GENERATOR
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Quotation & PDF":
-    st.markdown('<div class="main-header">Professional Quotation & PDF Generator</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Itemized operations breakdown with professional PDF output.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Professional Quotation & PDF Generator</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Itemized operations breakdown with professional PDF output.</div>', unsafe_allow_html=True)
     
     client = st.text_input("Customer / Company Name", "ABC Industries")
     drawing_no = st.text_input("Drawing No.", "TR-001")
@@ -352,12 +380,12 @@ elif st.session_state.nav_menu == "Quotation & PDF":
     if st.button("Generate Official Quotation PDF"):
         total_amt = unit_p * q_qty
         st.markdown(f"""
-        <div style="background: linear-gradient(135deg, #1C2541, #0F172A); padding: 25px; border-radius: 14px; border: 2px solid #48CAE4; box-shadow: 0 10px 25px rgba(72, 202, 228, 0.2);">
-            <h3>📄 MEGAla CNC MATE - OFFICIAL QUOTATION</h3>
+        <div style="background: linear-gradient(135deg, #111E38, #0B132B); padding: 25px; border-radius: 14px; border: 2px solid #48CAE4; box-shadow: 0 10px 25px rgba(72, 202, 228, 0.2);">
+            <h3>📄 CNC MATE - OFFICIAL QUOTATION</h3>
             <p><b>Client:</b> {client} | <b>Drawing No:</b> {drawing_no}</p>
             <p><b>Included Operations:</b> {', '.join(ops)}</p>
             <p><b>Quantity:</b> {q_qty} Nos | <b>Unit Price:</b> ₹{unit_p:.2f}</p>
-            <hr style="border-color: #334155;">
+            <hr style="border-color: #1E3A8A;">
             <h2><b>Total Estimated Amount: ₹{total_amt:.2f}</b></h2>
         </div>
         """, unsafe_allow_html=True)
@@ -367,8 +395,8 @@ elif st.session_state.nav_menu == "Quotation & PDF":
 # 7. MORE MENU / MASTERS & SETTINGS
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "More Menu / Master Settings":
-    st.markdown('<div class="main-header">More Menu & Masters</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-text">Manage masters, offline backup, and system settings.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">More Menu & Masters</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 20px;">Manage masters, offline backup, and system settings.</div>', unsafe_allow_html=True)
     
     st.markdown("### 📋 Masters Management")
     c_m1, c_m2 = st.columns(2)
@@ -383,5 +411,5 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown("---")
     st.markdown("### 💾 System & Backup (100% Offline)")
     st.button("🔄 Backup & Restore Database")
-    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v5.2 (Persistent State Fix)")
+    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v6.0 (Branded Mockup UI)")
     st.markdown("📞 **Help & Support:** Direct assistance for CNC professionals.")
