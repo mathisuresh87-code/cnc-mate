@@ -308,18 +308,22 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         " calculator.</div>",
         unsafe_allow_html=True,
     )
+    # Added support for webp, heic, png, jpg, jpeg, pdf to support mobile uploads
     adv_drawing = st.file_uploader(
-        "📁 Upload Part Drawing for 3D Scan (PNG, JPG, JPEG)",
-        type=["png", "jpg", "jpeg"],
+        "📁 Upload Part Drawing for 3D Scan (PNG, JPG, WEBP, HEIC, PDF)",
+        type=["png", "jpg", "jpeg", "webp", "heic", "pdf"],
         key="rod_drawing_upload",
     )
     if adv_drawing is not None:
-      st.image(
-          adv_drawing,
-          caption="Scanned Drawing Preview for 3D & Calculation",
-          use_container_width=True,
-      )
-      # Auto-detect simulation based on upload
+      try:
+        st.image(
+            adv_drawing,
+            caption="Scanned Drawing Preview for 3D & Calculation",
+            use_container_width=True,
+        )
+      except Exception:
+        st.info("📄 File uploaded successfully (Document format)")
+
       scanned_part_len = 135.0
       scanned_dia = 32.0
       st.success(
@@ -469,15 +473,18 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
   )
 
   uploaded_drawing = st.file_uploader(
-      "📁 Upload Part Drawing / Blueprint (PNG, JPG, JPEG)",
-      type=["png", "jpg", "jpeg"],
+      "📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)",
+      type=["png", "jpg", "jpeg", "webp", "heic", "pdf"],
   )
   if uploaded_drawing is not None:
-    st.image(
-        uploaded_drawing,
-        caption="Uploaded Drawing Preview",
-        use_container_width=True,
-    )
+    try:
+      st.image(
+          uploaded_drawing,
+          caption="Uploaded Drawing Preview",
+          use_container_width=True,
+      )
+    except Exception:
+      st.info("📄 File uploaded successfully")
     st.success("Drawing loaded successfully for operation analysis!")
 
   st.markdown("---")
@@ -627,17 +634,19 @@ elif st.session_state.nav_menu == "Quotation & PDF":
   )
 
   q_drawing = st.file_uploader(
-      "📁 Upload Job / Component Drawing (PNG, JPG, PDF)",
-      type=["png", "jpg", "jpeg", "pdf"],
+      "📁 Upload Job / Component Drawing (PNG, JPG, WEBP, HEIC, PDF)",
+      type=["png", "jpg", "jpeg", "webp", "heic", "pdf"],
       key="q_draw",
   )
   if q_drawing is not None:
-    if q_drawing.type in ["image/png", "image/jpeg"]:
+    try:
       st.image(
           q_drawing,
           caption="Quotation Drawing Reference Preview",
           use_container_width=True,
       )
+    except Exception:
+      st.info("📄 File uploaded successfully")
     st.success(
         "Drawing uploaded successfully! Auto-extracted operations & costs"
         " updated."
