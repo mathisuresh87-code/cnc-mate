@@ -295,7 +295,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod &'
       " Tube Calculator (3D Pro)</div>",
-      unsafe_allow_html=Thread := None,
+      unsafe_allow_html=True,
   )
   calc_mode = st.radio(
       "Operating Mode",
@@ -320,7 +320,6 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     )
 
     if adv_drawing is not None:
-      # Clear upload status check & confirmation box
       st.success(
           f"✅ **Drawing Successfully Uploaded!** File Name: `{adv_drawing.name}`"
           f" ({adv_drawing.size / 1024:.1f} KB)"
@@ -492,7 +491,6 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
   )
 
   if uploaded_drawing is not None:
-    # Clear confirmation status for G-Code generator
     st.success(
         f"✅ **Drawing Successfully Uploaded!** File Name:"
         f" `{uploaded_drawing.name}` ({uploaded_drawing.size / 1024:.1f} KB)"
@@ -676,7 +674,6 @@ elif st.session_state.nav_menu == "Quotation & PDF":
   )
 
   if q_drawing is not None:
-    # Clear confirmation status for Quotation generator
     st.success(
         f"✅ **Drawing Successfully Uploaded!** File Name: `{q_drawing.name}`"
         f" ({q_drawing.size / 1024:.1f} KB)"
