@@ -123,6 +123,14 @@ st.markdown(
     background: linear-gradient(90deg, #2563EB, #48CAE4);
     box-shadow: 0 6px 20px rgba(72, 202, 228, 0.7);
 }
+.upload-status-box {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid #10B981;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 12px;
+    margin-bottom: 15px;
+}
 </style>
 """,
     unsafe_allow_html=True,
@@ -290,7 +298,7 @@ if st.session_state.nav_menu == "Home Dashboard":
       navigate_to("More Menu / Master Settings")
       st.rerun()
 
-# 2. ROD & TUBE CALCULATOR (Advanced Mode with Auto Drawing Scan & Size Extraction)
+# 2. ROD & TUBE CALCULATOR
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod &'
@@ -308,8 +316,8 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         '<div style="background: rgba(72, 202, 228, 0.1); padding: 15px;'
         ' border-radius: 10px; border: 1px solid #48CAE4; margin-bottom:'
         ' 15px;"><b>Advanced Mode Active:</b> Upload your part drawing / 2D'
-        " blueprint. Dimensions will be auto-scanned and updated"
-        " automatically!</div>",
+        " blueprint. Once uploaded, confirmation and preview will appear"
+        " below!</div>",
         unsafe_allow_html=True,
     )
 
@@ -320,9 +328,16 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     )
 
     if adv_drawing is not None:
-      st.success(
-          f"✅ **Drawing Successfully Uploaded!** File Name: `{adv_drawing.name}`"
-          f" ({adv_drawing.size / 1024:.1f} KB)"
+      # Clear visual upload confirmation card
+      st.markdown(
+          f"""
+            <div class="upload-status-box">
+                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Successfully Uploaded!</h4>
+                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {adv_drawing.name}</p>
+                <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {adv_drawing.size / 1024:.1f} KB | <b>Status:</b> Ready for calculation preview</p>
+            </div>
+            """,
+          unsafe_allow_html=True,
       )
       try:
         img = Image.open(adv_drawing)
@@ -333,19 +348,14 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         st.image(
             adv_drawing,
             caption=(
-                f"📷 Scanned Preview [{adv_drawing.name}] | 🚀 Auto-Extracted"
-                f" Part Length: {auto_len} mm"
+                f"📷 Uploaded Drawing Preview [{adv_drawing.name}] | Part"
+                f" Length Set to: {auto_len} mm"
             ),
             use_container_width=True,
         )
-        st.info(
-            f"🔄 **Auto-Extraction Success:** Part Length updated automatically"
-            f" to **{auto_len} mm** based on drawing scan!"
-        )
       except Exception:
         st.info(
-            f"📄 Document `{adv_drawing.name}` successfully received and loaded"
-            " for calculation."
+            f"📄 Document `{adv_drawing.name}` successfully loaded for reference."
         )
     st.markdown("---")
 
@@ -479,8 +489,8 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
   )
   st.markdown(
       '<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Upload'
-      " drawing, select machine type (CNC, Traub, or Drilling), explain"
-      " operations, generate G-code, and export as PDF.</div>",
+      " drawing, confirm upload success, select machine type, and generate"
+      " G-code.</div>",
       unsafe_allow_html=True,
   )
 
@@ -491,9 +501,15 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
   )
 
   if uploaded_drawing is not None:
-    st.success(
-        f"✅ **Drawing Successfully Uploaded!** File Name:"
-        f" `{uploaded_drawing.name}` ({uploaded_drawing.size / 1024:.1f} KB)"
+    st.markdown(
+        f"""
+        <div class="upload-status-box">
+            <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ G-Code Drawing Successfully Uploaded!</h4>
+            <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
+            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {uploaded_drawing.size / 1024:.1f} KB | <b>Status:</b> Ready</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
     try:
       img_g = Image.open(uploaded_drawing)
@@ -502,18 +518,14 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
       st.image(
           uploaded_drawing,
           caption=(
-              f"📷 G-Code Drawing Preview [{uploaded_drawing.name}] | Auto-Stock"
-              f" Dia: {auto_dia} mm"
+              f"📷 G-Code Drawing Preview [{uploaded_drawing.name}] | Stock Dia"
+              f" Auto-Set: {auto_dia} mm"
           ),
           use_container_width=True,
       )
-      st.info(
-          f"🔄 **Auto-Extraction Success:** Stock Diameter updated"
-          f" automatically to **{auto_dia} mm** from drawing analysis!"
-      )
     except Exception:
       st.info(
-          f"📄 File `{uploaded_drawing.name}` successfully loaded for G-Code"
+          f"📄 File `{uploaded_drawing.name}` successfully loaded for program"
           " generation."
       )
 
@@ -652,7 +664,7 @@ M30
           " direct PDF download buttons."
       )
 
-# 6. QUOTATION & PDF (Advanced Drawing Upload & Auto Cost Conversion)
+# 6. QUOTATION & PDF
 elif st.session_state.nav_menu == "Quotation & PDF":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Professional'
@@ -661,9 +673,8 @@ elif st.session_state.nav_menu == "Quotation & PDF":
   )
   st.markdown(
       '<div style="color: #94A3B8; font-size: 13px; margin-bottom:'
-      ' 15px;">Upload job drawing, select required operations for'
-      " automatic cost estimation, and export as a professional PDF"
-      " quotation.</div>",
+      ' 15px;">Upload job drawing, verify upload confirmation, and export'
+      " professional quotation PDF.</div>",
       unsafe_allow_html=True,
   )
 
@@ -674,19 +685,21 @@ elif st.session_state.nav_menu == "Quotation & PDF":
   )
 
   if q_drawing is not None:
-    st.success(
-        f"✅ **Drawing Successfully Uploaded!** File Name: `{q_drawing.name}`"
-        f" ({q_drawing.size / 1024:.1f} KB)"
+    st.markdown(
+        f"""
+        <div class="upload-status-box">
+            <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Quotation Drawing Successfully Uploaded!</h4>
+            <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {q_drawing.name}</p>
+            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {q_drawing.size / 1024:.1f} KB | <b>Status:</b> Linked</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
     try:
       st.image(
           q_drawing,
           caption=f"Quotation Reference Preview [{q_drawing.name}]",
           use_container_width=True,
-      )
-      st.info(
-          "🔄 **Auto-Analysis Success:** Component operations and pricing"
-          " parameters linked from uploaded drawing."
       )
     except Exception:
       st.info(f"📄 Quotation file `{q_drawing.name}` uploaded successfully.")
@@ -761,10 +774,7 @@ elif st.session_state.nav_menu == "Quotation & PDF":
         "unit_price": unit_price,
         "total_quote": total_quote,
     }
-    st.success(
-        "Quotation generated successfully with auto-calculated operations"
-        " pricing!"
-    )
+    st.success("Quotation generated successfully!")
 
   if "quote_data" in st.session_state:
     qd = st.session_state.quote_data
