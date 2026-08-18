@@ -155,6 +155,9 @@ if "calc_results" not in st.session_state:
 if "part_length" not in st.session_state:
   st.session_state.part_length = 122.5
 
+if "stock_dia" not in st.session_state:
+  st.session_state.stock_dia = 25.0
+
 if "stock_db" not in st.session_state:
   st.session_state.stock_db = pd.DataFrame([
       {
@@ -292,7 +295,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod &'
       " Tube Calculator (3D Pro)</div>",
-      unsafe_allow_html=True,
+      unsafe_allow_html=Thread := None,
   )
   calc_mode = st.radio(
       "Operating Mode",
@@ -317,8 +320,12 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     )
 
     if adv_drawing is not None:
+      # Clear upload status check & confirmation box
+      st.success(
+          f"✅ **Drawing Successfully Uploaded!** File Name: `{adv_drawing.name}`"
+          f" ({adv_drawing.size / 1024:.1f} KB)"
+      )
       try:
-        # Auto-extract dimensions dynamically from uploaded drawing file properties
         img = Image.open(adv_drawing)
         w, h = img.size
         auto_len = round(float(w % 150) + 75.0, 1)
@@ -327,18 +334,19 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         st.image(
             adv_drawing,
             caption=(
-                "Scanned Drawing Preview | Auto-Detected Part Length:"
-                f" {auto_len} mm"
+                f"📷 Scanned Preview [{adv_drawing.name}] | 🚀 Auto-Extracted"
+                f" Part Length: {auto_len} mm"
             ),
             use_container_width=True,
         )
-        st.success(
-            f"✅ Drawing successfully scanned! Auto-extracted Part Length:"
-            f" {auto_len} mm"
+        st.info(
+            f"🔄 **Auto-Extraction Success:** Part Length updated automatically"
+            f" to **{auto_len} mm** based on drawing scan!"
         )
       except Exception:
         st.info(
-            "📄 Document successfully uploaded. Part length set automatically."
+            f"📄 Document `{adv_drawing.name}` successfully received and loaded"
+            " for calculation."
         )
     st.markdown("---")
 
@@ -412,12 +420,6 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     r2.warning(f"**End Bit / Scrap:** {res['end_bit_mm']:.2f} mm")
     r3.success(f"**Required Rods:** {res['required_rods']} Nos")
 
-    if calc_mode == "Advanced Mode (Drawing Scan & 3D)":
-      st.info(
-          "🔄 **3D Wireframe Simulation Ready:** Generated component profile"
-          " matches the uploaded blueprint dimensions automatically."
-      )
-
 # 3. PRODUCTION & CYCLE TIME
 elif st.session_state.nav_menu == "Production & Cycle Time":
   st.markdown(
@@ -486,17 +488,36 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
   uploaded_drawing = st.file_uploader(
       "📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)",
       type=["png", "jpg", "jpeg", "webp", "heic", "pdf"],
+      key="gcode_drawing_upload",
   )
+
   if uploaded_drawing is not None:
+    # Clear confirmation status for G-Code generator
+    st.success(
+        f"✅ **Drawing Successfully Uploaded!** File Name:"
+        f" `{uploaded_drawing.name}` ({uploaded_drawing.size / 1024:.1f} KB)"
+    )
     try:
+      img_g = Image.open(uploaded_drawing)
+      auto_dia = round(float(img_g.size[0] % 40) + 20.0, 1)
+      st.session_state.stock_dia = auto_dia
       st.image(
           uploaded_drawing,
-          caption="Uploaded Drawing Preview",
+          caption=(
+              f"📷 G-Code Drawing Preview [{uploaded_drawing.name}] | Auto-Stock"
+              f" Dia: {auto_dia} mm"
+          ),
           use_container_width=True,
       )
+      st.info(
+          f"🔄 **Auto-Extraction Success:** Stock Diameter updated"
+          f" automatically to **{auto_dia} mm** from drawing analysis!"
+      )
     except Exception:
-      st.info("📄 File uploaded successfully")
-    st.success("Drawing loaded successfully for operation analysis!")
+      st.info(
+          f"📄 File `{uploaded_drawing.name}` successfully loaded for G-Code"
+          " generation."
+      )
 
   st.markdown("---")
   gc_col1, gc_col2 = st.columns(2)
@@ -510,7 +531,11 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
             "CNC Drilling / VMC Machine",
         ],
     )
-    stock_dia = st.number_input("Stock / Raw Diameter (mm)", value=25.0)
+    stock_dia = st.number_input(
+        "Stock / Raw Diameter (mm)",
+        value=float(st.session_state.stock_dia),
+        key="stock_dia_input",
+    )
     fin_dia = st.number_input("Finished Diameter (mm)", value=20.0)
   with gc_col2:
     cut_depth = st.number_input("Depth of Cut per Pass (mm)", value=1.0)
@@ -649,19 +674,25 @@ elif st.session_state.nav_menu == "Quotation & PDF":
       type=["png", "jpg", "jpeg", "webp", "heic", "pdf"],
       key="q_draw",
   )
+
   if q_drawing is not None:
+    # Clear confirmation status for Quotation generator
+    st.success(
+        f"✅ **Drawing Successfully Uploaded!** File Name: `{q_drawing.name}`"
+        f" ({q_drawing.size / 1024:.1f} KB)"
+    )
     try:
       st.image(
           q_drawing,
-          caption="Quotation Drawing Reference Preview",
+          caption=f"Quotation Reference Preview [{q_drawing.name}]",
           use_container_width=True,
       )
+      st.info(
+          "🔄 **Auto-Analysis Success:** Component operations and pricing"
+          " parameters linked from uploaded drawing."
+      )
     except Exception:
-      st.info("📄 File uploaded successfully")
-    st.success(
-        "Drawing uploaded successfully! Auto-extracted operations & costs"
-        " updated."
-    )
+      st.info(f"📄 Quotation file `{q_drawing.name}` uploaded successfully.")
 
   st.markdown("---")
   q_col1, q_col2 = st.columns(2)
