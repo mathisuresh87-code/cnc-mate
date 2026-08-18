@@ -5,7 +5,7 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="CNC MATE - Smart CNC. Simple Work.", page_icon="⚙️", layout="wide"
+    page_title="MEGALA CNC MATE - Smart CNC. Simple Work.", page_icon="⚙️", layout="wide"
 )
 
 
