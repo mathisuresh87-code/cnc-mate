@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom High-End Branded App UI Styling with Perfect Size & Glowing Logo
+# Custom High-End Branded App UI Styling with Seamless Logo Glow & Transparent Background
 st.markdown("""
     <style>
     .stApp {
@@ -29,10 +29,9 @@ st.markdown("""
     .brand-container img {
         width: 110px !important;
         max-width: 100% !important;
-        border-radius: 16px;
-        border: 2px solid rgba(72, 202, 228, 0.7);
-        box-shadow: 0 0 20px rgba(72, 202, 228, 0.8), 0 0 40px rgba(0, 119, 182, 0.4);
-        filter: brightness(1.25) contrast(1.1);
+        border-radius: 14px;
+        mix-blend-mode: screen;
+        filter: drop-shadow(0 0 22px rgba(72, 202, 228, 0.95)) brightness(1.2);
         margin-bottom: 10px;
         display: block;
         margin-left: auto;
@@ -98,7 +97,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Branded Header Banner with Compact & Glowing Logo
+# Top Branded Header Banner with Glowing Logo
 st.markdown('<div class="brand-container">', unsafe_allow_html=True)
 if os.path.exists("logo.png"):
     col_l1, col_l2, col_l3 = st.columns([1, 1, 1])
@@ -159,8 +158,8 @@ if selected_sidebar_menu != st.session_state.nav_menu:
 # 1. HOME DASHBOARD
 # -------------------------------------------------------------
 if st.session_state.nav_menu == "Home Dashboard":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #F8FAFC; margin-bottom: 5px;">Hello, Nithish! 👋</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Good Morning - Select a module below to start working</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #F8FAFC; margin-bottom: 5px;">Welcome, Operator! 👋</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Smart CNC. Simple Work. - Select a module below to start working</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
