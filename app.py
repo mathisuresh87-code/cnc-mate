@@ -32,7 +32,7 @@ st.markdown(
     }
     .brand-container {
         text-align: center;
-        padding: 15px 0 20px 0;
+        padding: 20px 0;
         background: radial-gradient(circle at center, #0F1C3F 0%, #070B19 100%);
         border-bottom: 2px solid #1E3A8A;
         margin-bottom: 15px;
@@ -117,26 +117,22 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Top Header Banner with Glowing Logo
-st.markdown('<div class="brand-container">', unsafe_allow_html=True)
+# Top Header Banner with Centered Glowing Logo & Title (Single Markdown Block)
 if logo_base64:
-  st.markdown(
-      f"""
-        <div class="logo-glow-box">
-            <img src="data:image/png;base64,{logo_base64}" />
-        </div>
-    """,
-      unsafe_allow_html=True,
-  )
+  logo_display_html = f"""
+    <div class="logo-glow-box">
+        <img src="data:image/png;base64,{logo_base64}" />
+    </div>
+    """
 else:
-  st.markdown(
-      '<div style="font-size: 35px; margin-bottom: 2px; text-align:'
-      ' center;">⚙️</div>',
-      unsafe_allow_html=True,
+  logo_display_html = (
+      '<div style="font-size: 35px; margin-bottom: 2px;">⚙️</div>'
   )
 
 st.markdown(
-    """
+    f"""
+    <div class="brand-container">
+        {logo_display_html}
         <div class="brand-title">MEGALA CNC MATE</div>
         <div class="brand-subtitle">SMART CNC. SIMPLE WORK.</div>
     </div>
@@ -172,7 +168,7 @@ def navigate_to(menu_name):
   st.session_state.nav_menu = menu_name
 
 
-# SIDEBAR (Gear ⚙️ replaced with Logo)
+# SIDEBAR (Logo Center Aligned)
 if logo_base64:
   st.sidebar.markdown(
       f"""
@@ -454,7 +450,7 @@ elif st.session_state.nav_menu == "Stock Management":
   )
 
 # 5. ADVANCED G-CODE GENERATOR
-elif st.session_state.nav_menu == "Advanced G-Code Generator":
+elif st.session_state.nav_menu == "Advanced G-CodeGenerator":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced'
       " G-Code Generator</div>",
