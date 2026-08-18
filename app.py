@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom High-End Branded App UI Styling matching the exact Mockup Theme
+# Custom High-End Branded App UI Styling with Compact Glowing Logo
 st.markdown("""
     <style>
     .stApp {
@@ -19,50 +19,49 @@ st.markdown("""
     }
     .brand-container {
         text-align: center;
-        padding: 20px 0 25px 0;
+        padding: 15px 0 20px 0;
         background: radial-gradient(circle at center, #0F1C3F 0%, #070B19 100%);
         border-bottom: 2px solid #1E3A8A;
-        margin-bottom: 20px;
-        border-radius: 0 0 24px 24px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+        margin-bottom: 15px;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     }
     .logo-wrapper {
         display: inline-block;
-        padding: 12px;
+        padding: 6px;
         background: linear-gradient(145deg, #0A1428, #111E38);
-        border-radius: 20px;
-        border: 1px solid #48CAE4;
-        box-shadow: 0 0 30px rgba(72, 202, 228, 0.4);
-        margin-bottom: 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(72, 202, 228, 0.6);
+        box-shadow: 0 0 20px rgba(72, 202, 228, 0.5);
+        margin-bottom: 8px;
     }
     .brand-container img {
-        width: 100px !important;
+        width: 52px !important;
         max-width: 100% !important;
-        border-radius: 14px;
-        mix-blend-mode: luminosity;
-        filter: brightness(1.3) contrast(1.2);
+        border-radius: 10px;
+        filter: drop-shadow(0 0 12px rgba(72, 202, 228, 0.95)) brightness(1.25);
         display: block;
         margin: auto;
     }
     .brand-title {
-        font-size: 36px;
+        font-size: 30px;
         font-weight: 900;
         letter-spacing: 3px;
         background: linear-gradient(90deg, #48CAE4, #0077B6, #FFFFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-top: 5px;
+        margin-top: 2px;
         margin-bottom: 0px;
         text-align: center;
-        text-shadow: 0 0 30px rgba(72, 202, 228, 0.5);
+        text-shadow: 0 0 25px rgba(72, 202, 228, 0.5);
     }
     .brand-subtitle {
-        font-size: 13px;
-        letter-spacing: 4px;
+        font-size: 12px;
+        letter-spacing: 3px;
         color: #94A3B8;
         font-weight: 600;
         text-transform: uppercase;
-        margin-top: 6px;
+        margin-top: 4px;
         text-align: center;
     }
     .metric-card {
@@ -104,14 +103,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Branded Header Banner with Glowing Logo Mockup Style
+# Top Branded Header Banner with Compact Glowing Logo
 st.markdown('<div class="brand-container">', unsafe_allow_html=True)
 if os.path.exists("logo.png"):
     st.markdown('<div class="logo-wrapper">', unsafe_allow_html=True)
     st.image("logo.png")
     st.markdown('</div>', unsafe_allow_html=True)
 else:
-    st.markdown('<div style="font-size: 50px; margin-bottom: 5px; text-align: center;">⚙️</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 35px; margin-bottom: 2px; text-align: center;">⚙️</div>', unsafe_allow_html=True)
 
 st.markdown("""
         <div class="brand-title">CNC MATE</div>
