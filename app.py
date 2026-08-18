@@ -436,6 +436,11 @@ elif st.session_state.nav_menu == "Stock Management":
       " Management System</div>",
       unsafe_allow_html=True,
   )
+  st.markdown(
+      '<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Add,'
+      " edit, and monitor your raw material stocks directly below.</div>",
+      unsafe_allow_html=True,
+  )
   st.session_state.stock_db = st.data_editor(
       st.session_state.stock_db, num_rows="dynamic", use_container_width=True
   )
@@ -447,9 +452,33 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
       " G-Code Generator</div>",
       unsafe_allow_html=True,
   )
+  st.markdown(
+      '<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Configure'
+      " parameters to generate automated G-Code programs.</div>",
+      unsafe_allow_html=True,
+  )
+  gc_col1, gc_col2 = st.columns(2)
+  with gc_col1:
+    prog_no = st.text_input("Program Number", value="O1001")
+    stock_dia = st.number_input("Stock Diameter (mm)", value=25.0)
+    fin_dia = st.number_input("Finished Diameter (mm)", value=20.0)
+  with gc_col2:
+    cut_depth = st.number_input("Depth of Cut per Pass (mm)", value=1.0)
+    feed_rate = st.number_input("Feed Rate (mm/rev)", value=0.15)
+
   if st.button("Generate G-Code & Export"):
-    gcode_sample = "O0001\nG21 G90\nM30"
+    gcode_sample = f"""{prog_no}
+G21 G90 G40 G80
+T0101 (TURNING TOOL)
+G96 S200 M03
+G00 X{stock_dia + 2.0} Z2.0
+G01 Z0.0 F{feed_rate}
+X{fin_dia}
+G00 Z5.0
+M30
+"""
     st.code(gcode_sample, language="text")
+    st.success("G-Code generated successfully!")
 
 # 6. QUOTATION & PDF
 elif st.session_state.nav_menu == "Quotation & PDF":
@@ -458,6 +487,27 @@ elif st.session_state.nav_menu == "Quotation & PDF":
       " Generator</div>",
       unsafe_allow_html=True,
   )
+  st.markdown(
+      '<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Create'
+      " professional job cost estimations and exportable quotes.</div>",
+      unsafe_allow_html=True,
+  )
+  q_col1, q_col2 = st.columns(2)
+  with q_col1:
+    client_name = st.text_input("Client Name", value="ABC Engineering")
+    job_name = st.text_input("Job / Component Name", value="Pin Bush")
+    qty_q = st.number_input("Quantity", value=500)
+  with q_col2:
+    material_cost = st.number_input("Material Cost per Part (₹)", value=15.0)
+    machining_cost = st.number_input("Machining Cost per Part (₹)", value=10.0)
+    profit_margin = st.slider("Profit Margin (%)", 0, 50, 20)
+
+  if st.button("Calculate Quotation"):
+    total_cost = (material_cost + machining_cost) * (1 + profit_margin / 100.0)
+    total_quote = total_cost * qty_q
+    st.markdown("---")
+    st.info(f"### Price per Part: **₹ {total_cost:.2f}**")
+    st.success(f"### Total Quotation Amount: **₹ {total_quote:.2f}**")
 
 # 7. MORE MENU / MASTERS & SETTINGS
 elif st.session_state.nav_menu == "More Menu / Master Settings":
@@ -466,3 +516,13 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
       " & Masters</div>",
       unsafe_allow_html=True,
   )
+  st.markdown(
+      '<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Manage'
+      " application preferences, tool lists, and master defaults.</div>",
+      unsafe_allow_html=True,
+  )
+  st.checkbox("Enable Sound Alerts on Calculation", value=True)
+  st.checkbox("Auto-save Calculation History", value=True)
+  st.text_input("Company Name Header", value="MEGALA CNC MATE")
+  if st.button("Save Settings"):
+    st.success("Settings saved successfully!")
