@@ -4,7 +4,7 @@ import os
 
 # Page Configuration
 st.set_page_config(
-    page_title="CNC MATE - Smart CNC. Simple Work.",
+    page_title="MEGALA CNC MATE - Smart CNC. Simple Work.",
     page_icon="⚙️",
     layout="wide"
 )
@@ -82,11 +82,17 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Branded Header Banner
+# Top Branded Header Banner with Custom Logo Image
+st.markdown('<div class="brand-container">', unsafe_allow_html=True)
+if os.path.exists("logo.png"):
+    col_l1, col_l2, col_l3 = st.columns([1, 1, 1])
+    with col_l2:
+        st.image("logo.png", width=120)
+else:
+    st.markdown('<div style="font-size: 42px; margin-bottom: 5px;">⚙️</div>', unsafe_allow_html=True)
+
 st.markdown("""
-    <div class="brand-container">
-        <div style="font-size: 42px; margin-bottom: 5px;">⚙️</div>
-        <div class="brand-title">CNC MATE</div>
+        <div class="brand-title">MEGALA CNC MATE</div>
         <div class="brand-subtitle">Smart CNC. Simple Work.</div>
     </div>
 """, unsafe_allow_html=True)
@@ -104,7 +110,7 @@ def navigate_to(menu_name):
 # -------------------------------------------------------------
 # SIDEBAR / APP CONTROL PANEL
 # -------------------------------------------------------------
-st.sidebar.title("⚙️ CNC MATE PRO")
+st.sidebar.title("⚙️ MEGALA CNC PRO")
 st.sidebar.markdown("### Smart CNC. Simple Work.")
 
 languages = [
@@ -176,7 +182,7 @@ if st.session_state.nav_menu == "Home Dashboard":
             st.rerun()
 
 # -------------------------------------------------------------
-# 2. ROD & TUBE CALCULATOR (With Live Uploaded Part Photo Preview)
+# 2. ROD & TUBE CALCULATOR
 # -------------------------------------------------------------
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
@@ -192,7 +198,6 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         uploaded_drawing = st.file_uploader("Upload Part Drawing Photo (PNG, JPG)", type=["png", "jpg", "jpeg"])
         
         if uploaded_drawing is not None:
-            # Display the uploaded drawing photo directly on screen
             st.image(uploaded_drawing, caption="Uploaded Part Drawing Preview", use_container_width=True)
             st.success("✨ Drawing photo successfully loaded! Auto-detected operations: **Facing, Turning, Drilling, Chamfering**")
             auto_operations = ["Facing", "Turning", "Drilling", "Chamfering"]
@@ -250,7 +255,6 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         r5.info(f"**Production / Hour:** {res['prod_per_hr']} Nos")
         r6.info(f"**Total Machine Time:** {res['total_machine_time']:.2f} Hr")
         
-        # Gorgeous Native 3D Cylinder Preview UI
         st.markdown(f"""
         <div style="background: linear-gradient(145deg, #111E38, #0B132B); padding: 25px; border-radius: 16px; border: 2px solid #48CAE4; text-align: center; margin-top: 20px; box-shadow: 0 10px 30px rgba(72, 202, 228, 0.3);">
             <h3 style="color: #48CAE4; margin-bottom: 5px;">🧊 Live Part / Rod Preview</h3>
@@ -357,7 +361,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         st.subheader("Generated G-Code Output:")
         
         gcode_sample = f"""
-        O0001 (CNC MATE GENERATED CODE)
+        O0001 (MEGALA CNC MATE GENERATED CODE)
         G21 G90 G95
         M03 S2500
         G00 X0 Z0 (Operation: Facing)
@@ -367,7 +371,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         M30
         """
         st.code(gcode_sample, language="text")
-        st.download_button("Download G-Code File", data=gcode_sample, file_name="cnc_mate_gcode.txt")
+        st.download_button("Download G-Code File", data=gcode_sample, file_name="megala_cnc_gcode.txt")
 
 # -------------------------------------------------------------
 # 6. PROFESSIONAL QUOTATION & PDF GENERATOR
@@ -386,7 +390,7 @@ elif st.session_state.nav_menu == "Quotation & PDF":
         total_amt = unit_p * q_qty
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, #111E38, #0B132B); padding: 25px; border-radius: 14px; border: 2px solid #48CAE4; box-shadow: 0 10px 25px rgba(72, 202, 228, 0.2);">
-            <h3>📄 CNC MATE - OFFICIAL QUOTATION</h3>
+            <h3>📄 MEGALA CNC MATE - OFFICIAL QUOTATION</h3>
             <p><b>Client:</b> {client} | <b>Drawing No:</b> {drawing_no}</p>
             <p><b>Included Operations:</b> {', '.join(ops)}</p>
             <p><b>Quantity:</b> {q_qty} Nos | <b>Unit Price:</b> ₹{unit_p:.2f}</p>
@@ -416,5 +420,5 @@ elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown("---")
     st.markdown("### 💾 System & Backup (100% Offline)")
     st.button("🔄 Backup & Restore Database")
-    st.markdown("ℹ️ **About CNC Mate:** Professional App Edition v6.1 (With Drawing Preview)")
+    st.markdown("ℹ️ **About MEGALA CNC MATE:** Professional App Edition v7.0")
     st.markdown("📞 **Help & Support:** Direct assistance for CNC professionals.")
