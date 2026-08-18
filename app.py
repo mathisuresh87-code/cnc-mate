@@ -5,7 +5,9 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="MEGALA CNC MATE - Smart CNC. Simple Work.", page_icon="⚙️", layout="wide"
+    page_title="MEGALA CNC MATE - Smart CNC. Simple Work.",
+    page_icon="⚙️",
+    layout="wide",
 )
 
 
@@ -135,7 +137,7 @@ else:
 
 st.markdown(
     """
-        <div class="brand-title">CNC MATE</div>
+        <div class="brand-title">MEGALA CNC MATE</div>
         <div class="brand-subtitle">SMART CNC. SIMPLE WORK.</div>
     </div>
 """,
@@ -149,13 +151,29 @@ if "nav_menu" not in st.session_state:
 if "calc_results" not in st.session_state:
   st.session_state.calc_results = None
 
+if "stock_db" not in st.session_state:
+  st.session_state.stock_db = pd.DataFrame([
+      {
+          "Material": "EN8 Round Bar - 12mm",
+          "Unit": "Meter",
+          "Available Stock": 120.50,
+          "Status": "In Stock",
+      },
+      {
+          "Material": "MS Round Bar - 20mm",
+          "Unit": "Kg",
+          "Available Stock": 45.20,
+          "Status": "Low Stock",
+      },
+  ])
+
 
 def navigate_to(menu_name):
   st.session_state.nav_menu = menu_name
 
 
 # SIDEBAR
-st.sidebar.title("⚙️ CNC MATE PRO")
+st.sidebar.title("⚙️ MEGALA CNC MATE")
 st.sidebar.markdown("### Smart CNC. Simple Work.")
 
 languages = [
@@ -417,22 +435,10 @@ elif st.session_state.nav_menu == "Stock Management":
       " Management System</div>",
       unsafe_allow_html=True,
   )
-  if "stock_db" not in st.session_state:
-    st.session_state.stock_db = pd.DataFrame([
-        {
-            "Material": "EN8 Round Bar - 12mm",
-            "Unit": "Meter",
-            "Available Stock": 120.50,
-            "Status": "In Stock",
-        },
-        {
-            "Material": "MS Round Bar - 20mm",
-            "Unit": "Kg",
-            "Available Stock": 45.20,
-            "Status": "Low Stock",
-        },
-    ])
-  st.dataframe(st.session_state.stock_db, use_container_width=True)
+  # Using st.data_editor so that user changes/stocks are interactive and persisted without data loss
+  st.session_state.stock_db = st.data_editor(
+      st.session_state.stock_db, num_rows="dynamic", use_container_width=True
+  )
 
 # 5. ADVANCED G-CODE GENERATOR
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
