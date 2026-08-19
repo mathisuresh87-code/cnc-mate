@@ -222,6 +222,7 @@ if st.session_state.nav_menu == "Home Dashboard":
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
 
+    # Steel weight formula based on shape (Diameter^2 / Constant)
     def get_kg_per_meter(dia, shape):
         if dia <= 0: return 0.0
         if shape == "Round": return (dia**2) / 162
@@ -257,7 +258,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         rod_type = st.selectbox("Rod Shape", ["Round", "Hexagon", "Square", "Tube"])
         rod_dia = st.number_input("Rod Diameter / Across Flats (mm)", min_value=0.0, value=25.0, step=0.5)
         unit_type = st.selectbox("Input Unit", ["Meter", "Kilogram"])
-        rod_length_input = st.number_input("Input Value (Length or Weight)", min_value=0.0, value=0.0, step=0.1)
+        rod_length_input = st.number_input("Input Value (Length in Meters OR Weight in Kg)", min_value=0.0, value=0.0, step=0.1)
         shift_hours = st.number_input("Working Hours per Shift / Day", min_value=0.0, value=0.0, step=0.5)
     with col2:
         part_length = st.number_input("Part Length (mm)", min_value=0.0, value=float(st.session_state.part_length), step=0.1, key="part_len_input")
@@ -268,7 +269,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     if st.button("Calculate & Render Part Preview"):
         kg_per_m = get_kg_per_meter(rod_dia, rod_type)
         
-        # Dynamic Meter <-> Kilogram Conversion
+        # Dynamic Meter <-> Kilogram Conversion Logic
         total_rod_meters = 0.0
         equivalent_kg = 0.0
         
