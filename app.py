@@ -38,7 +38,7 @@ def get_image_base64(path):
 
 logo_base64 = get_image_base64("logo.png")
 
-# Custom UI Styling with Uniform Dashboard Grid
+# Custom UI Styling with Uniform Dashboard Grid & Uniform Summary Cards
 st.markdown("""
 <style>
 .stApp {
@@ -127,6 +127,46 @@ st.markdown("""
     font-weight: 700;
     color: #F8FAFC;
     letter-spacing: 0.5px;
+}
+
+/* UNIFORM SUMMARY CARDS FOR CALCULATOR */
+.uniform-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.uniform-card {
+    background: linear-gradient(145deg, #111E38, #0B132B);
+    padding: 15px;
+    border-radius: 14px;
+    border: 1px solid #1E3A8A;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 110px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.uniform-card:hover {
+    border-color: #48CAE4;
+    box-shadow: 0 0 15px rgba(72, 202, 228, 0.4);
+}
+.card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #94A3B8;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.card-value {
+    font-size: 18px;
+    font-weight: 900;
+    color: #48CAE4;
 }
 
 .stButton>button {
@@ -280,6 +320,15 @@ def generate_3d_stepped_shaft(steps):
         current_z += length
     return meshes
 
+def get_kg_per_meter(dia, shape):
+    if dia <= 0: return 0.0
+    if shape == "Round": return (dia**2) / 162
+    elif shape == "Square": return (dia**2) / 127
+    elif shape == "Hexagon": return (dia**2) / 147
+    elif shape in ["Tube", "Bush"]: return (dia**2) / 162
+    elif shape == "Flange": return (dia**2) / 150
+    return (dia**2) / 162
+
 # SIDEBAR
 if logo_base64:
     sidebar_logo_html = f"""
@@ -371,18 +420,9 @@ if st.session_state.nav_menu == "Home Dashboard":
             navigate_to("Advanced G-Code Generator")
             st.rerun()
 
-# 2. ROD & TUBE CALCULATOR WITH INSTANT DRAWING PREVIEW & 3D ANIMATION
+# 2. ROD & TUBE CALCULATOR WITH BULK STOCK, TOTAL SCRAP & UNIFORM CARDS
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (Instant Drawing Preview & Live 3D Studio)</div>', unsafe_allow_html=True)
-
-    def get_kg_per_meter(dia, shape):
-        if dia <= 0: return 0.0
-        if shape == "Round": return (dia**2) / 162
-        elif shape == "Square": return (dia**2) / 127
-        elif shape == "Hexagon": return (dia**2) / 147
-        elif shape in ["Tube", "Bush"]: return (dia**2) / 162
-        elif shape == "Flange": return (dia**2) / 150
-        return (dia**2) / 162
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (Bulk Stock, Total Scrap & Live 3D Studio)</div>', unsafe_allow_html=True)
 
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & Live 3D Model)"], horizontal=True)
 
@@ -438,9 +478,12 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         inner_dia_input = 0.0
         if rod_type in ["Tube", "Bush"]:
             inner_dia_input = st.number_input("Inner Diameter (mm)", min_value=0.0, value=12.0, step=0.5)
-        unit_type = st.selectbox("Input Unit", ["Meter", "Kilogram"])
-        rod_length_input = st.number_input("Input Value (Length in Meters OR Weight in Kg)", min_value=0.0, value=1.0, step=0.1)
+        
+        unit_type = st.selectbox("Input Stock Unit", ["Kilogram", "Meter"])
+        rod_length_input = st.number_input("Input Value (Total Weight in Kg OR Total Length in Meters, e.g. 7000 Kg)", min_value=0.0, value=7000.0, step=10.0)
+        standard_bar_len_m = st.number_input("Standard Bar Length (Meters per bar)", min_value=1.0, value=3.0, step=0.5)
         shift_hours = st.number_input("Working Hours per Shift / Day", min_value=0.0, value=8.0, step=0.5)
+
     with col2:
         if rod_type == "Stepped Shaft":
             part_length = sum([s['len'] for s in rod_steps_data])
@@ -451,41 +494,57 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         required_qty = st.number_input("Required Quantity (Nos)", min_value=0, value=100, step=1)
         cycle_sec = st.number_input("Cycle Time (Seconds)", min_value=0.0, value=25.0, step=0.5)
 
-    if st.button("Calculate & Render Dynamic 3D Model"):
+    if st.button("Calculate Bulk Stock, Total Parts & Scrap Analysis"):
         kg_per_m = get_kg_per_meter(rod_dia, rod_type)
         total_rod_meters = 0.0
-        equivalent_kg = 0.0
+        total_bulk_kg = 0.0
         
         if unit_type == "Kilogram":
-            equivalent_kg = rod_length_input
-            total_rod_meters = (rod_length_input / kg_per_m) if kg_per_m > 0 else 0.0
+            total_bulk_kg = rod_length_input # e.g., 7000 kg
+            total_rod_meters = (total_bulk_kg / kg_per_m) if kg_per_m > 0 else 0.0
         else:
             total_rod_meters = rod_length_input
-            equivalent_kg = total_rod_meters * kg_per_m
+            total_bulk_kg = total_rod_meters * kg_per_m
 
-        total_part_len = part_length + cutting_allowance
-        rod_total_mm = total_rod_meters * 1000
+        total_part_len_mm = part_length + cutting_allowance
         
-        parts_per_rod = int(rod_total_mm / total_part_len) if (total_part_len > 0 and total_rod_meters > 0) else 0
-        used_length_mm = parts_per_rod * total_part_len
-        end_bit_mm = (rod_total_mm - used_length_mm) if rod_length_input > 0 else 0.0
-        required_rods = math.ceil(required_qty / parts_per_rod) if (parts_per_rod > 0 and required_qty > 0) else 0
-        total_stock_len = (required_rods * total_rod_meters) if required_rods > 0 else 0.0
+        # Calculate parts per standard bar
+        parts_per_bar = int((standard_bar_len_m * 1000) / total_part_len_mm) if total_part_len_mm > 0 else 0
+        end_bit_per_bar_mm = (standard_bar_len_m * 1000) - (parts_per_bar * total_part_len_mm) if parts_per_bar > 0 else 0.0
         
-        prod_per_hr = int(3600 / cycle_sec) if cycle_sec > 0 else 0
+        # Total bars required for the bulk stock weight/meters
+        total_bars_count = math.ceil(total_rod_meters / standard_bar_len_m) if standard_bar_len_m > 0 else 0
+        
+        # Total possible parts from bulk stock
+        total_possible_parts = total_bars_count * parts_per_bar
+        
+        # Total Scrap (End Bits across all bars)
+        total_scrap_length_m = (total_bars_count * end_bit_per_bar_mm) / 1000.0
+        total_scrap_weight_kg = total_scrap_length_m * kg_per_m
+        
         total_machine_time = ((required_qty * cycle_sec) / 3600) if (required_qty > 0 and cycle_sec > 0) else 0.0
         total_days = (total_machine_time / shift_hours) if (total_machine_time > 0 and shift_hours > 0) else 0.0
+        prod_per_hr = int(3600 / cycle_sec) if cycle_sec > 0 else 0
         prod_per_shift = int(prod_per_hr * shift_hours) if shift_hours > 0 else 0
 
         st.session_state.calc_results = {
-            "parts_per_rod": parts_per_rod, "end_bit_mm": end_bit_mm,
-            "required_rods": required_rods, "total_stock_len": total_stock_len,
-            "prod_per_hr": prod_per_hr, "total_machine_time": total_machine_time,
-            "total_days": total_days, "shift_hours": shift_hours,
-            "prod_per_shift": prod_per_shift, "equivalent_kg": equivalent_kg,
-            "total_rod_meters": total_rod_meters, "unit_type": unit_type,
-            "rod_dia": rod_dia, "inner_dia": inner_dia_input,
-            "part_length": part_length, "rod_type": rod_type,
+            "total_bulk_kg": total_bulk_kg,
+            "total_rod_meters": total_rod_meters,
+            "total_bars_count": total_bars_count,
+            "parts_per_bar": parts_per_bar,
+            "end_bit_mm": end_bit_per_bar_mm,
+            "total_possible_parts": total_possible_parts,
+            "total_scrap_length_m": total_scrap_length_m,
+            "total_scrap_weight_kg": total_scrap_weight_kg,
+            "total_machine_time": total_machine_time,
+            "total_days": total_days,
+            "shift_hours": shift_hours,
+            "prod_per_hr": prod_per_hr,
+            "prod_per_shift": prod_per_shift,
+            "rod_dia": rod_dia,
+            "inner_dia": inner_dia_input,
+            "part_length": part_length,
+            "rod_type": rod_type,
             "stepped_data": rod_steps_data if rod_type == "Stepped Shaft" else None
         }
 
@@ -509,13 +568,36 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
             st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("---")
-        st.subheader("📊 Calculation & Production Report Summary")
-        st.info(f"🔄 **Conversion Details:** Equivalent Length: **{res['total_rod_meters']:.2f} Meters** | Equivalent Weight: **{res['equivalent_kg']:.2f} Kg**")
-
-        r1, r2, r3 = st.columns(3)
-        r1.success(f"**Parts / Rod:** {res['parts_per_rod']} Nos")
-        r2.warning(f"**End Bit / Scrap:** {res['end_bit_mm']:.2f} mm")
-        r3.success(f"**Required Rods:** {res['required_rods']} Nos")
+        st.subheader("📊 Bulk Stock, Total Parts & Scrap Analysis Report")
+        
+        st.markdown(f"""
+        <div class="uniform-grid">
+            <div class="uniform-card">
+                <div class="card-title">Total Bulk Stock</div>
+                <div class="card-value">{res['total_bulk_kg']:.2f} Kg / {res['total_rod_meters']:.1f} m</div>
+            </div>
+            <div class="uniform-card">
+                <div class="card-title">Total Bars / Rods</div>
+                <div class="card-value">{res['total_bars_count']} Nos</div>
+            </div>
+            <div class="uniform-card">
+                <div class="card-title">Total Usable Parts</div>
+                <div class="card-value">{res['total_possible_parts']} Nos</div>
+            </div>
+            <div class="uniform-card">
+                <div class="card-title">End Bit per Bar</div>
+                <div class="card-value">{res['end_bit_mm']:.1f} mm</div>
+            </div>
+            <div class="uniform-card">
+                <div class="card-title">Total Scrap Length</div>
+                <div class="card-value">{res['total_scrap_length_m']:.2f} Meters</div>
+            </div>
+            <div class="uniform-card">
+                <div class="card-title">Total Scrap Weight</div>
+                <div class="card-value">{res['total_scrap_weight_kg']:.2f} Kg</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
         st.markdown("---")
         st.subheader("⏱️ Time & Scheduling Breakdown")
@@ -726,7 +808,7 @@ elif st.session_state.nav_menu == "Stock Management":
 # 7. ADVANCED G-CODE GENERATOR WITH INSTANT PREVIEW & 3D STUDIO
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Live 3D Drawing Studio</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகും.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
 
     uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="gcode_drawing_upload")
     if uploaded_drawing is not None:
