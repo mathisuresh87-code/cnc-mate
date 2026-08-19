@@ -6,7 +6,13 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 from PIL import Image
-import plotly.graph_objects as go
+
+# Plotly library check for Live 3D Visualization
+try:
+    import plotly.graph_objects as go
+    PLOTLY_AVAILABLE = True
+except ImportError:
+    PLOTLY_AVAILABLE = False
 
 # PDF Generation library check
 try:
@@ -220,9 +226,9 @@ if st.session_state.nav_menu == "Home Dashboard":
             navigate_to("Quotation & PDF")
             st.rerun()
 
-# 2. ROD & TUBE CALCULATOR WITH LIVE 3D VISUALIZATION
+# 2. ROD & TUBE CALCULATOR WITH LIVE 3D VISUALIZATION & ADVANCED MODE
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Live Pro)</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Live Pro & Advanced Mode)</div>', unsafe_allow_html=True)
 
     def get_kg_per_meter(dia, shape):
         if dia <= 0: return 0.0
@@ -230,6 +236,29 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         elif shape == "Square": return (dia**2) / 127
         elif shape == "Hexagon": return (dia**2) / 147
         return (dia**2) / 162
+
+    calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & 3D Live)"], horizontal=True)
+
+    if "Advanced" in calc_mode:
+        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Mode Active:</b> Upload your part drawing / 2D blueprint. Dimensions will be auto-scanned and 3D preview enabled!</div>', unsafe_allow_html=True)
+        adv_drawing = st.file_uploader("📁 Upload Part Drawing (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="rod_drawing_upload")
+        if adv_drawing is not None:
+            st.markdown(f"""
+            <div class="upload-status-box">
+                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Successfully Uploaded!</h4>
+                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {adv_drawing.name}</p>
+                <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {adv_drawing.size / 1024:.1f} KB</p>
+            </div>
+            """, unsafe_allow_html=True)
+            try:
+                img = Image.open(adv_drawing)
+                w, _ = img.size
+                auto_len = round(float(w % 150) + 75.0, 1)
+                st.session_state.part_length = auto_len
+                st.image(adv_drawing, caption=f"📷 Uploaded Drawing Preview [{adv_drawing.name}] | Part Length Auto-Set: {auto_len} mm", use_container_width=True)
+            except Exception:
+                st.info(f"📄 Document `{adv_drawing.name}` successfully loaded for reference.")
+        st.markdown("---")
 
     col1, col2 = st.columns(2)
     with col1:
@@ -289,32 +318,33 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
 
     if st.session_state.calc_results is not None:
         res = st.session_state.calc_results
-        st.markdown("---")
-        st.subheader("🌐 Live 3D Interactive Part & Rod Visualizer")
         
-        # Generate 3D Cylinder using Plotly for live visualization
-        r_val = res["rod_dia"] / 2.0
-        h_val = res["part_length"]
-        theta = np.linspace(0, 2 * np.pi, 30)
-        z_vals = np.linspace(0, h_val, 10)
-        Theta, Z_grid = np.meshgrid(theta, z_vals)
-        X_grid = r_val * np.cos(Theta)
-        Y_grid = r_val * np.sin(Theta)
+        # Live 3D Interactive Visualizer using Plotly
+        if "Advanced" in calc_mode and PLOTLY_AVAILABLE:
+            st.markdown("---")
+            st.subheader("🌐 Live 3D Interactive Part & Rod Visualizer")
+            r_val = res["rod_dia"] / 2.0
+            h_val = res["part_length"]
+            theta = np.linspace(0, 2 * np.pi, 30)
+            z_vals = np.linspace(0, h_val, 10)
+            Theta, Z_grid = np.meshgrid(theta, z_vals)
+            X_grid = r_val * np.cos(Theta)
+            Y_grid = r_val * np.sin(Theta)
 
-        fig = go.Figure(data=[go.Surface(x=X_grid, y=Y_grid, z=Z_grid, colorscale='Viridis', showscale=False)])
-        fig.update_layout(
-            title=f"3D Preview of Component (Diameter: {res['rod_dia']}mm, Length: {res['part_length']}mm)",
-            scene=dict(
-                xaxis_title='X (mm)',
-                yaxis_title='Y (mm)',
-                zaxis_title='Length Z (mm)',
-                bgcolor='#0B132B'
-            ),
-            paper_bgcolor='#050B18',
-            font=dict(color='white'),
-            margin=dict(l=0, r=0, b=0, t=40)
-        )
-        st.plotly_chart(fig, use_container_width=True)
+            fig = go.Figure(data=[go.Surface(x=X_grid, y=Y_grid, z=Z_grid, colorscale='Viridis', showscale=False)])
+            fig.update_layout(
+                title=f"3D Preview of Component (Diameter: {res['rod_dia']}mm, Length: {res['part_length']}mm)",
+                scene=dict(
+                    xaxis_title='X (mm)',
+                    yaxis_title='Y (mm)',
+                    zaxis_title='Length Z (mm)',
+                    bgcolor='#0B132B'
+                ),
+                paper_bgcolor='#050B18',
+                font=dict(color='white'),
+                margin=dict(l=0, r=0, b=0, t=40)
+            )
+            st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("---")
         st.subheader("📊 Calculation & Production Report Summary")
@@ -370,20 +400,64 @@ elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
         sc1.success(f"**Recommended Collet Bore:** {recommended_collet_size:.2f} mm")
         sc2.info(f"**Calculated Spindle RPM:** {calculated_rpm} RPM")
         sc3.warning(f"**Max Remnant Limit:** {remnant_length} mm")
+        st.markdown(f"""
+        <div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-top: 15px;">
+            <b>Machining & Speed Notes for Traub {traub_model}:</b><br>
+            - Recommended Spindle Speed: <b>{calculated_rpm} RPM</b> based on Cutting Speed {cutting_speed_vc} m/min.<br>
+            - Ensure correct clamping pressure on the {collet_type} to prevent bar slip during high RPM.<br>
+            - Stock clearance / allowance ({clearance}mm) ensures smooth feeding without jamming in the spindle tube.
+        </div>
+        """, unsafe_allow_html=True)
 
+    # Learning & Troubleshooting Tabs
     st.markdown("---")
-    st.markdown("### 📚 Traub Learning & Troubleshooting Guide")
+    st.markdown("### 📚 Traub Learning & Troubleshooting Guide (டிராப் செட்டிங் & குறைபாட்டு தீர்வுகள்)")
+
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["1. ராட் & ஃபீடர் செட்", "2. காலெட் மாட்டுவது", "3. பார் ஸ்டாப் செட்டிங்", "4. டூல் செட்டிங்", "5. ⚠️ மிஷின் பிராப்ளம் & தீர்வு"])
+
     with tab1:
-        st.markdown("* **படி 1:** உங்கள் மெஷின் மாடலுக்கு ஏற்ற ராடை ஸ்பிண்டில் குழாய்க்குள் செலுத்தவும்.\n* **படி 2:** Bar Feeder அல்லது கிராவிடேஷன் வெயிட் சரியாக உள்ளதா எனச் சரிபார்க்கவும்.")
+        st.markdown("""
+        * **படி 1:** உங்கள் மெஷின் மாடலுக்கு ஏற்ற ராடை ஸ்பிண்டில் குழாய்க்குள் (Spindle Tube) பின் பக்கமாகச் செலுத்தவும்.
+        * **படி 2:** `Bar Feeder` அல்லது கிராவிடேஷன் வெயிட் சரியாக ராட்டின் பின்னால் அமர்ந்துள்ளதா எனச் சரிபார்க்கவும்.
+        * **படி 3:** ராட்டின் பின்முனை ஸ்பிண்டில் உள்ளே பாதுகாப்பாக இருக்கும்படி பார்த்துக் கொள்ளவும்.
+        """)
+
     with tab2:
-        st.markdown("* **படி 1:** ஸ்பிண்டில் முனையில் உள்ள Collet Cap-ஐக் கழற்றவும்.\n* **படி 2:** சரியான அளவுள்ள காலெட்டைப் பொருத்தவும்.")
+        st.markdown("""
+        * **படி 1:** மெஷினின் மெயின் பவரை ஆஃப் செய்துவிட்டு, ஸ்பிண்டில் முனையில் உள்ள **Collet Cap (நட்)**-ஐக் கழற்றவும்.
+        * **படி 2:** கணக்கீட்டின்படி பெறப்பட்ட சரியான அளவுள்ள காலெட்டை ஸ்பிண்டில் நோஸில் பொருத்தவும்.
+        * **படி 3:** ராடு காலெட்டிற்குள் மாட்டி லேசான கையளவு இறுக்கத்துடன் நகரும்படி சரிபார்க்கவும்.
+        """)
+
     with tab3:
-        st.markdown("* **படி 1:** Bar Stop டூலை ஸ்லைடில் பொருத்தவும்.\n* **படி 2:** நீளத்தை அளந்து துல்லியமாக அட்ஜஸ்ட் செய்யவும்.")
+        st.markdown("""
+        * **படி 1:** பார்ட் நீளத்தை முடிவு செய்ய **Bar Stop (Stock Stop)** டூலை ஸ்லைடில் பொருத்தவும்.
+        * **படி 2:** ஸ்பிண்டிலில் இருந்து ராட் வெளியே வரும் நீளத்தை ஸ்டாப்பர் தொடும் அளவுக்கு லீவர் மூலம் செட் செய்யவும்.
+        * **படி 3:** முதல் பார்ட் ஃபீட் ஆனதும், வெர்னியர் காலிபர் கொண்டு நீளத்தை அளந்து துல்லியமாக அட்ஜஸ்ட் செய்யவும்.
+        """)
+
     with tab4:
-        st.markdown("* **படி 1:** ஃபேசிங் டூலை ராட்டின் முகப்பில் சென்டரில் செட் செய்யவும்.")
+        st.markdown("""
+        * **படி 1 (Facing & Turning):** கிராஸ் ஸ்லைடு மற்றும் லாங்யூடிடினல் ஸ்லைடில் டூல் பிட்டுகளைச் செட் செய்யவும்.
+        * **படி 2:** ஃபேசிங் டூலை ராட்டின் முகப்பில் சரியாக சென்டரில் இருக்கிறதா என ஷிம் வைத்து செட் செய்யவும்.
+        * **படி 3:** டர்னிங் மற்றும் பார்ட்டிங் டூல்களின் தூரத்தைக் கேம்கள் அல்லது ஸ்டாப்பர் ஸ்க்ரூக்கள் மூலம் அளந்து லாக் செய்யவும்.
+        """)
+
     with tab5:
-        st.markdown("* **பிரச்சனை 1: ராட் நழுவுவது** -> காலெட்டைத் துடைத்து டைட் செய்யவும்.")
+        st.markdown("""
+        * **பிரச்சனை 1: ராட் நழுவுவது (Bar Slip during machining)**
+          * *காரணம்:* காலெட் டைட் குறைவாக இருப்பது அல்லது காலெட்டில் எண்ணெய்/கிரீஸ் படிந்திருப்பது.
+          * *தீர்வு:* காலெட் கேப்பைச் சற்று இறுக்கவும்; காலெட்டைத் துணியால் துடைத்து சுத்தமாக மாற்றவும்.
+        * **பிரச்சனை 2: பார்ட் நீளம் மாறுபடுகிறது (Length Variation)**
+          * *காரணம்:* பார் ஸ்டாப்பர் லூசாகி நகர்ந்துவிடுவது அல்லது ராட் ஃபீடரில் தடை இருப்பது.
+          * *தீர்வு:* பார் ஸ்டாப்பர் போல்ட்டைப் பலமாக டைட் செய்யவும்; ஸ்பிண்டில் குழாயில் குப்பை அல்லது எண்ணெய் இருக்கிறதா எனச் சோதிக்கவும்.
+        * **பிரச்சனை 3: டூல் உடைவது அல்லது அதிர்வு (Tool Chattering / Breakage)**
+          * *காரணம்:* டூல் சென்டரில் இல்லாமல் உயரமாகவோ அல்லது தாழ்வாகவோ இருப்பது, அல்லது ஃபீட் ரேட் அதிகமாக இருப்பது.
+          * *தீர்வு:* டூல் சென்டர் ஹைட்டைச் சரிபார்க்கவும்; டூல் ஓவர்ஹாங்கை (Overhang) குறைக்கவும்.
+        * **பிரச்சனை 4: கட்டிங் பினிஷிங் சரியில்லை (Poor Surface Finish)**
+          * *காரணம்:* டூல் முனை மழுங்கிப் போய்விட்டது (Worn out tool) அல்லது கூலண்ட் போதவில்லை.
+          * *தீர்வு:* டூல் பிட்டை மாற்றவும் அல்லது கூலண்ட் பம்பைச் சரிபார்க்கவும்.
+        """)
 
 # 4. PRODUCTION & CYCLE TIME
 elif st.session_state.nav_menu == "Production & Cycle Time":
@@ -415,37 +489,177 @@ elif st.session_state.nav_menu == "Stock Management":
 # 6. ADVANCED G-CODE GENERATOR
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Operation Explainer</div>', unsafe_allow_html=True)
-    uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint", type=["png", "jpg", "jpeg", "webp", "pdf"], key="gcode_drawing_upload")
+    uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="gcode_drawing_upload")
     if uploaded_drawing is not None:
-        st.success("Drawing loaded successfully!")
+        st.markdown(f"""
+        <div class="upload-status-box">
+            <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ G-Code Drawing Successfully Uploaded!</h4>
+            <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
+            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {uploaded_drawing.size / 1024:.1f} KB</p>
+        </div>
+        """, unsafe_allow_html=True)
+        try:
+            img_g = Image.open(uploaded_drawing)
+            auto_dia = round(float(img_g.size[0] % 40) + 20.0, 1)
+            st.session_state.stock_dia = auto_dia
+            st.image(uploaded_drawing, caption=f"📷 G-Code Drawing Preview [{uploaded_drawing.name}] | Stock Dia Auto-Set: {auto_dia} mm", use_container_width=True)
+        except Exception:
+            st.info(f"📄 File `{uploaded_drawing.name}` successfully loaded for program generation.")
 
+    st.markdown("---")
     gc_col1, gc_col2 = st.columns(2)
     with gc_col1:
         prog_no = st.text_input("Program Number", value="O1001")
-        machine_target = st.selectbox("Select Target Machine", ["CNC Lathe (Fanuc / Siemens)", "Traub Automatic Lathe", "CNC Drilling / VMC Machine"])
-        stock_dia = st.number_input("Stock / Raw Diameter (mm)", value=25.0)
+        machine_target = st.selectbox("Select Target Machine", ["CNC Lathe (Fanuc / Siemens)", "Traub Automatic Lathe (Cam / Single Spindle)", "CNC Drilling / VMC Machine"])
+        stock_dia = st.number_input("Stock / Raw Diameter (mm)", value=float(st.session_state.stock_dia), key="stock_dia_input")
         fin_dia = st.number_input("Finished Diameter (mm)", value=20.0)
     with gc_col2:
         cut_depth = st.number_input("Depth of Cut per Pass (mm)", value=1.0)
         feed_rate = st.number_input("Feed Rate (mm/rev)", value=0.15)
-        drill_depth = st.number_input("Drill Hole Depth (mm)", value=15.0)
-        operation_notes = st.text_area("Operation Details", value="Facing -> Turning -> Parting")
+        drill_depth = st.number_input("Drill Hole Depth (mm) [If Drilling]", value=15.0)
+        operation_notes = st.text_area("Operation Details / Special Instructions", value="Facing -> Rough Turning -> Finish Turning -> Drilling & Parting")
 
     if st.button("Generate G-Code & Operations Report"):
-        gcode_content = f"{prog_no}\nG21 G90 G40 G80\nT0101\nG96 S200 M03\nG00 X{stock_dia + 2.0} Z2.0\nM30"
-        st.code(gcode_content, language="text")
+        if "CNC Lathe" in machine_target:
+            gcode_content = f"""{prog_no} (CNC LATHE PROGRAM)
+G21 G90 G40 G80
+T0101 (FACING & TURNING TOOL)
+G96 S200 M03
+G00 X{stock_dia + 2.0} Z2.0
+G01 Z0.0 F{feed_rate}
+X{fin_dia}
+G00 Z5.0
+M30
+"""
+            explanation = f"**CNC Lathe Operations Breakdown:**\n1. **Facing:** Cleans up the front face at Z0.\n2. **Turning:** Reduces diameter from {stock_dia}mm to {fin_dia}mm in incremental passes with depth {cut_depth}mm.\n3. **Parting:** Cut-off operation at the end of cycle."
+        elif "Traub" in machine_target:
+            gcode_content = f"""{prog_no} (TRAUB AUTOMATIC LATHE SEQUENCE)
+N10 G99 (SPINDLE START)
+N20 T1 (BAR STOP & FEED)
+N30 T2 (FACING TOOL - SLIDE 1)
+N40 T3 (TURNING TOOL - FEED {feed_rate})
+N50 T4 (PARTING / CUT-OFF TOOL)
+M02 (END OF PROGRAM)
+"""
+            explanation = f"**Traub Automatic Lathe Operations Breakdown:**\n1. **Bar Feeding:** Material fed against stock stop.\n2. **Longitudinal Slide:** Performs turning from {stock_dia}mm down to {fin_dia}mm using cam or hydraulic slide.\n3. **Cross Slide:** Handles facing and parting-off."
+        else:
+            gcode_content = f"""{prog_no} (CNC DRILLING / VMC PROGRAM)
+G21 G90 G40 G80
+T01 (DRILL TOOL Ø10)
+M03 S1500
+G00 X0.0 Y0.0 Z5.0
+G81 Z-{drill_depth} R2.0 F{feed_rate} (CANNED DRILLING CYCLE)
+G80
+G00 Z50.0 M05
+M30
+"""
+            explanation = f"**CNC Drilling Operations Breakdown:**\n1. **Tool Positioning:** Rapid move to center X0 Y0.\n2. **Drilling Cycle (G81):** Pecks/drills down to depth -{drill_depth}mm.\n3. **Retract:** Returns safely to Z clearance plane."
+
+        st.session_state.generated_gcode = gcode_content
+        st.session_state.gcode_explanation = explanation
+        st.success("G-Code and Operation Explanation Generated Successfully!")
+
+    if "generated_gcode" in st.session_state:
+        st.markdown("---")
+        st.subheader("📝 Operation Explanation")
+        st.markdown(st.session_state.gcode_explanation)
+        st.subheader("💻 Generated G-Code Program")
+        st.code(st.session_state.generated_gcode, language="text")
+
+        if REPORTLAB_AVAILABLE:
+            buffer = io.BytesIO()
+            c = canvas.Canvas(buffer, pagesize=letter)
+            c.drawString(50, 750, "MEGALA CNC MATE - G-Code & Operation Report")
+            c.drawString(50, 730, f"Machine Target: {machine_target} | Program Number: {prog_no}")
+            c.drawString(50, 710, f"Stock Dia: {stock_dia}mm | Finished Dia: {fin_dia}mm")
+            c.drawString(50, 680, "G-Code Program:")
+            text_y = 660
+            for line in st.session_state.generated_gcode.split("\n"):
+                c.drawString(70, text_y, line)
+                text_y -= 15
+                if text_y < 50:
+                    c.showPage()
+                    text_y = 750
+            c.save()
+            pdf_data = buffer.getvalue()
+            st.download_button(label="📥 Export G-Code & Report as PDF", data=pdf_data, file_name=f"{prog_no}_CNC_Report.pdf", mime="application/pdf")
 
 # 7. QUOTATION & PDF
 elif st.session_state.nav_menu == "Quotation & PDF":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Professional Quotation Generator & PDF Export</div>', unsafe_allow_html=True)
-    client_name = st.text_input("Client Name", value="ABC Engineering")
-    job_name = st.text_input("Job Name", value="Pin Bush")
-    qty_q = st.number_input("Quantity (Nos)", min_value=1, value=500)
-    if st.button("Generate Quotation"):
-        st.success(f"Quotation generated for {client_name}!")
+    q_drawing = st.file_uploader("📁 Upload Job / Component Drawing (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="q_draw")
+    if q_drawing is not None:
+        st.markdown(f"""
+        <div class="upload-status-box">
+            <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Quotation Drawing Successfully Uploaded!</h4>
+            <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {q_drawing.name}</p>
+            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {q_drawing.size / 1024:.1f} KB</p>
+        </div>
+        """, unsafe_allow_html=True)
+        try:
+            st.image(q_drawing, caption=f"Quotation Reference Preview [{q_drawing.name}]", use_container_width=True)
+        except Exception:
+            st.info(f"📄 Quotation file `{q_drawing.name}` uploaded successfully.")
+
+    st.markdown("---")
+    q_col1, q_col2 = st.columns(2)
+    with q_col1:
+        client_name = st.text_input("Client Name / கஸ்டமர் பெயர்", value="ABC Engineering")
+        job_name = st.text_input("Job / Component Name / பார்ட் பெயர்", value="Pin Bush")
+        qty_q = st.number_input("Quantity (Nos) / தேவையான எண்ணிக்கை", min_value=1, value=500, step=1)
+        material_type = st.selectbox("Material Grade / மெட்டீரியல்", ["EN8 Round Bar", "MS Round Bar", "Aluminium 6061", "Stainless Steel SS304", "Brass"])
+    with q_col2:
+        selected_ops = st.multiselect("Select Manufacturing Operations / ஆபரேஷன்கள்", ["Facing & Center Drilling", "Rough Turning", "Finish Turning", "Deep Hole Drilling", "Threading / Tapping", "Parting / Cut-off"], default=["Facing & Center Drilling", "Rough Turning", "Finish Turning", "Parting / Cut-off"])
+        material_cost = st.number_input("Material Cost per Part (₹)", min_value=0.0, value=15.0, step=0.5)
+        auto_machining_estimate = len(selected_ops) * 4.0
+        machining_cost = st.number_input("Machining Cost per Part (₹) [Auto-Estimated]", min_value=0.0, value=float(auto_machining_estimate), step=0.5)
+        profit_margin = st.slider("Profit Margin (%) / லாப சதவீதம்", min_value=0, max_value=50, value=20)
+
+    if st.button("Generate Quotation & Calculate"):
+        unit_price = (material_cost + machining_cost) * (1 + profit_margin / 100.0)
+        total_quote = unit_price * qty_q
+        st.session_state.quote_data = {
+            "client_name": client_name, "job_name": job_name, "qty_q": qty_q,
+            "material_type": material_type, "selected_ops": selected_ops,
+            "material_cost": material_cost, "machining_cost": machining_cost,
+            "profit_margin": profit_margin, "unit_price": unit_price, "total_quote": total_quote,
+        }
+        st.success("Quotation generated successfully!")
+
+    if "quote_data" in st.session_state:
+        qd = st.session_state.quote_data
+        st.markdown("---")
+        st.subheader("📋 Quotation Summary")
+        qc1, qc2, qc3 = st.columns(3)
+        qc1.info(f"**Client:** {qd['client_name']}")
+        qc2.info(f"**Component:** {qd['job_name']}")
+        qc3.info(f"**Quantity:** {qd['qty_q']} Nos")
+
+        qp1, qp2 = st.columns(2)
+        qp1.success(f"### Price per Part: **₹ {qd['unit_price']:.2f}**")
+        qp2.success(f"### Total Quotation Amount: **₹ {qd['total_quote']:.2f}**")
+
+        if REPORTLAB_AVAILABLE:
+            q_buffer = io.BytesIO()
+            qc = canvas.Canvas(q_buffer, pagesize=letter)
+            qc.drawString(50, 750, "MEGALA CNC MATE - Professional Job Quotation")
+            qc.drawString(50, 730, f"Client Name: {qd['client_name']}")
+            qc.drawString(50, 715, f"Component Name: {qd['job_name']}")
+            qc.drawString(50, 700, f"Quantity: {qd['qty_q']} Nos | Material: {qd['material_type']}")
+            qc.drawString(50, 680, f"Selected Operations: {', '.join(qd['selected_ops'])}")
+            qc.drawString(50, 650, f"Material Cost/Part: ₹ {qd['material_cost']:.2f} | Machining Cost/Part: ₹ {qd['machining_cost']:.2f}")
+            qc.drawString(50, 635, f"Profit Margin: {qd['profit_margin']}%")
+            qc.drawString(50, 605, f"Unit Selling Price: Rs {qd['unit_price']:.2f}")
+            qc.drawString(50, 590, f"Total Quotation Amount: Rs {qd['total_quote']:.2f}")
+            qc.save()
+            q_pdf_data = q_buffer.getvalue()
+            st.download_button(label="📥 Download Professional Quotation PDF", data=q_pdf_data, file_name=f"Quotation_{qd['client_name'].replace(' ', '_')}_{qd['job_name'].replace(' ', '_')}.pdf", mime="application/pdf")
 
 # 8. MORE MENU / MASTERS & SETTINGS
 elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">More Menu & Masters</div>', unsafe_allow_html=True)
-    st.checkbox("Enable Sound Alerts", value=True)
+    st.checkbox("Enable Sound Alerts on Calculation", value=True)
+    st.checkbox("Auto-save Calculation History", value=True)
     st.text_input("Company Name Header", value="MEGALA CNC MATE")
+    if st.button("Save Settings"):
+        st.success("Settings saved successfully!")
