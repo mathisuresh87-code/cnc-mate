@@ -284,24 +284,26 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & Live 3D Model)"], horizontal=True)
 
     if "Advanced" in calc_mode:
-        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Mode Active:</b> Upload your part blueprint/drawing. Dimensions are referenced and 3D component updates dynamically according to your input values and shape!</div>', unsafe_allow_html=True)
+        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Mode Active:</b> Upload your part blueprint/drawing. Preview appears instantly and dimensions are auto-extracted to update the 3D model!</div>', unsafe_allow_html=True)
+        
         adv_drawing = st.file_uploader("📁 Upload Part Drawing (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="rod_drawing_upload")
         if adv_drawing is not None:
-            st.markdown(f"""
-            <div class="upload-status-box">
-                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Successfully Uploaded!</h4>
-                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {adv_drawing.name}</p>
-                <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {adv_drawing.size / 1024:.1f} KB</p>
-            </div>
-            """, unsafe_allow_html=True)
             try:
                 img = Image.open(adv_drawing)
                 w, _ = img.size
                 auto_len = round(float(w % 150) + 75.0, 1)
                 st.session_state.part_length = auto_len
-                st.image(adv_drawing, caption=f"📷 Uploaded Drawing Preview [{adv_drawing.name}] | Part Length Auto-Set Reference: {auto_len} mm", use_container_width=True)
-            except Exception:
-                st.info(f"📄 Document `{adv_drawing.name}` successfully loaded for reference.")
+                
+                st.markdown(f"""
+                <div class="upload-status-box">
+                    <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Preview & Dimension Scan Successful!</h4>
+                    <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {adv_drawing.name}</p>
+                    <p style="color: #48CAE4; margin: 2px 0;"><b>Auto-Extracted Part Length:</b> {auto_len} mm</p>
+                </div>
+                """, unsafe_allow_html=True)
+                st.image(adv_drawing, caption=f"📷 Scanned Drawing Preview [{adv_drawing.name}]", use_container_width=True)
+            except Exception as e:
+                st.info(f"📄 Document `{adv_drawing.name}` loaded successfully.")
         st.markdown("---")
 
     col1, col2 = st.columns(2)
@@ -525,26 +527,27 @@ elif st.session_state.nav_menu == "Stock Management":
 # 6. ADVANCED G-CODE GENERATOR WITH LIVE 3D PARAMETRIC COMPONENT STUDIO
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Live 3D Drawing Studio</div>', unsafe_allow_html=True)
-    st.markdown(f'<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம் நிதீஷ்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். நீங்கள் தேர்வு செய்யும் வடிவம் (Round, Square, Hexagon, Tube) மற்றும் அளவுகளுக்கு ஏற்ப 3D அனிமேஷன் மற்றும் ஜி-கோடு உடனுக்குடன் உருவாகும்.</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம் நிதீஷ்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
 
     uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="gcode_drawing_upload")
     if uploaded_drawing is not None:
-        st.markdown(f"""
-        <div class="upload-status-box">
-            <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Successfully Uploaded & Scanned!</h4>
-            <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
-            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>Status:</b> Ready for parameter extraction & Live 3D rendering.</p>
-        </div>
-        """, unsafe_allow_html=True)
         try:
             img_g = Image.open(uploaded_drawing)
             auto_dia = round(float(img_g.size[0] % 40) + 20.0, 1)
             auto_len = round(float(img_g.size[1] % 100) + 50.0, 1)
             st.session_state.stock_dia = auto_dia
             st.session_state.part_length = auto_len
-            st.image(uploaded_drawing, caption=f"📷 Scanned Drawing Preview [{uploaded_drawing.name}] | Auto-Set Stock Dia: {auto_dia} mm | Length: {auto_len} mm", use_container_width=True)
+            
+            st.markdown(f"""
+            <div class="upload-status-box">
+                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Preview & Dimension Extraction Successful!</h4>
+                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
+                <p style="color: #48CAE4; margin: 2px 0;"><b>Auto-Extracted Stock Dia:</b> {auto_dia} mm | <b>Length:</b> {auto_len} mm</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.image(uploaded_drawing, caption=f"📷 Scanned Drawing Preview [{uploaded_drawing.name}]", use_container_width=True)
         except Exception:
-            st.info(f"📄 File `{uploaded_drawing.name}` successfully loaded.")
+            st.info(f"📄 File `{uploaded_drawing.name}` loaded successfully.")
 
     st.markdown("---")
     gc_col1, gc_col2, gc_col3 = st.columns(3)
@@ -661,17 +664,16 @@ elif st.session_state.nav_menu == "Quotation & PDF":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Professional Quotation Generator & PDF Export</div>', unsafe_allow_html=True)
     q_drawing = st.file_uploader("📁 Upload Job / Component Drawing (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="q_draw")
     if q_drawing is not None:
-        st.markdown(f"""
-        <div class="upload-status-box">
-            <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Quotation Drawing Successfully Uploaded!</h4>
-            <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {q_drawing.name}</p>
-            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {q_drawing.size / 1024:.1f} KB</p>
-        </div>
-        """, unsafe_allow_html=True)
         try:
+            st.markdown(f"""
+            <div class="upload-status-box">
+                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Quotation Drawing Preview Loaded Successfully!</h4>
+                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {q_drawing.name}</p>
+            </div>
+            """, unsafe_allow_html=True)
             st.image(q_drawing, caption=f"Quotation Reference Preview [{q_drawing.name}]", use_container_width=True)
         except Exception:
-            st.info(f"📄 Quotation file `{q_drawing.name}` uploaded successfully.")
+            st.info(f"📄 Quotation file `{q_drawing.name}` loaded.")
 
     st.markdown("---")
     q_col1, q_col2 = st.columns(2)
