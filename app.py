@@ -240,7 +240,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & Live 3D Model)"], horizontal=True)
 
     if "Advanced" in calc_mode:
-        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Mode Active:</b> Upload your part blueprint/drawing. Dimensions are referenced and 3D component updates dynamically according to your input values!</div>', unsafe_allow_html=True)
+        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Mode Active:</b> Upload your part blueprint/drawing. Dimensions are referenced and 3D component updates dynamically according to your input values and shape!</div>', unsafe_allow_html=True)
         adv_drawing = st.file_uploader("📁 Upload Part Drawing (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="rod_drawing_upload")
         if adv_drawing is not None:
             st.markdown(f"""
@@ -313,27 +313,40 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
             "total_rod_meters": total_rod_meters,
             "unit_type": unit_type,
             "rod_dia": rod_dia,
-            "part_length": part_length
+            "part_length": part_length,
+            "rod_type": rod_type
         }
 
     if st.session_state.calc_results is not None:
         res = st.session_state.calc_results
         
-        # Dynamic 3D Interactive Visualizer reacting directly to entered dimensions
+        # Dynamic 3D Interactive Visualizer reacting directly to entered shape and dimensions
         if "Advanced" in calc_mode and PLOTLY_AVAILABLE:
             st.markdown("---")
-            st.subheader("🌐 Dynamic 3D Interactive Component Preview (Auto-Scaled to Input Dimensions)")
-            r_val = res["rod_dia"] / 2.0
-            h_val = res["part_length"]
-            theta = np.linspace(0, 2 * np.pi, 30)
-            z_vals = np.linspace(0, h_val, 15)
-            Theta, Z_grid = np.meshgrid(theta, z_vals)
-            X_grid = r_val * np.cos(Theta)
-            Y_grid = r_val * np.sin(Theta)
+            st.subheader(f"🌐 Dynamic 3D Interactive Component Preview [{res['rod_type']} Shape]")
+            h_val = res["res_length"] if "res_length" in res else res["part_length"]
+            r_flat = res["rod_dia"] / 2.0
+            
+            # Shape-specific 3D geometry generation
+            theta_smooth = np.linspace(0, 2 * np.pi, 120)
+            z_grid_poly = np.linspace(0, res["part_length"], 20)
+            Theta_p, Z_p = np.meshgrid(theta_smooth, z_grid_poly)
+            
+            if res["rod_type"] == "Hexagon":
+                n_sides = 6
+                r_poly = r_flat / np.cos((Theta_p % (2 * np.pi / n_sides)) - (np.pi / n_sides))
+            elif res["rod_type"] == "Square":
+                n_sides = 4
+                r_poly = r_flat / np.cos((Theta_p % (2 * np.pi / n_sides)) - (np.pi / n_sides))
+            else: # Round or Tube
+                r_poly = np.full_like(Theta_p, r_flat)
 
-            fig = go.Figure(data=[go.Surface(x=X_grid, y=Y_grid, z=Z_grid, colorscale='Viridis', showscale=False)])
+            X_grid = r_poly * np.cos(Theta_p)
+            Y_grid = r_poly * np.sin(Theta_p)
+
+            fig = go.Figure(data=[go.Surface(x=X_grid, y=Y_grid, z=Z_p, colorscale='Viridis', showscale=False)])
             fig.update_layout(
-                title=dict(text=f"3D Component Model -> Diameter: {res['rod_dia']} mm | Length: {res['part_length']} mm", font=dict(size=14, color='#48CAE4')),
+                title=dict(text=f"3D Model [{res['rod_type']}] -> Size: {res['rod_dia']} mm | Length: {res['part_length']} mm", font=dict(size=14, color='#48CAE4')),
                 scene=dict(
                     xaxis_title='X Axis (mm)',
                     yaxis_title='Y Axis (mm)',
