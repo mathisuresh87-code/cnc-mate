@@ -197,7 +197,7 @@ if "stock_db" not in st.session_state:
 def navigate_to(menu_name):
     st.session_state.nav_menu = menu_name
 
-# Helper function for precise shape mesh generation in 3D Plotly (Lowercase colorscales fixed)
+# Helper function for precise shape mesh generation in 3D Plotly
 def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
     z_vals = np.linspace(0, length, 30)
     theta = np.linspace(0, 2 * np.pi, 60)
@@ -320,12 +320,11 @@ if selected_sidebar_menu != st.session_state.nav_menu:
     st.session_state.nav_menu = selected_sidebar_menu
     st.rerun()
 
-# 1. HOME DASHBOARD (Uniform Grid Layout - Fully Aligned & Bug-Free)
+# 1. HOME DASHBOARD
 if st.session_state.nav_menu == "Home Dashboard":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome Nithish 👋 (MEGALA CNC MATE Suite)</div>', unsafe_allow_html=True)
     st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 25px;">Ultra-Advanced CNC, Traub & Blueprint Studio - Select any module below</div>', unsafe_allow_html=True)
 
-    # 3-Column Uniform Grid Cards (Fixed indentation to prevent raw HTML display bug)
     st.markdown("""<div class="dashboard-grid">
     <div class="dash-card"><div class="dash-icon">📏</div><div class="dash-label">Rod Calculator & 3D</div></div>
     <div class="dash-card"><div class="dash-icon">🔧</div><div class="dash-label">Traub Collet & Bar Feed</div></div>
@@ -338,7 +337,6 @@ if st.session_state.nav_menu == "Home Dashboard":
     <div class="dash-card"><div class="dash-icon">✨</div><div class="dash-label">Studio & Assistant</div></div>
 </div>""", unsafe_allow_html=True)
 
-    # Perfectly Aligned Uniform Action Buttons Below Cards
     col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("Open Rod Calculator"):
@@ -728,7 +726,7 @@ elif st.session_state.nav_menu == "Stock Management":
 # 7. ADVANCED G-CODE GENERATOR WITH INSTANT PREVIEW & 3D STUDIO
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Live 3D Drawing Studio</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகും.</div>', unsafe_allow_html=True)
 
     uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="gcode_drawing_upload")
     if uploaded_drawing is not None:
