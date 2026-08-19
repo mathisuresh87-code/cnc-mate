@@ -222,7 +222,6 @@ if st.session_state.nav_menu == "Home Dashboard":
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Pro)</div>', unsafe_allow_html=True)
 
-    # Steel weight formula based on shape (Diameter^2 / Constant)
     def get_kg_per_meter(dia, shape):
         if dia <= 0: return 0.0
         if shape == "Round": return (dia**2) / 162
@@ -269,7 +268,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     if st.button("Calculate & Render Part Preview"):
         kg_per_m = get_kg_per_meter(rod_dia, rod_type)
         
-        # Dynamic Meter <-> Kilogram Conversion Logic
+        # Dynamic Meter <-> Kilogram Conversion
         total_rod_meters = 0.0
         equivalent_kg = 0.0
         
@@ -289,7 +288,6 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         required_rods = math.ceil(required_qty / parts_per_rod) if (parts_per_rod > 0 and required_qty > 0) else 0
         total_stock_len = (required_rods * total_rod_meters) if required_rods > 0 else 0.0
         
-        # Time calculations with 0-safety checks
         prod_per_hr = int(3600 / cycle_sec) if cycle_sec > 0 else 0
         total_machine_time = ((required_qty * cycle_sec) / 3600) if (required_qty > 0 and cycle_sec > 0) else 0.0
         total_days = (total_machine_time / shift_hours) if (total_machine_time > 0 and shift_hours > 0) else 0.0
@@ -328,14 +326,15 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         t2.info(f"**Estimated Days ({res['shift_hours']} hrs/day):** {res['total_days']:.2f} Days")
         t3.info(f"**Production Rate:** {res['prod_per_hr']} parts/hr (~ {res['prod_per_shift']} parts/shift)")
 
-# 3. TRAUB COLLET & BAR FEED MASTER
+# 3. TRAUB COLLET & BAR FEED MASTER (Updated with A32 Model)
 elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Traub Collet & Bar Feed Master</div>', unsafe_allow_html=True)
     st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Calculate appropriate collet sizes, bar feeder clearances, and feed stock settings for Traub automatic lathes.</div>', unsafe_allow_html=True)
 
     t_col1, t_col2 = st.columns(2)
     with t_col1:
-        traub_model = st.selectbox("Traub Machine Model", ["A15 / A25", "A42 / A60", "TD16 / TD26", "TNS"])
+        # Added A32 to the list of models here:
+        traub_model = st.selectbox("Traub Machine Model", ["A15 / A25", "A32", "A42 / A60", "TD16 / TD26", "TNS"])
         collet_type = st.selectbox("Collet Profile", ["Round Collet (DIN 6343 / 144E)", "Hexagon Collet", "Square Collet", "Dead Length Collet"])
         raw_bar_dia = st.number_input("Raw Bar Diameter / Across Flats (mm)", min_value=1.0, value=16.0, step=0.5)
     with t_col2:
@@ -485,8 +484,6 @@ M30
             c.save()
             pdf_data = buffer.getvalue()
             st.download_button(label="📥 Export G-Code & Report as PDF", data=pdf_data, file_name=f"{prog_no}_CNC_Report.pdf", mime="application/pdf")
-        else:
-            st.info("Install reportlab package (`pip install reportlab`) to enable direct PDF download buttons.")
 
 # 7. QUOTATION & PDF
 elif st.session_state.nav_menu == "Quotation & PDF":
