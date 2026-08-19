@@ -335,12 +335,24 @@ elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
         collet_type = st.selectbox("Collet Profile", ["Round Collet (DIN 6343 / 144E)", "Hexagon Collet", "Square Collet", "Dead Length Collet"])
         raw_bar_dia = st.number_input("Raw Bar Diameter / Across Flats (mm)", min_value=1.0, value=16.0, step=0.5)
     with t_col2:
-        bar_tolerance = st.selectbox("Bar Stock Tolerance Grade", ["h9 (Standard Bright Bar)", "h11", "K12"])
+        tolerance_option = st.selectbox(
+            "Bar Stock Tolerance Grade", 
+            ["h6", "h7", "h8", "h9 (Standard Bright Bar)", "h10", "h11", "K12", "Custom / Manual Clearance"]
+        )
+        if "Custom" in tolerance_option:
+            clearance = st.number_input("Enter Custom Clearance / Tolerance (mm)", min_value=0.0, value=0.05, step=0.01)
+        else:
+            if "h6" in tolerance_option or "h7" in tolerance_option:
+                clearance = 0.02
+            elif "h8" in tolerance_option or "h9" in tolerance_option:
+                clearance = 0.05
+            else:
+                clearance = 0.10
+
         cutting_speed_vc = st.number_input("Cutting Speed (Vc in m/min) [For RPM Calc]", min_value=10.0, value=100.0, step=5.0)
         remnant_length = st.number_input("Target Remnant / End Piece Length (mm)", min_value=10.0, value=45.0, step=5.0)
 
     if st.button("Calculate Traub Collet & Spindle RPM"):
-        clearance = 0.05 if "h9" in bar_tolerance else 0.10
         recommended_collet_size = raw_bar_dia + clearance
         calculated_rpm = int((cutting_speed_vc * 1000) / (math.pi * raw_bar_dia)) if raw_bar_dia > 0 else 0
         
@@ -355,7 +367,7 @@ elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
             <b>Machining & Speed Notes for Traub {traub_model}:</b><br>
             - Recommended Spindle Speed: <b>{calculated_rpm} RPM</b> based on Cutting Speed {cutting_speed_vc} m/min.<br>
             - Ensure correct clamping pressure on the {collet_type} to prevent bar slip during high RPM.<br>
-            - Stock clearance ({clearance}mm) ensures smooth feeding without jamming in the spindle tube.
+            - Stock clearance / allowance ({clearance}mm) ensures smooth feeding without jamming in the spindle tube.
         </div>
         """, unsafe_allow_html=True)
 
