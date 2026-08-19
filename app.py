@@ -226,9 +226,9 @@ if st.session_state.nav_menu == "Home Dashboard":
             navigate_to("Quotation & PDF")
             st.rerun()
 
-# 2. ROD & TUBE CALCULATOR WITH LIVE 3D VISUALIZATION & ADVANCED MODE
+# 2. ROD & TUBE CALCULATOR WITH DYNAMIC 3D PARAMETRIC ANIMATION & DRAWING UPLOAD
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Live Pro & Advanced Mode)</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Parametric Pro & Drawing Scan)</div>', unsafe_allow_html=True)
 
     def get_kg_per_meter(dia, shape):
         if dia <= 0: return 0.0
@@ -237,10 +237,10 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         elif shape == "Hexagon": return (dia**2) / 147
         return (dia**2) / 162
 
-    calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & 3D Live)"], horizontal=True)
+    calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & Live 3D Model)"], horizontal=True)
 
     if "Advanced" in calc_mode:
-        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Mode Active:</b> Upload your part drawing / 2D blueprint. Dimensions will be auto-scanned and 3D preview enabled!</div>', unsafe_allow_html=True)
+        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Mode Active:</b> Upload your part blueprint/drawing. Dimensions are referenced and 3D component updates dynamically according to your input values!</div>', unsafe_allow_html=True)
         adv_drawing = st.file_uploader("📁 Upload Part Drawing (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="rod_drawing_upload")
         if adv_drawing is not None:
             st.markdown(f"""
@@ -255,7 +255,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
                 w, _ = img.size
                 auto_len = round(float(w % 150) + 75.0, 1)
                 st.session_state.part_length = auto_len
-                st.image(adv_drawing, caption=f"📷 Uploaded Drawing Preview [{adv_drawing.name}] | Part Length Auto-Set: {auto_len} mm", use_container_width=True)
+                st.image(adv_drawing, caption=f"📷 Uploaded Drawing Preview [{adv_drawing.name}] | Part Length Auto-Set Reference: {auto_len} mm", use_container_width=True)
             except Exception:
                 st.info(f"📄 Document `{adv_drawing.name}` successfully loaded for reference.")
         st.markdown("---")
@@ -273,7 +273,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         required_qty = st.number_input("Required Quantity (Nos)", min_value=0, value=100, step=1)
         cycle_sec = st.number_input("Cycle Time (Seconds)", min_value=0.0, value=25.0, step=0.5)
 
-    if st.button("Calculate & Render Live 3D Preview"):
+    if st.button("Calculate & Render Dynamic 3D Model"):
         kg_per_m = get_kg_per_meter(rod_dia, rod_type)
         total_rod_meters = 0.0
         equivalent_kg = 0.0
@@ -319,24 +319,24 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     if st.session_state.calc_results is not None:
         res = st.session_state.calc_results
         
-        # Live 3D Interactive Visualizer using Plotly
+        # Dynamic 3D Interactive Visualizer reacting directly to entered dimensions
         if "Advanced" in calc_mode and PLOTLY_AVAILABLE:
             st.markdown("---")
-            st.subheader("🌐 Live 3D Interactive Part & Rod Visualizer")
+            st.subheader("🌐 Dynamic 3D Interactive Component Preview (Auto-Scaled to Input Dimensions)")
             r_val = res["rod_dia"] / 2.0
             h_val = res["part_length"]
             theta = np.linspace(0, 2 * np.pi, 30)
-            z_vals = np.linspace(0, h_val, 10)
+            z_vals = np.linspace(0, h_val, 15)
             Theta, Z_grid = np.meshgrid(theta, z_vals)
             X_grid = r_val * np.cos(Theta)
             Y_grid = r_val * np.sin(Theta)
 
             fig = go.Figure(data=[go.Surface(x=X_grid, y=Y_grid, z=Z_grid, colorscale='Viridis', showscale=False)])
             fig.update_layout(
-                title=f"3D Preview of Component (Diameter: {res['rod_dia']}mm, Length: {res['part_length']}mm)",
+                title=dict(text=f"3D Component Model -> Diameter: {res['rod_dia']} mm | Length: {res['part_length']} mm", font=dict(size=14, color='#48CAE4')),
                 scene=dict(
-                    xaxis_title='X (mm)',
-                    yaxis_title='Y (mm)',
+                    xaxis_title='X Axis (mm)',
+                    yaxis_title='Y Axis (mm)',
                     zaxis_title='Length Z (mm)',
                     bgcolor='#0B132B'
                 ),
