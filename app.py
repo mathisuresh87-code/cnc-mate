@@ -217,6 +217,7 @@ st.sidebar.markdown("---")
 menu_options = [
     "Home Dashboard",
     "Rod & Tube Calculator",
+    "Traub Collet & Bar Feed",
     "Production & Cycle Time",
     "Stock Management",
     "Advanced G-Code Generator",
@@ -257,12 +258,12 @@ if st.session_state.nav_menu == "Home Dashboard":
       navigate_to("Rod & Tube Calculator")
       st.rerun()
     st.markdown(
-        '<div class="metric-card">🛠️<div class="card-title">G-Code'
-        " Generator</div></div>",
+        '<div class="metric-card">🔧<div class="card-title">Traub Collet &'
+        " Bar Feed</div></div>",
         unsafe_allow_html=True,
     )
-    if st.button("Open G-Code Generator"):
-      navigate_to("Advanced G-Code Generator")
+    if st.button("Open Traub Collet Master"):
+      navigate_to("Traub Collet & Bar Feed")
       st.rerun()
   with col2:
     st.markdown(
@@ -283,20 +284,20 @@ if st.session_state.nav_menu == "Home Dashboard":
       st.rerun()
   with col3:
     st.markdown(
+        '<div class="metric-card">🛠️<div class="card-title">G-Code'
+        " Generator</div></div>",
+        unsafe_allow_html=True,
+    )
+    if st.button("Open G-Code Generator"):
+      navigate_to("Advanced G-Code Generator")
+      st.rerun()
+    st.markdown(
         '<div class="metric-card">📄<div class="card-title">Quotation &'
         " PDF</div></div>",
         unsafe_allow_html=True,
     )
     if st.button("Open Quotation Generator"):
       navigate_to("Quotation & PDF")
-      st.rerun()
-    st.markdown(
-        '<div class="metric-card">⚙️<div class="card-title">Settings &'
-        " Masters</div></div>",
-        unsafe_allow_html=True,
-    )
-    if st.button("Open Settings"):
-      navigate_to("More Menu / Master Settings")
       st.rerun()
 
 # 2. ROD & TUBE CALCULATOR
@@ -317,8 +318,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         '<div style="background: rgba(72, 202, 228, 0.1); padding: 15px;'
         ' border-radius: 10px; border: 1px solid #48CAE4; margin-bottom:'
         ' 15px;"><b>Advanced Mode Active:</b> Upload your part drawing / 2D'
-        " blueprint. Once uploaded, dimensions will be auto-scanned and"
-        " updated automatically!</div>",
+        " blueprint. Dimensions will be auto-scanned!</div>",
         unsafe_allow_html=True,
     )
 
@@ -334,14 +334,14 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
             <div class="upload-status-box">
                 <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Successfully Uploaded!</h4>
                 <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {adv_drawing.name}</p>
-                <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {adv_drawing.size / 1024:.1f} KB | <b>Status:</b> Ready for calculation preview</p>
+                <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {adv_drawing.size / 1024:.1f} KB</p>
             </div>
             """,
           unsafe_allow_html=True,
       )
       try:
         img = Image.open(adv_drawing)
-        w, h = img.size
+        w, _ = img.size
         auto_len = round(float(w % 150) + 75.0, 1)
         st.session_state.part_length = auto_len
 
@@ -369,10 +369,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         "Rod Length / Weight Input", min_value=0.0, value=4.0, step=0.1
     )
     shift_hours = st.number_input(
-        "Working Hours per Shift / Day (e.g., 8, 10, 11, 12 hrs)",
-        min_value=1.0,
-        value=8.0,
-        step=0.5,
+        "Working Hours per Shift / Day", min_value=1.0, value=8.0, step=0.5
     )
   with col2:
     part_length = st.number_input(
@@ -456,25 +453,84 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         f" {res['prod_per_shift']} parts/shift)"
     )
 
-    with st.expander("🔍 View Full Calculation Details"):
-      st.write(
-          f"- One rod length input: {rod_length_input} m ("
-          f"{rod_length_input*1000} mm)"
-      )
-      st.write(
-          f"- Effective length per piece (Part + Allowance):"
-          f" {part_length + cutting_allowance} mm"
-      )
-      st.write(f"- Total required pieces: {required_qty} Nos")
-      st.write(
-          f"- Selected shift duration: {res['shift_hours']} Hours per day"
-      )
-      st.write(
-          f"- Total stock length required: {res['required_rods'] * rod_length_input:.2f}"
-          " Meters"
-      )
+# 3. TRAUB COLLET & BAR FEED MASTER (New specialized module)
+elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
+  st.markdown(
+      '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Traub'
+      " Collet & Bar Feed Master</div>",
+      unsafe_allow_html=True,
+  )
+  st.markdown(
+      '<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Calculate'
+      " appropriate collet sizes, bar feeder clearances, and feed stock"
+      " settings for Traub automatic lathes.</div>",
+      unsafe_allow_html=True,
+  )
 
-# 3. PRODUCTION & CYCLE TIME
+  t_col1, t_col2 = st.columns(2)
+  with t_col1:
+    traub_model = st.selectbox(
+        "Traub Machine Model", ["A15 / A25", "A42 / A60", "TD16 / TD26", "TNS"]
+    )
+    collet_type = st.selectbox(
+        "Collet Profile",
+        [
+            "Round Collet (DIN 6343 / 144E)",
+            "Hexagon Collet",
+            "Square Collet",
+            "Dead Length Collet",
+        ],
+    )
+    raw_bar_dia = st.number_input(
+        "Raw Bar Diameter / Across Flats (mm)", min_value=1.0, value=16.0, step=0.5
+    )
+  with t_col2:
+    bar_tolerance = st.selectbox(
+        "Bar Stock Tolerance Grade", ["h9 (Standard Bright Bar)", "h11", "K12"]
+    )
+    feeder_type = st.selectbox(
+        "Bar Feeder Type",
+        [
+            "Gravity / Weight Feed",
+            "Pneumatic Push Feed",
+            "Hydrobar / Magazine Bar Loader",
+        ],
+    )
+    remnant_length = st.number_input(
+        "Target Remnant / End Piece Length (mm)",
+        min_value=10.0,
+        value=45.0,
+        step=5.0,
+    )
+
+  if st.button("Calculate Collet Clearance & Feed Settings"):
+    # Clearances for collets based on stock
+    clearance = 0.05 if "h9" in bar_tolerance else 0.10
+    recommended_collet_size = raw_bar_dia + clearance
+
+    st.markdown("---")
+    st.subheader("⚙️ Traub Setup Recommendations")
+
+    sc1, sc2, sc3 = st.columns(3)
+    sc1.success(
+        f"**Recommended Collet Bore:** {recommended_collet_size:.2f} mm"
+    )
+    sc2.info(f"**Selected Model:** Traub {traub_model}")
+    sc3.warning(f"**Max Remnant Limit:** {remnant_length} mm")
+
+    st.markdown(
+        f"""
+        <div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-top: 15px;">
+            <b>Machining Notes for {traub_model}:</b><br>
+            - Ensure correct clamping pressure on the {collet_type} to prevent bar slip during high spindle RPM.<br>
+            - Verify bar stop positioning against the stock feed lever for consistent part length accuracy.<br>
+            - Recommended stock clearance ({clearance}mm) ensures smooth feeding without jamming in the spindle tube.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# 4. PRODUCTION & CYCLE TIME
 elif st.session_state.nav_menu == "Production & Cycle Time":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Production'
@@ -514,7 +570,7 @@ elif st.session_state.nav_menu == "Production & Cycle Time":
     c1.success(f"### Production / Hour: **{prod_per_hr} Nos**")
     c2.success(f"### Production for {avail_time} Hours: **{prod_per_day} Nos**")
 
-# 4. STOCK MANAGEMENT
+# 5. STOCK MANAGEMENT
 elif st.session_state.nav_menu == "Stock Management":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Stock'
@@ -525,7 +581,7 @@ elif st.session_state.nav_menu == "Stock Management":
       st.session_state.stock_db, num_rows="dynamic", use_container_width=True
   )
 
-# 5. ADVANCED G-CODE GENERATOR
+# 6. ADVANCED G-CODE GENERATOR
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced'
@@ -551,7 +607,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         <div class="upload-status-box">
             <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ G-Code Drawing Successfully Uploaded!</h4>
             <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
-            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {uploaded_drawing.size / 1024:.1f} KB | <b>Status:</b> Ready</p>
+            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {uploaded_drawing.size / 1024:.1f} KB</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -709,7 +765,7 @@ M30
           " direct PDF download buttons."
       )
 
-# 6. QUOTATION & PDF
+# 7. QUOTATION & PDF
 elif st.session_state.nav_menu == "Quotation & PDF":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Professional'
@@ -735,7 +791,7 @@ elif st.session_state.nav_menu == "Quotation & PDF":
         <div class="upload-status-box">
             <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Quotation Drawing Successfully Uploaded!</h4>
             <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {q_drawing.name}</p>
-            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {q_drawing.size / 1024:.1f} KB | <b>Status:</b> Linked</p>
+            <p style="color: #94A3B8; margin: 2px 0; font-size: 13px;"><b>File Size:</b> {q_drawing.size / 1024:.1f} KB</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -794,7 +850,7 @@ elif st.session_state.nav_menu == "Quotation & PDF":
     )
     auto_machining_estimate = len(selected_ops) * 4.0
     machining_cost = st.number_input(
-        "Machining Cost per Part (₹) [Auto-Estimated from Ops]",
+        "Machining Cost per Part (₹) [Auto-Estimated]",
         min_value=0.0,
         value=float(auto_machining_estimate),
         step=0.5,
@@ -870,7 +926,7 @@ elif st.session_state.nav_menu == "Quotation & PDF":
           " PDF quotation export."
       )
 
-# 7. MORE MENU / MASTERS & SETTINGS
+# 8. MORE MENU / MASTERS & SETTINGS
 elif st.session_state.nav_menu == "More Menu / Master Settings":
   st.markdown(
       '<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">More Menu'
