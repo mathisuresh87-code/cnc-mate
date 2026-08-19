@@ -186,34 +186,34 @@ if selected_sidebar_menu != st.session_state.nav_menu:
 
 # 1. HOME DASHBOARD (All Menus Accessible)
 if st.session_state.nav_menu == "Home Dashboard":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #F8FAFC; margin-bottom: 5px;">Welcome, Nithish! 👋</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Smart CNC. Simple Work. - Select any module below to jump directly</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome to Megala CNC Mate 👋</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Smart CNC & Traub Industrial Suite - Select any module below to jump directly</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown('<div class="metric-card">📏<div class="card-title">Rod Calculator & 3D</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card">📏<div style="font-weight:700; margin-top:8px;">Rod Calculator & 3D</div></div>', unsafe_allow_html=True)
         if st.button("Open Rod Calculator"):
             navigate_to("Rod & Tube Calculator")
             st.rerun()
-        st.markdown('<div class="metric-card">📦<div class="card-title">Stock Management</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card">📦<div style="font-weight:700; margin-top:8px;">Stock Management</div></div>', unsafe_allow_html=True)
         if st.button("Open Stock Management"):
             navigate_to("Stock Management")
             st.rerun()
     with col2:
-        st.markdown('<div class="metric-card">🔧<div class="card-title">Traub Collet & Bar Feed</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card">🔧<div style="font-weight:700; margin-top:8px;">Traub Collet & Bar Feed</div></div>', unsafe_allow_html=True)
         if st.button("Open Traub Collet Master"):
             navigate_to("Traub Collet & Bar Feed")
             st.rerun()
-        st.markdown('<div class="metric-card">🛠️<div class="card-title">G-Code Generator</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card">🛠️<div style="font-weight:700; margin-top:8px;">G-Code Generator</div></div>', unsafe_allow_html=True)
         if st.button("Open G-Code Generator"):
             navigate_to("Advanced G-Code Generator")
             st.rerun()
     with col3:
-        st.markdown('<div class="metric-card">⏱️<div class="card-title">Production & Drilling</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card">⏱️<div style="font-weight:700; margin-top:8px;">Production & Drilling</div></div>', unsafe_allow_html=True)
         if st.button("Open Production Calculator"):
             navigate_to("Production & Cycle Time")
             st.rerun()
-        st.markdown('<div class="metric-card">📄<div class="card-title">Quotation & PDF</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card">📄<div style="font-weight:700; margin-top:8px;">Quotation & PDF</div></div>', unsafe_allow_html=True)
         if st.button("Open Quotation Generator"):
             navigate_to("Quotation & PDF")
             st.rerun()
@@ -342,7 +342,6 @@ elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
     if st.button("Calculate Traub Collet & Spindle RPM"):
         clearance = 0.05 if "h9" in bar_tolerance else 0.10
         recommended_collet_size = raw_bar_dia + clearance
-        # Spindle RPM calculation formula: (Vc * 1000) / (pi * dia)
         calculated_rpm = int((cutting_speed_vc * 1000) / (math.pi * raw_bar_dia)) if raw_bar_dia > 0 else 0
         
         st.markdown("---")
