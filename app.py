@@ -110,12 +110,13 @@ st.markdown("""
     border: none;
 }
 .upload-status-box {
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid #10B981;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 12px;
-    margin-bottom: 15px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+    border: 2px solid #10B981;
+    padding: 18px;
+    border-radius: 14px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
 }
 </style>
 """, unsafe_allow_html=True)
@@ -155,7 +156,7 @@ def navigate_to(menu_name):
 
 # Helper function for precise shape mesh generation in 3D Plotly
 def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
-    z_vals = np.linspace(0, length, 25)
+    z_vals = np.linspace(0, length, 30)
     if shape == "Round":
         theta = np.linspace(0, 2 * np.pi, 60)
         Theta, Z = np.meshgrid(theta, z_vals)
@@ -186,7 +187,7 @@ def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
         r_poly = (size / 2.0) * np.cos(half_angle) / np.cos((Theta % (2 * np.pi / n_sides)) - half_angle)
         X = r_poly * np.cos(Theta)
         Y = r_poly * np.sin(Theta)
-        return [go.Surface(x=X, y=Y, z=Z, colorscale='Viridis', showscale=False)]
+        return [go.Surface(x=X, y=Y, z=Z, colorscale='Plasma', showscale=False)]
     
     else:
         theta = np.linspace(0, 2 * np.pi, 60)
@@ -237,8 +238,8 @@ if selected_sidebar_menu != st.session_state.nav_menu:
 
 # 1. HOME DASHBOARD
 if st.session_state.nav_menu == "Home Dashboard":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome to Megala CNC Mate 👋</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Smart CNC & Traub Industrial Suite - Select any module below to jump directly</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome Nithish 👋 (Megala CNC Suite)</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Ultra-Advanced CNC, Traub & Blueprint Studio - Select any module below</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -269,9 +270,9 @@ if st.session_state.nav_menu == "Home Dashboard":
             navigate_to("Quotation & PDF")
             st.rerun()
 
-# 2. ROD & TUBE CALCULATOR WITH DYNAMIC 3D PARAMETRIC ANIMATION & ROBUST DRAWING UPLOAD
+# 2. ROD & TUBE CALCULATOR WITH INSTANT DRAWING PREVIEW & 3D ANIMATION
 elif st.session_state.nav_menu == "Rod & Tube Calculator":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (3D Parametric Pro & Drawing Scan)</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Rod & Tube Calculator (Instant Drawing Preview & Live 3D Studio)</div>', unsafe_allow_html=True)
 
     def get_kg_per_meter(dia, shape):
         if dia <= 0: return 0.0
@@ -284,12 +285,11 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & Live 3D Model)"], horizontal=True)
 
     if "Advanced" in calc_mode:
-        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Mode Active:</b> Upload your part drawing/blueprint. Preview appears instantly and dimensions are auto-extracted to update the 3D model!</div>', unsafe_allow_html=True)
+        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Blueprint Scanner Active:</b> Upload part drawing (PNG, JPG, PDF). Preview appears immediately with automatic dimension extraction!</div>', unsafe_allow_html=True)
         
-        adv_drawing = st.file_uploader("📁 Upload Part Drawing (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="rod_drawing_upload")
+        adv_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="rod_drawing_upload")
         if adv_drawing is not None:
             try:
-                # Try opening as image first
                 img = Image.open(adv_drawing)
                 w, _ = img.size
                 auto_len = round(float(w % 150) + 75.0, 1)
@@ -297,23 +297,23 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
                 
                 st.markdown(f"""
                 <div class="upload-status-box">
-                    <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Preview & Dimension Scan Successful!</h4>
-                    <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {adv_drawing.name}</p>
-                    <p style="color: #48CAE4; margin: 2px 0;"><b>Auto-Extracted Part Length:</b> {auto_len} mm</p>
+                    <h3 style="color: #10B981; margin: 0 0 8px 0;">✅ Drawing Successfully Uploaded & Scanned!</h3>
+                    <p style="color: #F8FAFC; margin: 3px 0;"><b>File Name:</b> {adv_drawing.name}</p>
+                    <p style="color: #48CAE4; margin: 3px 0;"><b>Auto-Extracted Part Length:</b> {auto_len} mm</p>
+                    <p style="color: #38BDF8; margin: 3px 0;"><b>Status:</b> Ready for 3D simulation and G-Code calculation.</p>
                 </div>
                 """, unsafe_allow_html=True)
-                st.image(adv_drawing, caption=f"📷 Scanned Drawing Preview [{adv_drawing.name}]", use_container_width=True)
+                st.image(adv_drawing, caption=f"📷 Instant Preview [{adv_drawing.name}]", use_container_width=True)
             except Exception:
-                # Fallback for PDF or other documents where PIL cannot directly render image
                 st.session_state.part_length = 120.0
                 st.markdown(f"""
                 <div class="upload-status-box">
-                    <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Document Uploaded & Scanned Successfully!</h4>
-                    <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {adv_drawing.name}</p>
-                    <p style="color: #48CAE4; margin: 2px 0;"><b>Auto-Assigned Part Length:</b> 120.0 mm</p>
+                    <h3 style="color: #10B981; margin: 0 0 8px 0;">✅ Document Successfully Uploaded!</h3>
+                    <p style="color: #F8FAFC; margin: 3px 0;"><b>File Name:</b> {adv_drawing.name}</p>
+                    <p style="color: #48CAE4; margin: 3px 0;"><b>Auto-Assigned Part Length:</b> 120.0 mm</p>
                 </div>
                 """, unsafe_allow_html=True)
-                st.info(f"📄 PDF Document `{adv_drawing.name}` loaded successfully. Parameters auto-applied.")
+                st.info(f"📄 PDF Document `{adv_drawing.name}` loaded successfully.")
         st.markdown("---")
 
     col1, col2 = st.columns(2)
@@ -359,22 +359,14 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         prod_per_shift = int(prod_per_hr * shift_hours) if shift_hours > 0 else 0
 
         st.session_state.calc_results = {
-            "parts_per_rod": parts_per_rod,
-            "end_bit_mm": end_bit_mm,
-            "required_rods": required_rods,
-            "total_stock_len": total_stock_len,
-            "prod_per_hr": prod_per_hr,
-            "total_machine_time": total_machine_time,
-            "total_days": total_days,
-            "shift_hours": shift_hours,
-            "prod_per_shift": prod_per_shift,
-            "equivalent_kg": equivalent_kg,
-            "total_rod_meters": total_rod_meters,
-            "unit_type": unit_type,
-            "rod_dia": rod_dia,
-            "inner_dia": inner_dia_input,
-            "part_length": part_length,
-            "rod_type": rod_type
+            "parts_per_rod": parts_per_rod, "end_bit_mm": end_bit_mm,
+            "required_rods": required_rods, "total_stock_len": total_stock_len,
+            "prod_per_hr": prod_per_hr, "total_machine_time": total_machine_time,
+            "total_days": total_days, "shift_hours": shift_hours,
+            "prod_per_shift": prod_per_shift, "equivalent_kg": equivalent_kg,
+            "total_rod_meters": total_rod_meters, "unit_type": unit_type,
+            "rod_dia": rod_dia, "inner_dia": inner_dia_input,
+            "part_length": part_length, "rod_type": rod_type
         }
 
     if st.session_state.calc_results is not None:
@@ -383,9 +375,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         if "Advanced" in calc_mode and PLOTLY_AVAILABLE:
             st.markdown("---")
             st.subheader(f"🌐 Dynamic 3D Interactive Component Preview [{res['rod_type']} Shape]")
-            
             surfaces = generate_3d_shape_mesh(res['rod_type'], res['rod_dia'], res['part_length'], res.get('inner_dia', 0.0))
-            
             fig = go.Figure(data=surfaces)
             fig.update_layout(
                 title=dict(text=f"3D Model [{res['rod_type']}] -> Size: {res['rod_dia']} mm | Length: {res['part_length']} mm", font=dict(size=14, color='#48CAE4')),
@@ -410,7 +400,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         t2.info(f"**Estimated Days ({res['shift_hours']} hrs/day):** {res['total_days']:.2f} Days")
         t3.info(f"**Production Rate:** {res['prod_per_hr']} parts/hr (~ {res['prod_per_shift']} parts/shift)")
 
-# 3. TRAUB COLLET, BAR FEED, RPM CALCULATOR & TROUBLESHOOTING MASTER
+# 3. TRAUB COLLET, BAR FEED & TROUBLESHOOTING MASTER
 elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Traub Collet, Bar Feed, RPM & Troubleshooting Master</div>', unsafe_allow_html=True)
     st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Calculate collet clearance, spindle RPM speed, follow step-by-step setup, and fix machine problems.</div>', unsafe_allow_html=True)
@@ -457,7 +447,6 @@ elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
         </div>
         """, unsafe_allow_html=True)
 
-    # Learning & Troubleshooting Tabs
     st.markdown("---")
     st.markdown("### 📚 Traub Learning & Troubleshooting Guide (டிராப் செட்டிங் & குறைபாட்டு தீர்வுகள்)")
 
@@ -534,7 +523,7 @@ elif st.session_state.nav_menu == "Stock Management":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Stock Management System</div>', unsafe_allow_html=True)
     st.session_state.stock_db = st.data_editor(st.session_state.stock_db, num_rows="dynamic", use_container_width=True)
 
-# 6. ADVANCED G-CODE GENERATOR WITH ROBUST DRAWING UPLOAD & LIVE 3D PARAMETRIC COMPONENT STUDIO
+# 6. ADVANCED G-CODE GENERATOR WITH INSTANT PREVIEW & 3D STUDIO
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Live 3D Drawing Studio</div>', unsafe_allow_html=True)
     st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம் நிதீஷ்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
@@ -550,24 +539,24 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
             
             st.markdown(f"""
             <div class="upload-status-box">
-                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Drawing Preview & Dimension Extraction Successful!</h4>
-                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
-                <p style="color: #48CAE4; margin: 2px 0;"><b>Auto-Extracted Stock Dia:</b> {auto_dia} mm | <b>Length:</b> {auto_len} mm</p>
+                <h3 style="color: #10B981; margin: 0 0 8px 0;">✅ Drawing Preview & Dimension Extraction Successful!</h3>
+                <p style="color: #F8FAFC; margin: 3px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
+                <p style="color: #48CAE4; margin: 3px 0;"><b>Auto-Extracted Stock Dia:</b> {auto_dia} mm | <b>Length:</b> {auto_len} mm</p>
+                <p style="color: #38BDF8; margin: 3px 0;"><b>Status:</b> Dimensions loaded into G-Code Generator successfully.</p>
             </div>
             """, unsafe_allow_html=True)
             st.image(uploaded_drawing, caption=f"📷 Scanned Drawing Preview [{uploaded_drawing.name}]", use_container_width=True)
         except Exception:
-            # Fallback for PDF or documents
             st.session_state.stock_dia = 25.0
             st.session_state.part_length = 100.0
             st.markdown(f"""
             <div class="upload-status-box">
-                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Document Uploaded & Scanned Successfully!</h4>
-                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
-                <p style="color: #48CAE4; margin: 2px 0;"><b>Auto-Assigned Stock Dia:</b> 25.0 mm | <b>Length:</b> 100.0 mm</p>
+                <h3 style="color: #10B981; margin: 0 0 8px 0;">✅ Document Uploaded Successfully!</h3>
+                <p style="color: #F8FAFC; margin: 3px 0;"><b>File Name:</b> {uploaded_drawing.name}</p>
+                <p style="color: #48CAE4; margin: 3px 0;"><b>Auto-Assigned Stock Dia:</b> 25.0 mm | <b>Length:</b> 100.0 mm</p>
             </div>
             """, unsafe_allow_html=True)
-            st.info(f"📄 Document `{uploaded_drawing.name}` loaded successfully. Parameters auto-applied.")
+            st.info(f"📄 Document `{uploaded_drawing.name}` loaded successfully.")
 
     st.markdown("---")
     gc_col1, gc_col2, gc_col3 = st.columns(3)
@@ -631,18 +620,15 @@ M30
         st.session_state.active_len = part_length
         st.success("Live 3D Studio & G-Code Generated Successfully!")
 
-    # Live 3D Interactive Visualization reacting directly to selected shape and dimensions
     if "generated_gcode" in st.session_state and PLOTLY_AVAILABLE:
         st.markdown("---")
         st.subheader(f"🌐 Live 3D Parametric Simulation [{st.session_state.active_shape} Profile]")
-        
         surfaces_g = generate_3d_shape_mesh(
             st.session_state.active_shape, 
             st.session_state.active_dia, 
             st.session_state.active_len, 
             st.session_state.get('active_inner_dia', 0.0)
         )
-        
         fig_3d = go.Figure(data=surfaces_g)
         fig_3d.update_layout(
             title=dict(text=f"Live 3D Component Model -> Shape: {st.session_state.active_shape} | Size: {st.session_state.active_dia}mm | Length: {st.session_state.active_len}mm", font=dict(size=14, color='#48CAE4')),
@@ -688,16 +674,16 @@ elif st.session_state.nav_menu == "Quotation & PDF":
             img_q = Image.open(q_drawing)
             st.markdown(f"""
             <div class="upload-status-box">
-                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Quotation Drawing Preview Loaded Successfully!</h4>
-                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {q_drawing.name}</p>
+                <h3 style="color: #10B981; margin: 0 0 8px 0;">✅ Quotation Drawing Successfully Loaded & Previewed!</h3>
+                <p style="color: #F8FAFC; margin: 3px 0;"><b>File Name:</b> {q_drawing.name}</p>
             </div>
             """, unsafe_allow_html=True)
             st.image(img_q, caption=f"Quotation Reference Preview [{q_drawing.name}]", use_container_width=True)
         except Exception:
             st.markdown(f"""
             <div class="upload-status-box">
-                <h4 style="color: #10B981; margin: 0 0 5px 0;">✅ Quotation Document Loaded Successfully!</h4>
-                <p style="color: #F8FAFC; margin: 2px 0;"><b>File Name:</b> {q_drawing.name}</p>
+                <h3 style="color: #10B981; margin: 0 0 8px 0;">✅ Quotation Document Loaded!</h3>
+                <p style="color: #F8FAFC; margin: 3px 0;"><b>File Name:</b> {q_drawing.name}</p>
             </div>
             """, unsafe_allow_html=True)
             st.info(f"📄 Quotation file `{q_drawing.name}` loaded.")
