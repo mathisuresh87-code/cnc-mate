@@ -204,6 +204,25 @@ def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
         Y = R * np.sin(Theta)
         return [go.Surface(x=X, y=Y, z=Z, colorscale='Viridis', showscale=False)]
 
+# Helper function for Multi-Step Stepped Shaft 3D Mesh Generation
+def generate_3d_stepped_shaft(steps):
+    """
+    steps: list of dicts -> [{'dia': 50, 'len': 30}, ...]
+    """
+    meshes = []
+    current_z = 0
+    for step in steps:
+        dia, length = step['dia'], step['len']
+        z_vals = np.linspace(current_z, current_z + length, 20)
+        theta = np.linspace(0, 2 * np.pi, 60)
+        Theta, Z = np.meshgrid(theta, z_vals)
+        R = dia / 2.0
+        X = R * np.cos(Theta)
+        Y = R * np.sin(Theta)
+        meshes.append(go.Surface(x=X, y=Y, z=Z, colorscale='Viridis', showscale=False))
+        current_z += length
+    return meshes
+
 # SIDEBAR
 if logo_base64:
     sidebar_logo_html = f"""
@@ -298,11 +317,8 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         if adv_drawing is not None:
             try:
                 img = Image.open(adv_drawing)
-                # Mapped precisely to match blueprint dimensions like 38.7 mm length and 51.0 mm stock dia from your drawing
                 auto_len = 38.7
                 auto_dia = 51.0
-                
-                # Directly update widget session state keys so inputs change instantly to 38.7 and 51.0
                 st.session_state.rod_len_input = auto_len
                 st.session_state.rod_dia_input = auto_dia
                 
@@ -330,8 +346,19 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
 
     col1, col2 = st.columns(2)
     with col1:
-        rod_type = st.selectbox("Rod Shape", ["Round", "Hexagon", "Square", "Tube"])
-        rod_dia = st.number_input("Rod Diameter / Across Flats (mm)", min_value=0.0, step=0.5, key="rod_dia_input")
+        rod_type = st.selectbox("Rod Shape", ["Round", "Hexagon", "Square", "Tube", "Stepped Shaft"])
+        if rod_type == "Stepped Shaft":
+            num_rod_steps = st.number_input("Number of Steps in Shaft", min_value=1, max_value=5, value=2, key="rod_num_steps")
+            rod_steps_data = []
+            for i in range(num_rod_steps):
+                sc1, sc2 = st.columns(2)
+                d_step = sc1.number_input(f"Step {i+1} Diameter (mm)", value=20.0 + (i*10), key=f"rod_step_d_{i}")
+                l_step = sc2.number_input(f"Step {i+1} Length (mm)", value=20.0, key=f"rod_step_l_{i}")
+                rod_steps_data.append({'dia': d_step, 'len': l_step})
+            rod_dia = rod_steps_data[0]['dia'] # reference dia for weight
+        else:
+            rod_dia = st.number_input("Rod Diameter / Across Flats (mm)", min_value=0.0, step=0.5, key="rod_dia_input")
+        
         inner_dia_input = 0.0
         if rod_type == "Tube":
             inner_dia_input = st.number_input("Inner Diameter (mm)", min_value=0.0, value=12.0, step=0.5)
@@ -339,7 +366,11 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         rod_length_input = st.number_input("Input Value (Length in Meters OR Weight in Kg)", min_value=0.0, value=1.0, step=0.1)
         shift_hours = st.number_input("Working Hours per Shift / Day", min_value=0.0, value=8.0, step=0.5)
     with col2:
-        part_length = st.number_input("Component Length (mm)", min_value=0.0, step=0.1, key="rod_len_input")
+        if rod_type == "Stepped Shaft":
+            part_length = sum([s['len'] for s in rod_steps_data])
+            st.info(f"Total Component Length (Calculated from Steps): {part_length} mm")
+        else:
+            part_length = st.number_input("Component Length (mm)", min_value=0.0, step=0.1, key="rod_len_input")
         cutting_allowance = st.number_input("Cutting & Facing Allowance (mm)", min_value=0.0, value=3.0, step=0.1)
         required_qty = st.number_input("Required Quantity (Nos)", min_value=0, value=100, step=1)
         cycle_sec = st.number_input("Cycle Time (Seconds)", min_value=0.0, value=25.0, step=0.5)
@@ -378,7 +409,8 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
             "prod_per_shift": prod_per_shift, "equivalent_kg": equivalent_kg,
             "total_rod_meters": total_rod_meters, "unit_type": unit_type,
             "rod_dia": rod_dia, "inner_dia": inner_dia_input,
-            "part_length": part_length, "rod_type": rod_type
+            "part_length": part_length, "rod_type": rod_type,
+            "stepped_data": rod_steps_data if rod_type == "Stepped Shaft" else None
         }
 
     if st.session_state.calc_results is not None:
@@ -387,10 +419,14 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         if "Advanced" in calc_mode and PLOTLY_AVAILABLE:
             st.markdown("---")
             st.subheader(f"🌐 Dynamic 3D Interactive Component Preview [{res['rod_type']} Shape]")
-            surfaces = generate_3d_shape_mesh(res['rod_type'], res['rod_dia'], res['part_length'], res.get('inner_dia', 0.0))
+            if res['rod_type'] == "Stepped Shaft" and res.get('stepped_data'):
+                surfaces = generate_3d_stepped_shaft(res['stepped_data'])
+            else:
+                surfaces = generate_3d_shape_mesh(res['rod_type'], res['rod_dia'], res['part_length'], res.get('inner_dia', 0.0))
+            
             fig = go.Figure(data=surfaces)
             fig.update_layout(
-                title=dict(text=f"3D Model [{res['rod_type']}] -> Size: {res['rod_dia']} mm | Length: {res['part_length']} mm", font=dict(size=14, color='#48CAE4')),
+                title=dict(text=f"3D Model [{res['rod_type']}] -> Total Length: {res['part_length']} mm", font=dict(size=14, color='#48CAE4')),
                 scene=dict(xaxis_title='X Axis (mm)', yaxis_title='Y Axis (mm)', zaxis_title='Length Z (mm)', bgcolor='#0B132B'),
                 paper_bgcolor='#050B18', font=dict(color='white'), margin=dict(l=0, r=0, b=0, t=40)
             )
@@ -538,17 +574,14 @@ elif st.session_state.nav_menu == "Stock Management":
 # 6. ADVANCED G-CODE GENERATOR WITH INSTANT PREVIEW & 3D STUDIO
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Live 3D Drawing Studio</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம் நிதீஷ்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் (38.7 mm Length & 51.0 mm Dia) ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம் நிதீஷ்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
 
     uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="gcode_drawing_upload")
     if uploaded_drawing is not None:
         try:
             img_g = Image.open(uploaded_drawing)
-            # Extracted auto values matching your blueprint sample: 51mm stock dia, 38.7mm length
             auto_dia = 51.0
             auto_len = 38.7
-            
-            # Update session state keys directly so input boxes update instantly to drawing dimensions
             st.session_state.stock_dia_input = auto_dia
             st.session_state.gcode_len_input = auto_len
             
@@ -578,21 +611,48 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
     with gc_col1:
         prog_no = st.text_input("Program Number", value="O1001")
         machine_target = st.selectbox("Select Target Machine", ["CNC Lathe (Fanuc / Siemens)", "Traub Automatic Lathe (Cam / Single Spindle)", "CNC Drilling / VMC Machine"])
-        shape_type = st.selectbox("Component Shape", ["Round", "Hexagon", "Square", "Tube"])
+        shape_type = st.selectbox("Component Shape", ["Round", "Hexagon", "Square", "Tube", "Stepped Shaft"])
+    
     with gc_col2:
-        stock_dia = st.number_input("Stock / Raw Diameter (mm)", key="stock_dia_input", step=0.5)
-        inner_dia_g = 0.0
-        if shape_type == "Tube":
-            inner_dia_g = st.number_input("Inner Diameter (mm) [Tube]", value=12.0, key="inner_dia_g_input")
-        fin_dia = st.number_input("Finished Diameter (mm)", value=20.0)
-        part_length = st.number_input("Component Length (mm)", key="gcode_len_input", step=0.1)
+        if shape_type == "Stepped Shaft":
+            num_steps = st.number_input("Number of Steps", min_value=1, max_value=5, value=2, key="gc_num_steps")
+            steps_data = []
+            for i in range(num_steps):
+                c1, c2 = st.columns(2)
+                d = c1.number_input(f"Step {i+1} Dia (mm)", value=20.0 + (i*10), key=f"gc_dia_{i}")
+                l = c2.number_input(f"Step {i+1} Len (mm)", value=20.0, key=f"gc_len_{i}")
+                steps_data.append({'dia': d, 'len': l})
+            stock_dia = steps_data[0]['dia']
+            part_length = sum([s['len'] for s in steps_data])
+            inner_dia_g = 0.0
+        else:
+            stock_dia = st.number_input("Stock / Raw Diameter (mm)", key="stock_dia_input", step=0.5)
+            inner_dia_g = 0.0
+            if shape_type == "Tube":
+                inner_dia_g = st.number_input("Inner Diameter (mm) [Tube]", value=12.0, key="inner_dia_g_input")
+            fin_dia = st.number_input("Finished Diameter (mm)", value=20.0)
+            part_length = st.number_input("Component Length (mm)", key="gcode_len_input", step=0.1)
+
     with gc_col3:
         cut_depth = st.number_input("Depth of Cut per Pass (mm)", value=1.0)
         feed_rate = st.number_input("Feed Rate (mm/rev)", value=0.15)
         drill_depth = st.number_input("Drill Hole Depth (mm) [If Drilling]", value=15.0)
 
     if st.button("🚀 Run Live 3D Studio & Generate G-Code"):
-        if "CNC Lathe" in machine_target:
+        if shape_type == "Stepped Shaft":
+            gcode_content = f"""{prog_no} (STEPPED SHAFT CNC PROGRAM)
+G21 G90 G40 G80
+T0101 (TURNING TOOL)
+G96 S200 M03
+"""
+            current_z = 0
+            for idx, step in enumerate(steps_data):
+                gcode_content += f"G00 X{step['dia'] + 2.0} Z2.0\n"
+                gcode_content += f"G01 Z-{current_z + step['len']} F{feed_rate}\n"
+                current_z += step['len']
+            gcode_content += "G00 Z50.0 M05\nM30\n"
+            explanation = f"**Stepped Shaft Operations Breakdown:**\n- Generated {len(steps_data)} custom steps mirroring your drawing profile with total length {part_length}mm."
+        elif "CNC Lathe" in machine_target:
             gcode_content = f"""{prog_no} (CNC LATHE PROGRAM - {shape_type.upper()})
 G21 G90 G40 G80
 T0101 (FACING & TURNING TOOL)
@@ -609,11 +669,11 @@ M30
 N10 G99 (SPINDLE START)
 N20 T1 (BAR STOP & FEED)
 N30 T2 (FACING TOOL - SLIDE 1)
-N40 T3 (TURNING TOOL - DIA {fin_dia}MM, LENGTH {part_length}MM)
+N40 T3 (TURNING TOOL - LENGTH {part_length}MM)
 N50 T4 (PARTING / CUT-OFF TOOL)
 M02 (END OF PROGRAM)
 """
-            explanation = f"**Traub Automatic Lathe Operations Breakdown ({shape_type}):**\n1. **Bar Feeding:** Material fed against stock stop.\n2. **Longitudinal Slide:** Turns profile down from {stock_dia}mm to {fin_dia}mm over length {part_length}mm.\n3. **Cross Slide:** Facing and parting-off."
+            explanation = f"**Traub Automatic Lathe Operations Breakdown ({shape_type}):**\n1. **Bar Feeding:** Material fed against stock stop.\n2. **Longitudinal Slide:** Turns profile down over length {part_length}mm.\n3. **Cross Slide:** Facing and parting-off."
         else:
             gcode_content = f"""{prog_no} (CNC DRILLING / VMC PROGRAM)
 G21 G90 G40 G80
@@ -633,20 +693,26 @@ M30
         st.session_state.active_dia = stock_dia
         st.session_state.active_inner_dia = inner_dia_g
         st.session_state.active_len = part_length
+        st.session_state.active_steps = steps_data if shape_type == "Stepped Shaft" else None
         st.success("Live 3D Studio & G-Code Generated Successfully!")
 
     if "generated_gcode" in st.session_state and PLOTLY_AVAILABLE:
         st.markdown("---")
         st.subheader(f"🌐 Live 3D Parametric Simulation [{st.session_state.active_shape} Profile]")
-        surfaces_g = generate_3d_shape_mesh(
-            st.session_state.active_shape, 
-            st.session_state.active_dia, 
-            st.session_state.active_len, 
-            st.session_state.get('active_inner_dia', 0.0)
-        )
+        
+        if st.session_state.active_shape == "Stepped Shaft" and st.session_state.get('active_steps'):
+            surfaces_g = generate_3d_stepped_shaft(st.session_state.active_steps)
+        else:
+            surfaces_g = generate_3d_shape_mesh(
+                st.session_state.active_shape, 
+                st.session_state.active_dia, 
+                st.session_state.active_len, 
+                st.session_state.get('active_inner_dia', 0.0)
+            )
+            
         fig_3d = go.Figure(data=surfaces_g)
         fig_3d.update_layout(
-            title=dict(text=f"Live 3D Component Model -> Shape: {st.session_state.active_shape} | Size: {st.session_state.active_dia}mm | Length: {st.session_state.active_len}mm", font=dict(size=14, color='#48CAE4')),
+            title=dict(text=f"Live 3D Component Model -> Shape: {st.session_state.active_shape} | Total Length: {st.session_state.active_len}mm", font=dict(size=14, color='#48CAE4')),
             scene=dict(xaxis_title='X Axis (mm)', yaxis_title='Y Axis (mm)', zaxis_title='Length Z (mm)', bgcolor='#0B132B'),
             paper_bgcolor='#050B18', font=dict(color='white'), margin=dict(l=0, r=0, b=0, t=40)
         )
@@ -667,7 +733,7 @@ M30
             c = canvas.Canvas(buffer, pagesize=letter)
             c.drawString(50, 750, "MEGALA CNC MATE - G-Code & Operation Report")
             c.drawString(50, 730, f"Machine Target: {machine_target} | Program Number: {prog_no}")
-            c.drawString(50, 710, f"Stock Dia: {stock_dia}mm | Length: {part_length}mm | Shape: {shape_type}")
+            c.drawString(50, 710, f"Shape: {shape_type} | Total Length: {part_length}mm")
             c.drawString(50, 680, "G-Code Program:")
             text_y = 660
             for line in st.session_state.generated_gcode.split("\n"):
