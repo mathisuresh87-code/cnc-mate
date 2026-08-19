@@ -206,9 +206,6 @@ def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
 
 # Helper function for Multi-Step Stepped Shaft 3D Mesh Generation
 def generate_3d_stepped_shaft(steps):
-    """
-    steps: list of dicts -> [{'dia': 50, 'len': 30}, ...]
-    """
     meshes = []
     current_z = 0
     for step in steps:
@@ -311,7 +308,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & Live 3D Model)"], horizontal=True)
 
     if "Advanced" in calc_mode:
-        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Blueprint Scanner Active:</b> Upload part drawing (PNG, JPG, PDF). Preview appears immediately and input values update automatically to extracted blueprint dimensions (e.g., 38.7 mm length & 51.0 mm dia)!</div>', unsafe_allow_html=True)
+        st.markdown('<div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-bottom: 15px;"><b>Advanced Blueprint Scanner Active:</b> Upload part drawing (PNG, JPG, PDF). Preview appears immediately and input values update automatically to extracted blueprint dimensions!</div>', unsafe_allow_html=True)
         
         adv_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="rod_drawing_upload")
         if adv_drawing is not None:
@@ -355,7 +352,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
                 d_step = sc1.number_input(f"Step {i+1} Diameter (mm)", value=20.0 + (i*10), key=f"rod_step_d_{i}")
                 l_step = sc2.number_input(f"Step {i+1} Length (mm)", value=20.0, key=f"rod_step_l_{i}")
                 rod_steps_data.append({'dia': d_step, 'len': l_step})
-            rod_dia = rod_steps_data[0]['dia'] # reference dia for weight
+            rod_dia = rod_steps_data[0]['dia']
         else:
             rod_dia = st.number_input("Rod Diameter / Across Flats (mm)", min_value=0.0, step=0.5, key="rod_dia_input")
         
