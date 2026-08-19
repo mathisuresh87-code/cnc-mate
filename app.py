@@ -186,7 +186,7 @@ if selected_sidebar_menu != st.session_state.nav_menu:
 
 # 1. HOME DASHBOARD
 if st.session_state.nav_menu == "Home Dashboard":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #F8FAFC; margin-bottom: 5px;">Welcome, Operator! 👋</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #F8FAFC; margin-bottom: 5px;">Welcome, Nithish! 👋</div>', unsafe_allow_html=True)
     st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Smart CNC. Simple Work. - Select a module below to start working</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
@@ -268,7 +268,6 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     if st.button("Calculate & Render Part Preview"):
         kg_per_m = get_kg_per_meter(rod_dia, rod_type)
         
-        # Dynamic Meter <-> Kilogram Conversion
         total_rod_meters = 0.0
         equivalent_kg = 0.0
         
@@ -326,14 +325,13 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         t2.info(f"**Estimated Days ({res['shift_hours']} hrs/day):** {res['total_days']:.2f} Days")
         t3.info(f"**Production Rate:** {res['prod_per_hr']} parts/hr (~ {res['prod_per_shift']} parts/shift)")
 
-# 3. TRAUB COLLET & BAR FEED MASTER (Updated with A32 Model)
+# 3. TRAUB COLLET & BAR FEED MASTER (With Step-by-Step Beginner Learning Guide)
 elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Traub Collet & Bar Feed Master</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Calculate appropriate collet sizes, bar feeder clearances, and feed stock settings for Traub automatic lathes.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Traub Collet, Bar Feed & Learning Master</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">Calculate appropriate collet sizes, bar feeder clearances, and follow the beginner step-by-step setup guide for Traub lathes.</div>', unsafe_allow_html=True)
 
     t_col1, t_col2 = st.columns(2)
     with t_col1:
-        # Added A32 to the list of models here:
         traub_model = st.selectbox("Traub Machine Model", ["A15 / A25", "A32", "A42 / A60", "TD16 / TD26", "TNS"])
         collet_type = st.selectbox("Collet Profile", ["Round Collet (DIN 6343 / 144E)", "Hexagon Collet", "Square Collet", "Dead Length Collet"])
         raw_bar_dia = st.number_input("Raw Bar Diameter / Across Flats (mm)", min_value=1.0, value=16.0, step=0.5)
@@ -359,6 +357,41 @@ elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
             - Recommended stock clearance ({clearance}mm) ensures smooth feeding without jamming in the spindle tube.
         </div>
         """, unsafe_allow_html=True)
+
+    # --- BEGINNER LEARNING GUIDE FOR TRAUB SETTING ---
+    st.markdown("---")
+    st.markdown("### 📚 Traub Machine Step-by-Step Learning Guide (புதியவர்களுக்கான டிராப் செட்டிங் வழிகாட்டி)")
+    st.markdown("டிராப் (Traub) இயந்திரத்தில் புதிதாக செட்டிங் செய்யக் கற்றுக்கொள்பவர்களுக்கான எளிய வழிமுறைகள்:")
+
+    tab1, tab2, tab3, tab4 = st.tabs(["1. ராட் & ஃபீடர் (Bar Loading)", "2. காலெட் மாட்டுவது (Collet Setting)", "3. பார் ஸ்டாப் (Bar Stop)", "4. டூல் செட்டிங் (Tool Setting)"])
+
+    with tab1:
+        st.markdown("""
+        * **படி 1:** உங்கள் மெஷின் மாடலுக்கு (`{traub_model}`) ஏற்ற ராடை ஸ்பிண்டில் குழாய்க்குள் (Spindle Tube) பின் பக்கமாகச் செலுத்தவும்.
+        * **படி 2:** `Bar Feeder` அல்லது வெயிட் வீல் (Weight / Gravity Feed) சரியாக ராட்டின் பின்னால் அமர்ந்துள்ளதா எனச் சரிபார்க்கவும்.
+        * **படி 3:** ராட்டின் பின்முனை ஸ்பிண்டில் உள்ளே பாதுகாப்பாக இருக்கும்படி பார்த்துக்கொள்ளவும்.
+        """)
+
+    with tab2:
+        st.markdown("""
+        * **படி 1:** மெஷினின் மெயின் பவரை ஆஃப் செய்துவிட்டு, ஸ்பிண்டில் முனையில் உள்ள **Collet Cap (நட்)**-ஐக் கழற்றவும்.
+        * **படி 2:** கணக்கீட்டின்படி பெறப்பட்ட சரியான அளவுள்ள காலெட்டை (`{raw_bar_dia + (0.05 if 'h9' in bar_tolerance else 0.10):.2f} mm`) ஸ்பிண்டில் நோஸில் பொருத்தவும்.
+        * **படி 3:** ராடு காலெட்டிற்குள் மாட்டி லேசான கையளவு இறுக்கத்துடன் நகரும்படி சரிபார்க்கவும் (அதிக டைட் ஆகவோ அல்லது மிகவும் லூசாகவோ இருக்கக்கூடாது).
+        """)
+
+    with tab3:
+        st.markdown("""
+        * **படி 1:** பார்ட் நீளத்தை (Part Length) முடிவு செய்ய **Bar Stop (Stock Stop)** டூலை ஸ்லைடில் பொருத்தவும்.
+        * **படி 2:** ஸ்பிண்டிலில் இருந்து ராட் வெளியே வரும் நீளத்தை ஸ்டாப்பர் தொடும் அளவுக்கு லீவர் அல்லது கேம் (Cam) மூலம் செட் செய்யவும்.
+        * **படி 3:** முதல் பார்ட் ஃபீட் ஆனதும், வெர்னியர் காலிபர் கொண்டு நீளத்தை அளந்து துல்லியமாக அட்ஜஸ்ட் செய்யவும்.
+        """)
+
+    with tab4:
+        st.markdown("""
+        * **படி 1 (Facing & Turning):** கிராஸ் ஸ்லைடு (Cross Slide) மற்றும் லாங்யூடிடினல் ஸ்லைடில் (Longitudinal Slide) டூல் பிட்டுகளை (Tool bits) செட் செய்யவும்.
+        * **படி 2:** ஃபேசிங் (Facing) டூலை ராட்டின் முகப்பில் சரியாக சென்டரில் (Center height) இருக்கிறதா என ஷiml வைத்து செட் செய்யவும்.
+        * **படி 3:** டர்னிங் மற்றும் பார்ட்டிங் (Parting-off) டூல்களின் தூரத்தைக் கேம்கள் அல்லது ஸ்டாப்பர் ஸ்க்ரூக்கள் மூலம் அளந்து லாக் செய்யவும்.
+        """)
 
 # 4. PRODUCTION & CYCLE TIME
 elif st.session_state.nav_menu == "Production & Cycle Time":
