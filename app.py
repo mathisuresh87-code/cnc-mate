@@ -38,7 +38,7 @@ def get_image_base64(path):
 
 logo_base64 = get_image_base64("logo.png")
 
-# Custom UI Styling
+# Custom UI Styling with Uniform Dashboard Grid
 st.markdown("""
 <style>
 .stApp {
@@ -91,15 +91,44 @@ st.markdown("""
     margin-top: 4px;
     text-align: center;
 }
-.metric-card {
+
+/* UNIFORM DASHBOARD GRID STYLING */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+.dash-card {
     background: linear-gradient(145deg, #111E38, #0B132B);
-    padding: 22px;
+    padding: 20px;
     border-radius: 16px;
     border: 1px solid #1E3A8A;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     text-align: center;
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 140px;
+    transition: all 0.3s ease;
 }
+.dash-card:hover {
+    border-color: #48CAE4;
+    box-shadow: 0 0 20px rgba(72, 202, 228, 0.4);
+    transform: translateY(-3px);
+}
+.dash-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+.dash-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #F8FAFC;
+    letter-spacing: 0.5px;
+}
+
 .stButton>button {
     width: 100%;
     background: linear-gradient(90deg, #1D4ED8, #00B4D8);
@@ -108,6 +137,12 @@ st.markdown("""
     border-radius: 12px;
     height: 48px;
     border: none;
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
+    transition: all 0.2s ease;
+}
+.stButton>button:hover {
+    background: linear-gradient(90deg, #2563EB, #06B6D4);
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
 }
 .upload-status-box {
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
@@ -230,7 +265,6 @@ def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
         Y = R * np.sin(Theta)
         return [go.Surface(x=X, y=Y, z=Z, colorscale='viridis', showscale=False)]
 
-# Helper function for Multi-Step Stepped Shaft 3D Mesh Generation
 def generate_3d_stepped_shaft(steps):
     meshes = []
     current_z = 0
@@ -286,48 +320,61 @@ if selected_sidebar_menu != st.session_state.nav_menu:
     st.session_state.nav_menu = selected_sidebar_menu
     st.rerun()
 
-# 1. HOME DASHBOARD (Updated with ALL module cards)
+# 1. HOME DASHBOARD (Uniform Grid Layout - Fully Aligned & Professional)
 if st.session_state.nav_menu == "Home Dashboard":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome Operator 👋 (MEGALA CNC MATE Suite)</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Ultra-Advanced CNC, Traub & Blueprint Studio - Select any module below</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome Nithish 👋 (MEGALA CNC MATE Suite)</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 25px;">Ultra-Advanced CNC, Traub & Blueprint Studio - Select any module below</div>', unsafe_allow_html=True)
 
+    # 3-Column Uniform Grid Cards
+    st.markdown("""
+    <div class="dashboard-grid">
+        <div class="dash-card"><div class="dash-icon">📏</div><div class="dash-label">Rod Calculator & 3D</div></div>
+        <div class="dash-card"><div class="dash-icon">🔧</div><div class="dash-label">Traub Collet & Bar Feed</div></div>
+        <div class="dash-card"><div class="dash-icon">⏱️</div><div class="dash-label">Production & OEE</div></div>
+        
+        <div class="dash-card"><div class="dash-icon">📦</div><div class="dash-label">Stock Management</div></div>
+        <div class="dash-card"><div class="dash-icon">🖥️</div><div class="dash-label">G-Code Generator</div></div>
+        <div class="dash-card"><div class="dash-icon">📄</div><div class="dash-label">Quotation & PDF</div></div>
+
+        <div class="dash-card"><div class="dash-icon">🛠️</div><div class="dash-label">Tool Life & Threads</div></div>
+        <div class="dash-card"><div class="dash-icon">⚙️</div><div class="dash-label">Master Settings</div></div>
+        <div class="dash-card"><div class="dash-icon">✨</div><div class="dash-label">Studio & Assistant</div></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Perfectly Aligned Uniform Action Buttons Below Cards
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown('<div class="metric-card">📏<div style="font-weight:700; margin-top:8px;">Rod Calculator & 3D</div></div>', unsafe_allow_html=True)
         if st.button("Open Rod Calculator"):
             navigate_to("Rod & Tube Calculator")
             st.rerun()
-        st.markdown('<div class="metric-card">📦<div style="font-weight:700; margin-top:8px;">Stock Management</div></div>', unsafe_allow_html=True)
         if st.button("Open Stock Management"):
             navigate_to("Stock Management")
             st.rerun()
-        st.markdown('<div class="metric-card">🛠️<div style="font-weight:700; margin-top:8px;">Tool Life & Thread Master</div></div>', unsafe_allow_html=True)
         if st.button("Open Tool Life Master"):
             navigate_to("Tool Life & Thread Master")
             st.rerun()
             
     with col2:
-        st.markdown('<div class="metric-card">🔧<div style="font-weight:700; margin-top:8px;">Traub Collet & Bar Feed</div></div>', unsafe_allow_html=True)
         if st.button("Open Traub Collet Master"):
             navigate_to("Traub Collet & Bar Feed")
             st.rerun()
-        st.markdown('<div class="metric-card">🖥️<div style="font-weight:700; margin-top:8px;">G-Code Generator</div></div>', unsafe_allow_html=True)
         if st.button("Open G-Code Generator"):
             navigate_to("Advanced G-Code Generator")
             st.rerun()
-        st.markdown('<div class="metric-card">⚙️<div style="font-weight:700; margin-top:8px;">More Menu & Settings</div></div>', unsafe_allow_html=True)
         if st.button("Open Master Settings"):
             navigate_to("More Menu / Master Settings")
             st.rerun()
             
     with col3:
-        st.markdown('<div class="metric-card">⏱️<div style="font-weight:700; margin-top:8px;">Production & OEE</div></div>', unsafe_allow_html=True)
         if st.button("Open Production & OEE"):
             navigate_to("Production & OEE Analyzer")
             st.rerun()
-        st.markdown('<div class="metric-card">📄<div style="font-weight:700; margin-top:8px;">Quotation & PDF</div></div>', unsafe_allow_html=True)
         if st.button("Open Quotation Generator"):
             navigate_to("Quotation & PDF Studio")
+            st.rerun()
+        if st.button("Open Studio Hub"):
+            navigate_to("Advanced G-Code Generator")
             st.rerun()
 
 # 2. ROD & TUBE CALCULATOR WITH INSTANT DRAWING PREVIEW & 3D ANIMATION
@@ -685,7 +732,7 @@ elif st.session_state.nav_menu == "Stock Management":
 # 7. ADVANCED G-CODE GENERATOR WITH INSTANT PREVIEW & 3D STUDIO
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Live 3D Drawing Studio</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகും.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
 
     uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="gcode_drawing_upload")
     if uploaded_drawing is not None:
