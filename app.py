@@ -156,25 +156,25 @@ if "stock_db" not in st.session_state:
     st.session_state.stock_db = pd.DataFrame([
         {"Material": "EN8 Round Bar - 12mm", "Unit": "Meter", "Available Stock": 120.50, "Status": "In Stock"},
         {"Material": "MS Round Bar - 20mm", "Unit": "Kg", "Available Stock": 45.20, "Status": "Low Stock"},
+        {"Material": "SS304 Round Bar - 25mm", "Unit": "Meter", "Available Stock": 85.00, "Status": "In Stock"},
     ])
 
 def navigate_to(menu_name):
     st.session_state.nav_menu = menu_name
 
-# Helper function for precise shape mesh generation in 3D Plotly
+# Helper function for precise shape mesh generation in 3D Plotly (Expanded with Flange, Bush, Bolt)
 def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
     z_vals = np.linspace(0, length, 30)
+    theta = np.linspace(0, 2 * np.pi, 60)
+    Theta, Z = np.meshgrid(theta, z_vals)
+
     if shape == "Round":
-        theta = np.linspace(0, 2 * np.pi, 60)
-        Theta, Z = np.meshgrid(theta, z_vals)
         R = size / 2.0
         X = R * np.cos(Theta)
         Y = R * np.sin(Theta)
         return [go.Surface(x=X, y=Y, z=Z, colorscale='Viridis', showscale=False)]
     
     elif shape == "Tube":
-        theta = np.linspace(0, 2 * np.pi, 60)
-        Theta, Z = np.meshgrid(theta, z_vals)
         R_out = size / 2.0
         R_in = max(0.1, inner_dia / 2.0)
         X_out = R_out * np.cos(Theta)
@@ -186,9 +186,38 @@ def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
             go.Surface(x=X_in, y=Y_in, z=Z, colorscale='Greys', showscale=False)
         ]
     
+    elif shape == "Flange":
+        # Flange with collar base
+        z_vals_f = np.linspace(0, length * 0.3, 15)
+        z_vals_b = np.linspace(length * 0.3, length, 20)
+        Th_f, Z_f = np.meshgrid(theta, z_vals_f)
+        Th_b, Z_b = np.meshgrid(theta, z_vals_b)
+        R_flange = size * 0.8
+        R_body = size * 0.4
+        X_f = R_flange * np.cos(Th_f)
+        Y_f = R_flange * np.sin(Th_f)
+        X_b = R_body * np.cos(Th_b)
+        Y_b = R_body * np.sin(Th_b)
+        return [
+            go.Surface(x=X_f, y=Y_f, z=Z_f, colorscale='Plasma', showscale=False),
+            go.Surface(x=X_b, y=Y_b, z=Z_b, colorscale='Viridis', showscale=False)
+        ]
+
+    elif shape == "Bush":
+        z_vals_b = np.linspace(0, length, 30)
+        Th_b, Z_b = np.meshgrid(theta, z_vals_b)
+        R_out = size / 2.0
+        R_in = max(0.1, (size * 0.6) / 2.0)
+        X_out = R_out * np.cos(Th_b)
+        Y_out = R_out * np.sin(Th_b)
+        X_in = R_in * np.cos(Th_b)
+        Y_in = R_in * np.sin(Th_b)
+        return [
+            go.Surface(x=X_out, y=Y_out, z=Z_b, colorscale='Teal', showscale=False),
+            go.Surface(x=X_in, y=Y_in, z=Z_b, colorscale='Copper', showscale=False)
+        ]
+
     elif shape in ["Square", "Hexagon"]:
-        theta = np.linspace(0, 2 * np.pi, 120)
-        Theta, Z = np.meshgrid(theta, z_vals)
         n_sides = 6 if shape == "Hexagon" else 4
         half_angle = np.pi / n_sides
         r_poly = (size / 2.0) * np.cos(half_angle) / np.cos((Theta % (2 * np.pi / n_sides)) - half_angle)
@@ -197,8 +226,6 @@ def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
         return [go.Surface(x=X, y=Y, z=Z, colorscale='Plasma', showscale=False)]
     
     else:
-        theta = np.linspace(0, 2 * np.pi, 60)
-        Theta, Z = np.meshgrid(theta, z_vals)
         R = size / 2.0
         X = R * np.cos(Theta)
         Y = R * np.sin(Theta)
@@ -243,10 +270,11 @@ menu_options = [
     "Home Dashboard",
     "Rod & Tube Calculator",
     "Traub Collet & Bar Feed",
-    "Production & Cycle Time",
+    "Production & OEE Analyzer",
+    "Tool Life & Thread Master",
     "Stock Management",
     "Advanced G-Code Generator",
-    "Quotation & PDF",
+    "Quotation & PDF Studio",
     "More Menu / Master Settings",
 ]
 
@@ -261,7 +289,7 @@ if selected_sidebar_menu != st.session_state.nav_menu:
 
 # 1. HOME DASHBOARD
 if st.session_state.nav_menu == "Home Dashboard":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome Nithish 👋 (Megala CNC Suite)</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome Operator 👋 (MEGALA CNC MATE Suite)</div>', unsafe_allow_html=True)
     st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 20px;">Ultra-Advanced CNC, Traub & Blueprint Studio - Select any module below</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
@@ -284,13 +312,13 @@ if st.session_state.nav_menu == "Home Dashboard":
             navigate_to("Advanced G-Code Generator")
             st.rerun()
     with col3:
-        st.markdown('<div class="metric-card">⏱️<div style="font-weight:700; margin-top:8px;">Production & Drilling</div></div>', unsafe_allow_html=True)
-        if st.button("Open Production Calculator"):
-            navigate_to("Production & Cycle Time")
+        st.markdown('<div class="metric-card">⏱️<div style="font-weight:700; margin-top:8px;">Production & OEE</div></div>', unsafe_allow_html=True)
+        if st.button("Open Production & OEE"):
+            navigate_to("Production & OEE Analyzer")
             st.rerun()
         st.markdown('<div class="metric-card">📄<div style="font-weight:700; margin-top:8px;">Quotation & PDF</div></div>', unsafe_allow_html=True)
         if st.button("Open Quotation Generator"):
-            navigate_to("Quotation & PDF")
+            navigate_to("Quotation & PDF Studio")
             st.rerun()
 
 # 2. ROD & TUBE CALCULATOR WITH INSTANT DRAWING PREVIEW & 3D ANIMATION
@@ -302,7 +330,8 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         if shape == "Round": return (dia**2) / 162
         elif shape == "Square": return (dia**2) / 127
         elif shape == "Hexagon": return (dia**2) / 147
-        elif shape == "Tube": return (dia**2) / 162
+        elif shape in ["Tube", "Bush"]: return (dia**2) / 162
+        elif shape == "Flange": return (dia**2) / 150
         return (dia**2) / 162
 
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & Live 3D Model)"], horizontal=True)
@@ -343,7 +372,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
 
     col1, col2 = st.columns(2)
     with col1:
-        rod_type = st.selectbox("Rod Shape", ["Round", "Hexagon", "Square", "Tube", "Stepped Shaft"])
+        rod_type = st.selectbox("Component / Rod Shape", ["Round", "Hexagon", "Square", "Tube", "Bush", "Flange", "Stepped Shaft"])
         if rod_type == "Stepped Shaft":
             num_rod_steps = st.number_input("Number of Steps in Shaft", min_value=1, max_value=5, value=2, key="rod_num_steps")
             rod_steps_data = []
@@ -357,7 +386,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
             rod_dia = st.number_input("Rod Diameter / Across Flats (mm)", min_value=0.0, step=0.5, key="rod_dia_input")
         
         inner_dia_input = 0.0
-        if rod_type == "Tube":
+        if rod_type in ["Tube", "Bush"]:
             inner_dia_input = st.number_input("Inner Diameter (mm)", min_value=0.0, value=12.0, step=0.5)
         unit_type = st.selectbox("Input Unit", ["Meter", "Kilogram"])
         rod_length_input = st.number_input("Input Value (Length in Meters OR Weight in Kg)", min_value=0.0, value=1.0, step=0.1)
@@ -413,7 +442,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     if st.session_state.calc_results is not None:
         res = st.session_state.calc_results
         
-        if "Advanced" in calc_mode and PLOTLY_AVAILABLE:
+        if PLOTLY_AVAILABLE:
             st.markdown("---")
             st.subheader(f"🌐 Dynamic 3D Interactive Component Preview [{res['rod_type']} Shape]")
             if res['rod_type'] == "Stepped Shaft" and res.get('stepped_data'):
@@ -541,37 +570,116 @@ elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
           * *தீர்வு:* டூல் பிட்டை மாற்றவும் அல்லது கூலண்ட் பம்பைச் சரிபார்க்கவும்.
         """)
 
-# 4. PRODUCTION & CYCLE TIME
-elif st.session_state.nav_menu == "Production & Cycle Time":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Production & Cycle Time Analyzer</div>', unsafe_allow_html=True)
+# 4. PRODUCTION & OEE ANALYZER
+elif st.session_state.nav_menu == "Production & OEE Analyzer":
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Production & OEE (Overall Equipment Effectiveness) Analyzer</div>', unsafe_allow_html=True)
+    
     col1, col2 = st.columns(2)
     with col1:
-        machine_type = st.selectbox("Machine Type", ["CNC Lathe", "Traub Machine", "Drill Machine", "VMC"])
-        operation_type = st.selectbox("Operation", ["Facing", "Turning", "Threading", "Tapping", "Drilling"])
-        cycle_time_p = st.number_input("Cycle Time per Part (sec)", min_value=0.0, value=20.0)
+        machine_type = st.selectbox("Machine Type", ["CNC Lathe", "Traub Automatic Lathe", "VMC Machine", "Drilling Machine"])
+        total_planned_time = st.number_input("Planned Production Time (Hours)", min_value=1.0, value=8.0, step=0.5)
+        downtime_hours = st.number_input("Total Downtime / Breakdowns (Hours)", min_value=0.0, value=0.5, step=0.1)
+        ideal_cycle_time = st.number_input("Ideal Cycle Time per Part (Seconds)", min_value=1.0, value=25.0, step=1.0)
     with col2:
-        avail_time = st.number_input("Total Working Hours", min_value=0.0, value=12.0, step=0.5)
-        machine_eff = st.slider("Machine Efficiency (%)", min_value=10, max_value=100, value=85)
-        break_time = st.number_input("Break Time (min)", min_value=0, value=30)
+        total_parts_produced = st.number_input("Total Parts Produced (Gross)", min_value=0, value=1000, step=10)
+        rejected_parts = st.number_input("Rejected / Defective Parts", min_value=0, value=15, step=1)
+        shift_name = st.text_input("Shift Identifier", value="Shift A")
 
-    if st.button("Calculate Production Output"):
-        effective_hours = avail_time - (break_time / 60.0) if avail_time > 0 else 0
-        prod_per_hr = int((3600 / cycle_time_p) * (machine_eff / 100.0)) if cycle_time_p > 0 else 0
-        prod_per_day = int(prod_per_hr * effective_hours) if effective_hours > 0 else 0
+    if st.button("Calculate Comprehensive OEE"):
+        operating_time = max(0.1, total_planned_time - downtime_hours)
+        availability = (operating_time / total_planned_time) * 100.0
+        
+        # Performance = (Ideal Cycle Time * Total Parts) / Operating Time (in seconds)
+        operating_seconds = operating_time * 3600
+        performance = ((ideal_cycle_time * total_parts_produced) / operating_seconds) * 100.0
+        performance = min(100.0, performance)
+
+        # Quality = Good Parts / Total Parts
+        good_parts = max(0, total_parts_produced - rejected_parts)
+        quality = (good_parts / total_parts_produced) * 100.0 if total_parts_produced > 0 else 0.0
+
+        oee = (availability * performance * quality) / 10000.0
+
         st.markdown("---")
-        c1, c2 = st.columns(2)
-        c1.success(f"### Production / Hour: **{prod_per_hr} Nos**")
-        c2.success(f"### Production for {avail_time} Hours: **{prod_per_day} Nos**")
+        st.subheader("📈 OEE & Performance Metrics")
+        
+        oc1, oc2, oc3, oc4 = st.columns(4)
+        oc1.info(f"**Availability:** {availability:.1f}%")
+        oc2.info(f"**Performance:** {performance:.1f}%")
+        oc3.info(f"**Quality:** {quality:.1f}%")
+        oc4.success(f"### **OEE: {oee:.1f}%**")
 
-# 5. STOCK MANAGEMENT
+        st.markdown(f"""
+        <div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-top: 15px;">
+            <b>Production Efficiency Report ({shift_name}):</b><br>
+            - Good Quality Parts Produced: <b>{good_parts} Nos</b> out of {total_parts_produced} total.<br>
+            - Operating Time: <b>{operating_time:.2f} Hours</b> (Planned: {total_planned_time} hrs, Downtime: {downtime_hours} hrs).<br>
+            - World-class manufacturing benchmark for OEE is typically <b>85% and above</b>.
+        </div>
+        """, unsafe_allow_html=True)
+
+# 5. TOOL LIFE & THREAD MASTER
+elif st.session_state.nav_menu == "Tool Life & Thread Master":
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Tool Life (Taylor Equation) & Thread Cutting Master</div>', unsafe_allow_html=True)
+    
+    sub_tab1, sub_tab2 = st.tabs(["1. Tool Life Predictor (Taylor's Law)", "2. Thread & Pitch Calculator"])
+
+    with sub_tab1:
+        st.markdown("### 🛠️ Taylor's Tool Life Equation ($V \\cdot T^n = C$)")
+        tc1, tc2 = st.columns(2)
+        with tc1:
+            tool_material = st.selectbox("Tool Insert Material", ["Carbide Insert", "High Speed Steel (HSS)", "Ceramic Insert", "CBN / PCD"])
+            cutting_speed_v = st.number_input("Cutting Speed V (m/min)", min_value=10.0, value=150.0, step=10.0)
+            taylor_constant_c = st.number_input("Taylor Constant C (Material Dependent)", min_value=50.0, value=300.0, step=10.0)
+        with tc2:
+            taylor_exponent_n = st.number_input("Taylor Exponent n", min_value=0.1, max_value=0.8, value=0.25, step=0.05)
+            part_cut_time = st.number_input("Cutting Time per Part (Seconds)", min_value=1.0, value=15.0, step=1.0)
+
+        if st.button("Calculate Tool Life & Part Count"):
+            # T = (C / V)^(1/n) in minutes
+            if cutting_speed_v > 0 and taylor_exponent_n > 0:
+                tool_life_minutes = (taylor_constant_c / cutting_speed_v) ** (1.0 / taylor_exponent_n)
+                total_parts_per_edge = int((tool_life_minutes * 60) / part_cut_time) if part_cut_time > 0 else 0
+                
+                st.success(f"Estimated Tool Life per Edge: **{tool_life_minutes:.2f} Minutes**")
+                st.info(f"Expected Components per Cutting Edge: **{total_parts_per_edge} Parts**")
+            else:
+                st.error("Please enter valid positive values.")
+
+    with sub_tab2:
+        st.markdown("### 🧵 Thread & Pitch Depth Calculator")
+        th1, th2 = st.columns(2)
+        with th1:
+            thread_type = st.selectbox("Thread Standard", ["Metric ISO Thread (M)", "BSW / BSF Thread", "ACME Thread", "NPT Pipe Thread"])
+            nominal_dia = st.number_input("Nominal Diameter (mm)", min_value=1.0, value=20.0, step=0.5)
+            thread_pitch = st.number_input("Thread Pitch (mm)", min_value=0.2, value=2.5, step=0.25)
+        with th2:
+            st.markdown("<b>Standard Thread Formulas:</b>", unsafe_allow_html=True)
+            if "Metric" in thread_type:
+                thread_depth = 0.6134 * thread_pitch
+                core_dia = nominal_dia - (1.0825 * thread_pitch)
+                st.info(f"**Thread Depth (H1):** {thread_depth:.3f} mm")
+                st.info(f"**Core / Tap Drill Diameter:** {core_dia:.3f} mm")
+            elif "BSW" in thread_type:
+                thread_depth = 0.6403 * thread_pitch
+                core_dia = nominal_dia - (1.2806 * thread_pitch)
+                st.info(f"**Thread Depth:** {thread_depth:.3f} mm")
+                st.info(f"**Core Diameter:** {core_dia:.3f} mm")
+            else:
+                thread_depth = 0.5 * thread_pitch
+                core_dia = nominal_dia - thread_pitch
+                st.info(f"**Approx. Thread Depth:** {thread_depth:.3f} mm")
+                st.info(f"**Approx. Core Diameter:** {core_dia:.3f} mm")
+
+# 6. STOCK MANAGEMENT
 elif st.session_state.nav_menu == "Stock Management":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Stock Management System</div>', unsafe_allow_html=True)
     st.session_state.stock_db = st.data_editor(st.session_state.stock_db, num_rows="dynamic", use_container_width=True)
 
-# 6. ADVANCED G-CODE GENERATOR WITH INSTANT PREVIEW & 3D STUDIO
+# 7. ADVANCED G-CODE GENERATOR WITH INSTANT PREVIEW & 3D STUDIO
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Live 3D Drawing Studio</div>', unsafe_allow_html=True)
-    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம் நிதீஷ்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். பிரிவியூ உடனே தோன்றும், அளவுகள் ஆட்டோமேட்டிக்காக இன்புட்டில் ஏறும், மற்றும் 3D மாடல் மற்றும் ஜி-கோடு உருவாகும்.</div>', unsafe_allow_html=True)
 
     uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="gcode_drawing_upload")
     if uploaded_drawing is not None:
@@ -608,7 +716,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
     with gc_col1:
         prog_no = st.text_input("Program Number", value="O1001")
         machine_target = st.selectbox("Select Target Machine", ["CNC Lathe (Fanuc / Siemens)", "Traub Automatic Lathe (Cam / Single Spindle)", "CNC Drilling / VMC Machine"])
-        shape_type = st.selectbox("Component Shape", ["Round", "Hexagon", "Square", "Tube", "Stepped Shaft"])
+        shape_type = st.selectbox("Component Shape", ["Round", "Hexagon", "Square", "Tube", "Bush", "Flange", "Stepped Shaft"])
     
     with gc_col2:
         if shape_type == "Stepped Shaft":
@@ -625,8 +733,8 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
         else:
             stock_dia = st.number_input("Stock / Raw Diameter (mm)", key="stock_dia_input", step=0.5)
             inner_dia_g = 0.0
-            if shape_type == "Tube":
-                inner_dia_g = st.number_input("Inner Diameter (mm) [Tube]", value=12.0, key="inner_dia_g_input")
+            if shape_type in ["Tube", "Bush"]:
+                inner_dia_g = st.number_input("Inner Diameter (mm)", value=12.0, key="inner_dia_g_input")
             fin_dia = st.number_input("Finished Diameter (mm)", value=20.0)
             part_length = st.number_input("Component Length (mm)", key="gcode_len_input", step=0.1)
 
@@ -743,8 +851,8 @@ M30
             pdf_data = buffer.getvalue()
             st.download_button(label="📥 Export G-Code & Report as PDF", data=pdf_data, file_name=f"{prog_no}_CNC_Report.pdf", mime="application/pdf")
 
-# 7. QUOTATION & PDF
-elif st.session_state.nav_menu == "Quotation & PDF":
+# 8. QUOTATION & PDF STUDIO
+elif st.session_state.nav_menu == "Quotation & PDF Studio":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Professional Quotation Generator & PDF Export</div>', unsafe_allow_html=True)
     q_drawing = st.file_uploader("📁 Upload Job / Component Drawing (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="q_draw")
     if q_drawing is not None:
@@ -820,7 +928,7 @@ elif st.session_state.nav_menu == "Quotation & PDF":
             q_pdf_data = q_buffer.getvalue()
             st.download_button(label="📥 Download Professional Quotation PDF", data=q_pdf_data, file_name=f"Quotation_{qd['client_name'].replace(' ', '_')}_{qd['job_name'].replace(' ', '_')}.pdf", mime="application/pdf")
 
-# 8. MORE MENU / MASTERS & SETTINGS
+# 9. MORE MENU / MASTERS & SETTINGS
 elif st.session_state.nav_menu == "More Menu / Master Settings":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">More Menu & Masters</div>', unsafe_allow_html=True)
     st.checkbox("Enable Sound Alerts on Calculation", value=True)
