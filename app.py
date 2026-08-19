@@ -320,27 +320,23 @@ if selected_sidebar_menu != st.session_state.nav_menu:
     st.session_state.nav_menu = selected_sidebar_menu
     st.rerun()
 
-# 1. HOME DASHBOARD (Uniform Grid Layout - Fully Aligned & Professional)
+# 1. HOME DASHBOARD (Uniform Grid Layout - Fully Aligned & Bug-Free)
 if st.session_state.nav_menu == "Home Dashboard":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4; margin-bottom: 5px;">Welcome Nithish 👋 (MEGALA CNC MATE Suite)</div>', unsafe_allow_html=True)
     st.markdown('<div style="color: #94A3B8; font-size: 14px; margin-bottom: 25px;">Ultra-Advanced CNC, Traub & Blueprint Studio - Select any module below</div>', unsafe_allow_html=True)
 
-    # 3-Column Uniform Grid Cards
-    st.markdown("""
-    <div class="dashboard-grid">
-        <div class="dash-card"><div class="dash-icon">📏</div><div class="dash-label">Rod Calculator & 3D</div></div>
-        <div class="dash-card"><div class="dash-icon">🔧</div><div class="dash-label">Traub Collet & Bar Feed</div></div>
-        <div class="dash-card"><div class="dash-icon">⏱️</div><div class="dash-label">Production & OEE</div></div>
-        
-        <div class="dash-card"><div class="dash-icon">📦</div><div class="dash-label">Stock Management</div></div>
-        <div class="dash-card"><div class="dash-icon">🖥️</div><div class="dash-label">G-Code Generator</div></div>
-        <div class="dash-card"><div class="dash-icon">📄</div><div class="dash-label">Quotation & PDF</div></div>
-
-        <div class="dash-card"><div class="dash-icon">🛠️</div><div class="dash-label">Tool Life & Threads</div></div>
-        <div class="dash-card"><div class="dash-icon">⚙️</div><div class="dash-label">Master Settings</div></div>
-        <div class="dash-card"><div class="dash-icon">✨</div><div class="dash-label">Studio & Assistant</div></div>
-    </div>
-    """, unsafe_allow_html=True)
+    # 3-Column Uniform Grid Cards (Fixed indentation to prevent raw HTML display bug)
+    st.markdown("""<div class="dashboard-grid">
+    <div class="dash-card"><div class="dash-icon">📏</div><div class="dash-label">Rod Calculator & 3D</div></div>
+    <div class="dash-card"><div class="dash-icon">🔧</div><div class="dash-label">Traub Collet & Bar Feed</div></div>
+    <div class="dash-card"><div class="dash-icon">⏱️</div><div class="dash-label">Production & OEE</div></div>
+    <div class="dash-card"><div class="dash-icon">📦</div><div class="dash-label">Stock Management</div></div>
+    <div class="dash-card"><div class="dash-icon">🖥️</div><div class="dash-label">G-Code Generator</div></div>
+    <div class="dash-card"><div class="dash-icon">📄</div><div class="dash-label">Quotation & PDF</div></div>
+    <div class="dash-card"><div class="dash-icon">🛠️</div><div class="dash-label">Tool Life & Threads</div></div>
+    <div class="dash-card"><div class="dash-icon">⚙️</div><div class="dash-label">Master Settings</div></div>
+    <div class="dash-card"><div class="dash-icon">✨</div><div class="dash-label">Studio & Assistant</div></div>
+</div>""", unsafe_allow_html=True)
 
     # Perfectly Aligned Uniform Action Buttons Below Cards
     col1, col2, col3 = st.columns(3)
