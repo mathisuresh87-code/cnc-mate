@@ -153,6 +153,49 @@ if "stock_db" not in st.session_state:
 def navigate_to(menu_name):
     st.session_state.nav_menu = menu_name
 
+# Helper function for precise shape mesh generation in 3D Plotly
+def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
+    z_vals = np.linspace(0, length, 25)
+    if shape == "Round":
+        theta = np.linspace(0, 2 * np.pi, 60)
+        Theta, Z = np.meshgrid(theta, z_vals)
+        R = size / 2.0
+        X = R * np.cos(Theta)
+        Y = R * np.sin(Theta)
+        return [go.Surface(x=X, y=Y, z=Z, colorscale='Viridis', showscale=False)]
+    
+    elif shape == "Tube":
+        theta = np.linspace(0, 2 * np.pi, 60)
+        Theta, Z = np.meshgrid(theta, z_vals)
+        R_out = size / 2.0
+        R_in = max(0.1, inner_dia / 2.0)
+        X_out = R_out * np.cos(Theta)
+        Y_out = R_out * np.sin(Theta)
+        X_in = R_in * np.cos(Theta)
+        Y_in = R_in * np.sin(Theta)
+        return [
+            go.Surface(x=X_out, y=Y_out, z=Z, colorscale='Blues', showscale=False),
+            go.Surface(x=X_in, y=Y_in, z=Z, colorscale='Greys', showscale=False)
+        ]
+    
+    elif shape in ["Square", "Hexagon"]:
+        theta = np.linspace(0, 2 * np.pi, 120)
+        Theta, Z = np.meshgrid(theta, z_vals)
+        n_sides = 6 if shape == "Hexagon" else 4
+        half_angle = np.pi / n_sides
+        r_poly = (size / 2.0) * np.cos(half_angle) / np.cos((Theta % (2 * np.pi / n_sides)) - half_angle)
+        X = r_poly * np.cos(Theta)
+        Y = r_poly * np.sin(Theta)
+        return [go.Surface(x=X, y=Y, z=Z, colorscale='Viridis', showscale=False)]
+    
+    else:
+        theta = np.linspace(0, 2 * np.pi, 60)
+        Theta, Z = np.meshgrid(theta, z_vals)
+        R = size / 2.0
+        X = R * np.cos(Theta)
+        Y = R * np.sin(Theta)
+        return [go.Surface(x=X, y=Y, z=Z, colorscale='Viridis', showscale=False)]
+
 # SIDEBAR
 if logo_base64:
     sidebar_logo_html = f"""
@@ -235,6 +278,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         if shape == "Round": return (dia**2) / 162
         elif shape == "Square": return (dia**2) / 127
         elif shape == "Hexagon": return (dia**2) / 147
+        elif shape == "Tube": return (dia**2) / 162
         return (dia**2) / 162
 
     calc_mode = st.radio("Operating Mode", ["Simple Mode", "Advanced Mode (Drawing Scan & Live 3D Model)"], horizontal=True)
@@ -264,6 +308,9 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
     with col1:
         rod_type = st.selectbox("Rod Shape", ["Round", "Hexagon", "Square", "Tube"])
         rod_dia = st.number_input("Rod Diameter / Across Flats (mm)", min_value=0.0, value=25.0, step=0.5)
+        inner_dia_input = 0.0
+        if rod_type == "Tube":
+            inner_dia_input = st.number_input("Inner Diameter (mm)", min_value=0.0, value=12.0, step=0.5)
         unit_type = st.selectbox("Input Unit", ["Meter", "Kilogram"])
         rod_length_input = st.number_input("Input Value (Length in Meters OR Weight in Kg)", min_value=0.0, value=1.0, step=0.1)
         shift_hours = st.number_input("Working Hours per Shift / Day", min_value=0.0, value=8.0, step=0.5)
@@ -313,6 +360,7 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
             "total_rod_meters": total_rod_meters,
             "unit_type": unit_type,
             "rod_dia": rod_dia,
+            "inner_dia": inner_dia_input,
             "part_length": part_length,
             "rod_type": rod_type
         }
@@ -323,25 +371,10 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
         if "Advanced" in calc_mode and PLOTLY_AVAILABLE:
             st.markdown("---")
             st.subheader(f"🌐 Dynamic 3D Interactive Component Preview [{res['rod_type']} Shape]")
-            r_flat = res["rod_dia"] / 2.0
             
-            theta_smooth = np.linspace(0, 2 * np.pi, 120)
-            z_grid_poly = np.linspace(0, res["part_length"], 20)
-            Theta_p, Z_p = np.meshgrid(theta_smooth, z_grid_poly)
+            surfaces = generate_3d_shape_mesh(res['rod_type'], res['rod_dia'], res['part_length'], res.get('inner_dia', 0.0))
             
-            if res["rod_type"] == "Hexagon":
-                n_sides = 6
-                r_poly = r_flat / np.cos((Theta_p % (2 * np.pi / n_sides)) - (np.pi / n_sides))
-            elif res["rod_type"] == "Square":
-                n_sides = 4
-                r_poly = r_flat / np.cos((Theta_p % (2 * np.pi / n_sides)) - (np.pi / n_sides))
-            else:
-                r_poly = np.full_like(Theta_p, r_flat)
-
-            X_grid = r_poly * np.cos(Theta_p)
-            Y_grid = r_poly * np.sin(Theta_p)
-
-            fig = go.Figure(data=[go.Surface(x=X_grid, y=Y_grid, z=Z_p, colorscale='Viridis', showscale=False)])
+            fig = go.Figure(data=surfaces)
             fig.update_layout(
                 title=dict(text=f"3D Model [{res['rod_type']}] -> Size: {res['rod_dia']} mm | Length: {res['part_length']} mm", font=dict(size=14, color='#48CAE4')),
                 scene=dict(xaxis_title='X Axis (mm)', yaxis_title='Y Axis (mm)', zaxis_title='Length Z (mm)', bgcolor='#0B132B'),
@@ -492,7 +525,7 @@ elif st.session_state.nav_menu == "Stock Management":
 # 6. ADVANCED G-CODE GENERATOR WITH LIVE 3D PARAMETRIC COMPONENT STUDIO
 elif st.session_state.nav_menu == "Advanced G-Code Generator":
     st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Advanced G-Code Generator & Live 3D Drawing Studio</div>', unsafe_allow_html=True)
-    st.markdown(f'<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம் நிதீஷ்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். சிஸ்டம் ஸ்கேன் செய்து உடனுக்குடன் 3D மாடலையும் ஜி-கோடையும் வழங்கும்.</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="color: #94A3B8; font-size: 13px; margin-bottom: 15px;">வணக்கம் நிதீஷ்! உங்கள் டிராயிங்கை கீழே அப்லோட் செய்யுங்கள். நீங்கள் தேர்வு செய்யும் வடிவம் (Round, Square, Hexagon, Tube) மற்றும் அளவுகளுக்கு ஏற்ப 3D அனிமேஷன் மற்றும் ஜி-கோடு உடனுக்குடன் உருவாகும்.</div>', unsafe_allow_html=True)
 
     uploaded_drawing = st.file_uploader("📁 Upload Part Drawing / Blueprint (PNG, JPG, WEBP, HEIC, PDF)", type=["png", "jpg", "jpeg", "webp", "heic", "pdf"], key="gcode_drawing_upload")
     if uploaded_drawing is not None:
@@ -518,9 +551,12 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
     with gc_col1:
         prog_no = st.text_input("Program Number", value="O1001")
         machine_target = st.selectbox("Select Target Machine", ["CNC Lathe (Fanuc / Siemens)", "Traub Automatic Lathe (Cam / Single Spindle)", "CNC Drilling / VMC Machine"])
-        shape_type = st.selectbox("Component Shape", ["Round", "Hexagon", "Square"])
+        shape_type = st.selectbox("Component Shape", ["Round", "Hexagon", "Square", "Tube"])
     with gc_col2:
         stock_dia = st.number_input("Stock / Raw Diameter (mm)", value=float(st.session_state.stock_dia), key="stock_dia_input")
+        inner_dia_g = 0.0
+        if shape_type == "Tube":
+            inner_dia_g = st.number_input("Inner Diameter (mm) [Tube]", value=12.0, key="inner_dia_g_input")
         fin_dia = st.number_input("Finished Diameter (mm)", value=20.0)
         part_length = st.number_input("Component Length (mm)", value=float(st.session_state.part_length), step=0.5, key="gcode_len_input")
     with gc_col3:
@@ -530,7 +566,7 @@ elif st.session_state.nav_menu == "Advanced G-Code Generator":
 
     if st.button("🚀 Run Live 3D Studio & Generate G-Code"):
         if "CNC Lathe" in machine_target:
-            gcode_content = f"""{prog_no} (CNC LATHE PROGRAM)
+            gcode_content = f"""{prog_no} (CNC LATHE PROGRAM - {shape_type.upper()})
 G21 G90 G40 G80
 T0101 (FACING & TURNING TOOL)
 G96 S200 M03
@@ -540,9 +576,9 @@ X{fin_dia} Z-{part_length}
 G00 Z5.0
 M30
 """
-            explanation = f"**CNC Lathe Operations Breakdown for {shape_type} bar:**\n1. **Facing:** Cleans up front face at Z0.\n2. **Turning:** Reduces diameter from {stock_dia}mm to {fin_dia}mm over length {part_length}mm with cut depth {cut_depth}mm.\n3. **Parting:** Cut-off at end of cycle."
+            explanation = f"**CNC Lathe Operations Breakdown for {shape_type} component:**\n1. **Facing:** Cleans up front face at Z0.\n2. **Turning:** Reduces diameter from {stock_dia}mm to {fin_dia}mm over length {part_length}mm with cut depth {cut_depth}mm.\n3. **Parting:** Cut-off at end of cycle."
         elif "Traub" in machine_target:
-            gcode_content = f"""{prog_no} (TRAUB AUTOMATIC LATHE SEQUENCE)
+            gcode_content = f"""{prog_no} (TRAUB AUTOMATIC LATHE SEQUENCE - {shape_type.upper()})
 N10 G99 (SPINDLE START)
 N20 T1 (BAR STOP & FEED)
 N30 T2 (FACING TOOL - SLIDE 1)
@@ -550,7 +586,7 @@ N40 T3 (TURNING TOOL - DIA {fin_dia}MM, LENGTH {part_length}MM)
 N50 T4 (PARTING / CUT-OFF TOOL)
 M02 (END OF PROGRAM)
 """
-            explanation = f"**Traub Automatic Lathe Operations Breakdown:**\n1. **Bar Feeding:** Material fed against stock stop.\n2. **Longitudinal Slide:** Turns profile down from {stock_dia}mm to {fin_dia}mm over length {part_length}mm.\n3. **Cross Slide:** Facing and parting-off."
+            explanation = f"**Traub Automatic Lathe Operations Breakdown ({shape_type}):**\n1. **Bar Feeding:** Material fed against stock stop.\n2. **Longitudinal Slide:** Turns profile down from {stock_dia}mm to {fin_dia}mm over length {part_length}mm.\n3. **Cross Slide:** Facing and parting-off."
         else:
             gcode_content = f"""{prog_no} (CNC DRILLING / VMC PROGRAM)
 G21 G90 G40 G80
@@ -568,36 +604,25 @@ M30
         st.session_state.gcode_explanation = explanation
         st.session_state.active_shape = shape_type
         st.session_state.active_dia = stock_dia
+        st.session_state.active_inner_dia = inner_dia_g
         st.session_state.active_len = part_length
         st.success("Live 3D Studio & G-Code Generated Successfully!")
 
-    # Live 3D Interactive Visualization reacting directly to dimensions in G-Code section
+    # Live 3D Interactive Visualization reacting directly to selected shape and dimensions
     if "generated_gcode" in st.session_state and PLOTLY_AVAILABLE:
         st.markdown("---")
         st.subheader(f"🌐 Live 3D Parametric Simulation [{st.session_state.active_shape} Profile]")
         
-        r_flat = st.session_state.active_dia / 2.0
-        length_z = st.session_state.active_len
+        surfaces_g = generate_3d_shape_mesh(
+            st.session_state.active_shape, 
+            st.session_state.active_dia, 
+            st.session_state.active_len, 
+            st.session_state.get('active_inner_dia', 0.0)
+        )
         
-        theta_smooth = np.linspace(0, 2 * np.pi, 120)
-        z_grid_poly = np.linspace(0, length_z, 25)
-        Theta_p, Z_p = np.meshgrid(theta_smooth, z_grid_poly)
-        
-        if st.session_state.active_shape == "Hexagon":
-            n_sides = 6
-            r_poly = r_flat / np.cos((Theta_p % (2 * np.pi / n_sides)) - (np.pi / n_sides))
-        elif st.session_state.active_shape == "Square":
-            n_sides = 4
-            r_poly = r_flat / np.cos((Theta_p % (2 * np.pi / n_sides)) - (np.pi / n_sides))
-        else:
-            r_poly = np.full_like(Theta_p, r_flat)
-
-        X_grid = r_poly * np.cos(Theta_p)
-        Y_grid = r_poly * np.sin(Theta_p)
-
-        fig_3d = go.Figure(data=[go.Surface(x=X_grid, y=Y_grid, z=Z_p, colorscale='Viridis', showscale=False)])
+        fig_3d = go.Figure(data=surfaces_g)
         fig_3d.update_layout(
-            title=dict(text=f"Live 3D Component Model -> Shape: {st.session_state.active_shape} | Dia: {st.session_state.active_dia}mm | Length: {length_z}mm", font=dict(size=14, color='#48CAE4')),
+            title=dict(text=f"Live 3D Component Model -> Shape: {st.session_state.active_shape} | Size: {st.session_state.active_dia}mm | Length: {st.session_state.active_len}mm", font=dict(size=14, color='#48CAE4')),
             scene=dict(xaxis_title='X Axis (mm)', yaxis_title='Y Axis (mm)', zaxis_title='Length Z (mm)', bgcolor='#0B132B'),
             paper_bgcolor='#050B18', font=dict(color='white'), margin=dict(l=0, r=0, b=0, t=40)
         )
