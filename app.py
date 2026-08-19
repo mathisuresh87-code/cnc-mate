@@ -508,17 +508,12 @@ elif st.session_state.nav_menu == "Rod & Tube Calculator":
 
         total_part_len_mm = part_length + cutting_allowance
         
-        # Calculate parts per standard bar
         parts_per_bar = int((standard_bar_len_m * 1000) / total_part_len_mm) if total_part_len_mm > 0 else 0
         end_bit_per_bar_mm = (standard_bar_len_m * 1000) - (parts_per_bar * total_part_len_mm) if parts_per_bar > 0 else 0.0
         
-        # Total bars required for the bulk stock weight/meters
         total_bars_count = math.ceil(total_rod_meters / standard_bar_len_m) if standard_bar_len_m > 0 else 0
-        
-        # Total possible parts from bulk stock
         total_possible_parts = total_bars_count * parts_per_bar
         
-        # Total Scrap (End Bits across all bars)
         total_scrap_length_m = (total_bars_count * end_bit_per_bar_mm) / 1000.0
         total_scrap_weight_kg = total_scrap_length_m * kg_per_m
         
@@ -702,9 +697,9 @@ elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
           * *தீர்வு:* டூல் பிட்டை மாற்றவும் அல்லது கூலண்ட் பம்பைச் சரிபார்க்கவும்.
         """)
 
-# 4. PRODUCTION & OEE ANALYZER
+# 4. PRODUCTION & OEE ANALYZER (UPDATED WITH EXPLICIT REJECTION & SHORTFALL METRICS)
 elif st.session_state.nav_menu == "Production & OEE Analyzer":
-    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Production & OEE (Overall Equipment Effectiveness) Analyzer</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 24px; font-weight: 800; color: #48CAE4;">Production & OEE Analyzer (Output, Rejection & Target Details)</div>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
@@ -714,11 +709,11 @@ elif st.session_state.nav_menu == "Production & OEE Analyzer":
         ideal_cycle_time = st.number_input("Ideal Cycle Time per Part (Seconds)", min_value=1.0, value=25.0, step=1.0)
     with col2:
         total_parts_produced = st.number_input("Total Parts Produced (Gross)", min_value=0, value=1000, step=10)
-        rejected_parts = st.number_input("Rejected / Defective Parts", min_value=0, value=15, step=1)
-        shift_name = st.text_input("Shift Identifier", value="Shift A")
+        rejected_parts = st.number_input("Rejected / Defective Parts (Rejections)", min_value=0, value=15, step=1)
+        shift_name = st.text_input("Shift Identifier", value="Madhesh")
 
-    if st.button("Calculate Comprehensive OEE"):
-        operating_time = max(0.1, total_planned_time - downtime_hours)
+    if st.button("Calculate Comprehensive OEE & Output Analysis"):
+        operating_time = max(0.01, total_planned_time - downtime_hours)
         availability = (operating_time / total_planned_time) * 100.0
         
         operating_seconds = operating_time * 3600
@@ -727,8 +722,15 @@ elif st.session_state.nav_menu == "Production & OEE Analyzer":
 
         good_parts = max(0, total_parts_produced - rejected_parts)
         quality = (good_parts / total_parts_produced) * 100.0 if total_parts_produced > 0 else 0.0
-
         oee = (availability * performance * quality) / 10000.0
+
+        # --- PIECE COUNT & TARGET CALCULATIONS ---
+        planned_total_seconds = total_planned_time * 3600
+        target_parts_planned = int(planned_total_seconds / ideal_cycle_time) if ideal_cycle_time > 0 else 0
+        target_parts_operating = int(operating_seconds / ideal_cycle_time) if ideal_cycle_time > 0 else 0
+        
+        shortfall_vs_planned = max(0, target_parts_planned - good_parts)
+        rejection_percentage = (rejected_parts / total_parts_produced) * 100.0 if total_parts_produced > 0 else 0.0
 
         st.markdown("---")
         st.subheader("📈 OEE & Performance Metrics")
@@ -739,12 +741,27 @@ elif st.session_state.nav_menu == "Production & OEE Analyzer":
         oc3.info(f"**Quality:** {quality:.1f}%")
         oc4.success(f"### **OEE: {oee:.1f}%**")
 
+        st.markdown("---")
+        st.subheader("📦 Production Output, Rejection & Target Analysis (உற்பத்தி, ரெஜெக்ஷன் & இலக்கு விவரங்கள்)")
+        
+        # 4 Column metrics layout explicitly showing Rejections
+        pc1, pc2, pc3, pc4 = st.columns(4)
+        pc1.metric(label="Target Parts (Planned)", value=f"{target_parts_planned} Nos", help="மொத்த பிளான் நேரத்தின்படி வர வேண்டிய இலக்கு")
+        pc2.metric(label="Actual Good Parts", value=f"{good_parts} Nos", delta=f"-{shortfall_vs_planned} Short" if shortfall_vs_planned > 0 else "On Track", delta_color="inverse")
+        pc3.metric(label="Rejected Parts", value=f"{rejected_parts} Nos", delta=f"{rejection_percentage:.1f}% Rej.", delta_color="off")
+        pc4.metric(label="Production Shortfall", value=f"{shortfall_vs_planned} Nos", help="வர வேண்டிய இலக்கிற்கும் நல்ல பீஸ்களுக்கும் உள்ள வித்தியாசம்")
+
         st.markdown(f"""
-        <div style="background: rgba(72, 202, 228, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #48CAE4; margin-top: 15px;">
-            <b>Production Efficiency Report ({shift_name}):</b><br>
-            - Good Quality Parts Produced: <b>{good_parts} Nos</b> out of {total_parts_produced} total.<br>
-            - Operating Time: <b>{operating_time:.2f} Hours</b> (Planned: {total_planned_time} hrs, Downtime: {downtime_hours} hrs).<br>
-            - World-class manufacturing benchmark for OEE is typically <b>85% and above</b>.
+        <div style="background: rgba(72, 202, 228, 0.1); padding: 18px; border-radius: 12px; border: 1px solid #48CAE4; margin-top: 15px;">
+            <b>Detailed Production & Rejection Report ({shift_name}):</b><br>
+            - <b>Planned Production Time:</b> {total_planned_time} Hours | <b>Downtime:</b> {downtime_hours} Hours<br>
+            - <b>Actual Operating Time:</b> {operating_time:.2f} Hours<br>
+            - <b>Total Gross Parts Produced:</b> {total_parts_produced} Nos<br>
+            - <b>Rejected / Defective Parts:</b> <span style="color: #EF4444; font-weight: bold;">{rejected_parts} Nos</span> ({rejection_percentage:.2f}% of total production)<br>
+            - <b>Total Good Parts (Actual Output):</b> <span style="color: #10B981; font-weight: bold;">{good_parts} Nos</span><br>
+            - <b>Target Output (Full {total_planned_time} hrs):</b> {target_parts_planned} Nos<br>
+            - <b>Output & Rejection Summary:</b> இந்த ஷிப்ட்டில் <b>{target_parts_planned} பீஸ்கள்</b> வர வேண்டியதில், நல்ல பீஸ்கள் <b>{good_parts} பீஸ்தான்</b> வந்துள்ளது. மொத்தம் <b>{shortfall_vs_planned} பீஸ்கள் குறைவாக</b> உற்பத்தியாகியுள்ளது மற்றும் நீங்கள் குறிப்பிட்டபடி <b>{rejected_parts} ரெஜெக்ஷன் (Rejections)</b> பதிவாகியுள்ளது!<br>
+            - <i>Note: World-class manufacturing benchmark for OEE is typically <b>85% and above</b>.</i>
         </div>
         """, unsafe_allow_html=True)
 
