@@ -65,10 +65,10 @@ if "stock_db" not in st.session_state:
         {"Material": "SS304 Round Bar - 25mm", "Unit": "Meter", "Available Stock": 85.00, "Status": "In Stock"},
     ])
 
-# Dynamic CSS based on Shop Floor Mode (Touch Friendly & Large UI)
-sf_padding = "18px" if st.session_state.shop_floor_mode else "12px"
+# Dynamic CSS based on Shop Floor Mode (Touch Friendly & Large UI for Mobile)
+sf_padding = "20px" if st.session_state.shop_floor_mode else "12px"
 sf_font_size = "18px" if st.session_state.shop_floor_mode else "15px"
-sf_button_height = "60px" if st.session_state.shop_floor_mode else "48px"
+sf_button_height = "64px" if st.session_state.shop_floor_mode else "48px"
 
 st.markdown(f"""
 <style>
@@ -76,6 +76,7 @@ st.markdown(f"""
     background: linear-gradient(135deg, #050B18 0%, #0A1428 50%, #040711 100%);
     color: #FFFFFF;
     font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+    touch-action: manipulation;
 }}
 .brand-container {{
     text-align: center;
@@ -200,6 +201,7 @@ st.markdown(f"""
     color: #48CAE4;
 }}
 
+/* MOBILE TOUCH OPTIMIZATION FOR BUTTONS & INPUTS */
 .stButton>button {{
     width: 100%;
     background: linear-gradient(90deg, #1D4ED8, #00B4D8);
@@ -211,6 +213,7 @@ st.markdown(f"""
     box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
     transition: all 0.2s ease;
     font-size: {sf_font_size};
+    cursor: pointer;
 }}
 .stButton>button:hover {{
     background: linear-gradient(90deg, #2563EB, #06B6D4);
@@ -358,9 +361,15 @@ if logo_base64:
 else:
     st.sidebar.title("MEGALA CNC MATE")
 
-# Shop Floor Touch Mode Toggle in Sidebar
+# 100% Mobile Touch-Friendly Checkbox Control for Shop Floor Mode
 st.sidebar.markdown("---")
-st.session_state.shop_floor_mode = st.sidebar.toggle("🖥️ Shop Floor Touch Mode (Big UI)", value=st.session_state.shop_floor_mode)
+st.session_state.shop_floor_mode = st.sidebar.checkbox(
+    "🖥️ Shop Floor Touch Mode (Big UI)", 
+    value=st.session_state.shop_floor_mode
+)
+if st.session_state.shop_floor_mode:
+    st.sidebar.success("✅ Touch Mode Active (Big UI)")
+
 st.sidebar.markdown(f"☁️ **Cloud Sync Status:** `{st.session_state.cloud_sync_status}`")
 
 languages = ["Tamil (தமிழ்)", "English", "Hindi (हिन्दी)", "Telugu (తెలుగు)", "Kannada (ಕನ್ನಡ)", "Malayalam (മലയാളം)"]
