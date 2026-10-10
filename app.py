@@ -7,29 +7,22 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 
-# Plotly library check for Live 3D Visualization & Toolpath
+# Plotly library check
 try:
     import plotly.graph_objects as go
     PLOTLY_AVAILABLE = True
 except ImportError:
     PLOTLY_AVAILABLE = False
 
-# PDF Generation library check
-try:
-    from reportlab.lib.pagesizes import letter
-    from reportlab.pdfgen import canvas
-    REPORTLAB_AVAILABLE = True
-except ImportError:
-    REPORTLAB_AVAILABLE = False
-
 # Page Configuration
 st.set_page_config(
-    page_title="MEGALA CNC MATE - Industrial Suite & Quotation Master",
+    page_title="MEGALA CNC MATE - Industrial Suite",
     page_icon="⚙️",
     layout="wide",
+    initial_sidebar_state="expanded" # மொபைலில் சைட்பார் தெளிவாகத் தெரிய
 )
 
-# Helper function to convert logo safely
+# Helper function for logo
 def get_image_base64(path):
     if os.path.exists(path):
         with open(path, "rb") as f:
@@ -38,15 +31,13 @@ def get_image_base64(path):
 
 logo_base64 = get_image_base64("logo.png")
 
-# Session states initialization
+# Session States
 if "shop_floor_mode" not in st.session_state:
     st.session_state.shop_floor_mode = False
 if "nav_menu" not in st.session_state:
     st.session_state.nav_menu = "Home Dashboard"
 if "calc_results" not in st.session_state:
     st.session_state.calc_results = None
-if "cloud_sync_status" not in st.session_state:
-    st.session_state.cloud_sync_status = "Synced (Cloud Active)"
 
 if "stock_db" not in st.session_state:
     st.session_state.stock_db = pd.DataFrame([
@@ -55,7 +46,7 @@ if "stock_db" not in st.session_state:
         {"Material": "SS304 Round Bar - 25mm", "Unit": "Meter", "Available Stock": 85.00, "Status": "In Stock"},
     ])
 
-# Dynamic CSS based on Shop Floor Mode (Touch Friendly & Large UI for Mobile)
+# Dynamic CSS
 sf_padding = "20px" if st.session_state.shop_floor_mode else "12px"
 sf_font_size = "18px" if st.session_state.shop_floor_mode else "15px"
 sf_button_height = "64px" if st.session_state.shop_floor_mode else "48px"
@@ -65,125 +56,20 @@ st.markdown(f"""
 .stApp {{
     background: linear-gradient(135deg, #050B18 0%, #0A1428 50%, #040711 100%);
     color: #FFFFFF;
-    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-    touch-action: manipulation;
+    font-family: 'Segoe UI', Roboto, sans-serif;
 }}
 .brand-container {{
     text-align: center;
-    padding: 20px 0;
+    padding: 15px 0;
     background: radial-gradient(circle at center, #0F1C3F 0%, #070B19 100%);
     border-bottom: 2px solid #1E3A8A;
     margin-bottom: 15px;
-    border-radius: 0 0 20px 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-}}
-.logo-glow-box {{
-    display: inline-block;
-    padding: 8px;
-    background: radial-gradient(circle, rgba(72, 202, 228, 0.3) 0%, rgba(10, 20, 40, 0.95) 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 30px rgba(72, 202, 228, 0.8), inset 0 0 15px rgba(72, 202, 228, 0.5);
-    border: 2px solid #48CAE4;
-    margin-bottom: 10px;
-}}
-.logo-glow-box img {{
-    width: 70px !important;
-    height: auto !important;
-    border-radius: 50%;
-    display: block;
-    margin: auto;
+    border-radius: 0 0 15px 15px;
 }}
 .brand-title {{
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 900;
-    letter-spacing: 3px;
-    background: linear-gradient(90deg, #48CAE4, #0077B6, #FFFFFF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-top: 4px;
-    text-align: center;
-    text-shadow: 0 0 25px rgba(72, 202, 228, 0.5);
-}}
-.brand-subtitle {{
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: #94A3B8;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-top: 4px;
-    text-align: center;
-}}
-.dashboard-grid {{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 25px;
-}}
-.dash-card {{
-    background: linear-gradient(145deg, #111E38, #0B132B);
-    padding: {sf_padding};
-    border-radius: 16px;
-    border: 1px solid #1E3A8A;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 140px;
-    transition: all 0.3s ease;
-}}
-.dash-card:hover {{
-    border-color: #48CAE4;
-    box-shadow: 0 0 20px rgba(72, 202, 228, 0.4);
-    transform: translateY(-3px);
-}}
-.dash-icon {{
-    font-size: 32px;
-    margin-bottom: 8px;
-}}
-.dash-label {{
-    font-size: {sf_font_size};
-    font-weight: 700;
-    color: #F8FAFC;
-    letter-spacing: 0.5px;
-}}
-.uniform-grid {{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-bottom: 20px;
-}}
-.uniform-card {{
-    background: linear-gradient(145deg, #111E38, #0B132B);
-    padding: 15px;
-    border-radius: 14px;
-    border: 1px solid #1E3A8A;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 110px;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-}}
-.uniform-card:hover {{
-    border-color: #48CAE4;
-    box-shadow: 0 0 15px rgba(72, 202, 228, 0.4);
-}}
-.card-title {{
-    font-size: 13px;
-    font-weight: 700;
-    color: #94A3B8;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}}
-.card-value {{
-    font-size: 18px;
-    font-weight: 900;
+    letter-spacing: 2px;
     color: #48CAE4;
 }}
 .stButton>button {{
@@ -193,69 +79,127 @@ st.markdown(f"""
     font-weight: bold;
     border-radius: 12px;
     height: {sf_button_height};
-    border: none;
-    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
-    transition: all 0.2s ease;
     font-size: {sf_font_size};
-    cursor: pointer;
-}}
-.stButton>button:hover {{
-    background: linear-gradient(90deg, #2563EB, #06B6D4);
-    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
-}}
-.upload-status-box {{
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
-    border: 2px solid #10B981;
-    padding: 18px;
-    border-radius: 14px;
-    margin-top: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-}}
-.ai-badge {{
-    background: linear-gradient(90deg, #8B5CF6, #3B82F6);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 8px;
+    border: none;
 }}
 </style>
 """, unsafe_allow_html=True)
 
-# Top Header Banner
-if logo_base64:
-    logo_display_html = f'<div class="logo-glow-box"><img src="data:image/png;base64,{logo_base64}" /></div>'
-else:
-    logo_display_html = '<div style="font-size: 35px; margin-bottom: 2px;">⚙️</div>'
-
-header_html = f"""
+# Banner
+st.markdown("""
 <div class="brand-container">
-    {logo_display_html}
     <div class="brand-title">MEGALA CNC MATE</div>
-    <div class="brand-subtitle">INDUSTRIAL CNC, TRAUB & PROFESSIONAL QUOTATION SUITE</div>
+    <div style="color: #94A3B8; font-size: 11px;">INDUSTRIAL CNC & PROFESSIONAL QUOTATION SUITE</div>
 </div>
-"""
-st.markdown(header_html, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-def navigate_to(menu_name):
-    st.session_state.nav_menu = menu_name
+# SIDEBAR NAVIGATION
+st.sidebar.title("⚙️ மெனு (Menu)")
 
-# Helper for 3D Shape Mesh
-def generate_3d_shape_mesh(shape, size, length, inner_dia=0.0):
-    z_vals = np.linspace(0, length, 30)
-    theta = np.linspace(0, 2 * np.pi, 60)
-    Theta, Z = np.meshgrid(theta, z_vals)
+st.session_state.shop_floor_mode = st.sidebar.checkbox(
+    "🖥️ Shop Floor Touch Mode (Big UI)", 
+    value=st.session_state.shop_floor_mode
+)
 
-    if shape == "Round":
-        R = size / 2.0
-        X = R * np.cos(Theta)
-        Y = R * np.sin(Theta)
-        return [go.Surface(x=X, y=Y, z=Z, colorscale='viridis', showscale=False)]
-    elif shape == "Tube":
-        R_out = size / 2.0
-        R_in = max(0.1, inner_dia / 2.0)
-        X_out = R_out * np.cos(Theta)
-        Y_out = R_out
+menu_options = [
+    "Home Dashboard",
+    "Rod & Tube Calculator",
+    "Traub Collet & Bar Feed",
+    "Production & OEE Analyzer",
+    "Stock Management",
+    "Advanced G-Code & Toolpath Studio",
+    "Professional Cost & Quotation Studio",
+]
+
+st.session_state.nav_menu = st.sidebar.radio("Navigation Menu", menu_options)
+
+def get_kg_per_meter(dia, shape):
+    if dia <= 0: return 0.0
+    if shape == "Round": return (dia**2) / 162
+    elif shape == "Square": return (dia**2) / 127
+    elif shape == "Hexagon": return (dia**2) / 147
+    return (dia**2) / 162
+
+# 1. HOME DASHBOARD
+if st.session_state.nav_menu == "Home Dashboard":
+    st.subheader("Welcome Nithish 👋 (MEGALA CNC MATE Suite)")
+    st.info("இடது பக்க மெனு மூலமாக அல்லது கீழே உள்ள பட்டன்கள் மூலம் நீங்கள் விரும்பிய பகுதிக்குச் செல்லலாம்.")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("📏 Rod & Weight Calculator"):
+            st.session_state.nav_menu = "Rod & Tube Calculator"
+            st.rerun()
+        if st.button("🔧 Traub Collet Master"):
+            st.session_state.nav_menu = "Traub Collet & Bar Feed"
+            st.rerun()
+        if st.button("📦 Stock Management"):
+            st.session_state.nav_menu = "Stock Management"
+            st.rerun()
+    with col2:
+        if st.button("⏱️ Production & OEE"):
+            st.session_state.nav_menu = "Production & OEE Analyzer"
+            st.rerun()
+        if st.button("🖥️ G-Code Generator"):
+            st.session_state.nav_menu = "Advanced G-Code & Toolpath Studio"
+            st.rerun()
+        if st.button("📄 Pro Quotation Studio"):
+            st.session_state.nav_menu = "Professional Cost & Quotation Studio"
+            st.rerun()
+
+# 2. ROD CALCULATOR
+elif st.session_state.nav_menu == "Rod & Tube Calculator":
+    st.subheader("📏 Rod, Tube & Bulk Stock Calculator")
+    col1, col2 = st.columns(2)
+    with col1:
+        rod_type = st.selectbox("Rod Shape", ["Round", "Hexagon", "Square"])
+        rod_dia = st.number_input("Rod Diameter (mm)", min_value=0.0, value=51.0, step=0.5)
+        rod_length_input = st.number_input("Total Stock Weight (Kg)", min_value=0.0, value=100.0, step=5.0)
+    with col2:
+        part_length = st.number_input("Component Length (mm)", min_value=0.0, value=38.7, step=0.1)
+        cutting_allowance = st.number_input("Cutting Allowance (mm)", min_value=0.0, value=3.0, step=0.1)
+
+    if st.button("Calculate Stock & Parts"):
+        kg_per_m = get_kg_per_meter(rod_dia, rod_type)
+        total_rod_meters = (rod_length_input / kg_per_m) if kg_per_m > 0 else 0.0
+        total_part_len_mm = part_length + cutting_allowance
+        parts_possible = int((total_rod_meters * 1000) / total_part_len_mm) if total_part_len_mm > 0 else 0
+        
+        st.success(f"**Total Meters:** {total_rod_meters:.2f} Meters")
+        st.success(f"**Total Usable Parts:** {parts_possible} Nos")
+
+# 3. TRAUB COLLET
+elif st.session_state.nav_menu == "Traub Collet & Bar Feed":
+    st.subheader("🔧 Traub Collet & RPM Master")
+    raw_bar_dia = st.number_input("Raw Bar Diameter (mm)", min_value=1.0, value=16.0, step=0.5)
+    cutting_speed_vc = st.number_input("Cutting Speed (Vc m/min)", min_value=10.0, value=100.0, step=5.0)
+
+    if st.button("Calculate Collet & RPM"):
+        rpm = int((cutting_speed_vc * 1000) / (math.pi * raw_bar_dia)) if raw_bar_dia > 0 else 0
+        st.info(f"Recommended Collet Size: **{raw_bar_dia + 0.05:.2f} mm**")
+        st.success(f"Calculated Spindle RPM: **{rpm} RPM**")
+
+# 4. OEE ANALYZER
+elif st.session_state.nav_menu == "Production & OEE Analyzer":
+    st.subheader("⏱️ Production & OEE Analyzer")
+    planned_time = st.number_input("Planned Time (Hours)", value=8.0)
+    downtime = st.number_input("Downtime (Hours)", value=0.5)
+    produced_parts = st.number_input("Total Parts Produced", value=1000)
+    rejected_parts = st.number_input("Rejected Parts", value=15)
+
+    if st.button("Calculate OEE"):
+        operating_time = max(0.01, planned_time - downtime)
+        availability = (operating_time / planned_time) * 100.0
+        good_parts = max(0, produced_parts - rejected_parts)
+        quality = (good_parts / produced_parts) * 100.0 if produced_parts > 0 else 0.0
+        st.metric("Availability", f"{availability:.1f}%")
+        st.metric("Quality", f"{quality:.1f}%")
+
+# 5. STOCK MANAGEMENT
+elif st.session_state.nav_menu == "Stock Management":
+    st.subheader("📦 Stock Management")
+    st.session_state.stock_db = st.data_editor(st.session_state.stock_db, num_rows="dynamic", use_container_width=True)
+
+# 6. G-CODE
+elif st.session_state.nav_menu == "Advanced G-Code & Toolpath Studio":
+    st.subheader("🖥️ G
